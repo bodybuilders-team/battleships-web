@@ -1,6 +1,7 @@
-package pt.isel.daw.battleships.api
+package pt.isel.daw.battleships.api.users
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.database.model.User
@@ -9,15 +10,18 @@ import pt.isel.daw.battleships.database.model.User
 @RequestMapping("/users")
 class UsersController {
 
-    @GetMapping("/", produces = ["text/main"])
+    @GetMapping("/")
     fun getUsers(): List<User> {
         // TODO: To be implemented
-        return listOf()
     }
 
-    @GetMapping("/{username}", produces = ["text/main"])
+    @PostMapping("/")
+    fun createUser(): User {
+        // TODO: To be implemented
+    }
+
+    @GetMapping("/{username}")
     fun getUser(): User {
         // TODO: To be implemented
-        return User()
     }
 }
