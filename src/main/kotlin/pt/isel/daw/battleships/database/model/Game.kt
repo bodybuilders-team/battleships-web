@@ -20,26 +20,23 @@ class Game(
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player1", nullable = false)
-    val player1: Player,
+    val player1: Player?,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player2", nullable = false)
-    val player2: Player,
+    val player2: Player?,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "current_player_turn", nullable = false)
-    val currentPlayerTurn: Player,
+    val currentPlayerTurn: Player?,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "winner", nullable = false)
-    val winner: Player,
+    val winner: Player?,
 
     @Column(name = "current_round", nullable = false)
     val currentRound: Int,
 
     @Column(name = "state", nullable = false)
     val state: Int
-) {
-    // Needed for JPA
-    constructor() : this(null, Player(), Player(), Player(), Player(), 0, 0)
-}
+)

@@ -4,54 +4,63 @@ import jdk.jshell.spi.ExecutionControl.NotImplementedException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.daw.battleships.JwtUtils.JwtPayload
-import pt.isel.daw.battleships.api.games.dtos.CreateGameResponseDTO
-import pt.isel.daw.battleships.api.games.dtos.GameDTO
-import pt.isel.daw.battleships.api.games.dtos.GameStatusDTO
+import pt.isel.daw.battleships.api.games.dtos.CreateShotsRequestDTO
+import pt.isel.daw.battleships.api.games.dtos.ShipDTO
+import pt.isel.daw.battleships.database.model.shot.Shot
 
 @RestController
-@RequestMapping("/games")
-class GamesController {
+@RequestMapping("/games/{gameId}/players/self")
+class PlayersController {
 
-    @GetMapping
-    fun getGames(): List<GameDTO> {
-        // TODO: To be implemented
-        throw NotImplementedException("Not implemented")
-    }
-
-    @PostMapping
-    fun createGame(
-        @RequestBody game: GameDTO,
-        @RequestAttribute("authPayload") authPayload: JwtPayload
-    ): CreateGameResponseDTO {
-        // TODO: To be implemented
-        throw NotImplementedException("Not implemented")
-    }
-
-    @GetMapping("/{gameId}")
-    fun getGame(
+    @GetMapping("/self/fleet/")
+    fun getFleet(
         @PathVariable gameId: Int
-    ): GameDTO {
+    ): List<ShipDTO> {
         // TODO: To be implemented
         throw NotImplementedException("Not implemented")
     }
 
-    @GetMapping("/{gameId}/status")
-    fun getGameStatus(
+    @GetMapping("/opponent/fleet")
+    fun getOpponentFleet(
         @PathVariable gameId: Int
-    ): GameStatusDTO {
+    ): List<ShipDTO> {
         // TODO: To be implemented
         throw NotImplementedException("Not implemented")
     }
 
-    @PostMapping("/{gameId}/join")
-    fun joinGame(
+    @PostMapping("/self/fleet")
+    fun deployFleet(
+        @PathVariable gameId: Int,
+        @RequestBody fleet: List<ShipDTO>
+    ) {
+        // TODO: To be implemented
+        throw NotImplementedException("Not implemented")
+    }
+
+    @GetMapping("/self/shots")
+    fun getShots(
         @PathVariable gameId: Int
-    ): GameDTO {
+    ): List<Shot> {
+        // TODO: To be implemented
+        throw NotImplementedException("Not implemented")
+    }
+
+    @GetMapping("/opponent/shots")
+    fun getOpponentShots(
+        @PathVariable gameId: Int
+    ): List<Shot> {
+        // TODO: To be implemented
+        throw NotImplementedException("Not implemented")
+    }
+
+    @PostMapping("/self/shots")
+    fun createShots(
+        @PathVariable gameId: Int,
+        @RequestBody shots: CreateShotsRequestDTO
+    ) {
         // TODO: To be implemented
         throw NotImplementedException("Not implemented")
     }

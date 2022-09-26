@@ -31,7 +31,4 @@ class Ship(
 
     @Column(name = "lives", nullable = false)
     val lives: Int
-) {
-    // Needed for JPA
-    constructor() : this(0, "", Coordinate(), ShipType(), 0)
-}
+)

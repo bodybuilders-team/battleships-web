@@ -17,7 +17,4 @@ class ShipType(
 
     @Column(name = "points", nullable = false)
     val points: Int
-) {
-    // Needed for JPA
-    constructor() : this("", 0, 0)
-}
+)

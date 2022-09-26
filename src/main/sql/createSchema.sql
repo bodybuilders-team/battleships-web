@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS shots CASCADE;
 CREATE TABLE users
 (
     username        VARCHAR(20) PRIMARY KEY,
-    hashed_password CHAR(512) NOT NULL,
+    hashed_password VARCHAR(512) NOT NULL,
     points          INT       NOT NULL
 );
 
@@ -23,13 +23,13 @@ CREATE TABLE players
 
 CREATE TABLE games
 (
-    id                 SERIAL PRIMARY KEY,
-    player1            VARCHAR(20),
-    player2            VARCHAR(20),
+    id                  SERIAL PRIMARY KEY,
+    player1             VARCHAR(20),
+    player2             VARCHAR(20),
     current_player_turn VARCHAR(20),
-    winner             VARCHAR(20),
-    current_round      INT         NOT NULL,
-    state              VARCHAR(20) NOT NULL CHECK
+    winner              VARCHAR(20),
+    current_round       INT         NOT NULL,
+    state               VARCHAR(20) NOT NULL CHECK
         ( state IN ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS', 'FINISHED') ),
 
     FOREIGN KEY (player1, id) REFERENCES players (username, game_id),
@@ -45,15 +45,16 @@ ALTER TABLE players
 
 CREATE TABLE shots
 (
-    round   INT         NOT NULL,
-    game_id INT         NOT NULL REFERENCES games (id),
-    row     INT         NOT NULL,
-    col     INT         NOT NULL,
-    result  VARCHAR(4)  NOT NULL CHECK ( result IN ('HIT', 'MISS', 'SUNK') ),
-    player  VARCHAR(20) NOT NULL,
+    shot_number INT         NOT NULL,
+    round       INT         NOT NULL,
+    game_id     INT         NOT NULL REFERENCES games (id),
+    row         INT         NOT NULL,
+    col         INT         NOT NULL,
+    result      VARCHAR(4)  NOT NULL CHECK (result IN ('HIT', 'MISS', 'SUNK')),
+    player      VARCHAR(20) NOT NULL,
 
     FOREIGN KEY (player, game_id) REFERENCES players (username, game_id),
-    PRIMARY KEY (round, game_id, player)
+    PRIMARY KEY (shot_number, round, game_id, player)
 );
 
 CREATE TABLE shiptypes
