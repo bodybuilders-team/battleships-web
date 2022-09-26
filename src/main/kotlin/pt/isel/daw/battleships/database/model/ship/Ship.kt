@@ -4,6 +4,8 @@ import pt.isel.daw.battleships.database.model.Coordinate
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -15,9 +17,9 @@ import javax.persistence.Table
  * The Ship entity.
  *
  * @property id The ship's id.
- * @property orientation The ship's orientation.
- * @property coordinate The ship's coordinate.
  * @property type The ship's type.
+ * @property coordinate The ship's coordinate.
+ * @property orientation The ship's orientation.
  * @property lives The ship's lives.
  */
 @Entity
@@ -27,16 +29,28 @@ class Ship(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
-    @Column(name = "orientation", nullable = false)
-    val orientation: String,
-
-    @Embedded
-    val coordinate: Coordinate,
-
     @ManyToOne
     @JoinColumn(name = "type", nullable = false)
     val type: ShipType,
 
+    @Embedded
+    val coordinate: Coordinate,
+
+    @Column(name = "orientation", nullable = false)
+    @Enumerated(EnumType.STRING)
+    val orientation: Orientation,
+
     @Column(name = "lives", nullable = false)
     val lives: Int
-)
+) {
+
+    /**
+     * Represents the possible orientations of a ship:
+     * - HORIZONTAL: The ship is horizontal.
+     * - VERTICAL: The ship is vertical.
+     */
+    enum class Orientation {
+        HORIZONTAL,
+        VERTICAL
+    }
+}

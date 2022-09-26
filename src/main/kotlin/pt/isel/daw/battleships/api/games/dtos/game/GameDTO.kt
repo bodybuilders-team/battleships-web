@@ -1,6 +1,5 @@
 package pt.isel.daw.battleships.api.games.dtos.game
 
-import pt.isel.daw.battleships.database.model.Game
 import pt.isel.daw.battleships.services.games.GameResponse
 
 /**
@@ -8,12 +7,16 @@ import pt.isel.daw.battleships.services.games.GameResponse
  *
  * @property sessionName The name of the session.
  * @property config The configuration of the game.
+ * @property state The state of the game.
  */
 data class GameDTO(
     val sessionName: String,
-    val config: GameConfigDTO
+    val config: GameConfigDTO,
+    val state: GameStateDTO
 ) {
-    constructor(gameResponse: GameResponse) : this(TODO())
-
-    constructor(game: Game) : this(TODO())
+    constructor(game: GameResponse) : this(
+        game.sessionName,
+        GameConfigDTO(game),
+        GameStateDTO(game)
+    )
 }

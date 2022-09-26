@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository
 import pt.isel.daw.battleships.database.model.Game
 
 /**
- * Repository for the Game entity.
+ * Repository for the GameResponse entity.
  */
 interface GamesRepository : CrudRepository<Game, Int>

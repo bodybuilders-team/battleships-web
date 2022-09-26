@@ -1,18 +1,29 @@
 package pt.isel.daw.battleships.api.games.dtos.game
 
+import pt.isel.daw.battleships.services.games.GameResponse
 import pt.isel.daw.battleships.services.games.GameStateResponse
 
 /**
  * Represents a game state.
  *
- * @property gamePhase The current game phase.
- * @property turn The current turn.
+ * @property phase The current game phase.
  * @property round The current round.
+ * @property turn The current turn.
  */
 data class GameStateDTO(
-    val gamePhase: String,
-    val turn: String,
-    val round: Int?
+    val phase: String,
+    val round: Int?,
+    val turn: String?
 ) {
-    constructor(gameStateResponse: GameStateResponse) : this(TODO())
+    constructor(gameStateResponse: GameStateResponse) : this(
+        gameStateResponse.phase,
+        gameStateResponse.round,
+        gameStateResponse.turn
+    )
+
+    constructor(game: GameResponse) : this(
+        game.phase,
+        game.round,
+        game.turn
+    )
 }

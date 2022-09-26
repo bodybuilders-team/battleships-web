@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.api.games.dtos.game
 
 import pt.isel.daw.battleships.api.games.dtos.ship.ShipTypeDTO
+import pt.isel.daw.battleships.services.games.GameResponse
 import javax.validation.constraints.Size
 
 /**
@@ -20,6 +21,8 @@ data class GameConfigDTO(
     val maxTimeForLayoutPhase: Int,
     val maxTimePerShot: Int
 ) {
+    constructor(game: GameResponse) : this(TODO())
+
     companion object {
         private const val MIN_GRID_SIZE = 1
         private const val MAX_GRID_SIZE = 26

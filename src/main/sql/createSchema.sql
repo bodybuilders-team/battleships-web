@@ -23,18 +23,18 @@ CREATE TABLE players
 
 CREATE TABLE games
 (
-    id             SERIAL PRIMARY KEY,
-    player1        VARCHAR(20),
-    player2        VARCHAR(20),
-    current_player VARCHAR(20),
-    winner         VARCHAR(20),
-    current_round  INT         NOT NULL,
-    state          VARCHAR(20) NOT NULL CHECK
-        ( state IN ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS', 'FINISHED') ),
+    id      SERIAL PRIMARY KEY,
+    player1 VARCHAR(20),
+    player2 VARCHAR(20),
+    phase   VARCHAR(20) NOT NULL CHECK
+        ( phase IN ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS', 'FINISHED') ),
+    round   INT,
+    turn    VARCHAR(20),
+    winner  VARCHAR(20),
 
     FOREIGN KEY (player1, id) REFERENCES players (username, game_id),
     FOREIGN KEY (player2, id) REFERENCES players (username, game_id),
-    FOREIGN KEY (current_player, id) REFERENCES players (username, game_id),
+    FOREIGN KEY (turn, id) REFERENCES players (username, game_id),
     FOREIGN KEY (winner, id) REFERENCES players (username, game_id)
 );
 
@@ -48,10 +48,10 @@ CREATE TABLE shots
     shot_number INT         NOT NULL,
     round       INT         NOT NULL,
     game_id     INT         NOT NULL REFERENCES games (id),
+    player      VARCHAR(20) NOT NULL,
     row         INT         NOT NULL,
     col         INT         NOT NULL,
     result      VARCHAR(4)  NOT NULL CHECK (result IN ('HIT', 'MISS', 'SUNK')),
-    player      VARCHAR(20) NOT NULL,
 
     FOREIGN KEY (player, game_id) REFERENCES players (username, game_id),
     PRIMARY KEY (shot_number, round, game_id, player)
@@ -67,9 +67,9 @@ CREATE TABLE shiptypes
 CREATE TABLE ships
 (
     id          SERIAL PRIMARY KEY,
-    orientation CHAR(1) NOT NULL CHECK ( orientation IN ('H', 'V') ),
-    row         INT     NOT NULL,
-    col         CHAR    NOT NULL,
     type        VARCHAR(10) REFERENCES shiptypes (ship_name),
-    lives       INT     NOT NULL
+    row         INT         NOT NULL,
+    col         CHAR        NOT NULL,
+    orientation VARCHAR(10) NOT NULL CHECK ( orientation IN ('HORIZONTAL', 'VERTICAL') ),
+    lives       INT         NOT NULL
 );

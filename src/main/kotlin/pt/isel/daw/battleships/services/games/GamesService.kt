@@ -7,7 +7,7 @@ import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import javax.transaction.Transactional
 
 /**
- * Game services.
+ * GameResponse services.
  *
  * @property gamesRepository The games' repository.
  */
@@ -23,7 +23,7 @@ class GamesService(
      * @return the id of the new game.
      */
     fun createGame(createGameRequest: CreateGameRequest): Int {
-        val game = Game()
+        val game = Game() // TODO
         gamesRepository.save(game)
 
         return game.id
@@ -53,7 +53,7 @@ class GamesService(
      * @return the response with the game state.
      */
     fun getGameState(gameId: Int): GameStateResponse =
-        GameStateResponse(state = getGameById(gameId).state)
+        GameStateResponse(game = getGameById(gameId))
 
     /**
      * Joins a game.
@@ -65,7 +65,7 @@ class GamesService(
         val game = getGameById(gameId)
 
         /*TODO: if (game.state != GameState.WAITING_FOR_PLAYERS) {
-            throw BadRequestException("Game is not waiting for players")
+            throw BadRequestException("GameResponse is not waiting for players")
         }*/
 
         return GameResponse(game)
@@ -81,5 +81,5 @@ class GamesService(
      */
     private fun getGameById(gameId: Int): Game = gamesRepository
         .findById(gameId)
-        .orElseThrow { NotFoundException("Game with id $gameId not found") }
+        .orElseThrow { NotFoundException("GameResponse with id $gameId not found") }
 }
