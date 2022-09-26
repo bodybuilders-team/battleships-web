@@ -15,7 +15,7 @@ import pt.isel.daw.battleships.database.model.shot.Shot
  * The controller that handles the requests to the game's player's resources.
  */
 @RestController
-@RequestMapping("/games/{gameId}/players/self")
+@RequestMapping("/games/{gameId}/players")
 class PlayersController {
 
     /**
@@ -24,7 +24,7 @@ class PlayersController {
      * @param gameId The id of the game.
      * @return The ships of the player.
      */
-    @GetMapping("/self/fleet/")
+    @GetMapping("/self/fleet")
     fun getFleet(
         @PathVariable gameId: Int
     ): List<ShipDTO> {

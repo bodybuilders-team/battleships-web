@@ -1,0 +1,9 @@
+package pt.isel.daw.battleships.database.repositories
+
+import org.springframework.data.repository.CrudRepository
+import pt.isel.daw.battleships.database.model.Game
+
+/**
+ * Repository for the Game entity.
+ */
+interface GamesRepository : CrudRepository<Game, Int>

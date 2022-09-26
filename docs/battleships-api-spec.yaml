@@ -1,783 +1,651 @@
 openapi: 3.0.3
 info:
   version: 0.0.1
-  title: Battleship API
+  title: Battleships API
   description: Web-based system that allows multiple players to play the Battleship game.
-#servers:
-#  - url: http://localhost:8080
+  termsOfService: https://swagger.io/terms/
+
+servers:
+  - url: http://localhost:8888/api
+
 tags:
-  - name: pet
-    description: Everything about your Pets
-    externalDocs:
-      description: Find out more
-      url: http://swagger.io
-  - name: store
-    description: Access to Petstore orders
-    externalDocs:
-      description: Find out more about our store
-      url: http://swagger.io
-  - name: user
-    description: Operations about user
+  - name: Users
+    description: Operations about users
+
+  - name: Games
+    description: Operations about games
+
+  - name: Players
+    description: Operations about players
+
+
 paths:
-  /pet:
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      description: Update an existing pet by Id
-      operationId: updatePet
-      requestBody:
-        description: Update an existent pet in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Pet'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
+  /users:
     post:
       tags:
-        - pet
-      summary: Add a new pet to the store
-      description: Add a new pet to the store
-      operationId: addPet
-      requestBody:
-        description: Create a new pet in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Pet'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-  /pet/findByStatus:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
-      parameters:
-        - name: status
-          in: query
-          description: Status values that need to be considered for filter
-          required: false
-          explode: true
-          schema:
-            type: string
-            default: available
-            enum:
-              - available
-              - pending
-              - sold
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid status value
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-  /pet/findByTags:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by tags
-      description: Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
-      operationId: findPetsByTags
-      parameters:
-        - name: tags
-          in: query
-          description: Tags to filter by
-          required: false
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid tag value
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-  /pet/{petId}:
-    get:
-      tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to return
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - api_key: [ ]
-        - petstore_auth:
-            - write:pets
-            - read:pets
-    post:
-      tags:
-        - pet
-      summary: Updates a pet in the store with form data
-      description: ''
-      operationId: updatePetWithForm
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: name
-          in: query
-          description: Name of pet that needs to be updated
-          schema:
-            type: string
-        - name: status
-          in: query
-          description: Status of pet that needs to be updated
-          schema:
-            type: string
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-    delete:
-      tags:
-        - pet
-      summary: Deletes a pet
-      description: delete a pet
-      operationId: deletePet
-      parameters:
-        - name: api_key
-          in: header
-          description: ''
-          required: false
-          schema:
-            type: string
-        - name: petId
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Invalid pet value
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-  /pet/{petId}/uploadImage:
-    post:
-      tags:
-        - pet
-      summary: uploads an image
-      description: ''
-      operationId: uploadFile
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: additionalMetadata
-          in: query
-          description: Additional Metadata
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
-  /store/inventory:
-    get:
-      tags:
-        - store
-      summary: Returns pet inventories by status
-      description: Returns a map of status codes to quantities
-      operationId: getInventory
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties:
-                  type: integer
-                  format: int32
-      security:
-        - api_key: [ ]
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Place an order for a pet
-      description: Place a new order in the store
-      operationId: placeOrder
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Order'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Order'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '405':
-          description: Invalid input
-  /store/order/{orderId}:
-    get:
-      tags:
-        - store
-      summary: Find purchase order by ID
-      description: For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
-      operationId: getOrderById
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of order that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-    delete:
-      tags:
-        - store
-      summary: Delete purchase order by ID
-      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
-      operationId: deleteOrder
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of the order that needs to be deleted
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-  /user:
-    post:
-      tags:
-        - user
+        - Users
       summary: Create user
-      description: This can only be done by the logged in user.
       operationId: createUser
       requestBody:
         description: Created user object
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/CreateUserRequest'
       responses:
-        default:
-          description: successful operation
+        201:
+          description: User was created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
+                $ref: '#/components/schemas/CreateUserResponse'
+        400:
+          $ref: '#/components/responses/InvalidRequestBodyResponse'
+        409:
+          description: User with the same username already exists
+          content:
+            application/json:
               schema:
-                $ref: '#/components/schemas/User'
-  /user/createWithList:
+                $ref: '#/components/schemas/AppError'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/login:
     post:
       tags:
-        - user
-      summary: Creates list of users with given input array
-      description: Creates list of users with given input array
-      operationId: createUsersWithListInput
+        - Users
+      summary: Logs a user in
+      operationId: login
       requestBody:
+        description: User credentials
+        required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/LoginUserRequest'
       responses:
-        '200':
-          description: Successful operation
+        200:
+          description: User was logged in
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        default:
-          description: successful operation
-  /user/login:
-    get:
-      tags:
-        - user
-      summary: Logs user into the system
-      description: ''
-      operationId: loginUser
-      parameters:
-        - name: username
-          in: query
-          description: The user name for login
-          required: false
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
+                $ref: '#/components/schemas/LoginUserResponse'
+        400:
+          description: Invalid username or password
           content:
-            application/xml:
-              schema:
-                type: string
             application/json:
               schema:
-                type: string
-        '400':
-          description: Invalid username/password supplied
-  /user/logout:
+                $ref: '#/components/schemas/AppError'
+        404:
+          description: No user with that email exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/{username}:
     get:
       tags:
-        - user
-      summary: Logs out current logged in user session
-      description: ''
-      operationId: logoutUser
-      parameters: [ ]
-      responses:
-        default:
-          description: successful operation
-  /user/{username}:
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      description: ''
-      operationId: getUserByName
+        - Users
+      summary: Gets a user by username
+      operationId: getUser
       parameters:
         - name: username
           in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
+          description: User username
           required: true
           schema:
             type: string
       responses:
-        '200':
-          description: successful operation
+        200:
+          description: User was found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-            application/xml:
+        400:
+          description: Invalid user username
+          content:
+            application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-    put:
+                $ref: '#/components/schemas/AppError'
+        404:
+          description: User was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games:
+    get:
       tags:
-        - user
-      summary: Update user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
+        - Games
+      summary: Gets all games
+      operationId: getGames
       parameters:
-        - name: username
-          in: path
-          description: name that need to be deleted
-          required: true
+        - name: skip
+          in: query
+          description: Number of entities to skip
+          required: false
           schema:
-            type: string
+            type: integer
+            default: 0
+
+        - name: limit
+          in: query
+          description: Number of entities that are returned
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        200:
+          description: Games were found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GamesResponse'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+    post:
+      tags:
+        - Games
+      summary: Create a game
+      operationId: createGame
       requestBody:
-        description: Update an existent user in the store
+        description: Created game object
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/CreateGameRequest'
       responses:
-        default:
-          description: successful operation
-    delete:
+        201:
+          description: Game was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGameResponse'
+        400:
+          $ref: '#/components/responses/InvalidRequestBodyResponse'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}:
+    get:
       tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
+        - Games
+      summary: Gets a game by id
+      operationId: getGame
       parameters:
-        - name: username
+        - name: gameId
           in: path
-          description: The name that needs to be deleted
+          description: Game id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
+        200:
+          description: Game was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        400:
+          description: Invalid game id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        404:
+          description: Game was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}/state:
+    get:
+      tags:
+        - Games
+      summary: Gets a game state by id
+      operationId: getGameState
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Game was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameState'
+        400:
+          description: Invalid game id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        404:
+          description: Game was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}/join:
+    post:
+      tags:
+        - Games
+      summary: Join a game
+      operationId: joinGame
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: User joined the game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JoinGameResponse'
+        400:
+          description: Invalid game id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        404:
+          description: Game was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}/players/self/fleet:
+    get:
+      tags:
+        - Players
+      summary: Gets the player's fleet
+      operationId: getFleet
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Game was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fleet'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+    post:
+      tags:
+        - Players
+      summary: Deploy a fleet
+      operationId: deployFleet
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Fleet object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployFleetRequest'
+      responses:
+        201:
+          description: Fleet was deployed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployFleetResponse'
+        400:
+          $ref: '#/components/responses/InvalidRequestBodyResponse'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}/players/opponent/fleet:
+    get:
+      tags:
+        - Players
+      summary: Gets the opponent's fleet
+      operationId: getOpponentFleet
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Game was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fleet'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}/players/self/shots:
+    get:
+      tags:
+        - Players
+      summary: Gets the player's shots
+      operationId: getShots
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Game was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShotsResponse'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+    post:
+      tags:
+        - Players
+      summary: Create shots
+      operationId: createShots
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Shots object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShotsRequest'
+      responses:
+        201:
+          description: Fleet was deployed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateShotsResponse'
+        400:
+          $ref: '#/components/responses/InvalidRequestBodyResponse'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /games/{gameId}/players/opponent/shots:
+    get:
+      tags:
+        - Players
+      summary: Gets the opponent's shots
+      operationId: getOpponentShots
+      parameters:
+        - name: gameId
+          in: path
+          description: Game id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Game was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShotsResponse'
+        500:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+
 components:
+  responses:
+    InternalServerErrorResponse:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Internal server error
+            required:
+              - name
+              - description
+            properties:
+              name:
+                type: string
+                description: Error name
+                example: INTERNAL_ERROR
+              description:
+                type: string
+                description: Error description message
+                example: An internal error occurred
+
+    InvalidRequestBodyResponse:
+      description: Invalid request body
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Invalid request body error
+            required:
+              - name
+              - description
+            properties:
+              name:
+                type: string
+                description: Error name
+                example: BAD_REQUEST
+              description:
+                type: string
+                description: Error description message
+                example: The request body is not valid
+              extraInfo:
+                type: string
+                description: Extra error info
+                example: Route id must be positive
+
+
   schemas:
-    Order:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        petId:
-          type: integer
-          format: int64
-          example: 198772
-        quantity:
-          type: integer
-          format: int32
-          example: 7
-        shipDate:
-          type: string
-          format: date-time
-        status:
-          type: string
-          description: Order Status
-          example: approved
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          type: boolean
-      xml:
-        name: order
-    Customer:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 100000
-        username:
-          type: string
-          example: fehguy
-        address:
-          type: array
-          xml:
-            name: addresses
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Address'
-      xml:
-        name: customer
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          example: 437 Lytton
-        city:
-          type: string
-          example: Palo Alto
-        state:
-          type: string
-          example: CA
-        zip:
-          type: string
-          example: '94301'
-      xml:
-        name: address
-    Category:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        name:
-          type: string
-          example: Dogs
-      xml:
-        name: category
     User:
       type: object
+      description: User object
+      required:
+        - username
+        - points
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
         username:
           type: string
-          example: theUser
-        firstName:
+          description: User name
+          example: André Jesus
+        points:
+          type: integer
+          description: User points
+          example: 100
+
+    CreateUserRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
           type: string
-          example: John
-        lastName:
-          type: string
-          example: James
-        email:
-          type: string
-          example: john@email.com
+          description: User username
+          example: André Páscoa
         password:
           type: string
-          example: '12345'
-        phone:
-          type: string
-          example: '12345'
-        userStatus:
-          type: integer
-          description: User Status
-          format: int32
-          example: 1
-      xml:
-        name: user
-    Tag:
+          description: User password
+          example: LittleHomie123
+
+    CreateUserResponse:
       type: object
+      required:
+        - token
       properties:
-        id:
-          type: integer
-          format: int64
-        name:
+        token:
           type: string
-      xml:
-        name: tag
-    Pet:
+          description: User token
+          example: 663f6889-e7b8-4eb4-8698-38d72de4a956
+
+    LoginUserRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: User username
+          example: andrepascoa
+        password:
+          type: string
+          description: User password
+          example: "LittleHomie123"
+
+    LoginUserResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: User token
+          example: 663f6889-e7b8-4eb4-8698-38d72de4a956
+
+    UsersResponse:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        totalCount:
+          type: integer
+          example: 10
+
+    AppError:
+      type: object
+      description: Application error
       required:
         - name
-        - photoUrls
-      type: object
+        - description
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
         name:
           type: string
-          example: doggie
-        category:
-          $ref: '#/components/schemas/Category'
-        photoUrls:
-          type: array
-          xml:
-            wrapped: true
-          items:
-            type: string
-            xml:
-              name: photoUrl
-        tags:
-          type: array
-          xml:
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
-        status:
+          description: Error name
+          example: FAIL
+        description:
           type: string
-          description: pet status in the store
-          enum:
-            - available
-            - pending
-            - sold
-      xml:
-        name: pet
-    ApiResponse:
+          description: Error description message
+          example: An error occurred
+        extraInfo:
+          type: string
+          description: Extra error info
+          example: "User not found"
+
+    Game:
       type: object
+      description: Game object
+      # TODO: Add required properties
+
+    CreateGameRequest:
+      type: object
+      # TODO: Add required properties
+
+    CreateGameResponse:
+      type: object
+      # TODO: Add required properties
+
+    GamesResponse:
+      type: object
+      required:
+        - games
       properties:
-        code:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+        totalCount:
           type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
-      xml:
-        name: '##default'
-  requestBodies:
-    Pet:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Pet'
-    UserArray:
-      description: List of user object
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
+          example: 10
+
+    GameState:
+      type: object
+      description: Game state object
+      # TODO: Add required properties
+
+    JoinGameResponse:
+      type: object
+      # TODO: Add required properties
+
+    Fleet:
+      type: object
+      description: Fleet object
+      # TODO: Add required properties
+
+    DeployFleetRequest:
+      type: object
+      # TODO: Add required properties
+
+    DeployFleetResponse:
+      type: object
+      # TODO: Add required properties
+
+    ShotsResponse:
+      type: object
+      # TODO: Add required properties
+
+    CreateShotsRequest:
+      type: object
+      # TODO: Add required properties
+
+    CreateShotsResponse:
+      type: object
+      # TODO: Add required properties
+
+
   securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    token:
+      type: http
+      scheme: bearer

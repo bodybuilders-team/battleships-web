@@ -27,27 +27,27 @@ class Game(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int?,
+    val id: Int = 0,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player1", nullable = false)
-    val player1: Player?,
+    val player1: Player? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player2", nullable = false)
-    val player2: Player?,
+    val player2: Player? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "current_player", nullable = false)
-    val currentPlayer: Player?,
+    val currentPlayer: Player? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "winner", nullable = false)
-    val winner: Player?,
+    val winner: Player? = null,
 
     @Column(name = "current_round", nullable = false)
-    val currentRound: Int,
+    val currentRound: Int = 0,
 
     @Column(name = "state", nullable = false)
-    val state: Int
+    val state: Int = 0
 )

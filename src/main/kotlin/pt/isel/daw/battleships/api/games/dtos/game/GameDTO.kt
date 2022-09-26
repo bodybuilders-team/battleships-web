@@ -1,5 +1,8 @@
 package pt.isel.daw.battleships.api.games.dtos.game
 
+import pt.isel.daw.battleships.database.model.Game
+import pt.isel.daw.battleships.services.games.GameResponse
+
 /**
  * Represents a game.
  *
@@ -9,4 +12,8 @@ package pt.isel.daw.battleships.api.games.dtos.game
 data class GameDTO(
     val sessionName: String,
     val config: GameConfigDTO
-)
+) {
+    constructor(gameResponse: GameResponse) : this(TODO())
+
+    constructor(game: Game) : this(TODO())
+}

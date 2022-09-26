@@ -26,35 +26,36 @@ class UsersController(private val usersService: UsersService) {
      * Handles the request to create a new user.
      *
      * @param userData The data of the user to be created.
-     * @return the response to the request.
+     * @return the response to the request with the created user.
      */
     @PostMapping
     fun createUser(
         @RequestBody userData: CreateUserRequestDTO
-    ): CreateUserResponseDTO {
-        val token = usersService.createUser(userData.toCreateUserRequest())
-        return CreateUserResponseDTO(token)
-    }
+    ): CreateUserResponseDTO =
+        CreateUserResponseDTO(token = usersService.createUser(userData.toCreateUserRequest()))
 
     /**
-     * Handles the request to login a user.
+     * Handles the request to log in a user.
      *
      * @param userData The data of the user to be logged in.
-     * @return the response to the request.
+     * @return the response to the request with the token of the logged in user.
      */
     @PostMapping("/login")
     fun login(
         @RequestBody userData: LoginUserRequestDTO
-    ): LoginUserResponseDTO {
-        val token = usersService.login(userData.username, userData.password)
-        return LoginUserResponseDTO(token)
-    }
+    ): LoginUserResponseDTO =
+        LoginUserResponseDTO(
+            token = usersService.login(
+                userData.username,
+                userData.password
+            )
+        )
 
     /**
      * Handles the request to get a user.
      *
      * @param username The username of the user.
-     * @return the response to the request.
+     * @return the response to the request with the user.
      */
     @GetMapping("/{username}")
     fun getUser(

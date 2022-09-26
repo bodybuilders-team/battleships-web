@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.api.games.dtos.game
+package pt.isel.daw.battleships.api.games.dtos.game.createGame
 
 /**
  * Represents the response body of a game creation request.

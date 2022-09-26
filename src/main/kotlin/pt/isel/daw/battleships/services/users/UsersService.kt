@@ -13,7 +13,7 @@ import javax.transaction.Transactional
 /**
  * Users services.
  *
- * @property usersRepository the users repository.
+ * @property usersRepository the users' repository.
  * @property utils the utils.
  * @property jwtUtils the jwt utils.
  */
@@ -39,9 +39,9 @@ class UsersService(
         }
 
         val hashedPassword = utils.hashPassword(createUserRequest.password)
-        val newUser = User(createUserRequest.username, hashedPassword)
+        val user = User(createUserRequest.username, hashedPassword)
 
-        usersRepository.save(newUser)
+        usersRepository.save(user)
 
         return jwtUtils.createToken(JwtPayload(createUserRequest.username))
     }
@@ -75,7 +75,9 @@ class UsersService(
      * @throws NotFoundException if the user does not exist.
      */
     fun getUser(username: String): UserResponse =
-        usersRepository
-            .findByUsername(username)?.let { UserResponse(it) }
-            ?: throw NotFoundException("User with username $username not found")
+        UserResponse(
+            user = usersRepository
+                .findByUsername(username)
+                ?: throw NotFoundException("User with username $username not found")
+        )
 }
