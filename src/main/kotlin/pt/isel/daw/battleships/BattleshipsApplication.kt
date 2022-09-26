@@ -8,6 +8,8 @@ import pt.isel.daw.battleships.pipeline.AuthenticationInterceptor
 
 /**
  * The main entry point of the Spring application.
+ *
+ * @property authInterceptor The authentication interceptor.
  */
 @SpringBootApplication
 class BattleshipsApplication(

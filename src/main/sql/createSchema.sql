@@ -9,7 +9,7 @@ CREATE TABLE users
 (
     username        VARCHAR(20) PRIMARY KEY,
     hashed_password VARCHAR(512) NOT NULL,
-    points          INT       NOT NULL
+    points          INT          NOT NULL
 );
 
 CREATE TABLE players
@@ -23,18 +23,18 @@ CREATE TABLE players
 
 CREATE TABLE games
 (
-    id                  SERIAL PRIMARY KEY,
-    player1             VARCHAR(20),
-    player2             VARCHAR(20),
-    current_player_turn VARCHAR(20),
-    winner              VARCHAR(20),
-    current_round       INT         NOT NULL,
-    state               VARCHAR(20) NOT NULL CHECK
+    id             SERIAL PRIMARY KEY,
+    player1        VARCHAR(20),
+    player2        VARCHAR(20),
+    current_player VARCHAR(20),
+    winner         VARCHAR(20),
+    current_round  INT         NOT NULL,
+    state          VARCHAR(20) NOT NULL CHECK
         ( state IN ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS', 'FINISHED') ),
 
     FOREIGN KEY (player1, id) REFERENCES players (username, game_id),
     FOREIGN KEY (player2, id) REFERENCES players (username, game_id),
-    FOREIGN KEY (current_player_turn, id) REFERENCES players (username, game_id),
+    FOREIGN KEY (current_player, id) REFERENCES players (username, game_id),
     FOREIGN KEY (winner, id) REFERENCES players (username, game_id)
 );
 
@@ -67,9 +67,9 @@ CREATE TABLE shiptypes
 CREATE TABLE ships
 (
     id          SERIAL PRIMARY KEY,
-    orientation VARCHAR(1) NOT NULL CHECK ( orientation IN ('H', 'V') ),
-    row         INT        NOT NULL,
-    col         CHAR       NOT NULL,
+    orientation CHAR(1) NOT NULL CHECK ( orientation IN ('H', 'V') ),
+    row         INT     NOT NULL,
+    col         CHAR    NOT NULL,
     type        VARCHAR(10) REFERENCES shiptypes (ship_name),
-    lives       INT        NOT NULL
+    lives       INT     NOT NULL
 );

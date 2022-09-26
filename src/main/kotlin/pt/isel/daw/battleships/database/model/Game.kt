@@ -10,6 +10,17 @@ import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
+/**
+ * The Game entity.
+ *
+ * @property id The game id.
+ * @property player1 The first player.
+ * @property player2 The second player.
+ * @property currentPlayer The current player.
+ * @property winner The winner player.
+ * @property currentRound The current round.
+ * @property state The game state.
+ */
 @Entity
 @Table(name = "games")
 class Game(
@@ -27,8 +38,8 @@ class Game(
     val player2: Player?,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "current_player_turn", nullable = false)
-    val currentPlayerTurn: Player?,
+    @JoinColumn(name = "current_player", nullable = false)
+    val currentPlayer: Player?,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "winner", nullable = false)

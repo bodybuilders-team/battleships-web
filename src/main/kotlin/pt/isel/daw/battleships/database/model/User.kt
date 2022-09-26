@@ -5,6 +5,13 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
 
+/**
+ * The User entity.
+ *
+ * @property username The username of the user.
+ * @property hashedPassword The hashed password of the user.
+ * @property points The points of the user.
+ */
 @Entity
 @Table(name = "users")
 class User(

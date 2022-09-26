@@ -11,10 +11,18 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 
+/**
+ * The Ship entity.
+ *
+ * @property id The ship's id.
+ * @property orientation The ship's orientation.
+ * @property coordinate The ship's coordinate.
+ * @property type The ship's type.
+ * @property lives The ship's lives.
+ */
 @Entity
 @Table(name = "ships")
 class Ship(
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
@@ -23,7 +31,7 @@ class Ship(
     val orientation: String,
 
     @Embedded
-    val cordinate: Coordinate,
+    val coordinate: Coordinate,
 
     @ManyToOne
     @JoinColumn(name = "type", nullable = false)

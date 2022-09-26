@@ -8,6 +8,14 @@ import javax.persistence.Embeddable
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 
+/**
+ * Represents the primary key of the [Shot] entity.
+ *
+ * @property game The game in which the shot was made.
+ * @property player The player who made the shot.
+ * @property round The round in which the shot was made.
+ * @property shotNumber The number of the shot in the round.
+ */
 @Embeddable
 class ShotId(
     @ManyToOne
@@ -25,6 +33,6 @@ class ShotId(
     val shotNumber: Int
 ) : Serializable {
     companion object {
-        private const val serialVersionUID = 5592698679692612632L
+        private const val SERIAL_VERSION_UID = 5592698679692612632L
     }
 }

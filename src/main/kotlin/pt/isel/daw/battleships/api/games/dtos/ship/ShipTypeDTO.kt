@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.api.games.dtos
+package pt.isel.daw.battleships.api.games.dtos.ship
 
 data class ShipTypeDTO(
     val name: String,

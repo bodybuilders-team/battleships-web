@@ -9,6 +9,13 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
+/**
+ * The Player entity.
+ *
+ * @property user The user that is playing the game.
+ * @property game The game that the player is playing.
+ * @property points The points that the player has.
+ */
 @Entity
 @Table(name = "players")
 class Player(
@@ -18,7 +25,7 @@ class Player(
     val user: User?,
 
     @OneToOne(mappedBy = "player1")
-    val game_id: Game?,
+    val game: Game?,
 
     @Column(name = "points", nullable = false)
     val points: Int

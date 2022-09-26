@@ -9,10 +9,13 @@ import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Table
 
-enum class ShotResult {
-    HIT, MISS, SUNK
-}
-
+/**
+ * The Shot entity.
+ *
+ * @property id The id of the shot.
+ * @property coordinate The coordinate of the shot.
+ * @property result The result of the shot.
+ */
 @Entity
 @Table(name = "shots")
 class Shot(
@@ -25,4 +28,16 @@ class Shot(
     @Column(name = "result", nullable = false)
     @Enumerated(EnumType.STRING)
     val result: ShotResult
-)
+) {
+    /**
+     * Represents the possible results of a shot:
+     * - HIT: The shot hit a ship.
+     * - MISS: The shot missed and hit the water.
+     * - SUNK: The shot sunk a ship.
+     */
+    enum class ShotResult {
+        HIT,
+        MISS,
+        SUNK
+    }
+}
