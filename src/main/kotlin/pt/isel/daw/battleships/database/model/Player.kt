@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.database.model
 
+import pt.isel.daw.battleships.database.model.game.Game
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Entity

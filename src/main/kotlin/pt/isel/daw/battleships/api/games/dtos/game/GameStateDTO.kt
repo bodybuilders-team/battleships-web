@@ -1,7 +1,6 @@
 package pt.isel.daw.battleships.api.games.dtos.game
 
-import pt.isel.daw.battleships.services.games.GameResponse
-import pt.isel.daw.battleships.services.games.GameStateResponse
+import pt.isel.daw.battleships.database.model.game.GameState
 
 /**
  * Represents a game state.
@@ -15,15 +14,9 @@ data class GameStateDTO(
     val round: Int?,
     val turn: String?
 ) {
-    constructor(gameStateResponse: GameStateResponse) : this(
-        gameStateResponse.phase,
-        gameStateResponse.round,
-        gameStateResponse.turn
-    )
-
-    constructor(game: GameResponse) : this(
-        game.phase,
-        game.round,
-        game.turn
+    constructor(state: GameState) : this(
+        state.phase.name,
+        state.round,
+        state.turn?.user?.username
     )
 }

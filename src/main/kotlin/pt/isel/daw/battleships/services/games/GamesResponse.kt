@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.services.games
 
-import pt.isel.daw.battleships.database.model.Game
+import pt.isel.daw.battleships.database.model.game.Game
 
 /**
  * Represents a response with games.

@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.database.model.shot
 
-import pt.isel.daw.battleships.database.model.Game
 import pt.isel.daw.battleships.database.model.Player
+import pt.isel.daw.battleships.database.model.game.Game
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable

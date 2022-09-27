@@ -1,8 +1,10 @@
 package pt.isel.daw.battleships.services.games
 
 import org.springframework.stereotype.Service
-import pt.isel.daw.battleships.database.model.Game
+import pt.isel.daw.battleships.database.model.game.Game
+import pt.isel.daw.battleships.database.model.game.GameState
 import pt.isel.daw.battleships.database.repositories.GamesRepository
+import pt.isel.daw.battleships.services.exceptions.BadRequestException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import javax.transaction.Transactional
 
@@ -23,7 +25,12 @@ class GamesService(
      * @return the id of the new game.
      */
     fun createGame(createGameRequest: CreateGameRequest): Int {
-        val game = Game() // TODO
+        val game = Game(
+            name = createGameRequest.name,
+            player1 = createGameRequest.player1,
+            config = createGameRequest.config,
+            state = GameState()
+        )
         gamesRepository.save(game)
 
         return game.id
@@ -43,8 +50,8 @@ class GamesService(
      * @param gameId the id of the game.
      * @return the response with the game.
      */
-    fun getGame(gameId: Int): GameResponse =
-        GameResponse(game = getGameById(gameId))
+    fun getGame(gameId: Int): Game =
+        getGameById(gameId)
 
     /**
      * Gets the state of a game.
@@ -52,8 +59,8 @@ class GamesService(
      * @param gameId the id of the game.
      * @return the response with the game state.
      */
-    fun getGameState(gameId: Int): GameStateResponse =
-        GameStateResponse(game = getGameById(gameId))
+    fun getGameState(gameId: Int): GameState =
+        getGameById(gameId).state
 
     /**
      * Joins a game.
@@ -61,14 +68,14 @@ class GamesService(
      * @param gameId the id of the game.
      * @return the response with the game.
      */
-    fun joinGame(gameId: Int): GameResponse {
+    fun joinGame(gameId: Int): Game {
         val game = getGameById(gameId)
 
-        /*TODO: if (game.state != GameState.WAITING_FOR_PLAYERS) {
+        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
             throw BadRequestException("GameResponse is not waiting for players")
-        }*/
+        }
 
-        return GameResponse(game)
+        return game
     }
 
     /**

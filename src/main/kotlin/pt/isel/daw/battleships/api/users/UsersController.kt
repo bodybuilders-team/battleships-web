@@ -38,7 +38,7 @@ class UsersController(private val usersService: UsersService) {
      * Handles the request to log in a user.
      *
      * @param userData The data of the user to be logged in.
-     * @return the response to the request with the token of the logged in user.
+     * @return the response to the request with the token of the logged-in user.
      */
     @PostMapping("/login")
     fun login(
