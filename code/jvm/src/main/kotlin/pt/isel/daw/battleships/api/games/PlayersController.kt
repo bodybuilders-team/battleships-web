@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.daw.battleships.api.games.dtos.ship.ShipDTO
-import pt.isel.daw.battleships.api.games.dtos.shot.CreateShotsRequestDTO
+import pt.isel.daw.battleships.api.games.models.ship.ShipModel
+import pt.isel.daw.battleships.api.games.models.ship.ShipsModel
+import pt.isel.daw.battleships.api.games.models.shot.CreateShotsInputModel
 import pt.isel.daw.battleships.database.model.shot.Shot
 
 /**
@@ -27,7 +28,7 @@ class PlayersController {
     @GetMapping("/self/fleet")
     fun getFleet(
         @PathVariable gameId: Int
-    ): List<ShipDTO> {
+    ): List<ShipModel> {
         // TODO: To be implemented
         throw NotImplementedException("Not implemented")
     }
@@ -41,7 +42,7 @@ class PlayersController {
     @GetMapping("/opponent/fleet")
     fun getOpponentFleet(
         @PathVariable gameId: Int
-    ): List<ShipDTO> {
+    ): ShipsModel {
         // TODO: To be implemented
         throw NotImplementedException("Not implemented")
     }
@@ -55,7 +56,7 @@ class PlayersController {
     @PostMapping("/self/fleet")
     fun deployFleet(
         @PathVariable gameId: Int,
-        @RequestBody fleet: List<ShipDTO>
+        @RequestBody fleet: List<ShipModel>
     ) {
         // TODO: To be implemented
         throw NotImplementedException("Not implemented")
@@ -98,9 +99,7 @@ class PlayersController {
     @PostMapping("/self/shots")
     fun createShots(
         @PathVariable gameId: Int,
-        @RequestBody shots: CreateShotsRequestDTO
+        @RequestBody shots: CreateShotsInputModel
     ) {
-        // TODO: To be implemented
-        throw NotImplementedException("Not implemented")
     }
 }

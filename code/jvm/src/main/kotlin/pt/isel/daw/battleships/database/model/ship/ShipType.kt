@@ -1,8 +1,8 @@
 package pt.isel.daw.battleships.database.model.ship
 
 import javax.persistence.Column
+import javax.persistence.EmbeddedId
 import javax.persistence.Entity
-import javax.persistence.Id
 import javax.persistence.Table
 
 /**
@@ -13,14 +13,16 @@ import javax.persistence.Table
  * @property points The points of the ship.
  */
 @Entity
-@Table(name = "shiptypes")
+@Table(name = "game_shiptypes")
 class ShipType(
-    @Id
-    @Column(name = "ship_name")
-    val shipName: String,
+    @EmbeddedId
+    val shipTypeId: ShipTypeId,
 
     @Column(name = "size", nullable = false)
     val size: Int,
+
+    @Column(name = "quantity", nullable = false)
+    val quantity: Int,
 
     @Column(name = "points", nullable = false)
     val points: Int

@@ -1,15 +1,15 @@
 package pt.isel.daw.battleships.database.model.game
 
-import pt.isel.daw.battleships.database.model.Player
+import pt.isel.daw.battleships.database.model.player.Player
+import java.io.Serializable
 import javax.persistence.CascadeType
 import javax.persistence.Column
-import javax.persistence.Entity
+import javax.persistence.Embeddable
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
-import javax.persistence.Id
 import javax.persistence.JoinColumn
+import javax.persistence.JoinColumns
 import javax.persistence.OneToOne
-import javax.persistence.Table
 
 /**
  * The GameState entity.
@@ -19,29 +19,29 @@ import javax.persistence.Table
  * @property turn The current player.
  * @property winner The winner player.
  */
-@Entity
-@Table(name = "gamestates")
+@Embeddable
 class GameState(
-    @Id
-    @OneToOne
-    @JoinColumn(name = "game_id")
-    val game: Game,
-
     @Column(name = "phase", nullable = false)
     @Enumerated(EnumType.STRING)
     val phase: GamePhase = GamePhase.WAITING_FOR_PLAYERS,
 
-    @Column(name = "round", nullable = true)
+    @Column(name = "round", nullable = false)
     val round: Int = 0,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "turn", nullable = true)
+    @JoinColumns(
+        JoinColumn(name = "id", referencedColumnName = "game_id", insertable = false, updatable = false),
+        JoinColumn(name = "turn", referencedColumnName = "username", insertable = false, updatable = false)
+    )
     val turn: Player? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "winner", nullable = true)
+    @JoinColumns(
+        JoinColumn(name = "id", referencedColumnName = "game_id", insertable = false, updatable = false),
+        JoinColumn(name = "winner", referencedColumnName = "username", insertable = false, updatable = false)
+    )
     val winner: Player? = null
-) {
+) : Serializable {
 
     /**
      * Represents the game phases.

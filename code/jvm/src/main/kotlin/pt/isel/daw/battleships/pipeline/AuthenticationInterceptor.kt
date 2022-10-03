@@ -38,18 +38,12 @@ class AuthenticationInterceptor(
             return false
         }
 
-        val payload = jwtUtils.validateToken(token)
-        if (payload == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token")
-            return false
-        }
-
-        request.setAttribute(PAYLOAD_ATTRIBUTE_NAME, payload)
+        request.setAttribute(TOKEN_ATTRIBUTE_NAME, token)
         return true
     }
 
     companion object {
         private const val AUTHORIZATION_HEADER = "Authorization"
-        private const val PAYLOAD_ATTRIBUTE_NAME = "authPayload"
+        private const val TOKEN_ATTRIBUTE_NAME = "token"
     }
 }

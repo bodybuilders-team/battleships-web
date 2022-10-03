@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
+import javax.persistence.JoinColumns
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 
@@ -30,7 +31,10 @@ class Ship(
     val id: Int,
 
     @ManyToOne
-    @JoinColumn(name = "type", nullable = false)
+    @JoinColumns(
+        JoinColumn(name = "game_id", referencedColumnName = "game_id"),
+        JoinColumn(name = "ship_name", referencedColumnName = "ship_name")
+    )
     val type: ShipType,
 
     @Embedded

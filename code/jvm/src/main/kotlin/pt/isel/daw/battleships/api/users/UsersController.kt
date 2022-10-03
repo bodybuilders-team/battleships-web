@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.daw.battleships.api.users.dtos.UserDTO
-import pt.isel.daw.battleships.api.users.dtos.createUser.CreateUserRequestDTO
-import pt.isel.daw.battleships.api.users.dtos.createUser.CreateUserResponseDTO
-import pt.isel.daw.battleships.api.users.dtos.login.LoginUserRequestDTO
-import pt.isel.daw.battleships.api.users.dtos.login.LoginUserResponseDTO
+import pt.isel.daw.battleships.api.users.dtos.UserModel
+import pt.isel.daw.battleships.api.users.dtos.createUser.CreateUserInputModel
+import pt.isel.daw.battleships.api.users.dtos.createUser.CreateUserOutputModel
+import pt.isel.daw.battleships.api.users.dtos.login.LoginUserInputModel
+import pt.isel.daw.battleships.api.users.dtos.login.LoginUserOutputModel
 import pt.isel.daw.battleships.services.users.UsersService
 
 /**
@@ -30,9 +30,9 @@ class UsersController(private val usersService: UsersService) {
      */
     @PostMapping
     fun createUser(
-        @RequestBody userData: CreateUserRequestDTO
-    ): CreateUserResponseDTO =
-        CreateUserResponseDTO(token = usersService.createUser(userData.toCreateUserRequest()))
+        @RequestBody userData: CreateUserInputModel
+    ): CreateUserOutputModel =
+        CreateUserOutputModel(token = usersService.createUser(userData.toCreateUserRequest()))
 
     /**
      * Handles the request to log in a user.
@@ -42,9 +42,9 @@ class UsersController(private val usersService: UsersService) {
      */
     @PostMapping("/login")
     fun login(
-        @RequestBody userData: LoginUserRequestDTO
-    ): LoginUserResponseDTO =
-        LoginUserResponseDTO(
+        @RequestBody userData: LoginUserInputModel
+    ): LoginUserOutputModel =
+        LoginUserOutputModel(
             token = usersService.login(
                 userData.username,
                 userData.password
@@ -60,6 +60,6 @@ class UsersController(private val usersService: UsersService) {
     @GetMapping("/{username}")
     fun getUser(
         @PathVariable username: String
-    ): UserDTO? =
-        UserDTO(usersService.getUser(username))
+    ): UserModel? =
+        UserModel(usersService.getUser(username))
 }
