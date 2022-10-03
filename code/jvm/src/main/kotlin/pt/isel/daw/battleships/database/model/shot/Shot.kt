@@ -3,10 +3,12 @@ package pt.isel.daw.battleships.database.model.shot
 import pt.isel.daw.battleships.database.model.Coordinate
 import javax.persistence.Column
 import javax.persistence.Embedded
-import javax.persistence.EmbeddedId
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 import javax.persistence.Table
 
 /**
@@ -19,16 +21,24 @@ import javax.persistence.Table
 @Entity
 @Table(name = "shots")
 class Shot(
-    @EmbeddedId
-    val id: ShotId,
-
     @Embedded
     val coordinate: Coordinate,
+
+    @Column(name = "round", nullable = false)
+    val round: Int,
+
+    @Column(name = "shot_number", nullable = false)
+    val shotNumber: Int,
 
     @Column(name = "result", nullable = false)
     @Enumerated(EnumType.STRING)
     val result: ShotResult
 ) {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private val id: Int? = null
+
     /**
      * Represents the possible results of a shot:
      * - HIT: The shot hit a ship.

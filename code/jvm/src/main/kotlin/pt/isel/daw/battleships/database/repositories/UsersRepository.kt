@@ -6,7 +6,9 @@ import pt.isel.daw.battleships.database.model.User
 /**
  * Repository for the User entity.
  */
-interface UsersRepository : CrudRepository<User, String> {
+interface JpaUsersRepository : CrudRepository<User, String>, UsersRepository
+
+interface UsersRepository {
 
     /**
      * Finds a user by its username.
@@ -23,4 +25,6 @@ interface UsersRepository : CrudRepository<User, String> {
      * @return true if a user with the given username exists, false otherwise
      */
     fun existsByUsername(username: String): Boolean
+
+    fun save(user: User): User
 }

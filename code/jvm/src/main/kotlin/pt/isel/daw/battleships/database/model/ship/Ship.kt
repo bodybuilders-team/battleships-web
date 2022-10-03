@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
-import javax.persistence.JoinColumns
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 
@@ -26,15 +25,8 @@ import javax.persistence.Table
 @Entity
 @Table(name = "ships")
 class Ship(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
-
     @ManyToOne
-    @JoinColumns(
-        JoinColumn(name = "game_id", referencedColumnName = "game_id"),
-        JoinColumn(name = "ship_name", referencedColumnName = "ship_name")
-    )
+    @JoinColumn(name = "type", nullable = false)
     val type: ShipType,
 
     @Embedded
@@ -47,6 +39,10 @@ class Ship(
     @Column(name = "lives", nullable = false)
     val lives: Int
 ) {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int? = null
 
     /**
      * Represents the possible orientations of a ship:

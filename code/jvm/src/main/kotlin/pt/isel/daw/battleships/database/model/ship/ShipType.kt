@@ -1,8 +1,13 @@
 package pt.isel.daw.battleships.database.model.ship
 
+import pt.isel.daw.battleships.database.model.game.Game
 import javax.persistence.Column
-import javax.persistence.EmbeddedId
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.OneToOne
 import javax.persistence.Table
 
 /**
@@ -13,10 +18,10 @@ import javax.persistence.Table
  * @property points The points of the ship.
  */
 @Entity
-@Table(name = "game_shiptypes")
+@Table(name = "ship_types")
 class ShipType(
-    @EmbeddedId
-    val shipTypeId: ShipTypeId,
+    @Column(name = "ship_name", nullable = false)
+    val shipName: String,
 
     @Column(name = "size", nullable = false)
     val size: Int,
@@ -26,4 +31,13 @@ class ShipType(
 
     @Column(name = "points", nullable = false)
     val points: Int
-)
+) {
+    @OneToOne
+    @JoinColumn(name = "game", nullable = false)
+    var game: Game? = null
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int? = null
+}

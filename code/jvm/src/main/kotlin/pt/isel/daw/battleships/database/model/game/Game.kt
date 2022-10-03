@@ -27,11 +27,6 @@ import javax.persistence.Table
 @Entity
 @Table(name = "games")
 class Game(
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
-
     @ManyToOne
     @JoinColumn(name = "creator")
     val creator: User,
@@ -45,22 +40,27 @@ class Game(
     @Embedded
     val config: GameConfig
 ) {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int? = null
+
     init {
         config.shipTypes.forEach {
-            it.shipTypeId.game = this
+            it.game = this
         }
     }
 
     @OneToMany(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "game")
     private val players: MutableList<Player> = mutableListOf()
 
     fun getPlayer(username: String): Player? {
-        return players.find { it.playerPk.user.username == username }
+        return players.find { it.user.username == username }
     }
 
     fun getOpponent(username: String): Player? {
-        return players.find { it.playerPk.user.username != username }
+        return players.find { it.user.username != username }
     }
 
     fun addPlayer(player: Player) {

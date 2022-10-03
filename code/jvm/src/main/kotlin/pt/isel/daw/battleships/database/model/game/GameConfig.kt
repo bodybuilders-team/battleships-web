@@ -32,6 +32,6 @@ class GameConfig(
     val maxTimeForLayoutPhase: Int,
 
     @OneToMany(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "game")
     val shipTypes: List<ShipType>
 )

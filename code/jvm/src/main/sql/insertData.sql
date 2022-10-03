@@ -5,8 +5,8 @@ INSERT INTO games(name, grid_size, max_time_for_layout_phase, shots_per_round, m
                   winner)
 VALUES ('game1', 10, 60, 1, 60, 'WAITING_FOR_PLAYERS', 0, NULL, NULL);
 
-INSERT INTO players(username, game_id, points)
+INSERT INTO players(username, game, points)
 VALUES ('guest', 1, 0);
 
-INSERT INTO game_shiptypes(game_id, ship_name, size, points)
+INSERT INTO game_shiptypes(game, ship_name, size, points)
 VALUES (1, 'Carrier', 5, 5), (1, 'Battleship', 4, 4), (1, 'Cruiser', 3, 3), (1, 'Submarine', 3, 3), (1, 'Destroyer', 2, 2);

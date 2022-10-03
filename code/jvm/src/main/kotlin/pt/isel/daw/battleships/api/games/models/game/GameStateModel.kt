@@ -12,11 +12,13 @@ import pt.isel.daw.battleships.services.games.dtos.GameStateDTO
 data class GameStateModel(
     val phase: String,
     val round: Int?,
-    val turn: String?
+    val turn: String?,
+    val winner: String?
 ) {
     constructor(state: GameStateDTO) : this(
         state.phase,
         state.round,
-        state.turn
+        state.turn,
+        state.winner
     )
 }

@@ -1,12 +1,13 @@
 package pt.isel.daw.battleships.services.games
 
 import org.springframework.stereotype.Service
+import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameState
 import pt.isel.daw.battleships.database.model.player.Player
-import pt.isel.daw.battleships.database.model.player.PlayerId
 import pt.isel.daw.battleships.database.repositories.GamesRepository
 import pt.isel.daw.battleships.database.repositories.UsersRepository
+import pt.isel.daw.battleships.services.exceptions.AuthenticationError
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.games.dtos.CreateGameDTO
 import pt.isel.daw.battleships.services.games.dtos.GameDTO
@@ -34,9 +35,7 @@ class GamesService(
      * @return the id of the new game.
      */
     fun createGame(token: String, createGameDTO: CreateGameDTO): Int {
-        val tokenPayload = jwtUtils.validateToken(token) ?: throw IllegalStateException("Invalid token")
-
-        val user = usersRepository.findByUsername(tokenPayload.username) ?: throw NotFoundException("User not found")
+        val user = authenticateUser(token)
 
         val game = Game(
             name = createGameDTO.name,
@@ -45,7 +44,7 @@ class GamesService(
             state = GameState()
         )
 
-        game.addPlayer(Player(PlayerId(game, user)))
+        game.addPlayer(Player(game, user))
 
         gamesRepository.save(game)
 
@@ -85,9 +84,7 @@ class GamesService(
      * @return the response with the game.
      */
     fun joinGame(token: String, gameId: Int): GameDTO {
-        val tokenPayload = jwtUtils.validateToken(token) ?: throw IllegalStateException("Invalid token")
-
-        val user = usersRepository.findByUsername(tokenPayload.username) ?: throw NotFoundException("User not found")
+        val user = authenticateUser(token)
 
         val game = getGameById(gameId)
 
@@ -99,7 +96,7 @@ class GamesService(
             throw IllegalStateException("You have already joined this game")
         }
 
-        game.addPlayer(Player(PlayerId(game, user)))
+        game.addPlayer(Player(game, user))
 
         return GameDTO(game)
     }
@@ -115,4 +112,10 @@ class GamesService(
     private fun getGameById(gameId: Int): Game = gamesRepository
         .findById(gameId)
         .orElseThrow { NotFoundException("GameResponse with id $gameId not found") }
+
+    private fun authenticateUser(token: String): User {
+        val tokenPayload = jwtUtils.validateToken(token) ?: throw AuthenticationError("Invalid token")
+
+        return usersRepository.findByUsername(tokenPayload.username) ?: throw NotFoundException("User not found")
+    }
 }

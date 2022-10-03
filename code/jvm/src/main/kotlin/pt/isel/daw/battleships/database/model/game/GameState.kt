@@ -8,7 +8,6 @@ import javax.persistence.Embeddable
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.JoinColumn
-import javax.persistence.JoinColumns
 import javax.persistence.OneToOne
 
 /**
@@ -26,20 +25,14 @@ class GameState(
     val phase: GamePhase = GamePhase.WAITING_FOR_PLAYERS,
 
     @Column(name = "round", nullable = false)
-    val round: Int = 0,
+    val round: Int? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumns(
-        JoinColumn(name = "id", referencedColumnName = "game_id", insertable = false, updatable = false),
-        JoinColumn(name = "turn", referencedColumnName = "username", insertable = false, updatable = false)
-    )
+    @JoinColumn(name = "turn", nullable = true)
     val turn: Player? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumns(
-        JoinColumn(name = "id", referencedColumnName = "game_id", insertable = false, updatable = false),
-        JoinColumn(name = "winner", referencedColumnName = "username", insertable = false, updatable = false)
-    )
+    @JoinColumn(name = "winner", nullable = true)
     val winner: Player? = null
 ) : Serializable {
 

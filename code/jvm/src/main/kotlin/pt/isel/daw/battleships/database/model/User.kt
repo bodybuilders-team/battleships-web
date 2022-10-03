@@ -2,6 +2,8 @@ package pt.isel.daw.battleships.database.model
 
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 
@@ -15,7 +17,6 @@ import javax.persistence.Table
 @Entity
 @Table(name = "users")
 class User(
-    @Id
     @Column(name = "username")
     val username: String,
 
@@ -24,4 +25,9 @@ class User(
 
     @Column(name = "points", nullable = false)
     val points: Int = 0
-)
+) {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int? = null
+}
