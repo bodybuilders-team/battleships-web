@@ -1,17 +1,7 @@
 package pt.isel.daw.battleships.database.model.ship
 
 import pt.isel.daw.battleships.database.model.Coordinate
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 /**
  * The Ship entity.
@@ -37,7 +27,7 @@ class Ship(
     val orientation: Orientation,
 
     @Column(name = "lives", nullable = false)
-    val lives: Int
+    var lives: Int
 ) {
     @Id
     @Column(name = "id")
@@ -53,4 +43,12 @@ class Ship(
         HORIZONTAL,
         VERTICAL
     }
+
+    val coordinates
+        get() = (0 until lives).map {
+            when (orientation) {
+                Orientation.HORIZONTAL -> Coordinate(coordinate.col + it, coordinate.row)
+                Orientation.VERTICAL -> Coordinate(coordinate.col, coordinate.row + it)
+            }
+        }
 }

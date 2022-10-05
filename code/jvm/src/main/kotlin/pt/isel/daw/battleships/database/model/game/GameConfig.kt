@@ -1,16 +1,11 @@
 package pt.isel.daw.battleships.database.model.game
 
 import pt.isel.daw.battleships.database.model.ship.ShipType
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embeddable
-import javax.persistence.JoinColumn
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 /**
  * The GameState entity.
  *
- * @property game The game id.
  * @property gridSize The grid size.
  * @property maxTimePerShot The maximum time per shot.
  * @property shotsPerRound The shots per round.
@@ -46,14 +41,17 @@ class GameConfig(
         if (shotsPerRound != other.shotsPerRound) return false
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
-        if (
-            shipTypes.any { shipType ->
-                other.shipTypes.none { otherShipType ->
-                    shipType == otherShipType
-                }
-            }
-        ) return false
+        if (shipTypes.toSet() == other.shipTypes.toSet()) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = gridSize
+        result = 31 * result + maxTimePerShot
+        result = 31 * result + shotsPerRound
+        result = 31 * result + maxTimeForLayoutPhase
+        result = 31 * result + shipTypes.hashCode()
+        return result
     }
 }

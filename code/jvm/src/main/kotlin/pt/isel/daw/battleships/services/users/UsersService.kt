@@ -7,8 +7,8 @@ import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.users.dtos.CreateUserRequestDTO
 import pt.isel.daw.battleships.services.users.dtos.UserDTO
-import pt.isel.daw.battleships.utils.JwtUtils
-import pt.isel.daw.battleships.utils.JwtUtils.JwtPayload
+import pt.isel.daw.battleships.utils.JwtProvider
+import pt.isel.daw.battleships.utils.JwtProvider.JwtPayload
 import pt.isel.daw.battleships.utils.Utils
 import javax.transaction.Transactional
 
@@ -17,14 +17,14 @@ import javax.transaction.Transactional
  *
  * @property usersRepository the users' repository.
  * @property utils the utils.
- * @property jwtUtils the jwt utils.
+ * @property jwtProvider the jwt utils.
  */
 @Service
 @Transactional
 class UsersService(
     private val usersRepository: UsersRepository,
     private val utils: Utils,
-    private val jwtUtils: JwtUtils
+    private val jwtProvider: JwtProvider
 ) {
 
     /**
@@ -45,7 +45,7 @@ class UsersService(
 
         usersRepository.save(user)
 
-        return jwtUtils.createToken(JwtPayload(createUserRequestDTO.username))
+        return jwtProvider.createToken(JwtPayload(createUserRequestDTO.username))
     }
 
     /**
@@ -65,7 +65,7 @@ class UsersService(
             throw NotFoundException("Invalid username or password")
         }
 
-        return jwtUtils.createToken(JwtPayload(username))
+        return jwtProvider.createToken(JwtPayload(username))
     }
 
     /**

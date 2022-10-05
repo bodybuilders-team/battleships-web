@@ -4,16 +4,7 @@ import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.ship.Ship
 import pt.isel.daw.battleships.database.model.shot.Shot
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 
 /**
  * The Player entity.
@@ -41,9 +32,9 @@ class Player(
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player")
-    private val ships: MutableList<Ship> = mutableListOf()
+    val ships: MutableList<Ship> = mutableListOf()
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player")
-    private val shots: MutableList<Shot> = mutableListOf()
+    val shots: MutableList<Shot> = mutableListOf()
 }

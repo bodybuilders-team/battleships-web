@@ -8,16 +8,10 @@ import pt.isel.daw.battleships.database.model.player.Player
 import pt.isel.daw.battleships.database.repositories.GamesRepository
 import pt.isel.daw.battleships.database.repositories.UsersRepository
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
-import pt.isel.daw.battleships.services.exceptions.AuthenticationError
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
-import pt.isel.daw.battleships.services.games.dtos.CreateGameDTO
-import pt.isel.daw.battleships.services.games.dtos.GameConfigDTO
-import pt.isel.daw.battleships.services.games.dtos.GameDTO
-import pt.isel.daw.battleships.services.games.dtos.GameStateDTO
-import pt.isel.daw.battleships.services.games.dtos.GamesDTO
-import pt.isel.daw.battleships.services.games.dtos.MatchmakeDTO
-import pt.isel.daw.battleships.utils.JwtUtils
+import pt.isel.daw.battleships.services.games.dtos.game.*
+import pt.isel.daw.battleships.utils.JwtProvider
 import javax.transaction.Transactional
 
 /**
@@ -30,7 +24,7 @@ import javax.transaction.Transactional
 class GamesService(
     private val gamesRepository: GamesRepository,
     private val usersRepository: UsersRepository,
-    private val jwtUtils: JwtUtils
+    private val jwtProvider: JwtProvider
 ) {
     /**
      * Creates a new game.
@@ -77,8 +71,19 @@ class GamesService(
      */
     fun joinGame(token: String, gameId: Int): GameDTO {
         val user = authenticateUser(token)
-        val game = gamesRepository.findById(gameId) ?: throw NotFoundException("Game not found")
+
+        val game = getGameById(gameId)
         joinGame(user, game)
+
+        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
+            throw IllegalStateException("Waiting for players phase is over")
+        }
+
+        if (game.getPlayerOrNull(user.username) != null) {
+            throw IllegalStateException("You have already joined this game")
+        }
+
+        game.addPlayer(Player(game, user))
 
         return GameDTO(game)
     }
@@ -91,13 +96,19 @@ class GamesService(
             config.toGameConfig()
         )
 
-        return if (game == null || game.getPlayer(user.username) != null) {
+        return if (game == null || game.getPlayerOrNull(user.username) != null) {
             val newGame = createGame(user, CreateGameDTO("Game", config))
             MatchmakeDTO(GameDTO(newGame), true)
         } else {
             joinGame(user, game)
             MatchmakeDTO(GameDTO(game), false)
         }
+    }
+
+    fun authenticateUser(token: String): User {
+        val tokenPayload = jwtProvider.validateToken(token) ?: throw IllegalStateException("Invalid token")
+
+        return usersRepository.findByUsername(tokenPayload.username) ?: throw NotFoundException("User not found")
     }
 
     /**
@@ -109,13 +120,7 @@ class GamesService(
      * @throws NotFoundException if the game does not exist.
      */
     private fun getGameById(gameId: Int): Game =
-        gamesRepository.findById(gameId) ?: throw NotFoundException("GameResponse with id $gameId not found")
-
-    private fun authenticateUser(token: String): User {
-        val tokenPayload = jwtUtils.validateToken(token) ?: throw AuthenticationError("Invalid token")
-
-        return usersRepository.findByUsername(tokenPayload.username) ?: throw NotFoundException("User not found")
-    }
+        gamesRepository.findById(gameId) ?: throw NotFoundException("Game with id $gameId not found")
 
     private fun createGame(user: User, createGameDTO: CreateGameDTO): Game {
         val game = Game(
@@ -135,7 +140,7 @@ class GamesService(
             throw InvalidPhaseException("Waiting for players phase is over")
         }
 
-        if (game.getPlayer(user.username) != null) {
+        if (game.getPlayerOrNull(user.username) != null) {
             throw AlreadyJoinedException("You have already joined this game")
         }
 

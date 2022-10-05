@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.pipeline
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
-import pt.isel.daw.battleships.utils.JwtUtils
+import pt.isel.daw.battleships.utils.JwtProvider
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletResponse
  * 2. If the token in the header is a bearer token
  * 3. If the token is valid
  *
- * @property jwtUtils The JWT utility class
+ * @property jwtProvider The JWT utility class
  */
 @Component
 class AuthenticationInterceptor(
-    val jwtUtils: JwtUtils
+    val jwtProvider: JwtProvider
 ) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
@@ -32,7 +32,7 @@ class AuthenticationInterceptor(
             return false
         }
 
-        val token = jwtUtils.parseBearerToken(authHeader)
+        val token = jwtProvider.parseBearerToken(authHeader)
         if (token == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Token")
             return false

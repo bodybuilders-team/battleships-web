@@ -2,17 +2,8 @@ package pt.isel.daw.battleships.database.model.game
 
 import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.player.Player
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import pt.isel.daw.battleships.services.exceptions.NotFoundException
+import javax.persistence.*
 
 /**
  * The Game entity.
@@ -55,12 +46,18 @@ class Game(
     @JoinColumn(name = "game")
     val players: MutableList<Player> = mutableListOf()
 
-    fun getPlayer(username: String): Player? {
+    fun getPlayer(username: String): Player {
+        return getPlayerOrNull(username)
+            ?: throw NotFoundException("Player with username $username is not part of the game")
+    }
+
+    fun getPlayerOrNull(username: String): Player? {
         return players.find { it.user.username == username }
     }
 
-    fun getOpponent(username: String): Player? {
+    fun getOpponent(username: String): Player {
         return players.find { it.user.username != username }
+            ?: throw NotFoundException("There's no opponent yet")
     }
 
     fun addPlayer(player: Player) {
