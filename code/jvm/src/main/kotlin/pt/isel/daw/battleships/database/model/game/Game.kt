@@ -53,7 +53,7 @@ class Game(
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "game")
-    private val players: MutableList<Player> = mutableListOf()
+    val players: MutableList<Player> = mutableListOf()
 
     fun getPlayer(username: String): Player? {
         return players.find { it.user.username == username }

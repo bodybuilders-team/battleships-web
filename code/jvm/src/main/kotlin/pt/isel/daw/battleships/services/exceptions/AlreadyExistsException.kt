@@ -3,6 +3,6 @@ package pt.isel.daw.battleships.services.exceptions
 /**
  * Thrown when a resource already exists.
  *
- * @param msg exception message
+ * @param s exception message
  */
-class AlreadyExistsException(msg: String) : Exception(msg)
+class AlreadyExistsException(s: String) : Exception(s)

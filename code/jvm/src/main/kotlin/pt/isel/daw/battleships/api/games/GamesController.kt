@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.api.games.models.GamesOutputModel
+import pt.isel.daw.battleships.api.games.models.MatchmakeModel
+import pt.isel.daw.battleships.api.games.models.game.GameConfigModel
 import pt.isel.daw.battleships.api.games.models.game.GameModel
 import pt.isel.daw.battleships.api.games.models.game.GameStateModel
 import pt.isel.daw.battleships.api.games.models.game.createGame.CreateGameInputModel
@@ -48,6 +50,12 @@ class GamesController(private val gamesService: GamesService) {
         CreateGameOutputModel(
             gamesService.createGame(token, gameData.toCreateGameRequest())
         )
+
+    @PostMapping("/matchmake")
+    fun matchmake(
+        @RequestBody gameConfig: GameConfigModel,
+        @RequestAttribute("token") token: String
+    ) = MatchmakeModel(gamesService.matchmake(token, gameConfig.toGameConfigDTO()))
 
     /**
      * Handles the request to get a game.

@@ -40,4 +40,18 @@ class ShipType(
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ShipType
+
+        if (shipName != other.shipName) return false
+        if (size != other.size) return false
+        if (quantity != other.quantity) return false
+        if (points != other.points) return false
+
+        return true
+    }
 }

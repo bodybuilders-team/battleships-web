@@ -34,4 +34,26 @@ class GameConfig(
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "game")
     val shipTypes: List<ShipType>
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as GameConfig
+
+        if (gridSize != other.gridSize) return false
+        if (maxTimePerShot != other.maxTimePerShot) return false
+        if (shotsPerRound != other.shotsPerRound) return false
+        if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
+        if (shipTypes.size != other.shipTypes.size) return false
+        if (
+            shipTypes.any { shipType ->
+                other.shipTypes.none { otherShipType ->
+                    shipType == otherShipType
+                }
+            }
+        ) return false
+
+        return true
+    }
+}

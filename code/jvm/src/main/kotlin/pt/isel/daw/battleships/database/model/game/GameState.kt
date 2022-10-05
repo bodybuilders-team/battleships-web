@@ -22,7 +22,7 @@ import javax.persistence.OneToOne
 class GameState(
     @Column(name = "phase", nullable = false)
     @Enumerated(EnumType.STRING)
-    val phase: GamePhase = GamePhase.WAITING_FOR_PLAYERS,
+    var phase: GamePhase = GamePhase.WAITING_FOR_PLAYERS,
 
     @Column(name = "round", nullable = false)
     val round: Int? = null,

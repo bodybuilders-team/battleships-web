@@ -3,12 +3,7 @@ package pt.isel.daw.battleships.database.repositories
 import org.springframework.data.repository.CrudRepository
 import pt.isel.daw.battleships.database.model.User
 
-/**
- * Repository for the User entity.
- */
-interface JpaUsersRepository : CrudRepository<User, String>, UsersRepository
-
-interface UsersRepository {
+interface UsersRepository : CrudRepository<User, Int> {
 
     /**
      * Finds a user by its username.
@@ -25,6 +20,4 @@ interface UsersRepository {
      * @return true if a user with the given username exists, false otherwise
      */
     fun existsByUsername(username: String): Boolean
-
-    fun save(user: User): User
 }
