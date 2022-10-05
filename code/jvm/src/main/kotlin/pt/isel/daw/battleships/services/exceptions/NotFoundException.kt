@@ -3,6 +3,6 @@ package pt.isel.daw.battleships.services.exceptions
 /**
  * Exception thrown when a resource is not found.
  *
- * @param s the message to be returned to the client
+ * @param msg exception message
  */
-class NotFoundException(s: String) : Exception(s)
+class NotFoundException(msg: String) : Exception(msg)

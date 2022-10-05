@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.services.games.dtos.ship
 
-import pt.isel.daw.battleships.services.games.dtos.shot.CoordinateDTO
+import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
 
 /**
  * Ship DTO for services.

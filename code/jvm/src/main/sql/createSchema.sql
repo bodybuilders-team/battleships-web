@@ -1,3 +1,5 @@
+-- Script to create the database and tables
+
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS players CASCADE;
 DROP TABLE IF EXISTS games CASCADE;

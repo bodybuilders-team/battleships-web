@@ -1,16 +1,22 @@
 package pt.isel.daw.battleships.database.model.game
 
-import pt.isel.daw.battleships.database.model.player.Player
+import pt.isel.daw.battleships.database.model.Player
 import java.io.Serializable
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Embeddable
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.JoinColumn
+import javax.persistence.OneToOne
 
 /**
  * The GameState entity.
  *
- * @property game The game id.
- * @property round The current round.
- * @property turn The current player.
- * @property winner The winner player.
+ * @property phase the phase of the game
+ * @property round the current round
+ * @property turn the current player
+ * @property winner the winner player
  */
 @Embeddable
 class GameState(

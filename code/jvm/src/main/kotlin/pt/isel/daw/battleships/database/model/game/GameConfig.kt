@@ -1,10 +1,14 @@
 package pt.isel.daw.battleships.database.model.game
 
 import pt.isel.daw.battleships.database.model.ship.ShipType
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Embeddable
+import javax.persistence.JoinColumn
+import javax.persistence.OneToMany
 
 /**
- * The GameState entity.
+ * The GameConfig entity.
  *
  * @property gridSize The grid size.
  * @property maxTimePerShot The maximum time per shot.

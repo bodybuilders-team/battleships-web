@@ -3,10 +3,10 @@ package pt.isel.daw.battleships.controllers.users.models
 import pt.isel.daw.battleships.services.users.dtos.UserDTO
 
 /**
- * Represents a User DTO.
+ * Represents a User model.
  *
- * @property username The username of the user.
- * @property points The points of the user.
+ * @property username the username of the user
+ * @property points the points of the user
  */
 data class UserModel(
     val username: String,

@@ -5,9 +5,10 @@ import pt.isel.daw.battleships.services.games.dtos.game.GameStateDTO
 /**
  * Represents a game state.
  *
- * @property phase The current game phase.
- * @property round The current round.
- * @property turn The current turn.
+ * @property phase the current game phase
+ * @property round the current round
+ * @property turn the current turn
+ * @property winner the winner of the game
  */
 data class GameStateModel(
     val phase: String,

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
  * 2. If the token in the header is a bearer token
  * 3. If the token is valid
  *
- * @property jwtProvider The JWT utility class
+ * @property jwtProvider the JWT provider
  */
 @Component
 class AuthenticationInterceptor(

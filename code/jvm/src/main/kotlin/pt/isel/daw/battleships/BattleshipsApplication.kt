@@ -9,7 +9,7 @@ import pt.isel.daw.battleships.pipeline.AuthenticationInterceptor
 /**
  * The main entry point of the Spring application.
  *
- * @property authInterceptor The authentication interceptor.
+ * @property authInterceptor the authentication interceptor
  */
 @SpringBootApplication
 class BattleshipsApplication(
@@ -21,11 +21,11 @@ class BattleshipsApplication(
     }
 }
 
+/**
+ * The main entry point of the application.
+ *
+ * @param args the command line arguments
+ */
 fun main(args: Array<String>) {
     runApplication<BattleshipsApplication>(*args)
-//    val ctx: ApplicationContext = runApplication<BattleshipsApplication>(*args)
-//    println("Let's inspect the beans provided by Spring Boot:")
-//    val beanNames = ctx.beanDefinitionNames
-//    beanNames.sort()
-//    beanNames.forEach { println(it) }
 }

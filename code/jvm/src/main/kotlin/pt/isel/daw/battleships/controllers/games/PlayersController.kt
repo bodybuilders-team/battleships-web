@@ -1,6 +1,12 @@
 package pt.isel.daw.battleships.controllers.games
 
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestAttribute
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.controllers.games.models.ship.InputShipModel
 import pt.isel.daw.battleships.controllers.games.models.ship.OutputShipModel
 import pt.isel.daw.battleships.controllers.games.models.ship.OutputShipsModel
@@ -11,16 +17,20 @@ import pt.isel.daw.battleships.services.games.PlayersService
 
 /**
  * The controller that handles the requests to the game's player's resources.
+ *
+ * @property playersService the service that handles the requests to the game's player's resources
  */
 @RestController
 @RequestMapping("/games/{gameId}/players")
 class PlayersController(private val playersService: PlayersService) {
 
     /**
-     * Gets the ships of the player.
+     * Gets the fleet of a player.
      *
-     * @param gameId The id of the game
-     * @return The ships of the player
+     * @param gameId the id of the game
+     * @param token the token of the user
+     *
+     * @return the fleet of the player
      */
     @GetMapping("/self/fleet")
     fun getFleet(
@@ -33,10 +43,13 @@ class PlayersController(private val playersService: PlayersService) {
         )
 
     /**
-     * Gets the ships of the opponent.
+     * Gets the fleet of the opponent.
+     * Only gets those that are sunk.
      *
-     * @param gameId The id of the game
-     * @return The ships of the opponent
+     * @param gameId the id of the game
+     * @param token the token of the user
+     *
+     * @return The fleet of the opponent
      */
     @GetMapping("/opponent/fleet")
     fun getOpponentFleet(
@@ -49,10 +62,11 @@ class PlayersController(private val playersService: PlayersService) {
         )
 
     /**
-     * Deploys the ships of the player.
+     * Deploys the fleet of the player.
      *
-     * @param gameId The id of the game
-     * @param fleet The ships to be deployed
+     * @param gameId the id of the game
+     * @param fleet the ships to be deployed
+     * @param token the token of the user
      */
     @PostMapping("/self/fleet")
     fun deployFleet(
@@ -60,14 +74,16 @@ class PlayersController(private val playersService: PlayersService) {
         @RequestBody fleet: List<InputShipModel>,
         @RequestAttribute("token") token: String
     ) {
-        playersService.deployFleet(token, gameId, fleet.map { it.toDTO() })
+        playersService.deployFleet(token, gameId, fleet.map { it.toInputShipDTO() })
     }
 
     /**
      * Gets the shots of the player.
      *
      * @param gameId The id of the game
-     * @return The shots of the player
+     * @param token the token of the user
+     *
+     * @return te shots of the player
      */
     @GetMapping("/self/shots")
     fun getShots(
@@ -83,7 +99,9 @@ class PlayersController(private val playersService: PlayersService) {
      * Gets the shots of the opponent.
      *
      * @param gameId The id of the game
-     * @return The shots of the opponent
+     * @param token the token of the user
+     *
+     * @return the shots of the opponent
      */
     @GetMapping("/opponent/shots")
     fun getOpponentShots(
@@ -99,7 +117,10 @@ class PlayersController(private val playersService: PlayersService) {
      * Creates the shots of the player.
      *
      * @param gameId The id of the game
-     * @param shots The shots to be created
+     * @param shots the shots to be created
+     * @param token the token of the user
+     *
+     * @return the shots created
      */
     @PostMapping("/self/shots")
     fun createShots(

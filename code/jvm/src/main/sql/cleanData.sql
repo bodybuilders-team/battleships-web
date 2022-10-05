@@ -1,3 +1,5 @@
+-- Script to clean up the database
+
 TRUNCATE users CASCADE;
 TRUNCATE players CASCADE;
 

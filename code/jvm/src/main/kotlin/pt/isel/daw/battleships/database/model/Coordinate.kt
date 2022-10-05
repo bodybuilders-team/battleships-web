@@ -4,7 +4,7 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 /**
- * Represents a coordinate in a board.
+ * The Coordinate entity.
  *
  * @property col the column of the coordinate
  * @property row the row of the coordinate

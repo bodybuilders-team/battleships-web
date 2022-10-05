@@ -7,11 +7,11 @@ import javax.validation.constraints.Size
 /**
  * Represents a game configuration.
  *
- * @property gridSize The size of the grid.
- * @property maxTimeForLayoutPhase The maximum time allowed for the layout phase.
- * @property shotsPerRound The number of shots that can be fired per round.
- * @property maxTimePerShot The maximum time allowed for each shot.
- * @property shipTypes The types of ships that can be placed in the game.
+ * @property gridSize the size of the grid
+ * @property maxTimeForLayoutPhase the maximum time allowed for the layout phase
+ * @property shotsPerRound the number of shots that can be fired per round
+ * @property maxTimePerShot the maximum time allowed for each shot
+ * @property shipTypes the types of ships that can be placed in the game
  */
 data class GameConfigModel(
     @Size(min = MIN_GRID_SIZE, max = MAX_GRID_SIZE)
@@ -21,6 +21,19 @@ data class GameConfigModel(
     val maxTimePerShot: Int,
     val shipTypes: List<ShipTypeModel>
 ) {
+    constructor(gameConfig: GameConfigDTO) : this(
+        gameConfig.gridSize,
+        gameConfig.maxTimeForLayoutPhase,
+        gameConfig.shotsPerRound,
+        gameConfig.maxTimePerShot,
+        gameConfig.shipTypes.map { ShipTypeModel(it) }
+    )
+
+    /**
+     * Converts the game config model to a DTO.
+     *
+     * @return the game config DTO
+     */
     fun toGameConfigDTO(): GameConfigDTO =
         GameConfigDTO(
             gridSize,
@@ -29,14 +42,6 @@ data class GameConfigModel(
             maxTimePerShot,
             shipTypes.map { it.toShipTypeDTO() }
         )
-
-    constructor(gameConfig: GameConfigDTO) : this(
-        gameConfig.gridSize,
-        gameConfig.maxTimeForLayoutPhase,
-        gameConfig.shotsPerRound,
-        gameConfig.maxTimePerShot,
-        gameConfig.shipTypes.map { ShipTypeModel(it) }
-    )
 
     companion object {
         private const val MIN_GRID_SIZE = 7

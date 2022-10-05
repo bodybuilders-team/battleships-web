@@ -1,6 +1,6 @@
-package pt.isel.daw.battleships.controllers.games.models.ship
+package pt.isel.daw.battleships.controllers.games.models
 
-import pt.isel.daw.battleships.services.games.dtos.shot.CoordinateDTO
+import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 import javax.validation.constraints.Pattern
@@ -11,7 +11,6 @@ import javax.validation.constraints.Pattern
  * @property col the column of the coordinate
  * @property row the row of the coordinate
  */
-
 data class CoordinateModel(
     @Pattern(regexp = "[A-Z]", message = "Col must be between 'A' and 'Z'")
     val col: Char,
@@ -20,9 +19,14 @@ data class CoordinateModel(
     @Max(MAX_ROW_SIZE.toLong(), message = "Row must be less than $MAX_COL_SIZE")
     val row: Int
 ) {
-    fun toCoordinateDTO() = CoordinateDTO(col, row)
-
     constructor(coordinate: CoordinateDTO) : this(coordinate.col, coordinate.row)
+
+    /**
+     * Converts the coordinate model to a DTO.
+     *
+     * @return the coordinate DTO
+     */
+    fun toCoordinateDTO() = CoordinateDTO(col, row)
 
     companion object {
         private const val MIN_COL_SIZE = 'A'

@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec
 @Component
 class JwtProvider(config: ServerConfiguration) {
 
-    private val key = SecretKeySpec(config.serverSecret.toByteArray(), "HmacSHA256")
+    private val key = SecretKeySpec(config.serverSecret.toByteArray(), SECRET_KEY_ALGORITHM)
 
     /**
      * Represents a JWT Payload.
@@ -31,10 +31,11 @@ class JwtProvider(config: ServerConfiguration) {
          * @return the [Claims] object
          */
         fun toClaims(): Claims = Jwts.claims(
-            mapOf("username" to username)
+            mapOf(USERNAME_KEY to username)
         )
 
         companion object {
+            private const val USERNAME_KEY = "username"
 
             /**
              * Creates a [JwtPayload] from the given [claims].
@@ -43,7 +44,7 @@ class JwtProvider(config: ServerConfiguration) {
              * @return the created payload
              */
             fun fromClaims(claims: Claims) = JwtPayload(
-                username = claims["username"] as String
+                username = claims[USERNAME_KEY] as String
             )
         }
     }
@@ -88,13 +89,13 @@ class JwtProvider(config: ServerConfiguration) {
      * @return the parsed bearer token or null if the token is not a bearer token
      */
     fun parseBearerToken(token: String): String? =
-        if (!token.startsWith(BEARER_TOKEN_PREFIX)) {
+        if (!token.startsWith(BEARER_TOKEN_PREFIX))
             null
-        } else {
+        else
             token.substringAfter(BEARER_TOKEN_PREFIX)
-        }
 
     companion object {
-        const val BEARER_TOKEN_PREFIX = "Bearer "
+        private const val BEARER_TOKEN_PREFIX = "Bearer "
+        private const val SECRET_KEY_ALGORITHM = "HmacSHA256"
     }
 }

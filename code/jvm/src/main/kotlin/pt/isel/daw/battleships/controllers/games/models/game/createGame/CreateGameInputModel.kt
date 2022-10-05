@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.controllers.games.models.game.createGame
 
 import pt.isel.daw.battleships.controllers.games.models.game.GameConfigModel
-import pt.isel.daw.battleships.services.games.dtos.game.CreateGameDTO
+import pt.isel.daw.battleships.services.games.dtos.game.CreateGameRequestDTO
 
 /**
  * Represents the input data for the create game operation.
@@ -15,11 +15,9 @@ data class CreateGameInputModel(
 ) {
 
     /**
-     * Converts this DTO to a service request.
+     * Converts the game creation request model to a DTO.
      *
-     * @return the service request
+     * @return the game creation request DTO
      */
-    fun toCreateGameRequest(): CreateGameDTO {
-        return CreateGameDTO(name, config.toGameConfigDTO())
-    }
+    fun toCreateGameRequest() = CreateGameRequestDTO(name, config.toGameConfigDTO())
 }
