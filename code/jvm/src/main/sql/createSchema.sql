@@ -10,9 +10,12 @@ DROP TABLE IF EXISTS ship_types CASCADE;
 CREATE TABLE users
 (
     id              SERIAL PRIMARY KEY,
-    username        VARCHAR(50) UNIQUE,
+    username        VARCHAR(50)  NOT NULL,
+    email           VARCHAR(320) NOT NULL CHECK ( email ~ '^[A-Za-z0-9+_.-]+@(.+)$'),
     hashed_password VARCHAR(512) NOT NULL,
-    points          INT          NOT NULL
+    points          INT          NOT NULL,
+
+    UNIQUE (username, email)
 );
 
 CREATE TABLE games
@@ -24,9 +27,8 @@ CREATE TABLE games
     max_time_for_layout_phase INT         NOT NULL,
     shots_per_round           INT         NOT NULL,
     max_time_per_shot         INT         NOT NULL,
-    phase                     VARCHAR(50) NOT NULL CHECK ( phase IN
-                                                           ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS',
-                                                            'FINISHED') ),
+    phase                     VARCHAR(50) NOT NULL
+        CHECK ( phase IN ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS', 'FINISHED') ),
     round                     INT,
     turn                      INT,
     winner                    INT
@@ -39,6 +41,7 @@ CREATE TABLE players
     -- Has to be user_id because user is a reserved word
     user_id INT NOT NULL REFERENCES users (id),
     points  INT NOT NULL,
+
     UNIQUE (game, user_id)
 );
 
@@ -50,15 +53,16 @@ ALTER TABLE games
 
 CREATE TABLE shots
 (
-    id          SERIAL PRIMARY KEY,
-    shot_number INT        NOT NULL,
-    round       INT        NOT NULL,
-    game        INT        NOT NULL,
-    player      INT        NOT NULL REFERENCES players (id),
-    row         INT        NOT NULL,
-    col         INT        NOT NULL,
-    result      VARCHAR(4) NOT NULL CHECK (result IN ('HIT', 'MISS', 'SUNK')),
-    UNIQUE (game, player, round, shot_number)
+    id     SERIAL PRIMARY KEY,
+    number INT        NOT NULL,
+    round  INT        NOT NULL,
+    game   INT        NOT NULL,
+    player INT        NOT NULL REFERENCES players (id),
+    row    INT        NOT NULL,
+    col    INT        NOT NULL,
+    result VARCHAR(4) NOT NULL CHECK (result IN ('HIT', 'MISS', 'SUNK')),
+
+    UNIQUE (game, player, round, number)
 );
 
 CREATE TABLE ship_types

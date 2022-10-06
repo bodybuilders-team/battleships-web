@@ -2,6 +2,8 @@
 
 > Battleship game.
 
+The project documentation is available [here](docs/README.md).
+
 ---
 
 ## Authors

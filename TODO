@@ -1,7 +1,8 @@
 - Update Relational Model and review database(structure and names)
-- Review comments
 - Review project structure (Player is attached to Game? What are the "sections"?)
 - Review properties order (example: in ship, should we have the coordinates before the orientation?)
-- Create swagger documentation
+- Review and update swagger documentation
+- Review comments
 - Reorder functions in the code (example: getUser should be before createUser?)
-- Maybe add email to user?
+- Add tests
+- Add pagination

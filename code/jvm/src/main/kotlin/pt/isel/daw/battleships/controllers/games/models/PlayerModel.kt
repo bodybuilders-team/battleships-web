@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.controllers.games.models.game
+package pt.isel.daw.battleships.controllers.games.models
 
 import pt.isel.daw.battleships.services.games.dtos.PlayerDTO
 

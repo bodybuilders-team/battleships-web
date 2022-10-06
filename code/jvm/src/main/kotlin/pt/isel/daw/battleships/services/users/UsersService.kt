@@ -40,7 +40,7 @@ class UsersService(
             throw AlreadyExistsException("User with username ${createUserRequestDTO.username} already exists")
 
         val hashedPassword = utils.hashPassword(createUserRequestDTO.password)
-        val user = User(createUserRequestDTO.username, hashedPassword)
+        val user = User(createUserRequestDTO.username, createUserRequestDTO.email, hashedPassword)
 
         usersRepository.save(user)
 

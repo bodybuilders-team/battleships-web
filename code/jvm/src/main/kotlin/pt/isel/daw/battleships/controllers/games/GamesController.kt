@@ -17,7 +17,7 @@ import pt.isel.daw.battleships.controllers.games.models.game.createGame.CreateGa
 import pt.isel.daw.battleships.services.games.GamesService
 
 /**
- * The controller that handles the requests to the /games endpoint.
+ * Controller that handles the requests to the /games endpoint.
  *
  * @property gamesService the service that handles the business logic for the games
  */

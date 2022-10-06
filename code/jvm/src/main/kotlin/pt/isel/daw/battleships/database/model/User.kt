@@ -12,6 +12,7 @@ import javax.persistence.Table
  *
  * @property id the id of the user
  * @property username the username of the user
+ * @property email the email of the user
  * @property hashedPassword the hashed password of the user
  * @property points the points of the user
  */
@@ -20,6 +21,9 @@ import javax.persistence.Table
 class User(
     @Column(name = "username")
     val username: String,
+
+    @Column(name = "email")
+    val email: String,
 
     @Column(name = "hashed_password", nullable = false)
     val hashedPassword: String,

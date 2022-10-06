@@ -5,16 +5,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Controller for the home page.
+ * Controller that handles the requests related to the home.
  */
 @RestController
 @RequestMapping("/home")
 class HomeController {
 
     /**
-     * Returns the home page.
+     * Handles the request to get the home page.
      *
-     * @return the home page
+     * @return the response to the request with the home page
      */
     @GetMapping(produces = ["application/json"])
     fun home(): String {

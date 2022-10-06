@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.controllers.games.models.game
 
+import pt.isel.daw.battleships.controllers.games.models.PlayerModel
 import pt.isel.daw.battleships.services.games.dtos.game.GameDTO
 
 /**
