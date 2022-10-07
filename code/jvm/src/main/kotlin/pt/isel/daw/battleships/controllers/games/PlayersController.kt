@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.controllers.games.models.ship.DeployFleetInputModel
+import pt.isel.daw.battleships.controllers.games.models.ship.DeployFleetOutputModel
 import pt.isel.daw.battleships.controllers.games.models.ship.OutputShipModel
 import pt.isel.daw.battleships.controllers.games.models.ship.OutputShipsModel
 import pt.isel.daw.battleships.controllers.games.models.shot.CreateShotsInputModel
@@ -73,8 +74,10 @@ class PlayersController(private val playersService: PlayersService) {
         @PathVariable gameId: Int,
         @RequestBody fleet: DeployFleetInputModel,
         @RequestAttribute("token") token: String
-    ) {
+    ): DeployFleetOutputModel {
         playersService.deployFleet(token, gameId, fleet.ships.map { it.toInputShipDTO() })
+
+        return DeployFleetOutputModel(true)
     }
 
     /**

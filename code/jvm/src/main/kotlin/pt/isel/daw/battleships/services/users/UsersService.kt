@@ -6,6 +6,7 @@ import pt.isel.daw.battleships.database.repositories.UsersRepository
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.users.dtos.CreateUserRequestDTO
+import pt.isel.daw.battleships.services.users.dtos.LoginUserInputDTO
 import pt.isel.daw.battleships.services.users.dtos.UserDTO
 import pt.isel.daw.battleships.utils.JwtProvider
 import pt.isel.daw.battleships.utils.JwtProvider.JwtPayload
@@ -50,20 +51,19 @@ class UsersService(
     /**
      * Logs a user in.
      *
-     * @param username the username of the user
-     * @param password the password of the user
+     * @param loginUserInputDTO the DTO with the data to log the user in
      *
      * @return the JWT token for the user
      * @throws NotFoundException if the user does not exist or the password is incorrect
      */
-    fun login(username: String, password: String): String {
-        val user = usersRepository.findByUsername(username)
-            ?: throw NotFoundException("User with username $username not found")
+    fun login(loginUserInputDTO: LoginUserInputDTO): String {
+        val user = usersRepository.findByUsername(loginUserInputDTO.username)
+            ?: throw NotFoundException("User with username ${loginUserInputDTO.username} not found")
 
-        if (!utils.checkPassword(password, user.hashedPassword))
+        if (!utils.checkPassword(loginUserInputDTO.password, user.hashedPassword))
             throw NotFoundException("Invalid username or password")
 
-        return jwtProvider.createToken(JwtPayload(username))
+        return jwtProvider.createToken(JwtPayload(loginUserInputDTO.username))
     }
 
     /**

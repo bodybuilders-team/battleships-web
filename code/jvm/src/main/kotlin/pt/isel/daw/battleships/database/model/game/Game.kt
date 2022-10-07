@@ -19,8 +19,8 @@ import javax.persistence.Table
  * The Game entity.
  *
  * @property id the game id
- * @property creator the user that created the game
  * @property name the game session name
+ * @property creator the user that created the game
  * @property state the current game state
  * @property config the game configuration
  * @property players the players that are playing the game
@@ -28,18 +28,18 @@ import javax.persistence.Table
 @Entity
 @Table(name = "games")
 class Game(
+    @Column(name = "name")
+    val name: String,
+
     @ManyToOne
     @JoinColumn(name = "creator")
     val creator: User,
 
-    @Column(name = "name")
-    val name: String,
+    @Embedded
+    val config: GameConfig,
 
     @Embedded
-    val state: GameState,
-
-    @Embedded
-    val config: GameConfig
+    val state: GameState
 ) {
     @Id
     @Column(name = "id")

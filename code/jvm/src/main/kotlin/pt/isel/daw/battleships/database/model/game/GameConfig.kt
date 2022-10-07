@@ -10,11 +10,11 @@ import javax.persistence.OneToMany
 /**
  * The GameConfig entity.
  *
- * @property gridSize The grid size.
- * @property maxTimePerShot The maximum time per shot.
- * @property shotsPerRound The shots per round.
- * @property maxTimeForLayoutPhase The maximum time for layout phase.
- * @property shipTypes The ship types.
+ * @property gridSize the grid size.
+ * @property maxTimePerShot the maximum time per shot
+ * @property shotsPerRound the shots per round
+ * @property maxTimeForLayoutPhase the maximum time for layout phase
+ * @property shipTypes the ship types
  */
 @Embeddable
 class GameConfig(

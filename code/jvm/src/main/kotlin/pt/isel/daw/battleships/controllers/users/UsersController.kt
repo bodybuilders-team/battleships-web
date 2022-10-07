@@ -32,7 +32,7 @@ class UsersController(private val usersService: UsersService) {
     fun createUser(
         @RequestBody userData: CreateUserInputModel
     ): CreateUserOutputModel =
-        CreateUserOutputModel(token = usersService.createUser(userData.toCreateUserRequest()))
+        CreateUserOutputModel(token = usersService.createUser(userData.toCreateUserRequestDTO()))
 
     /**
      * Handles the request to log in a user.
@@ -44,12 +44,7 @@ class UsersController(private val usersService: UsersService) {
     fun login(
         @RequestBody userData: LoginUserInputModel
     ): LoginUserOutputModel =
-        LoginUserOutputModel(
-            token = usersService.login(
-                userData.username,
-                userData.password
-            )
-        )
+        LoginUserOutputModel(token = usersService.login(userData.toLoginUserInputDTO()))
 
     /**
      * Handles the request to get a user.

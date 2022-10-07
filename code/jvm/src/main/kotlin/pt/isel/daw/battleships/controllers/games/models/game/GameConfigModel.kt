@@ -2,7 +2,8 @@ package pt.isel.daw.battleships.controllers.games.models.game
 
 import pt.isel.daw.battleships.controllers.games.models.ship.ShipTypeModel
 import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
-import javax.validation.constraints.Size
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
 
 /**
  * Represents a game configuration.
@@ -14,7 +15,8 @@ import javax.validation.constraints.Size
  * @property shipTypes the types of ships that can be placed in the game
  */
 data class GameConfigModel(
-    @Size(min = MIN_GRID_SIZE, max = MAX_GRID_SIZE)
+    @Min(value = MIN_GRID_SIZE.toLong())
+    @Max(value = MAX_GRID_SIZE.toLong())
     val gridSize: Int,
     val maxTimeForLayoutPhase: Int,
     val shotsPerRound: Int,
@@ -22,11 +24,11 @@ data class GameConfigModel(
     val shipTypes: List<ShipTypeModel>
 ) {
     constructor(gameConfig: GameConfigDTO) : this(
-        gameConfig.gridSize,
-        gameConfig.maxTimeForLayoutPhase,
-        gameConfig.shotsPerRound,
-        gameConfig.maxTimePerShot,
-        gameConfig.shipTypes.map { ShipTypeModel(it) }
+        gridSize = gameConfig.gridSize,
+        maxTimeForLayoutPhase = gameConfig.maxTimeForLayoutPhase,
+        shotsPerRound = gameConfig.shotsPerRound,
+        maxTimePerShot = gameConfig.maxTimePerShot,
+        shipTypes = gameConfig.shipTypes.map { ShipTypeModel(it) }
     )
 
     /**
@@ -36,11 +38,11 @@ data class GameConfigModel(
      */
     fun toGameConfigDTO(): GameConfigDTO =
         GameConfigDTO(
-            gridSize,
-            maxTimeForLayoutPhase,
-            shotsPerRound,
-            maxTimePerShot,
-            shipTypes.map { it.toShipTypeDTO() }
+            gridSize = gridSize,
+            maxTimeForLayoutPhase = maxTimeForLayoutPhase,
+            shotsPerRound = shotsPerRound,
+            maxTimePerShot = maxTimePerShot,
+            shipTypes = shipTypes.map { it.toShipTypeDTO() }
         )
 
     companion object {

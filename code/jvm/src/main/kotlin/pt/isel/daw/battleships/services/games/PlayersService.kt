@@ -7,6 +7,8 @@ import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.ship.Ship
 import pt.isel.daw.battleships.database.repositories.GamesRepository
 import pt.isel.daw.battleships.database.repositories.UsersRepository
+import pt.isel.daw.battleships.services.exceptions.AuthenticationException
+import pt.isel.daw.battleships.services.exceptions.InvalidArgumentException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
 import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
@@ -73,7 +75,7 @@ class PlayersService(
      * @param gameId the id of the game
      * @param fleet the ships to be deployed
      *
-     * @throws IllegalArgumentException if the player already has a fleet or if the fleet is invalid
+     * @throws InvalidArgumentException if the player already has a fleet or if the fleet is invalid
      */
     fun deployFleet(token: String, gameId: Int, fleet: List<InputShipDTO>) {
         val user = authenticateUser(token)
@@ -81,17 +83,17 @@ class PlayersService(
         val player = game.getPlayer(user.username)
 
         if (player.ships.isNotEmpty())
-            throw IllegalArgumentException("Player already has ships deployed.")
+            throw InvalidArgumentException("Player already has ships deployed.")
 
         if (
             game.config.shipTypes.all { shipType -> fleet.count { shipType.shipName == it.type } == shipType.quantity } &&
             game.config.shipTypes.fold(0) { acc, shipType -> acc + shipType.quantity } != fleet.size
         )
-            throw IllegalArgumentException("Fleet doesn't follow fleet configuration for this game.")
+            throw InvalidArgumentException("Fleet doesn't follow fleet configuration for this game.")
 
         fleet.forEach { ship ->
             val shipType = game.config.shipTypes.find { it.shipName == ship.type }
-                ?: throw IllegalArgumentException("'${ship.type}' is an invalid ship type for this game.")
+                ?: throw InvalidArgumentException("'${ship.type}' is an invalid ship type for this game.")
 
             player.ships.add(
                 Ship(
@@ -147,7 +149,7 @@ class PlayersService(
      * @param inputShotsDTO the shots to be created
      *
      * @return the shots created
-     * @throws IllegalArgumentException if the shots are invalid
+     * @throws InvalidArgumentException if the shots are invalid
      */
     fun createShots(token: String, gameId: Int, inputShotsDTO: List<InputShotDTO>): List<OutputShotDTO> {
         val user = authenticateUser(token)
@@ -156,14 +158,14 @@ class PlayersService(
         val opponent = game.getOpponent(user.username)
 
         if (inputShotsDTO.distinctBy { it.coordinate }.size != inputShotsDTO.size)
-            throw IllegalArgumentException("Shots must be to distinct coordinates.")
+            throw InvalidArgumentException("Shots must be to distinct coordinates.")
 
         if (
             inputShotsDTO.any {
                 it.coordinate in player.shots.map { existingShots -> CoordinateDTO(existingShots.coordinate) }
             }
         )
-            throw IllegalArgumentException("Shots must be to coordinates that have not been shot yet.")
+            throw InvalidArgumentException("Shots must be to coordinates that have not been shot yet.")
 
         val shots = inputShotsDTO.map { shotDTO ->
             Shot(
@@ -199,12 +201,12 @@ class PlayersService(
      * @param token the token of the user
      *
      * @return the authenticated user
-     * @throws IllegalArgumentException if the token is invalid
+     * @throws AuthenticationException if the token is invalid
      * @throws NotFoundException if the user is not found
      */
     private fun authenticateUser(token: String): User {
         val tokenPayload = jwtProvider.validateToken(token)
-            ?: throw IllegalStateException("Invalid token")
+            ?: throw AuthenticationException("Invalid token")
 
         return usersRepository.findByUsername(tokenPayload.username)
             ?: throw NotFoundException("User not found")

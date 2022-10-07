@@ -10,7 +10,7 @@ import pt.isel.daw.battleships.database.model.game.GameState.GamePhase
 /**
  * Repository for the [Game] entity.
  */
-interface GamesRepository : CrudRepository<Game, String>, GamesRepositoryCustom {
+interface GamesRepository : CrudRepository<Game, String> {
 
     /**
      * Finds a game by its ID.
@@ -27,9 +27,19 @@ interface GamesRepository : CrudRepository<Game, String>, GamesRepositoryCustom 
      * @return the games that are in the given phase
      */
     fun findAllByStatePhase(phase: GamePhase): List<Game>
+
+    /**
+     * Finds the first available game with the given configuration.
+     *
+     * @param config the configuration of the game
+     * @return the first available game with the given configuration or null if there is none
+     */
+    fun findFirstAvailableGameWithConfig(config: GameConfig): Game? =
+        findAllByStatePhase(GamePhase.WAITING_FOR_PLAYERS)
+            .find { it.config == config }
 }
 
-// TODO: Comment this
+// TODO: (ISTO é LIXO)
 interface GamesRepositoryCustom {
 
     /**
@@ -41,7 +51,7 @@ interface GamesRepositoryCustom {
     fun findFirstAvailableGameWithConfig(config: GameConfig): Game?
 }
 
-// TODO: Comment this
+// TODO: (ISTO é LIXO)
 @Component
 class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : GamesRepositoryCustom {
 

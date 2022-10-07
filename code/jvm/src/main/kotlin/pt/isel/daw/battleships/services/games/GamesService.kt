@@ -8,6 +8,7 @@ import pt.isel.daw.battleships.database.model.game.GameState
 import pt.isel.daw.battleships.database.repositories.GamesRepository
 import pt.isel.daw.battleships.database.repositories.UsersRepository
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
+import pt.isel.daw.battleships.services.exceptions.AuthenticationException
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.games.dtos.game.CreateGameRequestDTO
@@ -79,7 +80,8 @@ class GamesService(
      * @param gameId the id of the game
      *
      * @return the DTO with the information of the game
-     * @throws IllegalStateException if the game is already full or the user is already in the game
+     * @throws InvalidPhaseException if the game is not in the matchmaking phase
+     * @throws AlreadyJoinedException if the user is already in the game
      */
     fun joinGame(token: String, gameId: Int): GameDTO {
         val user = authenticateUser(token)
@@ -87,13 +89,6 @@ class GamesService(
 
         joinGame(user, game)
 
-        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
-            throw IllegalStateException("Waiting for players phase is over")
-
-        if (game.getPlayerOrNull(user.username) != null)
-            throw IllegalStateException("You have already joined this game")
-
-        game.addPlayer(Player(game, user))
         return GameDTO(game)
     }
 
@@ -124,35 +119,6 @@ class GamesService(
     }
 
     /**
-     * Authenticates a user.
-     *
-     * @param token the token of the user
-     *
-     * @return the authenticated user
-     * @throws IllegalStateException if the token is invalid
-     * @throws NotFoundException if the user is not found
-     */
-    fun authenticateUser(token: String): User {
-        val tokenPayload = jwtProvider.validateToken(token)
-            ?: throw IllegalStateException("Invalid token")
-
-        return usersRepository.findByUsername(tokenPayload.username)
-            ?: throw NotFoundException("User not found")
-    }
-
-    /**
-     * Gets a game by id.
-     *
-     * @param gameId the id of the game
-     *
-     * @return the game
-     * @throws NotFoundException if the game does not exist
-     */
-    private fun getGameById(gameId: Int): Game =
-        gamesRepository.findById(gameId)
-            ?: throw NotFoundException("Game with id $gameId not found")
-
-    /**
      * Creates a new game.
      *
      * @param user the user that is creating the game
@@ -178,8 +144,8 @@ class GamesService(
      * @param user the user that is joining the game
      * @param game the game to join
      *
-     * @throws AlreadyJoinedException if the user is already in the game
      * @throws InvalidPhaseException if the game is not in the matchmaking phase
+     * @throws AlreadyJoinedException if the user is already in the game
      */
     private fun joinGame(user: User, game: Game) {
         if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
@@ -191,4 +157,33 @@ class GamesService(
         game.addPlayer(Player(game, user))
         game.state.phase = GameState.GamePhase.PLACING_SHIPS
     }
+
+    /**
+     * Authenticates a user.
+     *
+     * @param token the token of the user
+     *
+     * @return the authenticated user
+     * @throws AuthenticationException if the token is invalid
+     * @throws NotFoundException if the user is not found
+     */
+    private fun authenticateUser(token: String): User {
+        val tokenPayload = jwtProvider.validateToken(token)
+            ?: throw AuthenticationException("Invalid token")
+
+        return usersRepository.findByUsername(tokenPayload.username)
+            ?: throw NotFoundException("User not found")
+    }
+
+    /**
+     * Gets a game by id.
+     *
+     * @param gameId the id of the game
+     *
+     * @return the game
+     * @throws NotFoundException if the game does not exist
+     */
+    private fun getGameById(gameId: Int): Game =
+        gamesRepository.findById(gameId)
+            ?: throw NotFoundException("Game with id $gameId not found")
 }

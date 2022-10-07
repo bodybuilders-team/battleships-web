@@ -48,7 +48,7 @@ class GamesController(private val gamesService: GamesService) {
         @RequestAttribute("token") token: String
     ): CreateGameOutputModel =
         CreateGameOutputModel(
-            gamesService.createGame(token, gameData.toCreateGameRequest())
+            gamesService.createGame(token, gameData.toCreateGameRequestDTO())
         )
 
     /**
@@ -63,7 +63,8 @@ class GamesController(private val gamesService: GamesService) {
     fun matchmake(
         @RequestBody gameConfig: GameConfigModel,
         @RequestAttribute("token") token: String
-    ) = MatchmakeModel(gamesService.matchmake(token, gameConfig.toGameConfigDTO()))
+    ): MatchmakeModel =
+        MatchmakeModel(gamesService.matchmake(token, gameConfig.toGameConfigDTO()))
 
     /**
      * Handles the request to get a game.

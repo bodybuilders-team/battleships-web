@@ -14,16 +14,16 @@ import pt.isel.daw.battleships.services.games.dtos.ship.ShipTypeDTO
  */
 data class GameConfigDTO(
     val gridSize: Int,
-    val maxTimePerShot: Int,
-    val shotsPerRound: Int,
     val maxTimeForLayoutPhase: Int,
+    val shotsPerRound: Int,
+    val maxTimePerShot: Int,
     val shipTypes: List<ShipTypeDTO>
 ) {
     constructor(gridSize: GameConfig) : this(
         gridSize = gridSize.gridSize,
-        maxTimePerShot = gridSize.maxTimePerShot,
-        shotsPerRound = gridSize.shotsPerRound,
         maxTimeForLayoutPhase = gridSize.maxTimeForLayoutPhase,
+        shotsPerRound = gridSize.shotsPerRound,
+        maxTimePerShot = gridSize.maxTimePerShot,
         shipTypes = gridSize.shipTypes.map { ShipTypeDTO(it) }
     )
 
@@ -35,9 +35,9 @@ data class GameConfigDTO(
     fun toGameConfig(): GameConfig =
         GameConfig(
             gridSize = gridSize,
-            maxTimePerShot = maxTimePerShot,
-            shotsPerRound = shotsPerRound,
             maxTimeForLayoutPhase = maxTimeForLayoutPhase,
+            shotsPerRound = shotsPerRound,
+            maxTimePerShot = maxTimePerShot,
             shipTypes = shipTypes.map { it.toShipType() }
         )
 }

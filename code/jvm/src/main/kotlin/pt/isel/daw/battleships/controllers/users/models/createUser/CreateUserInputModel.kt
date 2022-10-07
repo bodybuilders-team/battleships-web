@@ -20,5 +20,5 @@ data class CreateUserInputModel(
      *
      * @return the service DTO
      */
-    fun toCreateUserRequest(): CreateUserRequestDTO = CreateUserRequestDTO(username, email, password)
+    fun toCreateUserRequestDTO(): CreateUserRequestDTO = CreateUserRequestDTO(username, email, password)
 }

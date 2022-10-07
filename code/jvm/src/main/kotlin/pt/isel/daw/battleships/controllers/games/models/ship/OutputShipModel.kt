@@ -1,6 +1,5 @@
 package pt.isel.daw.battleships.controllers.games.models.ship
 
-import pt.isel.daw.battleships.controllers.games.models.CoordinateModel
 import pt.isel.daw.battleships.services.games.dtos.ship.OutputShipDTO
 import javax.validation.constraints.Pattern
 

@@ -19,5 +19,5 @@ data class CreateGameInputModel(
      *
      * @return the game creation request DTO
      */
-    fun toCreateGameRequest() = CreateGameRequestDTO(name, config.toGameConfigDTO())
+    fun toCreateGameRequestDTO() = CreateGameRequestDTO(name, config.toGameConfigDTO())
 }

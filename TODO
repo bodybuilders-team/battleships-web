@@ -1,4 +1,4 @@
-- Update Relational Model and review database(structure and names)
+- Update Relational Model and review database (structure and names)
 - Review project structure (Player is attached to Game? What are the "sections"?)
 - Review properties order (example: in ship, should we have the coordinates before the orientation?)
 - Review and update swagger documentation

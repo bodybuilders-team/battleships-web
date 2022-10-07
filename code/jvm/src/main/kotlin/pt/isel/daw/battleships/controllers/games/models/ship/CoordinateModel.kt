@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.controllers.games.models
+package pt.isel.daw.battleships.controllers.games.models.ship
 
 import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
 import javax.validation.constraints.Max
