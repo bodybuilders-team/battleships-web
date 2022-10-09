@@ -1,37 +1,18 @@
 package pt.isel.daw.battleships.services.games
 
-import org.springframework.stereotype.Service
-import pt.isel.daw.battleships.database.model.Shot
-import pt.isel.daw.battleships.database.model.User
-import pt.isel.daw.battleships.database.model.game.Game
-import pt.isel.daw.battleships.database.model.ship.Ship
-import pt.isel.daw.battleships.database.repositories.GamesRepository
-import pt.isel.daw.battleships.database.repositories.UsersRepository
-import pt.isel.daw.battleships.services.exceptions.AuthenticationException
-import pt.isel.daw.battleships.services.exceptions.InvalidArgumentException
-import pt.isel.daw.battleships.services.exceptions.NotFoundException
-import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
-import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
-import pt.isel.daw.battleships.services.games.dtos.ship.OutputShipDTO
-import pt.isel.daw.battleships.services.games.dtos.shot.InputShotDTO
-import pt.isel.daw.battleships.services.games.dtos.shot.OutputShotDTO
-import pt.isel.daw.battleships.utils.JwtProvider
-import javax.transaction.Transactional
+import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
+import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
+import pt.isel.daw.battleships.services.exceptions.InvalidShotException
+import pt.isel.daw.battleships.services.games.dtos.ship.InputFleetDTO
+import pt.isel.daw.battleships.services.games.dtos.ship.OutputFleetDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.InputShotsDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.OutputShotsDTO
 
 /**
  * Service that handles the business logic of the players.
- *
- * @property gamesRepository the repository of the games
- * @property usersRepository the repository of the users
- * @property jwtProvider the JWT provider
  */
-@Service
-@Transactional
-class PlayersService(
-    private val gamesRepository: GamesRepository,
-    private val usersRepository: UsersRepository,
-    private val jwtProvider: JwtProvider
-) {
+interface PlayersService {
 
     /**
      * Gets the fleet of a player.
@@ -41,13 +22,7 @@ class PlayersService(
      *
      * @return the fleet of the player
      */
-    fun getFleet(token: String, gameId: Int): List<OutputShipDTO> {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
-
-        return player.ships.map { OutputShipDTO(it) }
-    }
+    fun getFleet(token: String, gameId: Int): OutputFleetDTO
 
     /**
      * Gets the fleet of the opponent.
@@ -58,59 +33,20 @@ class PlayersService(
      *
      * @return the fleet of the opponent
      */
-    fun getOpponentFleet(token: String, gameId: Int): List<OutputShipDTO> {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val opponent = game.getOpponent(user.username)
-
-        return opponent.ships
-            .filter { it.lives == 0 }
-            .map { OutputShipDTO(it) }
-    }
+    fun getOpponentFleet(token: String, gameId: Int): OutputFleetDTO
 
     /**
      * Deploys the fleet of the player.
      *
      * @param token the token of the user
      * @param gameId the id of the game
-     * @param fleet the ships to be deployed
+     * @param fleetDTO the ships to be deployed
      *
-     * @throws InvalidArgumentException if the player already has a fleet or if the fleet is invalid
+     * @throws FleetAlreadyDeployedException if the fleet is already deployed
+     * @throws InvalidFleetException if the fleet is invalid
+     * @throws InvalidShipTypeException if the ship type is invalid
      */
-    fun deployFleet(token: String, gameId: Int, fleet: List<InputShipDTO>) {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
-
-        if (player.ships.isNotEmpty()) {
-            throw InvalidArgumentException("Player already deployed ships.")
-        }
-
-        if (
-            game.config.shipTypes.all { shipType -> fleet.count { shipType.shipName == it.type } == shipType.quantity } &&
-            game.config.shipTypes.fold(0) { acc, shipType -> acc + shipType.quantity } != fleet.size
-        ) {
-            throw InvalidArgumentException("Fleet doesn't follow fleet configuration for this game.")
-        }
-
-        fleet.forEach { ship ->
-            val shipType = game.config.shipTypes.find { it.shipName == ship.type }
-                ?: throw InvalidArgumentException("'${ship.type}' is an invalid ship type for this game.")
-
-            player.ships.add(
-                Ship(
-                    type = shipType,
-                    coordinate = ship.coordinate.toCoordinate(),
-                    orientation = if (ship.orientation == 'H') {
-                        Ship.Orientation.HORIZONTAL
-                    } else {
-                        Ship.Orientation.VERTICAL
-                    },
-                    lives = shipType.size
-                )
-            )
-        }
-    }
+    fun deployFleet(token: String, gameId: Int, fleetDTO: InputFleetDTO)
 
     /**
      * Gets the shots of the player.
@@ -120,13 +56,7 @@ class PlayersService(
      *
      * @return te shots of the player
      */
-    fun getShots(token: String, gameId: Int): List<OutputShotDTO> {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
-
-        return player.shots.map { OutputShotDTO(it) }
-    }
+    fun getShots(token: String, gameId: Int): OutputShotsDTO
 
     /**
      * Gets the shots of the opponent.
@@ -136,96 +66,17 @@ class PlayersService(
      *
      * @return the shots of the opponent
      */
-    fun getOpponentShots(token: String, gameId: Int): List<OutputShotDTO> {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val opponent = game.getOpponent(user.username)
-
-        return opponent.shots.map { OutputShotDTO(it) }
-    }
+    fun getOpponentShots(token: String, gameId: Int): OutputShotsDTO
 
     /**
-     * Creates the shots of the player.
+     * Shoots at the opponent.
      *
      * @param token the token of the user
      * @param gameId the id of the game
-     * @param inputShotsDTO the shots to be created
+     * @param inputShotsDTO the shots to be shot
      *
-     * @return the shots created
-     * @throws InvalidArgumentException if the shots are invalid
+     * @return the shots shot
+     * @throws InvalidShotException if a shot is invalid
      */
-    fun createShots(token: String, gameId: Int, inputShotsDTO: List<InputShotDTO>): List<OutputShotDTO> {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
-        val opponent = game.getOpponent(user.username)
-
-        if (inputShotsDTO.distinctBy { it.coordinate }.size != inputShotsDTO.size) {
-            throw InvalidArgumentException("Shots must be to distinct coordinates.")
-        }
-
-        if (
-            inputShotsDTO.any {
-                it.coordinate in player.shots.map { existingShots -> CoordinateDTO(existingShots.coordinate) }
-            }
-        ) {
-            throw InvalidArgumentException("Shots must be to coordinates that have not been shot yet.")
-        }
-
-        val shots = inputShotsDTO.map { shotDTO ->
-            Shot(
-                coordinate = shotDTO.coordinate.toCoordinate(),
-                round = game.state.round!!,
-                result = opponent.ships
-                    .find { ship -> shotDTO.coordinate in ship.coordinates.map { CoordinateDTO(it) } }
-                    .let { ship ->
-                        when {
-                            ship == null -> Shot.ShotResult.MISS
-                            ship.lives == 1 -> {
-                                ship.lives = 0
-                                Shot.ShotResult.SUNK
-                            }
-
-                            else -> {
-                                ship.lives--
-                                Shot.ShotResult.HIT
-                            }
-                        }
-                    }
-            )
-        }
-
-        player.shots.addAll(shots)
-
-        return shots.map { OutputShotDTO(it) }
-    }
-
-    /**
-     * Authenticates a user.
-     *
-     * @param token the token of the user
-     *
-     * @return the authenticated user
-     * @throws AuthenticationException if the token is invalid
-     * @throws NotFoundException if the user is not found
-     */
-    private fun authenticateUser(token: String): User {
-        val tokenPayload = jwtProvider.validateToken(token)
-            ?: throw AuthenticationException("Invalid token")
-
-        return usersRepository.findByUsername(tokenPayload.username)
-            ?: throw NotFoundException("User not found")
-    }
-
-    /**
-     * Gets a game by id.
-     *
-     * @param gameId the id of the game
-     *
-     * @return the game
-     * @throws NotFoundException if the game does not exist
-     */
-    private fun getGameById(gameId: Int): Game =
-        gamesRepository.findById(gameId)
-            ?: throw NotFoundException("Game with id $gameId not found")
+    fun shoot(token: String, gameId: Int, inputShotsDTO: InputShotsDTO): OutputShotsDTO
 }

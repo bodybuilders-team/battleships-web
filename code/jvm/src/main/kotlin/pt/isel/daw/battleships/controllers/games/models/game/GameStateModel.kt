@@ -16,10 +16,10 @@ data class GameStateModel(
     val turn: String?,
     val winner: String?
 ) {
-    constructor(state: GameStateDTO) : this(
-        state.phase,
-        state.round,
-        state.turn,
-        state.winner
+    constructor(stateDTO: GameStateDTO) : this(
+        stateDTO.phase,
+        stateDTO.round,
+        stateDTO.turn,
+        stateDTO.winner
     )
 }

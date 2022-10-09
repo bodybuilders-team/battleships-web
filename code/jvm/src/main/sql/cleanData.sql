@@ -1,16 +1,19 @@
 -- Script to clean up the database
 
 TRUNCATE users CASCADE;
+ALTER SEQUENCE users_id_seq RESTART WITH 1;
+
 TRUNCATE players CASCADE;
+ALTER SEQUENCE players_id_seq RESTART WITH 1;
 
 TRUNCATE games CASCADE;
 ALTER SEQUENCE games_id_seq RESTART WITH 1;
-TRUNCATE gamestates CASCADE;
-TRUNCATE gameconfigs CASCADE;
 
 TRUNCATE shots CASCADE;
+ALTER SEQUENCE shots_id_seq RESTART WITH 1;
 
-TRUNCATE shiptypes CASCADE;
+TRUNCATE ship_types CASCADE;
+ALTER SEQUENCE ship_types_id_seq RESTART WITH 1;
+
 TRUNCATE ships CASCADE;
-
-TRUNCATE gameconfig_shiptypes CASCADE;
+ALTER SEQUENCE ships_id_seq RESTART WITH 1;

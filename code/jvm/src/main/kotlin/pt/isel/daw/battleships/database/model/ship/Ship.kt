@@ -22,6 +22,7 @@ import javax.persistence.Table
  * @property orientation the ship's orientation
  * @property lives the ship's lives
  * @property coordinates the ship's coordinates
+ * @property isSunk true if the ship is sunk, false otherwise
  */
 @Entity
 @Table(name = "ships")
@@ -45,16 +46,6 @@ class Ship(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null
 
-    /**
-     * Represents the possible orientations of a ship:
-     * - HORIZONTAL: The ship is horizontal.
-     * - VERTICAL: The ship is vertical.
-     */
-    enum class Orientation {
-        HORIZONTAL,
-        VERTICAL
-    }
-
     val coordinates
         get() = (0 until lives).map {
             when (orientation) {
@@ -62,4 +53,34 @@ class Ship(
                 Orientation.VERTICAL -> Coordinate(coordinate.col, coordinate.row + it)
             }
         }
+
+    val isSunk
+        get() = lives == 0
+
+    /**
+     * Represents the possible orientations of a ship:
+     * - HORIZONTAL: The ship is horizontal.
+     * - VERTICAL: The ship is vertical.
+     */
+    enum class Orientation {
+        HORIZONTAL,
+        VERTICAL;
+
+        companion object {
+
+            /**
+             * Converts a Char to an Orientation.
+             *
+             * @param c the Char to be converted
+             *
+             * @return the Orientation that corresponds to the Char
+             * @throws IllegalArgumentException if the Char is not a valid Orientation
+             */
+            fun fromChar(c: Char?): Orientation = when (c) {
+                'H' -> HORIZONTAL
+                'V' -> VERTICAL
+                else -> throw IllegalArgumentException("Invalid orientation: $c")
+            }
+        }
+    }
 }

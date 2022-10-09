@@ -22,7 +22,11 @@ class AuthenticationInterceptor(
     val jwtProvider: JwtProvider
 ) : HandlerInterceptor {
 
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any
+    ): Boolean {
         // TODO: Verify if this is needed
         if (handler !is HandlerMethod) return true
 

@@ -2,6 +2,11 @@ package pt.isel.daw.battleships.database.model
 
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.ship.Ship
+import pt.isel.daw.battleships.database.model.ship.ShipType
+import pt.isel.daw.battleships.services.exceptions.InvalidShotException
+import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
+import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.InputShotDTO
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -49,4 +54,73 @@ class Player(
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player")
     val shots: MutableList<Shot> = mutableListOf()
+
+    /**
+     * Adds a ship to the player.
+     *
+     * @param shipDTO the ship to add
+     * @param shipType the type of the ship
+     */
+    fun addShip(shipDTO: InputShipDTO, shipType: ShipType) {
+        ships.add(
+            Ship(
+                type = shipType,
+                coordinate = shipDTO.coordinate.toCoordinate(),
+                orientation = Ship.Orientation.fromChar(shipDTO.orientation),
+                lives = shipType.size
+            )
+        )
+    }
+
+    /**
+     * Shoots the opponent player.
+     *
+     * @param opponent the opponent player
+     * @param inputShots the shots to make
+     *
+     * @return the list of shots made
+     * @throws InvalidShotException if a shot is invalid
+     */
+    fun shoot(
+        opponent: Player,
+        inputShots: List<InputShotDTO>
+    ): List<Shot> {
+        if (inputShots.distinctBy { it.coordinate }.size != inputShots.size) {
+            throw InvalidShotException("Shots must be to distinct coordinates.")
+        }
+
+        if (
+            inputShots.any { shot ->
+                shot.coordinate in shots.map { existingShots -> CoordinateDTO(existingShots.coordinate) }
+            }
+        ) {
+            throw InvalidShotException("Shots must be to coordinates that have not been shot yet.")
+        }
+
+        val madeShots = inputShots.map { shotDTO ->
+            Shot(
+                coordinate = shotDTO.coordinate.toCoordinate(),
+                round = game.state.round!!,
+                result = opponent.ships
+                    .find { ship -> shotDTO.coordinate in ship.coordinates.map { CoordinateDTO(it) } }
+                    .let { ship ->
+                        when {
+                            ship == null -> Shot.ShotResult.MISS
+                            ship.lives == 1 -> {
+                                ship.lives = 0
+                                Shot.ShotResult.SUNK
+                            }
+
+                            else -> {
+                                ship.lives--
+                                Shot.ShotResult.HIT
+                            }
+                        }
+                    }
+            )
+        }
+
+        this.shots.addAll(madeShots)
+        return madeShots
+    }
 }

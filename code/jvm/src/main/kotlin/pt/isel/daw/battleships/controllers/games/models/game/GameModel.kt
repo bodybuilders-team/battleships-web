@@ -21,12 +21,12 @@ data class GameModel(
     val state: GameStateModel,
     val players: List<PlayerModel>
 ) {
-    constructor(game: GameDTO) : this(
-        game.id,
-        game.name,
-        game.creator,
-        GameConfigModel(game.config),
-        GameStateModel(game.state),
-        game.players.map { PlayerModel(it) }
+    constructor(gameDTO: GameDTO) : this(
+        gameDTO.id,
+        gameDTO.name,
+        gameDTO.creator,
+        GameConfigModel(gameDTO.config),
+        GameStateModel(gameDTO.state),
+        gameDTO.players.map { PlayerModel(it) }
     )
 }

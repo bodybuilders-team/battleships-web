@@ -112,39 +112,7 @@ In our Open-API specification, we highlight the following aspects:
 
 ### Use-Case Scenario
 
-The application is launched in
-the [AppLaunch](https://github.com/isel-leic-ls/2122-2-LEIC41D-G03/blob/main/src/main/kotlin/pt/isel/ls/sports/AppLaunch.kt)
-file.
-This file contains the main function, where the database and server instances are created, starting the server.
-
-The server is represented by
-the [AppServer](https://github.com/isel-leic-ls/2122-2-LEIC41D-G03/blob/main/src/main/kotlin/pt/isel/ls/sports/AppServer.kt)
-class. It is implemented with a `Http4kServer`, and creates an instance of the application services, using the received
-database, and an instance of
-the Web API, using the services instance.
-
-The application services are represented by
-the [AppServices](https://github.com/isel-leic-ls/2122-2-LEIC41D-G03/blob/main/src/main/kotlin/pt/isel/ls/sports/services/AppServices.kt)
-and implements all the operations, making parameters validations, and calling the database methods.
-
-The Web API is implemented in
-the [AppWebApi](https://github.com/isel-leic-ls/2122-2-LEIC41D-G03/blob/main/src/main/kotlin/pt/isel/ls/sports/api/AppWebApi.kt)
-class.
-This class implements all the routes of the API, implementing all the requests and calling the corresponding services
-method.
-
-Both the services, the Web API and the database are divided into several sections.
-The services and Web API have one section per endpoint group (users, routes, activities, sports).
-The database has one section per entity (users, routes, activities, sports, tokens).
-
-When a request arrives, it is received and handled by the Web API module.
-
-This module calls the associated method of the services module, which does all sorts of validation.
-If everything is OK, then database methods may be called.
-
-In the end, the server will respond with the corresponding HTTP Response documented in
-the [Open-API Specification](https://github.com/isel-leic-ls/2122-2-LEIC41D-G03/blob/574f00333ae71cebfd74759226725bfb69bee372/docs/sports-api-spec.yml)
-.
+...
 
 ---
 
@@ -156,7 +124,7 @@ the [Open-API Specification](https://github.com/isel-leic-ls/2122-2-LEIC41D-G03/
 
 ### Data Access
 
-The data access implementation is available in the [here](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/database).
+The data access implementation is available [here](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/database).
 
 ...
 

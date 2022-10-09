@@ -15,6 +15,7 @@ import pt.isel.daw.battleships.controllers.games.models.game.MatchmakeModel
 import pt.isel.daw.battleships.controllers.games.models.game.createGame.CreateGameInputModel
 import pt.isel.daw.battleships.controllers.games.models.game.createGame.CreateGameOutputModel
 import pt.isel.daw.battleships.services.games.GamesService
+import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**
  * Controller that handles the requests to the /games endpoint.
@@ -32,7 +33,7 @@ class GamesController(private val gamesService: GamesService) {
      */
     @GetMapping
     fun getGames(): GamesOutputModel =
-        GamesOutputModel(gamesService.getGames())
+        GamesOutputModel(gamesDTO = gamesService.getGames())
 
     /**
      * Handles the request to create a new game.
@@ -45,11 +46,9 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping
     fun createGame(
         @RequestBody gameData: CreateGameInputModel,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): CreateGameOutputModel =
-        CreateGameOutputModel(
-            gamesService.createGame(token, gameData.toCreateGameRequestDTO())
-        )
+        CreateGameOutputModel(gameId = gamesService.createGame(token, gameData.toCreateGameRequestDTO()))
 
     /**
      * Handles the request to matchmake a game with a specific configuration.
@@ -62,9 +61,9 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping("/matchmake")
     fun matchmake(
         @RequestBody gameConfig: GameConfigModel,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): MatchmakeModel =
-        MatchmakeModel(gamesService.matchmake(token, gameConfig.toGameConfigDTO()))
+        MatchmakeModel(matchmakeDTO = gamesService.matchmake(token, gameConfig.toGameConfigDTO()))
 
     /**
      * Handles the request to get a game.
@@ -76,7 +75,7 @@ class GamesController(private val gamesService: GamesService) {
     fun getGame(
         @PathVariable gameId: Int
     ): GameModel =
-        GameModel(gamesService.getGame(gameId))
+        GameModel(gameDTO = gamesService.getGame(gameId))
 
     /**
      * Handles the request to get the state of a game.
@@ -88,7 +87,7 @@ class GamesController(private val gamesService: GamesService) {
     fun getGameState(
         @PathVariable gameId: Int
     ): GameStateModel =
-        GameStateModel(gamesService.getGameState(gameId))
+        GameStateModel(stateDTO = gamesService.getGameState(gameId))
 
     /**
      * Handles the request to join a game.
@@ -101,7 +100,7 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping("/{gameId}/join")
     fun joinGame(
         @PathVariable gameId: Int,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): GameModel =
-        GameModel(gamesService.joinGame(token, gameId))
+        GameModel(gameDTO = gamesService.joinGame(token, gameId))
 }

@@ -21,8 +21,8 @@ import javax.persistence.Table
  * @property id the game id
  * @property name the game session name
  * @property creator the user that created the game
- * @property state the current game state
  * @property config the game configuration
+ * @property state the current game state
  * @property players the players that are playing the game
  */
 @Entity
@@ -46,15 +46,15 @@ class Game(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null
 
+    @OneToMany(cascade = [CascadeType.PERSIST])
+    @JoinColumn(name = "game")
+    val players: MutableList<Player> = mutableListOf()
+
     init {
         config.shipTypes.forEach { shipType ->
             shipType.game = this
         }
     }
-
-    @OneToMany(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "game")
-    val players: MutableList<Player> = mutableListOf()
 
     /**
      * Returns the player that is playing the game.
@@ -67,6 +67,14 @@ class Game(
     fun getPlayer(username: String): Player =
         getPlayerOrNull(username)
             ?: throw NotFoundException("Player with username $username is not part of the game")
+
+    /**
+     * Checks if the player is playing the game.
+     *
+     * @param username the username of the player
+     * @return true if the player is playing the game, false otherwise
+     */
+    fun hasPlayer(username: String): Boolean = getPlayerOrNull(username) != null
 
     /**
      * Returns the player that is playing the game.

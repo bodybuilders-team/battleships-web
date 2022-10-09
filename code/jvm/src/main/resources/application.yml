@@ -9,5 +9,6 @@ spring:
     password: postgres
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
   jackson:
     default-property-inclusion: non_null

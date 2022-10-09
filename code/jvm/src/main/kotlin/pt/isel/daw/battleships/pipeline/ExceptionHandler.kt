@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.services.exceptions.AuthenticationException
+import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
+import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
+import pt.isel.daw.battleships.services.exceptions.InvalidShotException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 
 /**
@@ -28,11 +32,18 @@ class ExceptionHandler {
             AlreadyExistsException::class,
             NotFoundException::class,
             AlreadyJoinedException::class,
-            InvalidPhaseException::class
+            InvalidPhaseException::class,
+            FleetAlreadyDeployedException::class,
+            InvalidFleetException::class,
+            InvalidShipTypeException::class,
+            InvalidShotException::class
         ]
     )
     fun handleBadRequest(ex: Exception): ResponseEntity<Any> =
-        handleException(ex, HttpStatus.BAD_REQUEST)
+        handleException(
+            ex = ex,
+            status = HttpStatus.BAD_REQUEST
+        )
 
     /**
      * Handles Unauthorized exceptions.
@@ -43,8 +54,8 @@ class ExceptionHandler {
     @ExceptionHandler(value = [AuthenticationException::class])
     fun handleUnauthorized(ex: Exception): ResponseEntity<Any> =
         handleException(
-            ex,
-            HttpStatus.UNAUTHORIZED
+            ex = ex,
+            status = HttpStatus.UNAUTHORIZED
         )
 
     /**

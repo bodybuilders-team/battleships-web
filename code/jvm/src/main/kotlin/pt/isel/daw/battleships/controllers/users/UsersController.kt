@@ -56,5 +56,5 @@ class UsersController(private val usersService: UsersService) {
     fun getUser(
         @PathVariable username: String
     ): UserModel? =
-        UserModel(usersService.getUser(username))
+        UserModel(userDTO = usersService.getUser(username))
 }

@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.database.model.game
 
 import pt.isel.daw.battleships.database.model.ship.ShipType
+import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -34,6 +35,21 @@ class GameConfig(
     @JoinColumn(name = "game")
     val shipTypes: List<ShipType>
 ) {
+
+    /**
+     * Validates a given fleet against this configuration.
+     *
+     * The fleet is valid if:
+     * - It has the same number of ships as the configuration
+     * - Each shiptype in the configuration has the same number of ships in the fleet
+     *
+     * @param ships the ships to validate
+     * @return true if the fleet is valid, false otherwise
+     */
+    fun isValidFleet(ships: List<InputShipDTO>): Boolean =
+        shipTypes.sumOf { shipType -> shipType.quantity } != ships.size &&
+            shipTypes.all { shipType -> shipType.quantity == ships.count { shipType.shipName == it.type } }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

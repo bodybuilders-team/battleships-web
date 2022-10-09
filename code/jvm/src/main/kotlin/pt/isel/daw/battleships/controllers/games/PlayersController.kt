@@ -15,6 +15,9 @@ import pt.isel.daw.battleships.controllers.games.models.shot.CreateShotsInputMod
 import pt.isel.daw.battleships.controllers.games.models.shot.OutputShotModel
 import pt.isel.daw.battleships.controllers.games.models.shot.OutputShotsModel
 import pt.isel.daw.battleships.services.games.PlayersService
+import pt.isel.daw.battleships.services.games.dtos.ship.InputFleetDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.InputShotsDTO
+import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**
  * Controller that handles the requests to the game's player's resources.
@@ -36,10 +39,11 @@ class PlayersController(private val playersService: PlayersService) {
     @GetMapping("/self/fleet")
     fun getFleet(
         @PathVariable gameId: Int,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): OutputShipsModel =
         OutputShipsModel(
-            playersService.getFleet(token, gameId)
+            ships = playersService
+                .getFleet(token, gameId).ships
                 .map { OutputShipModel(it) }
         )
 
@@ -55,10 +59,11 @@ class PlayersController(private val playersService: PlayersService) {
     @GetMapping("/opponent/fleet")
     fun getOpponentFleet(
         @PathVariable gameId: Int,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): OutputShipsModel =
         OutputShipsModel(
-            playersService.getOpponentFleet(token, gameId)
+            ships = playersService
+                .getOpponentFleet(token, gameId).ships
                 .map { OutputShipModel(it) }
         )
 
@@ -73,17 +78,22 @@ class PlayersController(private val playersService: PlayersService) {
     fun deployFleet(
         @PathVariable gameId: Int,
         @RequestBody fleet: DeployFleetInputModel,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): DeployFleetOutputModel {
-        playersService.deployFleet(token, gameId, fleet.ships.map { it.toInputShipDTO() })
+        playersService
+            .deployFleet(
+                token = token,
+                gameId = gameId,
+                fleetDTO = InputFleetDTO(fleet.ships.map { it.toInputShipDTO() })
+            )
 
-        return DeployFleetOutputModel(true)
+        return DeployFleetOutputModel(successfullyDeployed = true)
     }
 
     /**
      * Handles the request to get the shots of the player.
      *
-     * @param gameId The id of the game
+     * @param gameId the id of the game
      * @param token the token of the user
      *
      * @return te shots of the player
@@ -91,17 +101,18 @@ class PlayersController(private val playersService: PlayersService) {
     @GetMapping("/self/shots")
     fun getShots(
         @PathVariable gameId: Int,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): OutputShotsModel =
         OutputShotsModel(
-            playersService.getShots(token, gameId)
+            playersService
+                .getShots(token, gameId).shots
                 .map { OutputShotModel(it) }
         )
 
     /**
      * Handles the request to get the shots of the opponent.
      *
-     * @param gameId The id of the game
+     * @param gameId the id of the game
      * @param token the token of the user
      *
      * @return the shots of the opponent
@@ -109,30 +120,33 @@ class PlayersController(private val playersService: PlayersService) {
     @GetMapping("/opponent/shots")
     fun getOpponentShots(
         @PathVariable gameId: Int,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): OutputShotsModel =
         OutputShotsModel(
-            playersService.getOpponentShots(token, gameId)
+            shots = playersService
+                .getOpponentShots(token, gameId).shots
                 .map { OutputShotModel(it) }
         )
 
     /**
-     * Handles the request to create the shots of the player.
+     * Handles the request to shoot at the opponent's fleet.
      *
-     * @param gameId The id of the game
+     * @param gameId the id of the game
      * @param shots the shots to be created
      * @param token the token of the user
      *
-     * @return the shots created
+     * @return the shots made
      */
     @PostMapping("/self/shots")
-    fun createShots(
+    fun shoot(
         @PathVariable gameId: Int,
         @RequestBody shots: CreateShotsInputModel,
-        @RequestAttribute("token") token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): OutputShotsModel =
         OutputShotsModel(
-            playersService.createShots(token, gameId, shots.shots.map { it.toInputShotDTO() })
+            shots = playersService
+                .shoot(token, gameId, InputShotsDTO(shots.shots.map { it.toInputShotDTO() }))
+                .shots
                 .map { OutputShotModel(it) }
         )
 }

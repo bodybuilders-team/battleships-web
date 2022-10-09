@@ -35,14 +35,14 @@ class ShipType(
     @Column(name = "points", nullable = false)
     val points: Int
 ) {
-    @OneToOne
-    @JoinColumn(name = "game", nullable = false)
-    var game: Game? = null
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null
+
+    @OneToOne
+    @JoinColumn(name = "game", nullable = false)
+    var game: Game? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

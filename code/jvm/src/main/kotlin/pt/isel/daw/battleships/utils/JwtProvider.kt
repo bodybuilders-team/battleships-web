@@ -98,5 +98,6 @@ class JwtProvider(config: ServerConfiguration) {
     companion object {
         private const val BEARER_TOKEN_PREFIX = "Bearer "
         private const val SECRET_KEY_ALGORITHM = "HmacSHA256"
+        const val TOKEN_ATTRIBUTE = "token"
     }
 }

@@ -11,8 +11,7 @@ CREATE TABLE users
 (
     id              SERIAL PRIMARY KEY,
     username        VARCHAR(50)  NOT NULL,
-    email           VARCHAR(320) NOT NULL CHECK ( email ~ '^[A-Za-z0-9+_.-]+@(.+)$'
-        ),
+    email           VARCHAR(320) NOT NULL CHECK ( email ~ '^[A-Za-z0-9+_.-]+@(.+)$'),
     hashed_password VARCHAR(512) NOT NULL,
     points          INT          NOT NULL,
 
