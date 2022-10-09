@@ -37,8 +37,9 @@ class UsersService(
      * @throws AlreadyExistsException if the user already exists
      */
     fun createUser(createUserRequestDTO: CreateUserRequestDTO): String {
-        if (usersRepository.existsByUsername(createUserRequestDTO.username))
+        if (usersRepository.existsByUsername(createUserRequestDTO.username)) {
             throw AlreadyExistsException("User with username ${createUserRequestDTO.username} already exists")
+        }
 
         val hashedPassword = utils.hashPassword(createUserRequestDTO.password)
         val user = User(createUserRequestDTO.username, createUserRequestDTO.email, hashedPassword)
@@ -60,8 +61,9 @@ class UsersService(
         val user = usersRepository.findByUsername(loginUserInputDTO.username)
             ?: throw NotFoundException("User with username ${loginUserInputDTO.username} not found")
 
-        if (!utils.checkPassword(loginUserInputDTO.password, user.hashedPassword))
+        if (!utils.checkPassword(loginUserInputDTO.password, user.hashedPassword)) {
             throw NotFoundException("Invalid username or password")
+        }
 
         return jwtProvider.createToken(JwtPayload(loginUserInputDTO.username))
     }

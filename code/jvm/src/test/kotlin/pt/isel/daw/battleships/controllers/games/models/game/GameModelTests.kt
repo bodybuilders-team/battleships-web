@@ -11,18 +11,24 @@ class GameModelTests {
     @Test
     fun `GameModel creation is successful`() {
         GameModel(
-            1, "Game 1", "Player 1",
+            1,
+            "Game 1",
+            "Player 1",
             GameConfigModel(1, 2, 3, 4, listOf()),
-            GameStateModel("WAITING_FOR_PLAYERS", 1, null, null), listOf()
+            GameStateModel("WAITING_FOR_PLAYERS", 1, null, null),
+            listOf()
         )
     }
 
     @Test
     fun `GameModel from GameDTO conversion is successful`() {
         val gameDTO = GameDTO(
-            1, "Game 1", "Player 1",
+            1,
+            "Game 1",
+            "Player 1",
             GameConfigDTO(1, 2, 3, 4, listOf()),
-            GameStateDTO("WAITING_FOR_PLAYERS", 1, null, null), listOf()
+            GameStateDTO("WAITING_FOR_PLAYERS", 1, null, null),
+            listOf()
         )
         val gameModel = GameModel(gameDTO)
 

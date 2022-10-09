@@ -89,10 +89,11 @@ class JwtProvider(config: ServerConfiguration) {
      * @return the parsed bearer token or null if the token is not a bearer token
      */
     fun parseBearerToken(token: String): String? =
-        if (!token.startsWith(BEARER_TOKEN_PREFIX))
+        if (!token.startsWith(BEARER_TOKEN_PREFIX)) {
             null
-        else
+        } else {
             token.substringAfter(BEARER_TOKEN_PREFIX)
+        }
 
     companion object {
         private const val BEARER_TOKEN_PREFIX = "Bearer "

@@ -13,9 +13,12 @@ class MatchmakeModelTests {
     fun `MatchmakeModel creation is successful`() {
         MatchmakeModel(
             GameModel(
-                1, "game", "Player 1",
+                1,
+                "game",
+                "Player 1",
                 GameConfigModel(1, 2, 3, 4, listOf()),
-                GameStateModel("WAITING_FOR_PLAYERS", 1, null, null), listOf()
+                GameStateModel("WAITING_FOR_PLAYERS", 1, null, null),
+                listOf()
             ),
             true
         )
@@ -25,9 +28,12 @@ class MatchmakeModelTests {
     fun `MatchmakeModel from MatchmakeDTO conversion is successful`() {
         val matchmakeDTO = MatchmakeDTO(
             GameDTO(
-                1, "game", "Player 1",
+                1,
+                "game",
+                "Player 1",
                 GameConfigDTO(1, 2, 3, 4, listOf()),
-                GameStateDTO("WAITING_FOR_PLAYERS", 1, null, null), listOf()
+                GameStateDTO("WAITING_FOR_PLAYERS", 1, null, null),
+                listOf()
             ),
             true
         )

@@ -107,9 +107,9 @@ class GamesService(
 
         return MatchmakeDTO(
             game = GameDTO(
-                if (game == null || game.getPlayerOrNull(user.username) != null)
+                if (game == null || game.getPlayerOrNull(user.username) != null) {
                     createGame(user, CreateGameRequestDTO("Game", gameConfigDTO))
-                else {
+                } else {
                     joinGame(user, game)
                     game
                 }
@@ -148,11 +148,13 @@ class GamesService(
      * @throws AlreadyJoinedException if the user is already in the game
      */
     private fun joinGame(user: User, game: Game) {
-        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
+        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
             throw InvalidPhaseException("Waiting for players phase is over")
+        }
 
-        if (game.getPlayerOrNull(user.username) != null)
+        if (game.getPlayerOrNull(user.username) != null) {
             throw AlreadyJoinedException("You have already joined this game")
+        }
 
         game.addPlayer(Player(game, user))
         game.state.phase = GameState.GamePhase.PLACING_SHIPS

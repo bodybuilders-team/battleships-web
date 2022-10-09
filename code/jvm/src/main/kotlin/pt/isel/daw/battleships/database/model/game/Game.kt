@@ -97,8 +97,9 @@ class Game(
      * @throws IllegalStateException if the game is already full
      */
     fun addPlayer(player: Player) {
-        if (players.size >= MAX_GAME_PLAYERS)
+        if (players.size >= MAX_GAME_PLAYERS) {
             throw IllegalStateException("Game already has two players")
+        }
 
         players.add(player)
     }

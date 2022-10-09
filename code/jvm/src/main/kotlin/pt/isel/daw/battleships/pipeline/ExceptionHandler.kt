@@ -5,19 +5,17 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.services.exceptions.AuthenticationException
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 
-// TODO: Check if this makes sense to be in the pipeline package
 /**
  * Handles exceptions thrown by the controllers.
  */
 @ControllerAdvice
-class ExceptionHandler : ResponseEntityExceptionHandler() {
+class ExceptionHandler {
 
     /**
      * Handles Bad Request exceptions.
@@ -57,9 +55,13 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
      *
      * @return response entity with the error message
      */
-    private fun handleException(ex: Exception, status: HttpStatus): ResponseEntity<Any> =
-        ResponseEntity
+    private fun handleException(ex: Exception, status: HttpStatus): ResponseEntity<Any> {
+        val body = mutableMapOf<String, Any>()
+        body["message"] = ex.message ?: "An error occurred"
+
+        return ResponseEntity
             .status(status)
             .contentType(MediaType.APPLICATION_JSON)
-            .body("{\"message\": \"${ex.message}\"}")
+            .body(body)
+    }
 }

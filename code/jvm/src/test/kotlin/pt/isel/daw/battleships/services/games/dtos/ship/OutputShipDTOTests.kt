@@ -17,7 +17,9 @@ class OutputShipDTOTests {
     fun `OutputShipDTO from Ship conversion is successful`() {
         val ship = Ship(
             ShipType("type", 3, 1, 10),
-            Coordinate('A', 1), Ship.Orientation.HORIZONTAL, 3
+            Coordinate('A', 1),
+            Ship.Orientation.HORIZONTAL,
+            3
         )
         val outputShipDTO = OutputShipDTO(ship)
 

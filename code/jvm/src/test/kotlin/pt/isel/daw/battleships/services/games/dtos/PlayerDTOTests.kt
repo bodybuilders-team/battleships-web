@@ -19,7 +19,8 @@ class PlayerDTOTests {
         val user = User("username", "email", "password", 0)
         val player = Player(
             Game(
-                "game", user,
+                "game",
+                user,
                 GameConfig(1, 2, 3, 4, listOf()),
                 GameState(GameState.GamePhase.WAITING_FOR_PLAYERS, 1, null, null)
             ),

@@ -82,14 +82,16 @@ class PlayersService(
         val game = getGameById(gameId)
         val player = game.getPlayer(user.username)
 
-        if (player.ships.isNotEmpty())
-            throw InvalidArgumentException("Player already has ships deployed.")
+        if (player.ships.isNotEmpty()) {
+            throw InvalidArgumentException("Player already deployed ships.")
+        }
 
         if (
             game.config.shipTypes.all { shipType -> fleet.count { shipType.shipName == it.type } == shipType.quantity } &&
             game.config.shipTypes.fold(0) { acc, shipType -> acc + shipType.quantity } != fleet.size
-        )
+        ) {
             throw InvalidArgumentException("Fleet doesn't follow fleet configuration for this game.")
+        }
 
         fleet.forEach { ship ->
             val shipType = game.config.shipTypes.find { it.shipName == ship.type }
@@ -99,10 +101,11 @@ class PlayersService(
                 Ship(
                     type = shipType,
                     coordinate = ship.coordinate.toCoordinate(),
-                    orientation = if (ship.orientation == 'H')
+                    orientation = if (ship.orientation == 'H') {
                         Ship.Orientation.HORIZONTAL
-                    else
-                        Ship.Orientation.VERTICAL,
+                    } else {
+                        Ship.Orientation.VERTICAL
+                    },
                     lives = shipType.size
                 )
             )
@@ -157,15 +160,17 @@ class PlayersService(
         val player = game.getPlayer(user.username)
         val opponent = game.getOpponent(user.username)
 
-        if (inputShotsDTO.distinctBy { it.coordinate }.size != inputShotsDTO.size)
+        if (inputShotsDTO.distinctBy { it.coordinate }.size != inputShotsDTO.size) {
             throw InvalidArgumentException("Shots must be to distinct coordinates.")
+        }
 
         if (
             inputShotsDTO.any {
                 it.coordinate in player.shots.map { existingShots -> CoordinateDTO(existingShots.coordinate) }
             }
-        )
+        ) {
             throw InvalidArgumentException("Shots must be to coordinates that have not been shot yet.")
+        }
 
         val shots = inputShotsDTO.map { shotDTO ->
             Shot(

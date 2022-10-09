@@ -13,7 +13,9 @@ class GamesOutputModelTests {
         GamesOutputModel(
             listOf(
                 GameModel(
-                    1, "game1", "player1",
+                    1,
+                    "game1",
+                    "player1",
                     GameConfigModel(1, 2, 3, 4, listOf()),
                     GameStateModel("WAITING_FOR_PLAYERS", 1, null, null),
                     listOf()
@@ -32,7 +34,9 @@ class GamesOutputModelTests {
         val gamesDTO = GamesDTO(
             listOf(
                 GameDTO(
-                    1, "game1", "player1",
+                    1,
+                    "game1",
+                    "player1",
                     GameConfigDTO(1, 2, 3, 4, listOf()),
                     GameStateDTO("WAITING_FOR_PLAYERS", 1, null, null),
                     listOf()
