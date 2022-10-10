@@ -29,6 +29,7 @@ CREATE TABLE games
     max_time_per_shot         INT         NOT NULL,
     phase                     VARCHAR(50) NOT NULL
         CHECK ( phase IN ('WAITING_FOR_PLAYERS', 'PLACING_SHIPS', 'IN_PROGRESS', 'FINISHED') ),
+    phase_end_time            TIMESTAMP   NOT NULL, -- TODO check this name
     round                     INT,
     turn                      INT,
     winner                    INT

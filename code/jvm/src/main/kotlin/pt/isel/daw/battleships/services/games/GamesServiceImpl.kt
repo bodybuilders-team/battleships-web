@@ -18,6 +18,7 @@ import pt.isel.daw.battleships.services.games.dtos.game.GameStateDTO
 import pt.isel.daw.battleships.services.games.dtos.game.GamesDTO
 import pt.isel.daw.battleships.services.games.dtos.game.MatchmakeDTO
 import pt.isel.daw.battleships.utils.JwtProvider
+import java.sql.Timestamp
 import javax.transaction.Transactional
 
 /**
@@ -118,6 +119,7 @@ class GamesServiceImpl(
 
         game.addPlayer(Player(game, user))
         game.state.phase = GameState.GamePhase.PLACING_SHIPS
+        game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimeForLayoutPhase)
     }
 
     /**

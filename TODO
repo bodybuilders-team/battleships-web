@@ -6,3 +6,4 @@
 - Reorder functions in the code (example: getUser should be before createUser?)
 - Add tests
 - Add pagination
+- Review database model and JPA implementation (check nullables and not null, etc)

@@ -9,11 +9,13 @@ import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.services.exceptions.AuthenticationException
 import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.services.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.services.exceptions.InvalidShotException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
+import pt.isel.daw.battleships.services.exceptions.ShootTimeExpiredException
 
 /**
  * Handles exceptions thrown by the controllers.
@@ -36,7 +38,9 @@ class ExceptionHandler {
             FleetAlreadyDeployedException::class,
             InvalidFleetException::class,
             InvalidShipTypeException::class,
-            InvalidShotException::class
+            InvalidShotException::class,
+            FleetDeployTimeExpiredException::class,
+            ShootTimeExpiredException::class
         ]
     )
     fun handleBadRequest(ex: Exception): ResponseEntity<Any> =

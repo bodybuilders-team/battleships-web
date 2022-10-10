@@ -112,6 +112,14 @@ class Game(
         players.add(player)
     }
 
+    /**
+     * Checks if the fleet of both players is ready.
+     *
+     * @return true if the fleet of both players is ready, false otherwise
+     */
+    fun areFleetsDeployed(): Boolean =
+        players.all { it.ships.isNotEmpty() }
+
     companion object {
         private const val MAX_GAME_PLAYERS = 2
     }
