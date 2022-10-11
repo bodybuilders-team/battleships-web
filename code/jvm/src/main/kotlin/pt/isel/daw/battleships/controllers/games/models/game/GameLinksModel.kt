@@ -1,22 +1,28 @@
-package pt.isel.daw.battleships.controllers.games.models.game.createGame
+package pt.isel.daw.battleships.controllers.games.models.game
 
 import pt.isel.daw.battleships.controllers.utils.LinkModel
 
 /**
- * Represents the response body of a game creation request.
+ * Represents the links of a game.
  *
- * @property links the links to the created game
+ * @property links the links of the game
  */
-data class CreateGameOutputModel(
+data class GameLinksModel(
     val links: List<LinkModel>
 ) {
     constructor(gameId: Int) : this(
-        links = listOf(
+        listOf(
             LinkModel(
                 rel = "self",
                 href = "/games/$gameId",
                 method = "GET",
                 requiresAuth = false
+            ),
+            LinkModel(
+                rel = "join",
+                href = "/games/$gameId/join",
+                method = "POST",
+                requiresAuth = true
             ),
             LinkModel(
                 rel = "state",

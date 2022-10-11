@@ -62,6 +62,7 @@ We highlight the following aspects:
 
 The conceptual model has the following restrictions:
 
+* The `email` attribute of the `player` entity needs to follow the following pattern: `^[A-Za-z0-9+_.-]+@(.+)$`;
 * ...
 
 ### Physical Model
@@ -78,7 +79,8 @@ The [`src/main/sql`](../code/jvm/src/main/sql) folder contains all SQL scripts d
 
 We highlight the following aspects of this model:
 
-* All unique identifiers are `SERIAL`;
+* All primary keys are represented by the `id` attribute and are `SERIAL`;
+* Other attributes that are not primary keys, but also identify the entity are `UNIQUE`;
 * ...
 
 ---

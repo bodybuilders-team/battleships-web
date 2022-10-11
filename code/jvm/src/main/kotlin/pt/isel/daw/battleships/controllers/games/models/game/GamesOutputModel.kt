@@ -9,8 +9,11 @@ import pt.isel.daw.battleships.services.games.dtos.game.GamesDTO
  * @property totalCount the total number of games
  */
 data class GamesOutputModel(
-    val games: List<GameModel>,
+    val games: List<GameLinksModel>,
     val totalCount: Int
 ) {
-    constructor(gamesDTO: GamesDTO) : this(gamesDTO.games.map { GameModel(it) }, gamesDTO.totalCount)
+    constructor(gamesDTO: GamesDTO) : this(
+        games = gamesDTO.games.map { GameLinksModel(it.id) },
+        gamesDTO.totalCount
+    )
 }

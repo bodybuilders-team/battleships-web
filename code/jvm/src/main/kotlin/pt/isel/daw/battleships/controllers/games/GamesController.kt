@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.daw.battleships.controllers.games.models.JoinGameModel
 import pt.isel.daw.battleships.controllers.games.models.game.GameConfigModel
 import pt.isel.daw.battleships.controllers.games.models.game.GameModel
 import pt.isel.daw.battleships.controllers.games.models.game.GameStateModel
@@ -87,7 +88,7 @@ class GamesController(private val gamesService: GamesService) {
     fun getGameState(
         @PathVariable gameId: Int
     ): GameStateModel =
-        GameStateModel(stateDTO = gamesService.getGameState(gameId))
+        GameStateModel(gameId, stateDTO = gamesService.getGameState(gameId))
 
     /**
      * Handles the request to join a game.
@@ -101,6 +102,6 @@ class GamesController(private val gamesService: GamesService) {
     fun joinGame(
         @PathVariable gameId: Int,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): GameModel =
-        GameModel(gameDTO = gamesService.joinGame(token, gameId))
+    ): JoinGameModel =
+        JoinGameModel(gameId = gamesService.joinGame(token, gameId).id)
 }
