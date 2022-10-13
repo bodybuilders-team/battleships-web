@@ -11,7 +11,12 @@ import pt.isel.daw.battleships.controllers.users.models.createUser.CreateUserInp
 import pt.isel.daw.battleships.controllers.users.models.createUser.CreateUserOutputModel
 import pt.isel.daw.battleships.controllers.users.models.login.LoginUserInputModel
 import pt.isel.daw.battleships.controllers.users.models.login.LoginUserOutputModel
+import pt.isel.daw.battleships.controllers.utils.siren.EmbeddedLink
+import pt.isel.daw.battleships.controllers.utils.siren.Link
+import pt.isel.daw.battleships.controllers.utils.siren.SIREN_TYPE
+import pt.isel.daw.battleships.controllers.utils.siren.SirenEntity
 import pt.isel.daw.battleships.services.users.UsersService
+import java.net.URI
 
 /**
  * Controller that handles the requests related to the users.
@@ -19,7 +24,7 @@ import pt.isel.daw.battleships.services.users.UsersService
  * @property usersService the service that handles the business logic related to the users
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/users", produces = [SIREN_TYPE])
 class UsersController(private val usersService: UsersService) {
 
     /**
@@ -31,8 +36,26 @@ class UsersController(private val usersService: UsersService) {
     @PostMapping
     fun createUser(
         @RequestBody userData: CreateUserInputModel
-    ): CreateUserOutputModel =
-        CreateUserOutputModel(token = usersService.createUser(userData.toCreateUserRequestDTO()))
+    ): SirenEntity<CreateUserOutputModel> {
+        val token = usersService.createUser(userData.toCreateUserRequestDTO())
+
+        return SirenEntity(
+            `class` = listOf("user"),
+            properties = CreateUserOutputModel(token),
+            links = listOf(
+                Link(
+                    rel = listOf("home"),
+                    href = URI("/home")
+                )
+            ),
+            entities = listOf(
+                EmbeddedLink(
+                    rel = listOf("user"),
+                    href = URI("/users/${userData.username}")
+                )
+            )
+        )
+    }
 
     /**
      * Handles the request to log in a user.
@@ -43,8 +66,26 @@ class UsersController(private val usersService: UsersService) {
     @PostMapping("/login")
     fun login(
         @RequestBody userData: LoginUserInputModel
-    ): LoginUserOutputModel =
-        LoginUserOutputModel(token = usersService.login(userData.toLoginUserInputDTO()))
+    ): SirenEntity<LoginUserOutputModel> {
+        val token = usersService.login(userData.toLoginUserInputDTO())
+
+        return SirenEntity(
+            `class` = listOf("user"),
+            properties = LoginUserOutputModel(token),
+            links = listOf(
+                Link(
+                    rel = listOf("home"),
+                    href = URI("/home")
+                )
+            ),
+            entities = listOf(
+                EmbeddedLink(
+                    rel = listOf("user"),
+                    href = URI("/users/${userData.username}")
+                )
+            )
+        )
+    }
 
     /**
      * Handles the request to get a user.
@@ -55,6 +96,22 @@ class UsersController(private val usersService: UsersService) {
     @GetMapping("/{username}")
     fun getUser(
         @PathVariable username: String
-    ): UserModel? =
-        UserModel(userDTO = usersService.getUser(username))
+    ): SirenEntity<UserModel?> {
+        val user = usersService.getUser(username)
+
+        return SirenEntity(
+            `class` = listOf("user"),
+            properties = UserModel(user),
+            links = listOf(
+                Link(
+                    rel = listOf("self"),
+                    href = URI("/users/$username")
+                ),
+                Link(
+                    rel = listOf("home"),
+                    href = URI("/home")
+                )
+            )
+        )
+    }
 }

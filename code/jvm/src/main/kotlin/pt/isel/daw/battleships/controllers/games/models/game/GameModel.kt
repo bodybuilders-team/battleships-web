@@ -12,7 +12,6 @@ import pt.isel.daw.battleships.services.games.dtos.game.GameDTO
  * @property config the configuration of the game
  * @property state the state of the game
  * @property players the players of the game
- * @property links the links of the game
  */
 data class GameModel(
     val id: Int,
@@ -20,8 +19,7 @@ data class GameModel(
     val creator: String,
     val config: GameConfigModel,
     val state: GameStateModel,
-    val players: List<PlayerModel>,
-    val links: GameLinksModel
+    val players: List<PlayerModel>
 ) {
     constructor(gameDTO: GameDTO) : this(
         gameDTO.id,
@@ -29,7 +27,6 @@ data class GameModel(
         gameDTO.creator,
         GameConfigModel(gameDTO.config),
         GameStateModel(gameDTO.id, gameDTO.state),
-        gameDTO.players.map { PlayerModel(it) },
-        GameLinksModel(gameDTO.id)
+        gameDTO.players.map { PlayerModel(it) }
     )
 }

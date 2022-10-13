@@ -8,6 +8,9 @@ import pt.isel.daw.battleships.database.model.Player
  * @property username the username of the player
  * @property points the points of the player
  */
-data class PlayerDTO(val username: String, val points: Int) {
+data class PlayerDTO(
+    val username: String,
+    val points: Int
+) {
     constructor(player: Player) : this(player.user.username, player.points)
 }

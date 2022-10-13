@@ -6,13 +6,17 @@ import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.controllers.home.models.AuthorModel
 import pt.isel.daw.battleships.controllers.home.models.HomeOutputModel
 import pt.isel.daw.battleships.controllers.home.models.RepositoryModel
-import pt.isel.daw.battleships.controllers.utils.LinkModel
+import pt.isel.daw.battleships.controllers.utils.siren.Action
+import pt.isel.daw.battleships.controllers.utils.siren.Link
+import pt.isel.daw.battleships.controllers.utils.siren.SIREN_TYPE
+import pt.isel.daw.battleships.controllers.utils.siren.SirenEntity
+import java.net.URI
 
 /**
  * Controller that handles the requests related to the home.
  */
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/home", produces = [SIREN_TYPE])
 class HomeController {
 
     /**
@@ -21,7 +25,7 @@ class HomeController {
      * @return the response to the request with the home page
      */
     @GetMapping
-    fun home(): HomeOutputModel {
+    fun home(): SirenEntity<HomeOutputModel> {
         val authors = listOf(
             AuthorModel(
                 name = "André Jesus",
@@ -40,7 +44,7 @@ class HomeController {
             )
         )
 
-        return HomeOutputModel(
+        val homeModel = HomeOutputModel(
             title = "Battleships",
             version = "0.0.1",
             description = "Battleships is a game where you have to sink all the ships of your opponent.",
@@ -48,44 +52,49 @@ class HomeController {
             repository = RepositoryModel(
                 type = "git",
                 url = "https://github.com/isel-leic-daw/2022-daw-leic51d-g03"
-            ),
+            )
+        )
+
+        return SirenEntity(
+            `class` = listOf("home"),
+            properties = homeModel,
             links = listOf(
-                LinkModel(
-                    rel = "self",
-                    href = "/home",
-                    method = "GET",
-                    requiresAuth = false
-                ),
-                LinkModel(
-                    rel = "home",
-                    href = "/",
-                    method = "GET",
-                    requiresAuth = false
-                ),
-                LinkModel(
-                    rel = "register",
-                    href = "/users",
+                Link(
+                    rel = listOf("self", "home"),
+                    href = URI("/home")
+                )
+            ),
+            actions = listOf(
+                Action(
+                    name = "register",
+                    title = "Register",
                     method = "POST",
-                    requiresAuth = false
+                    href = URI("/users")
                 ),
-                LinkModel(
-                    rel = "login",
-                    href = "/users/login",
+                Action(
+                    name = "login",
+                    title = "Login",
                     method = "POST",
-                    requiresAuth = false
+                    href = URI("/users/login")
                 ),
-                LinkModel(
-                    rel = "games",
-                    href = "/games",
+                Action(
+                    name = "matchmake",
+                    title = "Matchmake",
+                    method = "POST",
+                    href = URI("/games/matchmake")
+                ),
+                Action(
+                    name = "list-games",
+                    title = "List Games",
                     method = "GET",
-                    requiresAuth = true
+                    href = URI("/games")
                 ),
-                LinkModel(
-                    rel = "matchmaking",
-                    href = "/games/matchmaking",
-                    method = "POST",
-                    requiresAuth = true
-                ) // TODO: Add join game, when LinKModel supports query parameters
+                Action(
+                    name = "list-users",
+                    title = "List Users",
+                    method = "GET",
+                    href = URI("/users")
+                )
             )
         )
     }
