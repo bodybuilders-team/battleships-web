@@ -29,8 +29,10 @@ class AuthenticationInterceptor(
     ): Boolean {
         if (
             handler !is HandlerMethod ||
-            !handler.hasMethodAnnotation(Authenticated::class.java) ||
-            !handler.method.declaringClass.isAnnotationPresent(Authenticated::class.java)
+            (
+                !handler.hasMethodAnnotation(Authenticated::class.java) &&
+                    !handler.method.declaringClass.isAnnotationPresent(Authenticated::class.java)
+                )
         ) return true
 
         val authHeader = request.getHeader(AUTHORIZATION_HEADER)

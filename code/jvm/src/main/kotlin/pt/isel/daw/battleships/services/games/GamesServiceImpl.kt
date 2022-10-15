@@ -67,6 +67,12 @@ class GamesServiceImpl(
 
         val (game, wasCreated) = gamesRepository
             .findFirstAvailableGameWithConfig(gameConfigDTO.toGameConfig())
+            ?.let {
+                // Return the game if the user is not already in it
+                if (it.getPlayerOrNull(user.username) != null) {
+                    null
+                } else it
+            }
             ?.let { foundGame ->
                 joinGame(user, foundGame)
                 foundGame to false
