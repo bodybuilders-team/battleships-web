@@ -19,6 +19,7 @@ import pt.isel.daw.battleships.controllers.utils.siren.EmbeddedLink
 import pt.isel.daw.battleships.controllers.utils.siren.Link
 import pt.isel.daw.battleships.controllers.utils.siren.SIREN_TYPE
 import pt.isel.daw.battleships.controllers.utils.siren.SirenEntity
+import pt.isel.daw.battleships.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.services.games.GamesService
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 import java.net.URI
@@ -53,16 +54,17 @@ class GamesController(private val gamesService: GamesService) {
             entities = games.games.map {
                 EmbeddedLink(
                     rel = listOf("item", "game-${it.id}"),
-                    href = URI("/games/${it.id}")
+                    href = URI("/games/${it.id}"),
+                    title = "Game ${it.id}"
                 )
             },
             actions = listOf(
-                Action(
+                /*Action(
                     name = "join-game",
                     title = "Join Game",
                     method = "POST",
                     href = URI("/games/{gameId}/join")
-                )
+                )*/
             )
         )
     }
@@ -76,6 +78,7 @@ class GamesController(private val gamesService: GamesService) {
      * @return the response to the request with the created game
      */
     @PostMapping
+    @Authenticated
     fun createGame(
         @RequestBody gameData: CreateGameInputModel,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
@@ -105,6 +108,7 @@ class GamesController(private val gamesService: GamesService) {
      * @return the response to the request with the matched game
      */
     @PostMapping("/matchmake")
+    @Authenticated
     fun matchmake(
         @RequestBody gameConfig: GameConfigModel,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
@@ -243,6 +247,7 @@ class GamesController(private val gamesService: GamesService) {
      * @return the response to the request with the joined game
      */
     @PostMapping("/{gameId}/join")
+    @Authenticated
     fun joinGame(
         @PathVariable gameId: Int,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String

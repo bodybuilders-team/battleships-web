@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.pipeline
+package pt.isel.daw.battleships.pipeline.authentication
 
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
@@ -27,8 +27,11 @@ class AuthenticationInterceptor(
         response: HttpServletResponse,
         handler: Any
     ): Boolean {
-        // TODO: Verify if this is needed
-        if (handler !is HandlerMethod) return true
+        if (
+            handler !is HandlerMethod ||
+            !handler.hasMethodAnnotation(Authenticated::class.java) ||
+            !handler.method.declaringClass.isAnnotationPresent(Authenticated::class.java)
+        ) return true
 
         val authHeader = request.getHeader(AUTHORIZATION_HEADER)
         if (authHeader == null) {

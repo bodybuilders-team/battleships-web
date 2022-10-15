@@ -18,6 +18,7 @@ import pt.isel.daw.battleships.controllers.utils.siren.EmbeddedLink
 import pt.isel.daw.battleships.controllers.utils.siren.Link
 import pt.isel.daw.battleships.controllers.utils.siren.SIREN_TYPE
 import pt.isel.daw.battleships.controllers.utils.siren.SirenEntity
+import pt.isel.daw.battleships.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.services.games.PlayersService
 import pt.isel.daw.battleships.services.games.dtos.ship.InputFleetDTO
 import pt.isel.daw.battleships.services.games.dtos.shot.InputShotsDTO
@@ -31,6 +32,7 @@ import java.net.URI
  */
 @RestController
 @RequestMapping("/games/{gameId}/players", produces = [SIREN_TYPE])
+@Authenticated
 class PlayersController(private val playersService: PlayersService) {
 
     /**

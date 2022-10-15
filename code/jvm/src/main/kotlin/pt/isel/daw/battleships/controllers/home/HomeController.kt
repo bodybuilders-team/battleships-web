@@ -16,7 +16,7 @@ import java.net.URI
  * Controller that handles the requests related to the home.
  */
 @RestController
-@RequestMapping("/home", produces = [SIREN_TYPE])
+@RequestMapping("/home", "/", produces = [SIREN_TYPE])
 class HomeController {
 
     /**
