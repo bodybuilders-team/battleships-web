@@ -3,15 +3,28 @@ package pt.isel.daw.battleships.services.games.dtos.game
 import kotlin.test.Test
 
 class GameDTOTests {
+
     @Test
     fun `GameDTO creation is successful`() {
         GameDTO(
-            1,
-            "name",
-            "creator",
-            GameConfigDTO(1, 2, 3, 4, listOf()),
-            GameStateDTO("WAITING_FOR_PLAYERS", 1, null, null),
-            listOf()
+            id = 1,
+            name = "name",
+            creator = "creator",
+            config = GameConfigDTO(
+                gridSize = 1,
+                maxTimeForLayoutPhase = 2,
+                shotsPerRound = 3,
+                maxTimePerRound = 4,
+                shipTypes = listOf()
+            ),
+            state = GameStateDTO(
+                phase = "WAITING_FOR_PLAYERS",
+                phaseEndTime = 1L,
+                round = 1,
+                turn = null,
+                winner = null
+            ),
+            players = listOf()
         )
     }
 

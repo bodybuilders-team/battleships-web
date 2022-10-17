@@ -2,6 +2,7 @@ package pt.isel.daw.battleships.database.repositories.games
 
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
+import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameConfig
 import pt.isel.daw.battleships.database.model.game.GameState
@@ -14,8 +15,8 @@ import pt.isel.daw.battleships.database.model.game.GameState
 @Component
 class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : GamesRepositoryCustom {
 
-    override fun findFirstAvailableGameWithConfig(config: GameConfig): Game? =
+    override fun findFirstAvailableGameWithConfig(user: User, config: GameConfig): Game? =
         gamesRepository
             .findAllByStatePhase(GameState.GamePhase.WAITING_FOR_PLAYERS)
-            .find { it.config == config }
+            .find { game -> game.config == config && game.players.none { it.user == user } }
 }

@@ -5,11 +5,19 @@ import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.users.dtos.CreateUserRequestDTO
 import pt.isel.daw.battleships.services.users.dtos.LoginUserInputDTO
 import pt.isel.daw.battleships.services.users.dtos.UserDTO
+import pt.isel.daw.battleships.services.users.dtos.UsersDTO
 
 /**
  * Service that handles the business logic of the users.
  */
 interface UsersService {
+
+    /**
+     * Gets all users.
+     *
+     * @return the DTO with the information of all users
+     */
+    fun getUsers(): UsersDTO
 
     /**
      * Creates a new user.

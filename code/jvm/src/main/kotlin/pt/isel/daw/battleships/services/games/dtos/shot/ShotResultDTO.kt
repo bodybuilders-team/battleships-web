@@ -8,5 +8,5 @@ import pt.isel.daw.battleships.database.model.Shot
  * @property result the result of the shot
  */
 data class ShotResultDTO(val result: String) {
-    constructor(result: Shot.ShotResult) : this(result.name)
+    constructor(result: Shot.ShotResult) : this(result = result.name)
 }

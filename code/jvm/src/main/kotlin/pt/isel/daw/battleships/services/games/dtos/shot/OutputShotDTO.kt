@@ -16,8 +16,8 @@ data class OutputShotDTO(
     val result: ShotResultDTO
 ) {
     constructor(shot: Shot) : this(
-        CoordinateDTO(shot.coordinate),
-        shot.round,
-        ShotResultDTO(shot.result)
+        coordinate = CoordinateDTO(shot.coordinate),
+        round = shot.round,
+        result = ShotResultDTO(shot.result)
     )
 }

@@ -19,10 +19,10 @@ import javax.persistence.Table
 @Entity
 @Table(name = "users")
 class User(
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     val username: String,
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     val email: String,
 
     @Column(name = "hashed_password", nullable = false)

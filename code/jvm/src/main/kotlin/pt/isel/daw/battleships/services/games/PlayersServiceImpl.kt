@@ -46,25 +46,13 @@ class PlayersServiceImpl(
         return OutputFleetDTO(ships = player.ships.map { OutputShipDTO(it) })
     }
 
-    override fun getOpponentFleet(token: String, gameId: Int): OutputFleetDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId).also { it.getPlayer(user.username) }
-        val opponent = game.getOpponent(user.username)
-
-        return OutputFleetDTO(
-            ships = opponent.ships
-                .filter(Ship::isSunk)
-                .map { OutputShipDTO(it) }
-        )
-    }
-
     override fun deployFleet(token: String, gameId: Int, fleetDTO: InputFleetDTO) {
         val user = authenticateUser(token)
         val game = getGameById(gameId)
         val player = game.getPlayer(user.username)
         val opponent = game.getOpponent(user.username)
 
-        if (game.state.phase != GameState.GamePhase.PLACING_SHIPS) {
+        if (game.state.phase != GameState.GamePhase.GRID_LAYOUT) {
             game.state.phase = GameState.GamePhase.FINISHED
             game.state.winner = opponent
             throw IllegalStateException("Game is not in the placing ships phase")
@@ -83,7 +71,8 @@ class PlayersServiceImpl(
         }
 
         fleetDTO.ships.forEach { shipDTO ->
-            val shipType = game.config.shipTypes.find { it.shipName == shipDTO.type }
+            val shipType = game.config.shipTypes
+                .find { it.shipName == shipDTO.type }
                 ?: throw InvalidShipTypeException("Ship type '${shipDTO.type}' is invalid.")
 
             player.addShip(shipDTO, shipType)
@@ -91,8 +80,20 @@ class PlayersServiceImpl(
 
         if (game.areFleetsDeployed()) {
             game.state.phase = GameState.GamePhase.IN_PROGRESS
-            game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimePerShot)
+            game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimePerRound)
         }
+    }
+
+    override fun getOpponentFleet(token: String, gameId: Int): OutputFleetDTO {
+        val user = authenticateUser(token)
+        val game = getGameById(gameId).also { it.getPlayer(user.username) }
+        val opponent = game.getOpponent(user.username)
+
+        return OutputFleetDTO(
+            ships = opponent.ships
+                .filter(Ship::isSunk)
+                .map { OutputShipDTO(it) }
+        )
     }
 
     override fun getShots(token: String, gameId: Int): OutputShotsDTO {
@@ -101,14 +102,6 @@ class PlayersServiceImpl(
         val player = game.getPlayer(user.username)
 
         return OutputShotsDTO(shots = player.shots.map { OutputShotDTO(it) })
-    }
-
-    override fun getOpponentShots(token: String, gameId: Int): OutputShotsDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId).also { it.getPlayer(user.username) }
-        val opponent = game.getOpponent(user.username)
-
-        return OutputShotsDTO(shots = opponent.shots.map { OutputShotDTO(it) })
     }
 
     override fun shoot(token: String, gameId: Int, inputShotsDTO: InputShotsDTO): OutputShotsDTO {
@@ -134,10 +127,18 @@ class PlayersServiceImpl(
             game.state.phase = GameState.GamePhase.FINISHED
             game.state.winner = player
         } else {
-            game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimePerShot)
+            game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimePerRound)
         }
 
         return OutputShotsDTO(shots = shots.map { OutputShotDTO(it) })
+    }
+
+    override fun getOpponentShots(token: String, gameId: Int): OutputShotsDTO {
+        val user = authenticateUser(token)
+        val game = getGameById(gameId).also { it.getPlayer(user.username) }
+        val opponent = game.getOpponent(user.username)
+
+        return OutputShotsDTO(shots = opponent.shots.map { OutputShotDTO(it) })
     }
 
     /**

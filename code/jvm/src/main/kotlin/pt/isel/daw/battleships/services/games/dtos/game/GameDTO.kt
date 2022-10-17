@@ -22,11 +22,11 @@ data class GameDTO(
     val players: List<PlayerDTO>
 ) {
     constructor(game: Game) : this(
-        game.id!!,
-        game.name,
-        game.creator.username,
-        GameConfigDTO(game.config),
-        GameStateDTO(game.state),
-        game.players.map { PlayerDTO(it) }
+        id = game.id!!,
+        name = game.name,
+        creator = game.creator.username,
+        config = GameConfigDTO(game.config),
+        state = GameStateDTO(game.state),
+        players = game.players.map { PlayerDTO(it) }
     )
 }

@@ -15,6 +15,13 @@ import pt.isel.daw.battleships.services.games.dtos.game.MatchmakeDTO
 interface GamesService {
 
     /**
+     * Gets all games.
+     *
+     * @return the DTO with the information of all games
+     */
+    fun getGames(): GamesDTO
+
+    /**
      * Creates a new game.
      *
      * @param token the token of the user that is creating the game
@@ -25,12 +32,14 @@ interface GamesService {
     fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int
 
     /**
-     * Gets all games.
+     * Matchmakes a game with a specific configuration.
      *
-     * @return the DTO with the information of all games
+     * @param token the token of the user that is matchmaking
+     * @param gameConfigDTO the DTO with the game's configuration
+     *
+     * @return the DTO with the information of the matched game
      */
-    // TODO: Add pagination skip: Int, limit: Int
-    fun getGames(): GamesDTO
+    fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeDTO
 
     /**
      * Gets a game by id.
@@ -59,14 +68,4 @@ interface GamesService {
      * @throws AlreadyJoinedException if the user is already in the game
      */
     fun joinGame(token: String, gameId: Int): GameDTO
-
-    /**
-     * Matchmakes a game with a specific configuration.
-     *
-     * @param token the token of the user that is matchmaking
-     * @param gameConfigDTO the DTO with the game's configuration
-     *
-     * @return the DTO with the information of the matched game
-     */
-    fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeDTO
 }

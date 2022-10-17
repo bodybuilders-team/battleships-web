@@ -12,5 +12,8 @@ data class PlayerDTO(
     val username: String,
     val points: Int
 ) {
-    constructor(player: Player) : this(player.user.username, player.points)
+    constructor(player: Player) : this(
+        username = player.user.username,
+        points = player.points
+    )
 }

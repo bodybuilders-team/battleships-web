@@ -7,14 +7,23 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class OutputShotDTOTests {
+
     @Test
     fun `OutputShotDTO creation is successful`() {
-        OutputShotDTO(CoordinateDTO('A', 1), 1, ShotResultDTO("HIT"))
+        OutputShotDTO(
+            coordinate = CoordinateDTO(col = 'A', row = 1),
+            round = 1,
+            result = ShotResultDTO(result = "HIT")
+        )
     }
 
     @Test
     fun `OutputShotDTO from Shot conversion is successful`() {
-        val shot = Shot(Coordinate('A', 1), 1, Shot.ShotResult.HIT)
+        val shot = Shot(
+            coordinate = Coordinate(col = 'A', row = 1),
+            round = 1,
+            result = Shot.ShotResult.HIT
+        )
         val outputShotDTO = OutputShotDTO(shot)
 
         assertEquals(CoordinateDTO(shot.coordinate), outputShotDTO.coordinate)

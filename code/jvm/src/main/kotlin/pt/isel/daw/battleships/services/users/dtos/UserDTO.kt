@@ -14,5 +14,9 @@ data class UserDTO(
     val email: String,
     val points: Int
 ) {
-    constructor(user: User) : this(user.username, user.email, user.points)
+    constructor(user: User) : this(
+        username = user.username,
+        email = user.email,
+        points = user.points
+    )
 }

@@ -8,24 +8,30 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class OutputShipDTOTests {
+
     @Test
     fun `OutputShipDTO creation is successful`() {
-        OutputShipDTO("type", CoordinateDTO('A', 1), 'H', 3)
+        OutputShipDTO(
+            type = "type",
+            coordinate = CoordinateDTO('A', 1),
+            orientation = "HORIZONTAL",
+            lives = 3
+        )
     }
 
     @Test
     fun `OutputShipDTO from Ship conversion is successful`() {
         val ship = Ship(
-            ShipType("type", 3, 1, 10),
-            Coordinate('A', 1),
-            Ship.Orientation.HORIZONTAL,
-            3
+            type = ShipType(shipName = "type", size = 3, quantity = 1, points = 10),
+            coordinate = Coordinate(col = 'A', row = 1),
+            orientation = Ship.Orientation.HORIZONTAL,
+            lives = 3
         )
         val outputShipDTO = OutputShipDTO(ship)
 
         assertEquals(ship.type.shipName, outputShipDTO.type)
         assertEquals(CoordinateDTO(ship.coordinate), outputShipDTO.coordinate)
-        assertEquals('H', outputShipDTO.orientation)
+        assertEquals("HORIZONTAL", outputShipDTO.orientation)
         assertEquals(ship.lives, outputShipDTO.lives)
     }
 }

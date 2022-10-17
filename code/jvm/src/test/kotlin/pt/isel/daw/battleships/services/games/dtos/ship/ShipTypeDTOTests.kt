@@ -5,14 +5,25 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ShipTypeDTOTests {
+
     @Test
     fun `ShipTypeDTO creation is successful`() {
-        ShipTypeDTO("Carrier", 5, 1, 5)
+        ShipTypeDTO(
+            shipName = "Carrier",
+            size = 5,
+            quantity = 1,
+            points = 5
+        )
     }
 
     @Test
     fun `ShipTypeDTO from ShipType conversion is successful`() {
-        val shipType = ShipType("Carrier", 5, 1, 5)
+        val shipType = ShipType(
+            shipName = "Carrier",
+            size = 5,
+            quantity = 1,
+            points = 5
+        )
         val shipTypeDTO = ShipTypeDTO(shipType)
 
         assertEquals(shipType.shipName, shipTypeDTO.shipName)
@@ -23,7 +34,12 @@ class ShipTypeDTOTests {
 
     @Test
     fun `ShipTypeDTO to ShipType conversion is successful`() {
-        val shipTypeDTO = ShipTypeDTO("Carrier", 5, 1, 5)
+        val shipTypeDTO = ShipTypeDTO(
+            shipName = "Carrier",
+            size = 5,
+            quantity = 1,
+            points = 5
+        )
         val shipType = shipTypeDTO.toShipType()
 
         assertEquals(shipTypeDTO.shipName, shipType.shipName)

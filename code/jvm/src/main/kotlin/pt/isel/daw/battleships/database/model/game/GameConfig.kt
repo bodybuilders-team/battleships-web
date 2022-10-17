@@ -12,7 +12,7 @@ import javax.persistence.OneToMany
  * The GameConfig entity.
  *
  * @property gridSize the grid size.
- * @property maxTimePerShot the maximum time per shot
+ * @property maxTimePerRound the maximum time per round
  * @property shotsPerRound the shots per round
  * @property maxTimeForLayoutPhase the maximum time for layout phase
  * @property shipTypes the ship types
@@ -23,7 +23,7 @@ class GameConfig(
     val gridSize: Int,
 
     @Column(name = "max_time_per_shot", nullable = false)
-    val maxTimePerShot: Int,
+    val maxTimePerRound: Int,
 
     @Column(name = "shots_per_round", nullable = false)
     val shotsPerRound: Int,
@@ -57,7 +57,7 @@ class GameConfig(
         other as GameConfig
 
         if (gridSize != other.gridSize) return false
-        if (maxTimePerShot != other.maxTimePerShot) return false
+        if (maxTimePerRound != other.maxTimePerRound) return false
         if (shotsPerRound != other.shotsPerRound) return false
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
@@ -68,7 +68,7 @@ class GameConfig(
 
     override fun hashCode(): Int {
         var result = gridSize
-        result = 31 * result + maxTimePerShot
+        result = 31 * result + maxTimePerRound
         result = 31 * result + shotsPerRound
         result = 31 * result + maxTimeForLayoutPhase
         result = 31 * result + shipTypes.hashCode()

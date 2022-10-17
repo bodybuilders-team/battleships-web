@@ -66,7 +66,7 @@ class Player(
             Ship(
                 type = shipType,
                 coordinate = shipDTO.coordinate.toCoordinate(),
-                orientation = Ship.Orientation.fromChar(shipDTO.orientation),
+                orientation = Ship.Orientation.valueOf(shipDTO.orientation),
                 lives = shipType.size
             )
         )

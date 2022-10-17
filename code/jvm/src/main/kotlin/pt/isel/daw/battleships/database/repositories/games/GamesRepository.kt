@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.database.repositories.games
 
 import org.springframework.data.repository.CrudRepository
+import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameConfig
 import pt.isel.daw.battleships.database.model.game.GameState.GamePhase
@@ -33,11 +34,12 @@ interface GamesRepository : CrudRepository<Game, String>, GamesRepositoryCustom 
 interface GamesRepositoryCustom {
 
     /**
-     * Finds the first available game with the given configuration.
+     * Finds the first available game with the given configuration and wich the given user is not in it.
      *
+     * @param user the user that is looking for a game
      * @param config the configuration of the game
-     * @ return the first available game with the given configuration or null if there is none
      *
+     * @return the first available game with the given configuration or null if there is none
      */
-    fun findFirstAvailableGameWithConfig(config: GameConfig): Game?
+    fun findFirstAvailableGameWithConfig(user: User, config: GameConfig): Game?
 }

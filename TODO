@@ -1,10 +1,16 @@
-- Update Relational Model and review database (structure and names)
-- Review project structure (Player is attached to Game? What are the "sections"?)
-- Review properties order (example: in ship, should we have the coordinates before the orientation?)
-- Review and update swagger documentation
-- Review comments
-- Reorder functions in the code (example: getUser should be before createUser?)
-- Add tests
-- Add pagination
-- Review database model and JPA implementation (check nullables and not null, etc)
-- Add Action Fields
+- Database:
+    - Maybe change GameConfig to a table
+- Review project structure:
+    - Rename package database to repository or something like data access, since the professor likes to call it that way
+    - Move DTOS? Create domain?
+    - Models or Properties?
+- Documentation:
+    - Update swagger documentation
+    - Review comments
+    - Write documentation
+- Implementation:
+    - Add tests
+    - Add pagination
+    - Token expiration
+    - Check validations
+    - Check AuthenticationInterceptor develop by the professor

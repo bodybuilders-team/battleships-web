@@ -26,11 +26,11 @@ class ShipType(
     @Column(name = "ship_name", nullable = false)
     val shipName: String,
 
-    @Column(name = "size", nullable = false)
-    val size: Int,
-
     @Column(name = "quantity", nullable = false)
     val quantity: Int,
+
+    @Column(name = "size", nullable = false)
+    val size: Int,
 
     @Column(name = "points", nullable = false)
     val points: Int

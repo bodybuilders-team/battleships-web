@@ -36,15 +36,37 @@ class GamesServiceImpl(
     jwtProvider: JwtProvider
 ) : GamesService, AuthenticatedService(usersRepository, jwtProvider) {
 
+    override fun getGames(): GamesDTO = gamesRepository
+        .findAll()
+        .map { GameDTO(it) }
+        .let { games -> GamesDTO(games, games.size) }
+
     override fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int =
         createGame(
             creator = authenticateUser(token),
             createGameRequestDTO = createGameRequestDTO
-        ).id!!
+        ).id ?: throw IllegalStateException("Game ID is null")
 
-    override fun getGames(): GamesDTO {
-        val games = gamesRepository.findAll().map { GameDTO(it) }
-        return GamesDTO(games, games.size)
+    override fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeDTO {
+        val user = authenticateUser(token)
+
+        val (game, wasCreated) = gamesRepository
+            .findFirstAvailableGameWithConfig(user, gameConfigDTO.toGameConfig())
+            ?.let { foundGame ->
+                joinGame(user = user, game = foundGame)
+                foundGame to false
+            }
+            ?: (
+                createGame(
+                    creator = user,
+                    createGameRequestDTO = CreateGameRequestDTO(name = "Game", config = gameConfigDTO)
+                ) to true
+                )
+
+        return MatchmakeDTO(
+            game = GameDTO(game),
+            wasCreated = wasCreated
+        )
     }
 
     override fun getGame(gameId: Int): GameDTO =
@@ -60,29 +82,6 @@ class GamesServiceImpl(
         joinGame(user, game)
 
         return GameDTO(game)
-    }
-
-    override fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeDTO {
-        val user = authenticateUser(token)
-
-        val (game, wasCreated) = gamesRepository
-            .findFirstAvailableGameWithConfig(gameConfigDTO.toGameConfig())
-            ?.let {
-                // Return the game if the user is not already in it
-                if (it.getPlayerOrNull(user.username) != null) {
-                    null
-                } else it
-            }
-            ?.let { foundGame ->
-                joinGame(user, foundGame)
-                foundGame to false
-            }
-            ?: (createGame(creator = user, CreateGameRequestDTO("Game", gameConfigDTO)) to true)
-
-        return MatchmakeDTO(
-            game = GameDTO(game),
-            wasCreated = wasCreated
-        )
     }
 
     /**
@@ -101,7 +100,9 @@ class GamesServiceImpl(
             state = GameState()
         )
 
-        game.addPlayer(Player(game, creator))
+        game.addPlayer(
+            player = Player(game = game, user = creator)
+        )
         return gamesRepository.save(game)
     }
 
@@ -123,8 +124,10 @@ class GamesServiceImpl(
             throw AlreadyJoinedException("You have already joined this game")
         }
 
-        game.addPlayer(Player(game, user))
-        game.state.phase = GameState.GamePhase.PLACING_SHIPS
+        game.addPlayer(
+            player = Player(game = game, user = user)
+        )
+        game.state.phase = GameState.GamePhase.GRID_LAYOUT
         game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimeForLayoutPhase)
     }
 

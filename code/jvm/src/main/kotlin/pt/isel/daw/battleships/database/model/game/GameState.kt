@@ -1,6 +1,10 @@
 package pt.isel.daw.battleships.database.model.game
 
 import pt.isel.daw.battleships.database.model.Player
+import pt.isel.daw.battleships.database.model.game.GameState.GamePhase.FINISHED
+import pt.isel.daw.battleships.database.model.game.GameState.GamePhase.GRID_LAYOUT
+import pt.isel.daw.battleships.database.model.game.GameState.GamePhase.IN_PROGRESS
+import pt.isel.daw.battleships.database.model.game.GameState.GamePhase.WAITING_FOR_PLAYERS
 import java.io.Serializable
 import java.sql.Timestamp
 import javax.persistence.CascadeType
@@ -24,7 +28,7 @@ import javax.persistence.OneToOne
 class GameState(
     @Column(name = "phase", nullable = false)
     @Enumerated(EnumType.STRING)
-    var phase: GamePhase = GamePhase.WAITING_FOR_PLAYERS,
+    var phase: GamePhase = WAITING_FOR_PLAYERS,
 
     @Column(name = "phase_end_time", nullable = false)
     var phaseEndTime: Timestamp = Timestamp(System.currentTimeMillis() + MATCHMAKING_MAX_TIME),
@@ -43,10 +47,15 @@ class GameState(
 
     /**
      * Represents the game phases.
+     *
+     * @property WAITING_FOR_PLAYERS the game is waiting for players to join
+     * @property GRID_LAYOUT the game is waiting for players to place their ships
+     * @property IN_PROGRESS the game is in progress
+     * @property FINISHED the game is finished
      */
     enum class GamePhase {
         WAITING_FOR_PLAYERS,
-        PLACING_SHIPS,
+        GRID_LAYOUT,
         IN_PROGRESS,
         FINISHED
     }

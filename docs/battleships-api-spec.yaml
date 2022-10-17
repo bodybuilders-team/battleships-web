@@ -23,7 +23,7 @@ tags:
 
 
 paths:
-  /home:
+  /:
     get:
       tags:
         - Home

@@ -8,25 +8,35 @@ import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.users.dtos.CreateUserRequestDTO
 import pt.isel.daw.battleships.services.users.dtos.LoginUserInputDTO
 import pt.isel.daw.battleships.services.users.dtos.UserDTO
+import pt.isel.daw.battleships.services.users.dtos.UsersDTO
 import pt.isel.daw.battleships.utils.JwtProvider
 import pt.isel.daw.battleships.utils.JwtProvider.JwtPayload
-import pt.isel.daw.battleships.utils.Utils
 import javax.transaction.Transactional
 
 /**
  * Service that handles the business logic of the users.
  *
  * @property usersRepository the repository of the users
- * @property utils the utils
+ * @property passwordUtils the utils for password operations
  * @property jwtProvider the JWT provider
  */
 @Service
 @Transactional
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
-    private val utils: Utils,
+    private val passwordUtils: PasswordUtils,
     private val jwtProvider: JwtProvider
 ) : UsersService {
+
+    override fun getUsers(): UsersDTO = usersRepository
+        .findAll()
+        .map { UserDTO(it) }
+        .let { users ->
+            UsersDTO(
+                users = users,
+                totalCount = users.size
+            )
+        }
 
     override fun createUser(createUserRequestDTO: CreateUserRequestDTO): String {
         if (usersRepository.existsByUsername(username = createUserRequestDTO.username)) {
@@ -36,7 +46,7 @@ class UsersServiceImpl(
         val user = User(
             username = createUserRequestDTO.username,
             email = createUserRequestDTO.email,
-            hashedPassword = utils.hashPassword(
+            hashedPassword = passwordUtils.hashPassword(
                 username = createUserRequestDTO.username,
                 password = createUserRequestDTO.password
             )
@@ -52,7 +62,8 @@ class UsersServiceImpl(
             .findByUsername(username = loginUserInputDTO.username)
             ?: throw NotFoundException("User with username ${loginUserInputDTO.username} not found")
 
-        if (!utils.checkPassword(
+        if (
+            !passwordUtils.checkPassword(
                 username = loginUserInputDTO.username,
                 password = loginUserInputDTO.password,
                 hashedPassword = user.hashedPassword

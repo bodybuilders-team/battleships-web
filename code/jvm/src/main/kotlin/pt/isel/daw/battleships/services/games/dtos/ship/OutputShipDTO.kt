@@ -6,19 +6,21 @@ import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
 /**
  * Ship DTO for services.
  *
- * Doesn't know the data regarding the ShipType, apart from the name (its identifier), as that's governed by the
- * game config and its variable for each game.
+ * @property type the type of the ship
+ * @property coordinate the coordinate of the ship
+ * @property orientation the orientation of the ship
+ * @property lives the number of lives of the ship
  */
 data class OutputShipDTO(
     val type: String,
     val coordinate: CoordinateDTO,
-    val orientation: Char?,
+    val orientation: String,
     val lives: Int
 ) {
     constructor(ship: Ship) : this(
-        ship.type.shipName,
-        CoordinateDTO(ship.coordinate),
-        if (ship.orientation == Ship.Orientation.HORIZONTAL) 'H' else 'V',
-        ship.lives
+        type = ship.type.shipName,
+        coordinate = CoordinateDTO(ship.coordinate),
+        orientation = ship.orientation.name,
+        lives = ship.lives
     )
 }

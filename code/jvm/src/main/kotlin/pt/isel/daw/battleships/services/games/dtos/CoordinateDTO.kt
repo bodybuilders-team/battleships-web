@@ -12,12 +12,15 @@ data class CoordinateDTO(
     val col: Char,
     val row: Int
 ) {
-    constructor(coordinate: Coordinate) : this(coordinate.col, coordinate.row)
+    constructor(coordinate: Coordinate) : this(
+        col = coordinate.col,
+        row = coordinate.row
+    )
 
     /**
      * Converts this DTO to a database model.
      *
      * @return the database model coordinate
      */
-    fun toCoordinate() = Coordinate(col, row)
+    fun toCoordinate() = Coordinate(col = col, row = row)
 }

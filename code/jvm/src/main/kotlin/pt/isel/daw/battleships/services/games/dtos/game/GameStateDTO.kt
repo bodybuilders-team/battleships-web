@@ -1,7 +1,6 @@
 package pt.isel.daw.battleships.services.games.dtos.game
 
 import pt.isel.daw.battleships.database.model.game.GameState
-import java.sql.Timestamp
 
 /**
  * Represents a Game State DTO.
@@ -14,16 +13,16 @@ import java.sql.Timestamp
  */
 data class GameStateDTO(
     val phase: String,
-    val phaseEndTime: Timestamp,
+    val phaseEndTime: Long,
     val round: Int?,
     val turn: String?,
     val winner: String?
 ) {
     constructor(phase: GameState) : this(
-        phase.phase.name,
-        phase.phaseEndTime,
-        phase.round,
-        phase.turn?.user?.username,
-        phase.winner?.user?.username
+        phase = phase.phase.name,
+        phaseEndTime = phase.phaseEndTime.time,
+        round = phase.round,
+        turn = phase.turn?.user?.username,
+        winner = phase.winner?.user?.username
     )
 }

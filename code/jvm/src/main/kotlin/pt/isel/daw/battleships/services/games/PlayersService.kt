@@ -27,17 +27,6 @@ interface PlayersService {
     fun getFleet(token: String, gameId: Int): OutputFleetDTO
 
     /**
-     * Gets the fleet of the opponent.
-     * Only gets those that are sunk.
-     *
-     * @param token the token of the user
-     * @param gameId the id of the game
-     *
-     * @return the fleet of the opponent
-     */
-    fun getOpponentFleet(token: String, gameId: Int): OutputFleetDTO
-
-    /**
      * Deploys the fleet of the player.
      *
      * @param token the token of the user
@@ -52,6 +41,17 @@ interface PlayersService {
     fun deployFleet(token: String, gameId: Int, fleetDTO: InputFleetDTO)
 
     /**
+     * Gets the fleet of the opponent.
+     * Only gets those that are sunk.
+     *
+     * @param token the token of the user
+     * @param gameId the id of the game
+     *
+     * @return the fleet of the opponent
+     */
+    fun getOpponentFleet(token: String, gameId: Int): OutputFleetDTO
+
+    /**
      * Gets the shots of the player.
      *
      * @param token the token of the user
@@ -60,16 +60,6 @@ interface PlayersService {
      * @return te shots of the player
      */
     fun getShots(token: String, gameId: Int): OutputShotsDTO
-
-    /**
-     * Gets the shots of the opponent.
-     *
-     * @param token the token of the user
-     * @param gameId the id of the game
-     *
-     * @return the shots of the opponent
-     */
-    fun getOpponentShots(token: String, gameId: Int): OutputShotsDTO
 
     /**
      * Shoots at the opponent.
@@ -83,4 +73,14 @@ interface PlayersService {
      * @throws ShootTimeExpiredException if the player tries to shoot after the shoot time has expired
      */
     fun shoot(token: String, gameId: Int, inputShotsDTO: InputShotsDTO): OutputShotsDTO
+
+    /**
+     * Gets the shots of the opponent.
+     *
+     * @param token the token of the user
+     * @param gameId the id of the game
+     *
+     * @return the shots of the opponent
+     */
+    fun getOpponentShots(token: String, gameId: Int): OutputShotsDTO
 }

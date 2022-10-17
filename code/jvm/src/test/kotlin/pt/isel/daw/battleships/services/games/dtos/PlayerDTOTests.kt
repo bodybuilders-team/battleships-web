@@ -5,27 +5,42 @@ import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameConfig
 import pt.isel.daw.battleships.database.model.game.GameState
+import java.sql.Timestamp
+import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PlayerDTOTests {
+
     @Test
     fun `PlayerDTO creation is successful`() {
-        PlayerDTO("username", 0)
+        PlayerDTO(username = "username", points = 0)
     }
 
     @Test
     fun `PlayerDTO from Player conversion is successful`() {
-        val user = User("username", "email", "password", 0)
+        val user = User(username = "username", email = "email", hashedPassword = "password", points = 0)
         val player = Player(
-            Game(
-                "game",
-                user,
-                GameConfig(1, 2, 3, 4, listOf()),
-                GameState(GameState.GamePhase.WAITING_FOR_PLAYERS, 1, null, null)
+            game = Game(
+                name = "game",
+                creator = user,
+                config = GameConfig(
+                    gridSize = 1,
+                    maxTimePerRound = 2,
+                    shotsPerRound = 3,
+                    maxTimeForLayoutPhase = 4,
+                    shipTypes = listOf()
+                ),
+                state = GameState(
+                    phase = GameState.GamePhase.WAITING_FOR_PLAYERS,
+                    phaseEndTime = Timestamp(Instant.now().epochSecond),
+                    round = 1,
+                    turn = null,
+                    winner = null
+                )
             ),
-            user,
-            0
+            user = user,
+            points = 0
         )
         val playerDTO = PlayerDTO(player)
 

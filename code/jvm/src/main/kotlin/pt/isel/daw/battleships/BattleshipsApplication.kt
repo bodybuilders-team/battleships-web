@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import pt.isel.daw.battleships.pipeline.authentication.AuthenticationInterceptor
+import pt.isel.daw.battleships.http.pipeline.authentication.AuthenticationInterceptor
 
 /**
  * The main entry point of the Spring application.
@@ -17,7 +17,7 @@ class BattleshipsApplication(
 ) : WebMvcConfigurer {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(authInterceptor)
+        registry.addInterceptor(/* interceptor = */ authInterceptor)
     }
 }
 

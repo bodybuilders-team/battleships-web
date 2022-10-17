@@ -10,13 +10,16 @@ import javax.crypto.spec.SecretKeySpec
 /**
  * Utility class for JWT operations.
  *
- * @param config the server configuration
+ * @param serverConfig the server configuration
  * @property key the key used to sign the JWT
  */
 @Component
-class JwtProvider(config: ServerConfiguration) {
+class JwtProvider(serverConfig: ServerConfiguration) {
 
-    private val key = SecretKeySpec(config.serverSecret.toByteArray(), SECRET_KEY_ALGORITHM)
+    private val key = SecretKeySpec(
+        /* key = */ serverConfig.serverSecret.toByteArray(),
+        /* algorithm = */ SECRET_KEY_ALGORITHM
+    )
 
     /**
      * Represents a JWT Payload.
@@ -31,7 +34,7 @@ class JwtProvider(config: ServerConfiguration) {
          * @return the [Claims] object
          */
         fun toClaims(): Claims = Jwts.claims(
-            mapOf(USERNAME_KEY to username)
+            /* claims = */ mapOf(USERNAME_KEY to username)
         )
 
         companion object {
@@ -89,10 +92,10 @@ class JwtProvider(config: ServerConfiguration) {
      * @return the parsed bearer token or null if the token is not a bearer token
      */
     fun parseBearerToken(token: String): String? =
-        if (!token.startsWith(BEARER_TOKEN_PREFIX)) {
+        if (!token.startsWith(prefix = BEARER_TOKEN_PREFIX)) {
             null
         } else {
-            token.substringAfter(BEARER_TOKEN_PREFIX)
+            token.substringAfter(delimiter = BEARER_TOKEN_PREFIX)
         }
 
     companion object {

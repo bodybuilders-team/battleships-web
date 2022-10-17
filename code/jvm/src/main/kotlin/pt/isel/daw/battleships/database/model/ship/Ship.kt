@@ -65,22 +65,5 @@ class Ship(
     enum class Orientation {
         HORIZONTAL,
         VERTICAL;
-
-        companion object {
-
-            /**
-             * Converts a Char to an Orientation.
-             *
-             * @param c the Char to be converted
-             *
-             * @return the Orientation that corresponds to the Char
-             * @throws IllegalArgumentException if the Char is not a valid Orientation
-             */
-            fun fromChar(c: Char?): Orientation = when (c) {
-                'H' -> HORIZONTAL
-                'V' -> VERTICAL
-                else -> throw IllegalArgumentException("Invalid orientation: $c")
-            }
-        }
     }
 }

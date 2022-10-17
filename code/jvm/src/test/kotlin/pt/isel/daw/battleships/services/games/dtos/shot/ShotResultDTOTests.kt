@@ -4,9 +4,10 @@ import pt.isel.daw.battleships.database.model.Shot
 import kotlin.test.Test
 
 class ShotResultDTOTests {
+
     @Test
     fun `ShotResultDTO creation is successful`() {
-        ShotResultDTO("HIT")
+        ShotResultDTO(result = "HIT")
     }
 
     @Test
