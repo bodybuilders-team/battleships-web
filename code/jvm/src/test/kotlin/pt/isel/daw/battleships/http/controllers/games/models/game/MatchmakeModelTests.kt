@@ -1,9 +1,9 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
-import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
-import pt.isel.daw.battleships.services.games.dtos.game.GameDTO
-import pt.isel.daw.battleships.services.games.dtos.game.GameStateDTO
-import pt.isel.daw.battleships.services.games.dtos.game.MatchmakeDTO
+import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
+import pt.isel.daw.battleships.dtos.games.game.GameDTO
+import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
+import pt.isel.daw.battleships.dtos.games.game.MatchmakeDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

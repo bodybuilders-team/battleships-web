@@ -3,10 +3,10 @@ package pt.isel.daw.battleships.database.model
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.ship.Ship
 import pt.isel.daw.battleships.database.model.ship.ShipType
+import pt.isel.daw.battleships.dtos.games.CoordinateDTO
+import pt.isel.daw.battleships.dtos.games.ship.InputShipDTO
+import pt.isel.daw.battleships.dtos.games.shot.InputShotDTO
 import pt.isel.daw.battleships.services.exceptions.InvalidShotException
-import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
-import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
-import pt.isel.daw.battleships.services.games.dtos.shot.InputShotDTO
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity

@@ -1,13 +1,13 @@
 package pt.isel.daw.battleships.services.games
 
+import pt.isel.daw.battleships.dtos.games.game.CreateGameRequestDTO
+import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
+import pt.isel.daw.battleships.dtos.games.game.GameDTO
+import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
+import pt.isel.daw.battleships.dtos.games.game.GamesDTO
+import pt.isel.daw.battleships.dtos.games.game.MatchmakeDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
-import pt.isel.daw.battleships.services.games.dtos.game.CreateGameRequestDTO
-import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
-import pt.isel.daw.battleships.services.games.dtos.game.GameDTO
-import pt.isel.daw.battleships.services.games.dtos.game.GameStateDTO
-import pt.isel.daw.battleships.services.games.dtos.game.GamesDTO
-import pt.isel.daw.battleships.services.games.dtos.game.MatchmakeDTO
 
 /**
  * Service that handles the business logic of the games.

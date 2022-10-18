@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models
 
-import pt.isel.daw.battleships.services.users.dtos.UserDTO
+import pt.isel.daw.battleships.dtos.users.UserDTO
 import javax.validation.constraints.Min
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size

@@ -1,10 +1,10 @@
 package pt.isel.daw.battleships.http.controllers.games.models.ship
 
+import pt.isel.daw.battleships.dtos.games.ship.InputShipDTO
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
 import pt.isel.daw.battleships.http.controllers.games.models.ship.OutputShipModel.Companion.ORIENTATION_REGEX
 import pt.isel.daw.battleships.http.controllers.games.models.ship.ShipTypeModel.Companion.MAX_SHIP_NAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.games.models.ship.ShipTypeModel.Companion.MIN_SHIP_NAME_LENGTH
-import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 

@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.services.games.dtos.ship
+package pt.isel.daw.battleships.dtos.games.ship
 
 /**
  * Represents a list of Output Ship DTOs.

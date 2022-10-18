@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.database.model.game
 
 import pt.isel.daw.battleships.database.model.ship.ShipType
-import pt.isel.daw.battleships.services.games.dtos.ship.InputShipDTO
+import pt.isel.daw.battleships.dtos.games.ship.InputShipDTO
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embeddable

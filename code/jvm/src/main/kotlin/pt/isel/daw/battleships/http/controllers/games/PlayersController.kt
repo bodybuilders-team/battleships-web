@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.daw.battleships.dtos.games.ship.InputFleetDTO
+import pt.isel.daw.battleships.dtos.games.shot.InputShotsDTO
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.games.models.ship.DeployFleetInputModel
 import pt.isel.daw.battleships.http.controllers.games.models.ship.DeployFleetOutputModel
@@ -21,8 +23,6 @@ import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.services.games.PlayersService
-import pt.isel.daw.battleships.services.games.dtos.ship.InputFleetDTO
-import pt.isel.daw.battleships.services.games.dtos.shot.InputShotsDTO
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**

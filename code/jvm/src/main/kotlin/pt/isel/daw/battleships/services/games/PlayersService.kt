@@ -1,15 +1,15 @@
 package pt.isel.daw.battleships.services.games
 
+import pt.isel.daw.battleships.dtos.games.ship.InputFleetDTO
+import pt.isel.daw.battleships.dtos.games.ship.OutputFleetDTO
+import pt.isel.daw.battleships.dtos.games.shot.InputShotsDTO
+import pt.isel.daw.battleships.dtos.games.shot.OutputShotsDTO
 import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
 import pt.isel.daw.battleships.services.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.services.exceptions.InvalidShotException
 import pt.isel.daw.battleships.services.exceptions.ShootTimeExpiredException
-import pt.isel.daw.battleships.services.games.dtos.ship.InputFleetDTO
-import pt.isel.daw.battleships.services.games.dtos.ship.OutputFleetDTO
-import pt.isel.daw.battleships.services.games.dtos.shot.InputShotsDTO
-import pt.isel.daw.battleships.services.games.dtos.shot.OutputShotsDTO
 
 /**
  * Service that handles the business logic of the players.

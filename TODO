@@ -1,8 +1,6 @@
 - Database:
-    - Maybe change GameConfig to a table
+    - Maybe change GameConfig to a table (write about this in the report)
 - Review project structure:
-    - Rename package database to repository or something like data access, since the professor likes to call it that way
-    - Move DTOS? Create domain?
     - Models or Properties?
 - Documentation:
     - Update swagger documentation

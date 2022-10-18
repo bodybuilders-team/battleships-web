@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.services.users.dtos
+package pt.isel.daw.battleships.dtos.users
 
 /**
  * Represents a DTO for a user creation request.

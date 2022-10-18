@@ -1,8 +1,8 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
+import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
+import pt.isel.daw.battleships.dtos.games.ship.ShipTypeDTO
 import pt.isel.daw.battleships.http.controllers.games.models.ship.ShipTypeModel
-import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
-import pt.isel.daw.battleships.services.games.dtos.ship.ShipTypeDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

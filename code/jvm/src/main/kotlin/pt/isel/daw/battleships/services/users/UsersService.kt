@@ -1,11 +1,11 @@
 package pt.isel.daw.battleships.services.users
 
+import pt.isel.daw.battleships.dtos.users.CreateUserRequestDTO
+import pt.isel.daw.battleships.dtos.users.LoginUserInputDTO
+import pt.isel.daw.battleships.dtos.users.UserDTO
+import pt.isel.daw.battleships.dtos.users.UsersDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
-import pt.isel.daw.battleships.services.users.dtos.CreateUserRequestDTO
-import pt.isel.daw.battleships.services.users.dtos.LoginUserInputDTO
-import pt.isel.daw.battleships.services.users.dtos.UserDTO
-import pt.isel.daw.battleships.services.users.dtos.UsersDTO
 
 /**
  * Service that handles the business logic of the users.

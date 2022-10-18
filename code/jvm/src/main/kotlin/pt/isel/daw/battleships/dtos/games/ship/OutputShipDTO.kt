@@ -1,7 +1,7 @@
-package pt.isel.daw.battleships.services.games.dtos.ship
+package pt.isel.daw.battleships.dtos.games.ship
 
 import pt.isel.daw.battleships.database.model.ship.Ship
-import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
+import pt.isel.daw.battleships.dtos.games.CoordinateDTO
 
 /**
  * Ship DTO for services.

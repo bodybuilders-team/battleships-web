@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.services.games.dtos.shot
+package pt.isel.daw.battleships.dtos.games.shot
 
 /**
  * Represents a list of Output Shots DTOs.

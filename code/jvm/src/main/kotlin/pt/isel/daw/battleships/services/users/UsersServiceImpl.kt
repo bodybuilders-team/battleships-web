@@ -3,12 +3,12 @@ package pt.isel.daw.battleships.services.users
 import org.springframework.stereotype.Service
 import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.repositories.UsersRepository
+import pt.isel.daw.battleships.dtos.users.CreateUserRequestDTO
+import pt.isel.daw.battleships.dtos.users.LoginUserInputDTO
+import pt.isel.daw.battleships.dtos.users.UserDTO
+import pt.isel.daw.battleships.dtos.users.UsersDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
-import pt.isel.daw.battleships.services.users.dtos.CreateUserRequestDTO
-import pt.isel.daw.battleships.services.users.dtos.LoginUserInputDTO
-import pt.isel.daw.battleships.services.users.dtos.UserDTO
-import pt.isel.daw.battleships.services.users.dtos.UsersDTO
 import pt.isel.daw.battleships.utils.JwtProvider
 import pt.isel.daw.battleships.utils.JwtProvider.JwtPayload
 import javax.transaction.Transactional

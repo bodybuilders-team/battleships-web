@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models
 
-import pt.isel.daw.battleships.services.users.dtos.UserDTO
+import pt.isel.daw.battleships.dtos.users.UserDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

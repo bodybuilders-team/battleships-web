@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.shot
 
-import pt.isel.daw.battleships.services.games.dtos.shot.ShotResultDTO
+import pt.isel.daw.battleships.dtos.games.shot.ShotResultDTO
 
 /**
  * Represents a model for a shot result.

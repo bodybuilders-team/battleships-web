@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.shot
 
+import pt.isel.daw.battleships.dtos.games.shot.OutputShotDTO
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
-import pt.isel.daw.battleships.services.games.dtos.shot.OutputShotDTO
 
 /**
  * Represents a shot in the game.

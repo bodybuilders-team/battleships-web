@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.services.games.dtos.ship
 
 import pt.isel.daw.battleships.database.model.ship.ShipType
+import pt.isel.daw.battleships.dtos.games.ship.ShipTypeDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

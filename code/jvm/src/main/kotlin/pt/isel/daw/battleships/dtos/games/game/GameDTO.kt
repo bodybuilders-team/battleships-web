@@ -1,7 +1,7 @@
-package pt.isel.daw.battleships.services.games.dtos.game
+package pt.isel.daw.battleships.dtos.games.game
 
 import pt.isel.daw.battleships.database.model.game.Game
-import pt.isel.daw.battleships.services.games.dtos.PlayerDTO
+import pt.isel.daw.battleships.dtos.games.PlayerDTO
 
 /**
  * Represents a Game DTO.

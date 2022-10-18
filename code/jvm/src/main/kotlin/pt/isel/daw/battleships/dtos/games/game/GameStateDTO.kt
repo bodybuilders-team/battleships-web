@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.services.games.dtos.game
+package pt.isel.daw.battleships.dtos.games.game
 
 import pt.isel.daw.battleships.database.model.game.GameState
 

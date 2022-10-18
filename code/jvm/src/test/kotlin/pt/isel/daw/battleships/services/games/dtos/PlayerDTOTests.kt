@@ -5,6 +5,7 @@ import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameConfig
 import pt.isel.daw.battleships.database.model.game.GameState
+import pt.isel.daw.battleships.dtos.games.PlayerDTO
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.test.Test
