@@ -5,19 +5,28 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import java.security.SignatureException
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.TemporalAmount
+import java.util.Date
 import javax.crypto.spec.SecretKeySpec
 
 /**
  * Utility class for JWT operations.
  *
  * @param serverConfig the server configuration
- * @property key the key used to sign the JWT
+ * @property accessTokenKey the key used to sign the JWT
  */
 @Component
 class JwtProvider(serverConfig: ServerConfiguration) {
 
-    private val key = SecretKeySpec(
-        /* key = */ serverConfig.serverSecret.toByteArray(),
+    private val accessTokenKey = SecretKeySpec(
+        /* key = */ serverConfig.accessTokenSecret.toByteArray(),
+        /* algorithm = */ SECRET_KEY_ALGORITHM
+    )
+
+    private val refreshTokenKey = SecretKeySpec(
+        /* key = */ serverConfig.refreshTokenSecret.toByteArray(),
         /* algorithm = */ SECRET_KEY_ALGORITHM
     )
 
@@ -58,11 +67,32 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      * @param jwtPayload the payload to be signed
      * @return the JWT token
      */
-    fun createToken(jwtPayload: JwtPayload): String = Jwts.builder()
-        .setClaims(jwtPayload.toClaims())
-        .signWith(key)
-        .setIssuedAt(java.util.Date())
-        .compact()
+    fun createToken(jwtPayload: JwtPayload): String {
+        val issuedAt = Instant.now()
+        val expirationDate = issuedAt.plus(ACCESS_TOKEN_DURATION)
+
+        return Jwts.builder()
+            .setClaims(jwtPayload.toClaims())
+            .signWith(accessTokenKey)
+            .setIssuedAt(Date.from(issuedAt))
+            .setExpiration(Date.from(expirationDate))
+            .compact()
+    }
+
+    fun createRefreshToken(jwtPayload: JwtPayload): RefreshTokenDetails {
+        val issuedAt = Instant.now()
+        val expirationDate = issuedAt.plus(REFRESH_TOKEN_DURATION)
+
+        return RefreshTokenDetails(
+            token = Jwts.builder()
+                .setClaims(jwtPayload.toClaims())
+                .signWith(refreshTokenKey)
+                .setIssuedAt(Date.from(issuedAt))
+                .setExpiration(Date.from(expirationDate))
+                .compact(),
+            expirationDate = expirationDate
+        )
+    }
 
     /**
      * Validates a JWT token and returns the payload.
@@ -72,7 +102,22 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     fun validateToken(token: String): JwtPayload? = try {
         val claims = Jwts.parserBuilder()
-            .setSigningKey(key)
+            .setSigningKey(accessTokenKey)
+            .build()
+            .parseClaimsJws(token).body
+
+        JwtPayload.fromClaims(claims)
+    } catch (e: JwtException) {
+        null
+    } catch (e: IllegalArgumentException) {
+        null
+    } catch (e: SignatureException) {
+        null
+    }
+
+    fun validateRefreshToken(token: String): JwtPayload? = try {
+        val claims = Jwts.parserBuilder()
+            .setSigningKey(refreshTokenKey)
             .build()
             .parseClaimsJws(token).body
 
@@ -100,7 +145,11 @@ class JwtProvider(serverConfig: ServerConfiguration) {
 
     companion object {
         private const val BEARER_TOKEN_PREFIX = "Bearer "
-        private const val SECRET_KEY_ALGORITHM = "HmacSHA256"
+        private const val SECRET_KEY_ALGORITHM = "HmacSHA512"
         const val TOKEN_ATTRIBUTE = "token"
+        val ACCESS_TOKEN_DURATION: TemporalAmount = Duration.ofHours(1)
+        val REFRESH_TOKEN_DURATION: TemporalAmount = Duration.ofDays(1)
     }
 }
+
+data class RefreshTokenDetails(val token: String, val expirationDate: Instant)

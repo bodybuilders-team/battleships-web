@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.services.games
 
-import pt.isel.daw.battleships.dtos.games.game.CreateGameRequestDTO
+import pt.isel.daw.battleships.dtos.games.game.CreateGameInputDTO
 import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
 import pt.isel.daw.battleships.dtos.games.game.GameDTO
 import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
@@ -29,7 +29,7 @@ interface GamesService {
      *
      * @return the id of the new game
      */
-    fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int
+    fun createGame(token: String, createGameRequestDTO: CreateGameInputDTO): Int
 
     /**
      * Matchmakes a game with a specific configuration.

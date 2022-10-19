@@ -1,5 +1,12 @@
 server:
-  secret: 885650279fb7ff19a771c556f0c6ffad7092a26948db8df42cd8009745ebb545
+  config:
+    secrets:
+      passwordSecret: PeSgVkYp3s6v9y$B&E)H@McQfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G
+      accessTokenSecret: 9z$C&F)J@NcRfUjWnZr4u7x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4
+      refreshTokenSecret: D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F)J@NcRfUjXn2r5u8x
+      tokenHashSecret: QfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y$B&E)H
+    maxRefreshTokens: 3
+
   port: 8888
 
 spring:

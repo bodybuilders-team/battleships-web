@@ -22,7 +22,7 @@ class GameConfig(
     @Column(name = "grid_size", nullable = false)
     val gridSize: Int,
 
-    @Column(name = "max_time_per_shot", nullable = false)
+    @Column(name = "max_time_per_round", nullable = false)
     val maxTimePerRound: Int,
 
     @Column(name = "shots_per_round", nullable = false)

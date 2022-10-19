@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.dtos.users
+package pt.isel.daw.battleships.dtos.users.login
 
 /**
  * Represents a DTO for a user login request.

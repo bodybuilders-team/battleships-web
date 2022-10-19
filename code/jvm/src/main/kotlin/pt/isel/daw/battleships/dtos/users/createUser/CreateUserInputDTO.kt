@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.dtos.users
+package pt.isel.daw.battleships.dtos.users.createUser
 
 /**
  * Represents a DTO for a user creation request.
@@ -7,7 +7,7 @@ package pt.isel.daw.battleships.dtos.users
  * @property email email of the user
  * @property password password of the user
  */
-data class CreateUserRequestDTO(
+data class CreateUserInputDTO(
     val username: String,
     val email: String,
     val password: String

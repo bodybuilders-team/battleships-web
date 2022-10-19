@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
-import pt.isel.daw.battleships.dtos.games.game.CreateGameRequestDTO
+import pt.isel.daw.battleships.dtos.games.game.CreateGameInputDTO
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameModel.Companion.MAX_NAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameModel.Companion.MIN_NAME_LENGTH
 import javax.validation.constraints.Size
@@ -26,7 +26,7 @@ data class CreateGameInputModel(
      *
      * @return the game creation request DTO
      */
-    fun toCreateGameRequestDTO() = CreateGameRequestDTO(
+    fun toCreateGameRequestDTO() = CreateGameInputDTO(
         name = name,
         config = config.toGameConfigDTO()
     )

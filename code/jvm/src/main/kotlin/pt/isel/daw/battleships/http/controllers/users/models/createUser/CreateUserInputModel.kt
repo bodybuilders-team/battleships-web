@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models.createUser
 
-import pt.isel.daw.battleships.dtos.users.CreateUserRequestDTO
+import pt.isel.daw.battleships.dtos.users.createUser.CreateUserInputDTO
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.EMAIL_REGEX
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_EMAIL_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_USERNAME_LENGTH
@@ -45,7 +45,7 @@ data class CreateUserInputModel(
      *
      * @return the service DTO
      */
-    fun toCreateUserRequestDTO(): CreateUserRequestDTO = CreateUserRequestDTO(
+    fun toCreateUserRequestDTO(): CreateUserInputDTO = CreateUserInputDTO(
         username = username,
         email = email,
         password = password

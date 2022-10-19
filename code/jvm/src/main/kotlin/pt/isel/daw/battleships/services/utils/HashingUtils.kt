@@ -1,8 +1,10 @@
-package pt.isel.daw.battleships.services.users
+package pt.isel.daw.battleships.services.utils
 
 import org.springframework.stereotype.Component
 import pt.isel.daw.battleships.utils.ServerConfiguration
-import java.security.MessageDigest
+import javax.crypto.Mac
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * Utility class.
@@ -10,7 +12,16 @@ import java.security.MessageDigest
  * @property serverConfig the server configuration
  */
 @Component
-class PasswordUtils(private val serverConfig: ServerConfiguration) {
+class HashingUtils(private val serverConfig: ServerConfiguration) {
+
+    val tokenKey: SecretKey = SecretKeySpec(
+        /* key = */ serverConfig.tokenHashSecret.toByteArray(),
+        /* algorithm = */ "HmacSHA512"
+    )
+    val passwordKey: SecretKey = SecretKeySpec(
+        /* key = */ serverConfig.passwordSecret.toByteArray(),
+        /* algorithm = */ "HmacSHA512"
+    )
 
     /**
      * Generates a hash for the given [password].
@@ -21,7 +32,10 @@ class PasswordUtils(private val serverConfig: ServerConfiguration) {
      * @return the hash of the password
      */
     fun hashPassword(username: String, password: String): String =
-        (username + password + serverConfig.serverSecret).sha256()
+        (username + password).hmac(passwordKey)
+
+    fun hashToken(token: String): String =
+        (token).hmac(tokenKey)
 
     /**
      * Generates a hash for the given [password] and compares it to the given [hashedPassword].
@@ -36,12 +50,12 @@ class PasswordUtils(private val serverConfig: ServerConfiguration) {
         hashPassword(username, password) == hashedPassword
 
     /**
-     * Generates a hash for the string using the SHA-256 algorithm.
-     *
-     * @return the hash of the string
+     * Generates a MAC for the given [
      */
-    private fun String.sha256(): String = MessageDigest
-        .getInstance("SHA256")
-        .digest(this.toByteArray())
-        .fold("") { str, it -> str + "%02x".format(it) }
+    fun String.hmac(key: SecretKey): String {
+        val mac = Mac.getInstance("HmacSHA512")
+        mac.init(key)
+
+        return mac.doFinal(this.toByteArray()).fold("") { str, it -> str + "%02x".format(it) }
+    }
 }

@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.services.users.dtos
 
-import pt.isel.daw.battleships.dtos.users.LoginUserInputDTO
+import pt.isel.daw.battleships.dtos.users.login.LoginUserInputDTO
 import kotlin.test.Test
 
 class LoginUserInputDTOTests {

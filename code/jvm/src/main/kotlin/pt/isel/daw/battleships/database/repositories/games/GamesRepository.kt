@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.database.repositories.games
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameConfig
@@ -9,7 +9,7 @@ import pt.isel.daw.battleships.database.model.game.GameState.GamePhase
 /**
  * Repository for the [Game] entity.
  */
-interface GamesRepository : CrudRepository<Game, String>, GamesRepositoryCustom {
+interface GamesRepository : JpaRepository<Game, String>, GamesRepositoryCustom {
 
     /**
      * Finds a game by its ID.

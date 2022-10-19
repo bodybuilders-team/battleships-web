@@ -6,7 +6,7 @@ package pt.isel.daw.battleships.dtos.games.game
  * @property name name of the game
  * @property config configuration of the game
  */
-data class CreateGameRequestDTO(
+data class CreateGameInputDTO(
     val name: String,
     val config: GameConfigDTO
 )

@@ -7,7 +7,7 @@ import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameState
 import pt.isel.daw.battleships.database.repositories.UsersRepository
 import pt.isel.daw.battleships.database.repositories.games.GamesRepository
-import pt.isel.daw.battleships.dtos.games.game.CreateGameRequestDTO
+import pt.isel.daw.battleships.dtos.games.game.CreateGameInputDTO
 import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
 import pt.isel.daw.battleships.dtos.games.game.GameDTO
 import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
@@ -41,7 +41,7 @@ class GamesServiceImpl(
         .map { GameDTO(it) }
         .let { games -> GamesDTO(games, games.size) }
 
-    override fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int =
+    override fun createGame(token: String, createGameRequestDTO: CreateGameInputDTO): Int =
         createGame(
             creator = authenticateUser(token),
             createGameRequestDTO = createGameRequestDTO
@@ -59,7 +59,7 @@ class GamesServiceImpl(
             ?: (
                 createGame(
                     creator = user,
-                    createGameRequestDTO = CreateGameRequestDTO(name = "Game", config = gameConfigDTO)
+                    createGameRequestDTO = CreateGameInputDTO(name = "Game", config = gameConfigDTO)
                 ) to true
                 )
 
@@ -92,7 +92,7 @@ class GamesServiceImpl(
      *
      * @return the new game
      */
-    private fun createGame(creator: User, createGameRequestDTO: CreateGameRequestDTO): Game {
+    private fun createGame(creator: User, createGameRequestDTO: CreateGameInputDTO): Game {
         val game = Game(
             name = createGameRequestDTO.name,
             creator = creator,

@@ -1,12 +1,14 @@
 package pt.isel.daw.battleships.database.repositories
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import pt.isel.daw.battleships.database.model.User
 
 /**
  * Repository for the [User] entity.
  */
-interface UsersRepository : CrudRepository<User, Int> {
+interface UsersRepository : JpaRepository<User, Int> {
+
+    fun existsByEmail(email: String): Boolean
 
     /**
      * Finds a user by its username.

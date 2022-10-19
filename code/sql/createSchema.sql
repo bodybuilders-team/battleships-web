@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS games CASCADE;
 DROP TABLE IF EXISTS shots CASCADE;
 DROP TABLE IF EXISTS ships CASCADE;
 DROP TABLE IF EXISTS ship_types CASCADE;
+DROP TABLE IF EXISTS refresh_tokens CASCADE;
 
 CREATE TABLE users
 (
@@ -112,4 +113,14 @@ CREATE TABLE ships
     CONSTRAINT row_is_valid CHECK ( row >= 0 AND row <= 18 ),
     CONSTRAINT orientation_is_valid CHECK ( orientation IN ('HORIZONTAL', 'VERTICAL') ),
     CONSTRAINT lives_are_valid CHECK ( lives >= 0 AND lives <= 7 )
+);
+
+CREATE TABLE refresh_tokens
+(
+    id              SERIAL PRIMARY KEY,
+    user_id         INT           NOT NULL REFERENCES users (id),
+    token_hash      VARCHAR(512) NOT NULL,
+    expiration_date TIMESTAMP     NOT NULL,
+
+    UNIQUE (user_id, token_hash)
 );

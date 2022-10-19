@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel
@@ -13,6 +14,9 @@ import pt.isel.daw.battleships.http.controllers.users.models.createUser.CreateUs
 import pt.isel.daw.battleships.http.controllers.users.models.createUser.CreateUserOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserOutputModel
+import pt.isel.daw.battleships.http.controllers.users.models.logout.LogoutModel
+import pt.isel.daw.battleships.http.controllers.users.models.refresh.RefreshTokenInputModel
+import pt.isel.daw.battleships.http.controllers.users.models.refresh.RefreshTokenOutputModel
 import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
@@ -34,8 +38,11 @@ class UsersController(private val usersService: UsersService) {
      * @return the response to the request with all the users
      */
     @GetMapping(Uris.USERS)
-    fun getUsers(): SirenEntity<UsersOutputModel> {
-        val users = usersService.getUsers()
+    fun getUsers(
+        @RequestParam("offset") offset: Int,
+        @RequestParam("limit") limit: Int
+    ): SirenEntity<UsersOutputModel> {
+        val users = usersService.getUsers(offset, limit)
 
         return SirenEntity(
             `class` = listOf("users"),
@@ -66,11 +73,11 @@ class UsersController(private val usersService: UsersService) {
     fun createUser(
         @RequestBody userData: CreateUserInputModel
     ): SirenEntity<CreateUserOutputModel> {
-        val token = usersService.createUser(userData.toCreateUserRequestDTO())
+        val createUserDTO = usersService.createUser(userData.toCreateUserRequestDTO())
 
         return SirenEntity(
             `class` = listOf("user"),
-            properties = CreateUserOutputModel(token),
+            properties = CreateUserOutputModel(createUserDTO),
             links = listOf(
                 Link(
                     rel = listOf("home"),
@@ -96,11 +103,11 @@ class UsersController(private val usersService: UsersService) {
     fun login(
         @RequestBody userData: LoginUserInputModel
     ): SirenEntity<LoginUserOutputModel> {
-        val token = usersService.login(userData.toLoginUserInputDTO())
+        val loginDTO = usersService.login(userData.toLoginUserInputDTO())
 
         return SirenEntity(
             `class` = listOf("user"),
-            properties = LoginUserOutputModel(token),
+            properties = LoginUserOutputModel(loginDTO),
             links = listOf(
                 Link(
                     rel = listOf("home"),
@@ -111,6 +118,39 @@ class UsersController(private val usersService: UsersService) {
                 EmbeddedLink(
                     rel = listOf("user"),
                     href = Uris.userByUsername(userData.username)
+                )
+            )
+        )
+    }
+
+    @PostMapping(Uris.USERS_LOGOUT)
+    fun logout(@RequestBody logoutModel: LogoutModel): SirenEntity<Unit> {
+        usersService.logout(logoutModel.refreshToken)
+
+        return SirenEntity(
+            `class` = listOf("user"),
+            links = listOf(
+                Link(
+                    rel = listOf("home"),
+                    href = Uris.home()
+                )
+            )
+        )
+    }
+
+    @PostMapping(Uris.USERS_REFRESH_TOKEN)
+    fun refresh(
+        @RequestBody refreshTokenModel: RefreshTokenInputModel
+    ): SirenEntity<RefreshTokenOutputModel> {
+        val refreshDTO = usersService.refreshToken(refreshTokenModel.refreshToken)
+
+        return SirenEntity(
+            `class` = listOf("user"),
+            properties = RefreshTokenOutputModel(refreshDTO),
+            links = listOf(
+                Link(
+                    rel = listOf("home"),
+                    href = Uris.home()
                 )
             )
         )
