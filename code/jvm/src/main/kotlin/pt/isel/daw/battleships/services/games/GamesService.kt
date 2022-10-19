@@ -19,7 +19,7 @@ interface GamesService {
      *
      * @return the DTO with the information of all games
      */
-    fun getGames(): GamesDTO
+    fun getGames(offset: Int, limit: Int): GamesDTO
 
     /**
      * Creates a new game.

@@ -15,8 +15,10 @@ import pt.isel.daw.battleships.dtos.games.game.GamesDTO
 import pt.isel.daw.battleships.dtos.games.game.MatchmakeDTO
 import pt.isel.daw.battleships.services.AuthenticatedService
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
+import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
+import pt.isel.daw.battleships.services.utils.OffsetPageRequest
 import pt.isel.daw.battleships.utils.JwtProvider
 import java.sql.Timestamp
 import javax.transaction.Transactional
@@ -36,10 +38,26 @@ class GamesServiceImpl(
     jwtProvider: JwtProvider
 ) : GamesService, AuthenticatedService(usersRepository, jwtProvider) {
 
-    override fun getGames(): GamesDTO = gamesRepository
-        .findAll()
-        .map { GameDTO(it) }
-        .let { games -> GamesDTO(games, games.size) }
+    override fun getGames(offset: Int, limit: Int): GamesDTO {
+        if (offset < 0 || limit < 0) {
+            throw InvalidPaginationParams("Offset and limit must be positive")
+        }
+
+        if (limit > MAX_GAMES_LIMIT) {
+            throw InvalidPaginationParams("Limit must be less than $MAX_GAMES_LIMIT")
+        }
+
+        return gamesRepository
+            .findAll(OffsetPageRequest(offset.toLong(), limit))
+            .toList()
+            .map { GameDTO(it) }
+            .let { games ->
+                GamesDTO(
+                    games = games,
+                    totalCount = usersRepository.count().toInt()
+                )
+            }
+    }
 
     override fun createGame(token: String, createGameRequestDTO: CreateGameInputDTO): Int =
         createGame(
@@ -143,4 +161,8 @@ class GamesServiceImpl(
         gamesRepository
             .findById(gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
+
+    companion object {
+        const val MAX_GAMES_LIMIT = 100
+    }
 }

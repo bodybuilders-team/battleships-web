@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.games.models.JoinGameModel
@@ -39,8 +40,11 @@ class GamesController(private val gamesService: GamesService) {
      * @return the response to the request with the list of games
      */
     @GetMapping(Uris.GAMES)
-    fun getGames(): SirenEntity<GamesOutputModel> {
-        val games = gamesService.getGames()
+    fun getGames(
+        @RequestParam("offset") offset: Int,
+        @RequestParam("limit") limit: Int
+    ): SirenEntity<GamesOutputModel> {
+        val games = gamesService.getGames(offset, limit)
 
         return SirenEntity(
             `class` = listOf("games"),
