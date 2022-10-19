@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.services.users.dtos
+package pt.isel.daw.battleships.dtos.users
 
 import pt.isel.daw.battleships.dtos.users.createUser.CreateUserInputDTO
 import kotlin.test.Test

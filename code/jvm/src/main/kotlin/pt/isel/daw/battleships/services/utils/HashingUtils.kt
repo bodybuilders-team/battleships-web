@@ -7,20 +7,23 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
 /**
- * Utility class.
+ * Utility class for hashing operations.
  *
  * @property serverConfig the server configuration
+ * @property tokenKey the token key
+ * @property passwordKey the password key
  */
 @Component
 class HashingUtils(private val serverConfig: ServerConfiguration) {
 
     val tokenKey: SecretKey = SecretKeySpec(
         /* key = */ serverConfig.tokenHashSecret.toByteArray(),
-        /* algorithm = */ "HmacSHA512"
+        /* algorithm = */ SECRET_KEY_ALGORITHM
     )
+
     val passwordKey: SecretKey = SecretKeySpec(
         /* key = */ serverConfig.passwordSecret.toByteArray(),
-        /* algorithm = */ "HmacSHA512"
+        /* algorithm = */ SECRET_KEY_ALGORITHM
     )
 
     /**
@@ -34,6 +37,12 @@ class HashingUtils(private val serverConfig: ServerConfiguration) {
     fun hashPassword(username: String, password: String): String =
         (username + password).hmac(passwordKey)
 
+    /**
+     * Generates a hash for the given [token].
+     *
+     * @param token the token to be hashed
+     * @return the hash of the token
+     */
     fun hashToken(token: String): String =
         (token).hmac(tokenKey)
 
@@ -50,12 +59,20 @@ class HashingUtils(private val serverConfig: ServerConfiguration) {
         hashPassword(username, password) == hashedPassword
 
     /**
-     * Generates a MAC for the given [
+     * Generates a MAC for this given string using the given [key].
+     *
+     * @receiver the string to be hashed
+     * @param key the key to be used in the hashing
+     *
+     * @return the hash of the string
      */
-    fun String.hmac(key: SecretKey): String {
-        val mac = Mac.getInstance("HmacSHA512")
-        mac.init(key)
+    private fun String.hmac(key: SecretKey): String =
+        Mac.getInstance(SECRET_KEY_ALGORITHM)
+            .also { it.init(key) }
+            .doFinal(this.toByteArray())
+            .fold("") { str, it -> str + "%02x".format(it) }
 
-        return mac.doFinal(this.toByteArray()).fold("") { str, it -> str + "%02x".format(it) }
+    companion object {
+        private const val SECRET_KEY_ALGORITHM = "HmacSHA512"
     }
 }

@@ -1,10 +1,8 @@
-package pt.isel.daw.battleships.services.games.dtos.shot
+package pt.isel.daw.battleships.dtos.games.shot
 
 import pt.isel.daw.battleships.database.model.Coordinate
 import pt.isel.daw.battleships.database.model.Shot
 import pt.isel.daw.battleships.dtos.games.CoordinateDTO
-import pt.isel.daw.battleships.dtos.games.shot.OutputShotDTO
-import pt.isel.daw.battleships.dtos.games.shot.ShotResultDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

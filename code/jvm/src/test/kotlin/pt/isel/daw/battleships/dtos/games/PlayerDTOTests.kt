@@ -1,11 +1,10 @@
-package pt.isel.daw.battleships.services.games.dtos
+package pt.isel.daw.battleships.dtos.games
 
 import pt.isel.daw.battleships.database.model.Player
 import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameConfig
 import pt.isel.daw.battleships.database.model.game.GameState
-import pt.isel.daw.battleships.dtos.games.PlayerDTO
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.test.Test
@@ -20,7 +19,7 @@ class PlayerDTOTests {
 
     @Test
     fun `PlayerDTO from Player conversion is successful`() {
-        val user = User(username = "username", email = "email", hashedPassword = "password", points = 0)
+        val user = User(username = "username", email = "email", passwordHash = "password", points = 0)
         val player = Player(
             game = Game(
                 name = "game",

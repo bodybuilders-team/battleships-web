@@ -22,6 +22,8 @@ import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.services.users.UsersService
+import pt.isel.daw.battleships.services.utils.OffsetPageRequest.Companion.LIMIT_PARAM
+import pt.isel.daw.battleships.services.utils.OffsetPageRequest.Companion.OFFSET_PARAM
 
 /**
  * Controller that handles the requests related to the users.
@@ -35,12 +37,15 @@ class UsersController(private val usersService: UsersService) {
     /**
      * Handles the request to get all the users.
      *
+     * @param offset the offset of the users to be returned
+     * @param limit the limit of the users to be returned
+     *
      * @return the response to the request with all the users
      */
     @GetMapping(Uris.USERS)
     fun getUsers(
-        @RequestParam("offset") offset: Int,
-        @RequestParam("limit") limit: Int
+        @RequestParam(OFFSET_PARAM) offset: Int,
+        @RequestParam(LIMIT_PARAM) limit: Int
     ): SirenEntity<UsersOutputModel> {
         val users = usersService.getUsers(offset, limit)
 

@@ -1,7 +1,5 @@
-package pt.isel.daw.battleships.services.games.dtos.game
+package pt.isel.daw.battleships.dtos.games.game
 
-import pt.isel.daw.battleships.dtos.games.game.CreateGameInputDTO
-import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
 import kotlin.test.Test
 
 class CreateGameRequestDTOTests {

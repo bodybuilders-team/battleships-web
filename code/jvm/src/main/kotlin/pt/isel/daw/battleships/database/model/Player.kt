@@ -100,7 +100,7 @@ class Player(
         val madeShots = inputShots.map { shotDTO ->
             Shot(
                 coordinate = shotDTO.coordinate.toCoordinate(),
-                round = game.state.round!!,
+                round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
                 result = opponent.ships
                     .find { ship -> shotDTO.coordinate in ship.coordinates.map { CoordinateDTO(it) } }
                     .let { ship ->

@@ -63,7 +63,7 @@ class GamesServiceImpl(
         createGame(
             creator = authenticateUser(token),
             createGameRequestDTO = createGameRequestDTO
-        ).id ?: throw IllegalStateException("Game ID is null")
+        ).id ?: throw IllegalStateException("Game id cannot be null")
 
     override fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeDTO {
         val user = authenticateUser(token)

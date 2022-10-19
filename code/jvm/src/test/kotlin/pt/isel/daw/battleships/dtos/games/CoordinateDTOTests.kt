@@ -1,7 +1,6 @@
-package pt.isel.daw.battleships.services.games.dtos
+package pt.isel.daw.battleships.dtos.games
 
 import pt.isel.daw.battleships.database.model.Coordinate
-import pt.isel.daw.battleships.dtos.games.CoordinateDTO
 import kotlin.test.Test
 
 class CoordinateDTOTests {

@@ -7,6 +7,7 @@ import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
 import pt.isel.daw.battleships.dtos.games.game.GamesDTO
 import pt.isel.daw.battleships.dtos.games.game.MatchmakeDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
+import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 
 /**
@@ -17,7 +18,11 @@ interface GamesService {
     /**
      * Gets all games.
      *
-     * @return the DTO with the information of all games
+     * @param offset the offset of the pagination
+     * @param limit the limit of the pagination
+     *
+     * @return the DTO with the information of the games
+     * @throws InvalidPaginationParams if the offset or limit are invalid
      */
     fun getGames(offset: Int, limit: Int): GamesDTO
 
@@ -28,6 +33,7 @@ interface GamesService {
      * @param createGameRequestDTO the DTO with the game's information
      *
      * @return the id of the new game
+     * @throws IllegalStateException if the game's id is null
      */
     fun createGame(token: String, createGameRequestDTO: CreateGameInputDTO): Int
 

@@ -75,7 +75,7 @@ class UsersServiceImpl(
         val user = User(
             username = createUserInputDTO.username,
             email = createUserInputDTO.email,
-            hashedPassword = hashingUtils.hashPassword(
+            passwordHash = hashingUtils.hashPassword(
                 username = createUserInputDTO.username,
                 password = createUserInputDTO.password
             )
@@ -101,7 +101,7 @@ class UsersServiceImpl(
             !hashingUtils.checkPassword(
                 username = loginUserInputDTO.username,
                 password = loginUserInputDTO.password,
-                hashedPassword = user.hashedPassword
+                hashedPassword = user.passwordHash
             )
         ) throw NotFoundException("Invalid username or password")
 
@@ -130,10 +130,11 @@ class UsersServiceImpl(
 
         val refreshTokenHash = hashingUtils.hashToken(refreshToken)
 
-        val refreshTokenEntity = refreshTokenRepository.findByUserAndTokenHash(
-            user = user,
-            tokenHash = refreshTokenHash
-        )
+        val refreshTokenEntity = refreshTokenRepository
+            .findByUserAndTokenHash(
+                user = user,
+                tokenHash = refreshTokenHash
+            )
             ?: throw NotFoundException("Refresh token not found")
 
         refreshTokenRepository.delete(refreshTokenEntity)
@@ -157,22 +158,28 @@ class UsersServiceImpl(
                 ?: throw NotFoundException("User with username $username not found")
         )
 
+    /**
+     * Creates the access and refresh tokens for the given user.
+     *
+     * @param user the user to create the tokens for
+     *
+     * @return the access and refresh tokens
+     * @throws IllegalStateException if the user has no refresh tokens
+     */
     private fun createTokens(user: User): Tokens {
         if (refreshTokenRepository.countByUser(user) >= config.maxRefreshTokens) {
-            refreshTokenRepository.getOldestRefreshTokensByUser(
-                user = user,
-                pageable = PageRequest.of(0, 1)
-            )
+            refreshTokenRepository
+                .getOldestRefreshTokensByUser(
+                    user = user,
+                    pageable = PageRequest.of(/* page = */ 0, /* size = */ 1)
+                )
                 .get()
                 .findFirst()
-                .ifPresentOrElse(
-                    { refreshTokenRepository.delete(it) }
-                ) { throw IllegalStateException("User with username ${user.username} has no refresh tokens") }
+                .ifPresent { refreshTokenRepository.delete(it) }
         }
 
         val jwtPayload = JwtPayload(user.username)
-
-        val accessToken = jwtProvider.createToken(jwtPayload)
+        val accessToken = jwtProvider.createAccessToken(jwtPayload)
         val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload)
 
         val refreshTokenHash = hashingUtils.hashToken(refreshToken)
@@ -191,10 +198,28 @@ class UsersServiceImpl(
         )
     }
 
-    data class Tokens(val accessToken: String, val refreshToken: String)
+    /**
+     * Represents the tokens of a user.
+     *
+     * @property accessToken the access token
+     * @property refreshToken the refresh token
+     */
+    private data class Tokens(
+        val accessToken: String,
+        val refreshToken: String
+    )
 
-    private fun getUserFromRefreshToken(token: String): User {
-        val tokenPayload = jwtProvider.validateRefreshToken(token)
+    /**
+     * Gets the user from the refresh token.
+     *
+     * @param refreshToken the refresh token
+     *
+     * @return the user
+     * @throws AuthenticationException if the refresh token is invalid
+     * @throws NotFoundException if a user with the refresh token was not found
+     */
+    private fun getUserFromRefreshToken(refreshToken: String): User {
+        val tokenPayload = jwtProvider.validateRefreshToken(refreshToken)
             ?: throw AuthenticationException("Invalid token")
 
         return usersRepository.findByUsername(tokenPayload.username)

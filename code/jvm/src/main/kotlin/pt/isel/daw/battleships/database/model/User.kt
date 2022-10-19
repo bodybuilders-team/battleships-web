@@ -13,7 +13,7 @@ import javax.persistence.Table
  * @property id the id of the user
  * @property username the username of the user
  * @property email the email of the user
- * @property hashedPassword the hashed password of the user
+ * @property passwordHash the hashed password of the user
  * @property points the points of the user
  */
 @Entity
@@ -25,8 +25,8 @@ class User(
     @Column(name = "email", nullable = false, unique = true)
     val email: String,
 
-    @Column(name = "hashed_password", nullable = false)
-    val hashedPassword: String,
+    @Column(name = "password_hash", nullable = false)
+    val passwordHash: String,
 
     @Column(name = "points", nullable = false)
     val points: Int = 0

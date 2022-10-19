@@ -6,8 +6,13 @@ class JwtProviderTests {
 
     @Test
     fun `JwtProvider creation is successful`() {
-        val secret = "secret"
-        val serverConfiguration = ServerConfiguration(secret)
+        val serverConfiguration = ServerConfiguration(
+            accessTokenSecret = "secret",
+            refreshTokenSecret = "secret",
+            passwordSecret = "secret",
+            tokenHashSecret = "secret",
+            maxRefreshTokens = 10
+        )
         JwtProvider(serverConfig = serverConfiguration)
     }
 

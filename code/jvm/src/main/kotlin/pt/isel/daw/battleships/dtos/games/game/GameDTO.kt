@@ -22,7 +22,7 @@ data class GameDTO(
     val players: List<PlayerDTO>
 ) {
     constructor(game: Game) : this(
-        id = game.id!!,
+        id = game.id ?: throw IllegalStateException("Game id cannot be null"),
         name = game.name,
         creator = game.creator.username,
         config = GameConfigDTO(game.config),

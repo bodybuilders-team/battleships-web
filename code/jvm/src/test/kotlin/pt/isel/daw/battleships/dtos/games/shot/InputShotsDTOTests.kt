@@ -1,8 +1,6 @@
-package pt.isel.daw.battleships.services.games.dtos.shot
+package pt.isel.daw.battleships.dtos.games.shot
 
 import pt.isel.daw.battleships.dtos.games.CoordinateDTO
-import pt.isel.daw.battleships.dtos.games.shot.InputShotDTO
-import pt.isel.daw.battleships.dtos.games.shot.InputShotsDTO
 import kotlin.test.Test
 
 class InputShotsDTOTests {

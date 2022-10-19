@@ -23,6 +23,8 @@ import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.services.games.GamesService
+import pt.isel.daw.battleships.services.utils.OffsetPageRequest.Companion.LIMIT_PARAM
+import pt.isel.daw.battleships.services.utils.OffsetPageRequest.Companion.OFFSET_PARAM
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**
@@ -37,12 +39,15 @@ class GamesController(private val gamesService: GamesService) {
     /**
      * Handles the request to get a list of all the games.
      *
+     * @param offset the offset of the list of games
+     * @param limit the limit of the list of games
+     *
      * @return the response to the request with the list of games
      */
     @GetMapping(Uris.GAMES)
     fun getGames(
-        @RequestParam("offset") offset: Int,
-        @RequestParam("limit") limit: Int
+        @RequestParam(OFFSET_PARAM) offset: Int,
+        @RequestParam(LIMIT_PARAM) limit: Int
     ): SirenEntity<GamesOutputModel> {
         val games = gamesService.getGames(offset, limit)
 

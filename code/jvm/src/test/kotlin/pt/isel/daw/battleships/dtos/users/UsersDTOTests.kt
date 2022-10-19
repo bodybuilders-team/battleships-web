@@ -1,7 +1,5 @@
-package pt.isel.daw.battleships.services.users.dtos
+package pt.isel.daw.battleships.dtos.users
 
-import pt.isel.daw.battleships.dtos.users.UserDTO
-import pt.isel.daw.battleships.dtos.users.UsersDTO
 import kotlin.test.Test
 
 class UsersDTOTests {

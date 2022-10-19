@@ -1,6 +1,6 @@
 -- Script to insert some data into the database
 
-INSERT INTO users(username, email, hashed_password, points)
+INSERT INTO users(username, email, password_hash, points)
 VALUES ('guest', 'guest@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0),
        ('andre-j3sus', 'andre@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0),
        ('nyckoka', 'nyck@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0),

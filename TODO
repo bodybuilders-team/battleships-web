@@ -7,8 +7,7 @@
     - Review comments
     - Write documentation
 - Implementation:
+    - Revoke tokens
     - Add tests
-    - Add pagination
-    - Token expiration
     - Check validations
     - Check AuthenticationInterceptor develop by the professor

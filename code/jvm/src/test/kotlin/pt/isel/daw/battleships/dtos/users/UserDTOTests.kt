@@ -1,7 +1,6 @@
-package pt.isel.daw.battleships.services.users.dtos
+package pt.isel.daw.battleships.dtos.users
 
 import pt.isel.daw.battleships.database.model.User
-import pt.isel.daw.battleships.dtos.users.UserDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,7 +13,7 @@ class UserDTOTests {
 
     @Test
     fun `UserDTO from User conversion is successful`() {
-        val user = User(username = "username", email = "email", hashedPassword = "password", points = 0)
+        val user = User(username = "username", email = "email", passwordHash = "password", points = 0)
         val userDTO = UserDTO(user)
 
         assertEquals(user.username, userDTO.username)

@@ -6,6 +6,9 @@ class LoginUserOutputModelTests {
 
     @Test
     fun `LoginUserOutputModel creation is successful`() {
-        LoginUserOutputModel(token = "token")
+        LoginUserOutputModel(
+            accessToken = "access-token",
+            refreshToken = "refresh-token"
+        )
     }
 }

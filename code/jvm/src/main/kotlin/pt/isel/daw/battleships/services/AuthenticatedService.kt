@@ -29,7 +29,7 @@ abstract class AuthenticatedService(
      * @throws NotFoundException if the user is not found
      */
     fun authenticateUser(token: String): User {
-        val tokenPayload = jwtProvider.validateToken(token)
+        val tokenPayload = jwtProvider.validateAccessToken(token)
             ?: throw AuthenticationException("Invalid token")
 
         return usersRepository.findByUsername(tokenPayload.username)

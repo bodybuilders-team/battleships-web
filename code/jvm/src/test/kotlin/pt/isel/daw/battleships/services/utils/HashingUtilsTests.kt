@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.services.users
+package pt.isel.daw.battleships.services.utils
 
 class HashingUtilsTests {
 
