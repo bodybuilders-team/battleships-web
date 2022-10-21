@@ -10,11 +10,11 @@ DROP TABLE IF EXISTS ship_types CASCADE;
 
 CREATE TABLE users
 (
-    id              SERIAL PRIMARY KEY,
-    username        VARCHAR(40)  NOT NULL UNIQUE,
-    email           VARCHAR(320) NOT NULL UNIQUE,
+    id            SERIAL PRIMARY KEY,
+    username      VARCHAR(40)  NOT NULL UNIQUE,
+    email         VARCHAR(320) NOT NULL UNIQUE,
     password_hash VARCHAR(512) NOT NULL,
-    points          INT          NOT NULL,
+    points        INT          NOT NULL,
 
     CONSTRAINT username_length CHECK (char_length(username) >= 3),
     CONSTRAINT email_is_valid CHECK ( email ~ '^[A-Za-z0-9+_.-]+@(.+)$'),

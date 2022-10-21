@@ -4,6 +4,8 @@
 
 The project documentation is available [here](docs/README.md).
 
+The HTTP API documentation is available [here](docs/battleships-api-spec.yaml).
+
 ---
 
 ## Authors

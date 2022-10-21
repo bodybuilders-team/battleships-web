@@ -1,7 +1,7 @@
 - Database:
-    - Maybe change GameConfig to a table (write about this in the report)
 - Review project structure:
     - Models or Properties?
+    - Rename createUser to register or registerUser?
 - Documentation:
     - Update swagger documentation
     - Review comments
