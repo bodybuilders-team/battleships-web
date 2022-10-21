@@ -1,6 +1,6 @@
-package pt.isel.daw.battleships.http.controllers.users.models.createUser
+package pt.isel.daw.battleships.http.controllers.users.models.register
 
-import pt.isel.daw.battleships.dtos.users.createUser.CreateUserInputDTO
+import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.EMAIL_REGEX
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_EMAIL_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_USERNAME_LENGTH
@@ -16,7 +16,7 @@ import javax.validation.constraints.Size
  * @property email the email of the user to be created
  * @property password the password of the user to be created
  */
-data class CreateUserInputModel(
+data class RegisterUserInputModel(
     @Size(
         min = MIN_USERNAME_LENGTH,
         max = MAX_USERNAME_LENGTH,
@@ -45,7 +45,7 @@ data class CreateUserInputModel(
      *
      * @return the service DTO
      */
-    fun toCreateUserRequestDTO(): CreateUserInputDTO = CreateUserInputDTO(
+    fun toRegisterDTO(): RegisterUserInputDTO = RegisterUserInputDTO(
         username = username,
         email = email,
         password = password

@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.dtos.users.login
 
 /**
- * Represents a DTO for a user login request.
+ * Represents a Login User Input DTO.
  *
  * @property username name of the user
  * @property password password of the user

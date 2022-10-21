@@ -84,6 +84,18 @@ class HomeController {
                     href = Uris.usersLogin()
                 ),
                 Action(
+                    name = "logout",
+                    title = "Logout",
+                    method = "POST",
+                    href = Uris.usersLogout()
+                ),
+                Action(
+                    name = "refresh-token",
+                    title = "Refresh Token",
+                    method = "POST",
+                    href = Uris.usersRefreshToken()
+                ),
+                Action(
                     name = "matchmake",
                     title = "Matchmake",
                     method = "POST",

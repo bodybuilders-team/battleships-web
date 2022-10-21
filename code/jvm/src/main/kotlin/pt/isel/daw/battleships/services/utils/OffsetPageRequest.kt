@@ -40,7 +40,10 @@ class OffsetPageRequest(
             )
         } else this
 
-    override fun first(): Pageable = OffsetPageRequest(0, limit)
+    override fun first(): Pageable = OffsetPageRequest(
+        offset = 0,
+        limit = limit
+    )
 
     override fun withPage(pageNumber: Int): Pageable = OffsetPageRequest(
         offset = pageNumber * limit.toLong(),

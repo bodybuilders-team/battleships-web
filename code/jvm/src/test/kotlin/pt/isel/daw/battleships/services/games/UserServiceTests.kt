@@ -13,7 +13,7 @@ import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.repositories.RefreshTokenRepository
 import pt.isel.daw.battleships.database.repositories.UsersRepository
 import pt.isel.daw.battleships.dtos.users.UserDTO
-import pt.isel.daw.battleships.dtos.users.createUser.CreateUserInputDTO
+import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.users.UsersService
 import kotlin.test.assertEquals
@@ -87,7 +87,7 @@ class UserServiceTests {
                 token
             }
 
-        val result = userService.createUser(CreateUserInputDTO("bob", "bob@bob.com", "password"))
+        val result = userService.register(RegisterUserInputDTO("bob", "bob@bob.com", "password"))
 
         assertTrue(users.isNotEmpty())
         assertTrue(tokens.isNotEmpty())

@@ -2,11 +2,11 @@ package pt.isel.daw.battleships.services.users
 
 import pt.isel.daw.battleships.dtos.users.UserDTO
 import pt.isel.daw.battleships.dtos.users.UsersDTO
-import pt.isel.daw.battleships.dtos.users.createUser.CreateUserInputDTO
-import pt.isel.daw.battleships.dtos.users.createUser.CreateUserOutputDTO
 import pt.isel.daw.battleships.dtos.users.login.LoginUserInputDTO
 import pt.isel.daw.battleships.dtos.users.login.LoginUserOutputDTO
 import pt.isel.daw.battleships.dtos.users.refresh.RefreshTokenOutputDTO
+import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.dtos.users.register.RegisterUserOutputDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
@@ -28,14 +28,14 @@ interface UsersService {
     fun getUsers(offset: Int, limit: Int): UsersDTO
 
     /**
-     * Creates a new user.
+     * Registers a new user.
      *
-     * @param createUserInputDTO the DTO with the data to create the user
+     * @param registerUserInputDTO the DTO with the data to create the user
      *
      * @return the JWT token for the new user
      * @throws AlreadyExistsException if the user already exists
      */
-    fun createUser(createUserInputDTO: CreateUserInputDTO): CreateUserOutputDTO
+    fun register(registerUserInputDTO: RegisterUserInputDTO): RegisterUserOutputDTO
 
     /**
      * Logs a user in.

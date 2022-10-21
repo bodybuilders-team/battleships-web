@@ -1,12 +1,12 @@
-package pt.isel.daw.battleships.http.controllers.users.models.createUser
+package pt.isel.daw.battleships.http.controllers.users.models.register
 
 import kotlin.test.Test
 
-class CreateUserOutputModelTests {
+class RegisterUserOutputModelTests {
 
     @Test
     fun `CreateUserOutputModel creation is successful`() {
-        CreateUserOutputModel(
+        RegisterUserOutputModel(
             accessToken = "accessToken",
             refreshToken = "refreshToken"
         )

@@ -1,13 +1,14 @@
 - Database:
 - Review project structure:
     - Models or Properties?
-    - Rename createUser to register or registerUser?
 - Documentation:
     - Update swagger documentation
     - Review comments
     - Write documentation
+    - Add postman collection to docs
 - Implementation:
     - Revoke tokens
     - Add tests
     - Check validations
     - Check AuthenticationInterceptor develop by the professor
+    - If a user is in a game that is not over, they should not be able to join another game or do matchmaking?! -> VALIDATIONS

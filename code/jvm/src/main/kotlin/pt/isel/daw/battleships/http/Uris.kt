@@ -13,8 +13,8 @@ object Uris {
     const val USERS = "/users"
     const val USERS_LOGIN = "/users/login"
     const val USERS_LOGOUT = "/users/logout"
-    const val USERS_GET_BY_USERNAME = "/users/{username}"
     const val USERS_REFRESH_TOKEN = "/users/refresh-token"
+    const val USERS_GET_BY_USERNAME = "/users/{username}"
 
     const val GAMES = "/games"
     const val GAMES_MATCHMAKE = "/games/matchmake"
@@ -31,6 +31,8 @@ object Uris {
 
     fun users(): URI = URI(USERS)
     fun usersLogin(): URI = URI(USERS_LOGIN)
+    fun usersLogout(): URI = URI(USERS_LOGOUT)
+    fun usersRefreshToken(): URI = URI(USERS_REFRESH_TOKEN)
     fun userByUsername(username: String): URI = UriTemplate(USERS_GET_BY_USERNAME).expand(username)
 
     fun games(): URI = URI(GAMES)

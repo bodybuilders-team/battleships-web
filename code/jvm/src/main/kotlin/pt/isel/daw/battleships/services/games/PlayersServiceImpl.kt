@@ -17,11 +17,13 @@ import pt.isel.daw.battleships.services.AuthenticatedService
 import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
 import pt.isel.daw.battleships.services.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
+import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.exceptions.ShootTimeExpiredException
 import pt.isel.daw.battleships.utils.JwtProvider
 import java.sql.Timestamp
+import java.time.Instant
 
 /**
  * Service that handles the business logic of the players.
@@ -55,7 +57,7 @@ class PlayersServiceImpl(
         if (game.state.phase != GameState.GamePhase.GRID_LAYOUT) {
             game.state.phase = GameState.GamePhase.FINISHED
             game.state.winner = opponent
-            throw IllegalStateException("Game is not in the placing ships phase")
+            throw InvalidPhaseException("Game is not in the placing ships phase")
         }
 
         if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
@@ -80,7 +82,7 @@ class PlayersServiceImpl(
 
         if (game.areFleetsDeployed()) {
             game.state.phase = GameState.GamePhase.IN_PROGRESS
-            game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimePerRound)
+            game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimePerRound.toLong()))
         }
     }
 
@@ -111,7 +113,7 @@ class PlayersServiceImpl(
         val opponent = game.getOpponent(user.username)
 
         if (game.state.phase != GameState.GamePhase.IN_PROGRESS) {
-            throw IllegalStateException("Game is not in progress.")
+            throw InvalidPhaseException("Game is not in progress.")
         }
 
         if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
@@ -127,7 +129,7 @@ class PlayersServiceImpl(
             game.state.phase = GameState.GamePhase.FINISHED
             game.state.winner = player
         } else {
-            game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimePerRound)
+            game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimePerRound.toLong()))
         }
 
         return OutputShotsDTO(shots = shots.map { OutputShotDTO(it) })

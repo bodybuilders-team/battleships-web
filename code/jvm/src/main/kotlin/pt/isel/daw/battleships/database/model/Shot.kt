@@ -11,14 +11,17 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 /**
  * The Shot entity.
  *
  * @property id the id of the shot
- * @property coordinate the coordinate of the shot
  * @property round the round of the shot
+ * @property player the player that made the shot
+ * @property coordinate the coordinate of the shot
  * @property result the result of the shot
  */
 @Entity
@@ -26,6 +29,10 @@ import javax.persistence.Table
 class Shot(
     @Column(name = "round", nullable = false)
     val round: Int,
+
+    @ManyToOne
+    @JoinColumn(name = "player", nullable = false)
+    val player: Player? = null,
 
     @Embedded
     val coordinate: Coordinate,

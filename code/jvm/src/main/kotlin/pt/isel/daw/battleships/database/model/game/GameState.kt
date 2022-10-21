@@ -7,6 +7,7 @@ import pt.isel.daw.battleships.database.model.game.GameState.GamePhase.IN_PROGRE
 import pt.isel.daw.battleships.database.model.game.GameState.GamePhase.WAITING_FOR_PLAYERS
 import java.io.Serializable
 import java.sql.Timestamp
+import java.time.Instant
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -31,7 +32,7 @@ class GameState(
     var phase: GamePhase = WAITING_FOR_PLAYERS,
 
     @Column(name = "phase_end_time", nullable = false)
-    var phaseEndTime: Timestamp = Timestamp(System.currentTimeMillis() + MATCHMAKING_MAX_TIME),
+    var phaseEndTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
 
     @Column(name = "round", nullable = false)
     val round: Int? = null,
@@ -61,6 +62,6 @@ class GameState(
     }
 
     companion object {
-        private const val MATCHMAKING_MAX_TIME = 60 * 1000L
+        private const val MATCHMAKING_MAX_TIME = 60L
     }
 }

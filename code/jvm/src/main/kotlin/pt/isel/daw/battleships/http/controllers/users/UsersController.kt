@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel
 import pt.isel.daw.battleships.http.controllers.users.models.UsersOutputModel
-import pt.isel.daw.battleships.http.controllers.users.models.createUser.CreateUserInputModel
-import pt.isel.daw.battleships.http.controllers.users.models.createUser.CreateUserOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserOutputModel
-import pt.isel.daw.battleships.http.controllers.users.models.logout.LogoutModel
-import pt.isel.daw.battleships.http.controllers.users.models.refresh.RefreshTokenInputModel
-import pt.isel.daw.battleships.http.controllers.users.models.refresh.RefreshTokenOutputModel
+import pt.isel.daw.battleships.http.controllers.users.models.logout.LogoutUserModel
+import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.RefreshTokenInputModel
+import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.RefreshTokenOutputModel
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserOutputModel
 import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
@@ -69,20 +69,20 @@ class UsersController(private val usersService: UsersService) {
     }
 
     /**
-     * Handles the request to create a new user.
+     * Handles the request to register a new user.
      *
      * @param userData the data of the user to be created
      * @return the response to the request with the created user
      */
     @PostMapping(Uris.USERS)
-    fun createUser(
-        @RequestBody userData: CreateUserInputModel
-    ): SirenEntity<CreateUserOutputModel> {
-        val createUserDTO = usersService.createUser(userData.toCreateUserRequestDTO())
+    fun register(
+        @RequestBody userData: RegisterUserInputModel
+    ): SirenEntity<RegisterUserOutputModel> {
+        val registerDTO = usersService.register(userData.toRegisterDTO())
 
         return SirenEntity(
             `class` = listOf("user"),
-            properties = CreateUserOutputModel(createUserDTO),
+            properties = RegisterUserOutputModel(registerDTO),
             links = listOf(
                 Link(
                     rel = listOf("home"),
@@ -129,8 +129,8 @@ class UsersController(private val usersService: UsersService) {
     }
 
     @PostMapping(Uris.USERS_LOGOUT)
-    fun logout(@RequestBody logoutModel: LogoutModel): SirenEntity<Unit> {
-        usersService.logout(logoutModel.refreshToken)
+    fun logout(@RequestBody logoutUserModel: LogoutUserModel): SirenEntity<Unit> {
+        usersService.logout(logoutUserModel.refreshToken)
 
         return SirenEntity(
             `class` = listOf("user"),
@@ -144,7 +144,7 @@ class UsersController(private val usersService: UsersService) {
     }
 
     @PostMapping(Uris.USERS_REFRESH_TOKEN)
-    fun refresh(
+    fun refreshToken(
         @RequestBody refreshTokenModel: RefreshTokenInputModel
     ): SirenEntity<RefreshTokenOutputModel> {
         val refreshDTO = usersService.refreshToken(refreshTokenModel.refreshToken)

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
-import pt.isel.daw.battleships.http.controllers.games.models.JoinGameModel
 import pt.isel.daw.battleships.http.controllers.games.models.game.CreateGameInputModel
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameConfigModel
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameModel
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameStateModel
 import pt.isel.daw.battleships.http.controllers.games.models.game.GamesOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.game.JoinGameModel
 import pt.isel.daw.battleships.http.controllers.games.models.game.MatchmakeModel
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.http.siren.Action

@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.http.controllers.games.models
+package pt.isel.daw.battleships.http.controllers.games.models.game
 
 /**
  * Represents the response to the request to join a game.

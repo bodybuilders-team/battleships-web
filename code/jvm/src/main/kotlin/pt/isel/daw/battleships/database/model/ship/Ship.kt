@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.database.model.ship
 
 import pt.isel.daw.battleships.database.model.Coordinate
+import pt.isel.daw.battleships.database.model.Player
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -17,6 +18,7 @@ import javax.persistence.Table
  * The Ship entity.
  *
  * @property id the ship's id
+ * @property player the player that owns the ship
  * @property type the ship's type
  * @property coordinate the ship's coordinate
  * @property orientation the ship's orientation
@@ -27,6 +29,10 @@ import javax.persistence.Table
 @Entity
 @Table(name = "ships")
 class Ship(
+    @ManyToOne
+    @JoinColumn(name = "player", nullable = false)
+    val player: Player? = null,
+
     @ManyToOne
     @JoinColumn(name = "type", nullable = false)
     val type: ShipType,

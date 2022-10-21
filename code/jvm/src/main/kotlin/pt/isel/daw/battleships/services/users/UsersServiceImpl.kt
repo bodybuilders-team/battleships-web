@@ -9,11 +9,11 @@ import pt.isel.daw.battleships.database.repositories.RefreshTokenRepository
 import pt.isel.daw.battleships.database.repositories.UsersRepository
 import pt.isel.daw.battleships.dtos.users.UserDTO
 import pt.isel.daw.battleships.dtos.users.UsersDTO
-import pt.isel.daw.battleships.dtos.users.createUser.CreateUserInputDTO
-import pt.isel.daw.battleships.dtos.users.createUser.CreateUserOutputDTO
 import pt.isel.daw.battleships.dtos.users.login.LoginUserInputDTO
 import pt.isel.daw.battleships.dtos.users.login.LoginUserOutputDTO
 import pt.isel.daw.battleships.dtos.users.refresh.RefreshTokenOutputDTO
+import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.dtos.users.register.RegisterUserOutputDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.AuthenticationException
 import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
@@ -29,8 +29,10 @@ import java.time.Instant
  * Service that handles the business logic of the users.
  *
  * @property usersRepository the repository of the users
+ * @property refreshTokenRepository the repository of the refresh tokens
  * @property hashingUtils the utils for password operations
  * @property jwtProvider the JWT provider
+ * @property config the server configuration
  */
 @Service
 @Transactional
@@ -63,21 +65,21 @@ class UsersServiceImpl(
             }
     }
 
-    override fun createUser(createUserInputDTO: CreateUserInputDTO): CreateUserOutputDTO {
-        if (usersRepository.existsByUsername(username = createUserInputDTO.username)) {
-            throw AlreadyExistsException("User with username ${createUserInputDTO.username} already exists")
+    override fun register(registerUserInputDTO: RegisterUserInputDTO): RegisterUserOutputDTO {
+        if (usersRepository.existsByUsername(username = registerUserInputDTO.username)) {
+            throw AlreadyExistsException("User with username ${registerUserInputDTO.username} already exists")
         }
 
-        if (usersRepository.existsByEmail(email = createUserInputDTO.email)) {
-            throw AlreadyExistsException("User with email ${createUserInputDTO.email} already exists")
+        if (usersRepository.existsByEmail(email = registerUserInputDTO.email)) {
+            throw AlreadyExistsException("User with email ${registerUserInputDTO.email} already exists")
         }
 
         val user = User(
-            username = createUserInputDTO.username,
-            email = createUserInputDTO.email,
+            username = registerUserInputDTO.username,
+            email = registerUserInputDTO.email,
             passwordHash = hashingUtils.hashPassword(
-                username = createUserInputDTO.username,
-                password = createUserInputDTO.password
+                username = registerUserInputDTO.username,
+                password = registerUserInputDTO.password
             )
         )
 
@@ -85,8 +87,8 @@ class UsersServiceImpl(
 
         val (accessToken, refreshToken) = createTokens(user)
 
-        return CreateUserOutputDTO(
-            username = createUserInputDTO.username,
+        return RegisterUserOutputDTO(
+            username = registerUserInputDTO.username,
             accessToken = accessToken,
             refreshToken = refreshToken
         )
@@ -116,13 +118,13 @@ class UsersServiceImpl(
     override fun logout(refreshToken: String) {
         val user = getUserFromRefreshToken(refreshToken)
 
-        val cipheredRefreshToken = hashingUtils.hashToken(refreshToken)
+        val refreshTokenHash = hashingUtils.hashToken(refreshToken)
 
-        if (!refreshTokenRepository.existsByUserAndTokenHash(user = user, tokenHash = cipheredRefreshToken)) {
+        if (!refreshTokenRepository.existsByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)) {
             throw NotFoundException("Refresh token not found")
         }
 
-        refreshTokenRepository.deleteByUserAndTokenHash(user = user, tokenHash = cipheredRefreshToken)
+        refreshTokenRepository.deleteByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenOutputDTO {
@@ -139,7 +141,7 @@ class UsersServiceImpl(
 
         refreshTokenRepository.delete(refreshTokenEntity)
 
-        if (refreshTokenEntity.expirationDate.isAfter(Instant.now())) {
+        if (refreshTokenEntity.expirationDate.isBefore(Instant.now())) {
             throw NotFoundException("Refresh token expired")
         }
 

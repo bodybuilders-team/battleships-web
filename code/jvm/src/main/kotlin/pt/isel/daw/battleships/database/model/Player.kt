@@ -64,6 +64,7 @@ class Player(
     fun addShip(shipDTO: InputShipDTO, shipType: ShipType) {
         ships.add(
             Ship(
+                player = this,
                 type = shipType,
                 coordinate = shipDTO.coordinate.toCoordinate(),
                 orientation = Ship.Orientation.valueOf(shipDTO.orientation),
@@ -99,6 +100,7 @@ class Player(
 
         val madeShots = inputShots.map { shotDTO ->
             Shot(
+                player = this,
                 coordinate = shotDTO.coordinate.toCoordinate(),
                 round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
                 result = opponent.ships

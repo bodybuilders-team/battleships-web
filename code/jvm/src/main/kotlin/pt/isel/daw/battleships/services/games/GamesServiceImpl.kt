@@ -21,6 +21,8 @@ import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.utils.OffsetPageRequest
 import pt.isel.daw.battleships.utils.JwtProvider
 import java.sql.Timestamp
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
 
 /**
@@ -115,7 +117,7 @@ class GamesServiceImpl(
             name = createGameRequestDTO.name,
             creator = creator,
             config = createGameRequestDTO.config.toGameConfig(),
-            state = GameState()
+            state = GameState(phaseEndTime = Timestamp.from(Instant.now().plus(1L, ChronoUnit.DAYS)))
         )
 
         game.addPlayer(
@@ -138,6 +140,11 @@ class GamesServiceImpl(
             throw InvalidPhaseException("Waiting for players phase is over")
         }
 
+        if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
+            game.state.phase = GameState.GamePhase.FINISHED
+            throw InvalidPhaseException("Waiting for players phase is over")
+        }
+
         if (game.hasPlayer(user.username)) {
             throw AlreadyJoinedException("You have already joined this game")
         }
@@ -146,7 +153,7 @@ class GamesServiceImpl(
             player = Player(game = game, user = user)
         )
         game.state.phase = GameState.GamePhase.GRID_LAYOUT
-        game.state.phaseEndTime = Timestamp(System.currentTimeMillis() + game.config.maxTimeForLayoutPhase)
+        game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimeForLayoutPhase.toLong()))
     }
 
     /**
