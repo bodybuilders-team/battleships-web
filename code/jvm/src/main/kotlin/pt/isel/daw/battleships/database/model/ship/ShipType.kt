@@ -38,7 +38,7 @@ class ShipType(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null
+    var id: Int? = null
 
     @OneToOne
     @JoinColumn(name = "game", nullable = false)

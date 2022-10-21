@@ -20,3 +20,6 @@ ALTER SEQUENCE ship_types_id_seq RESTART WITH 1;
 
 TRUNCATE ships CASCADE;
 ALTER SEQUENCE ships_id_seq RESTART WITH 1;
+
+TRUNCATE refresh_tokens CASCADE;
+ALTER SEQUENCE refresh_tokens_id_seq RESTART WITH 1;

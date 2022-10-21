@@ -45,7 +45,7 @@ class Player(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null
+    var id: Int? = null
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player")

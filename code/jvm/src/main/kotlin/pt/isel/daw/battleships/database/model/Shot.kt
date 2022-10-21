@@ -37,7 +37,7 @@ class Shot(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Int? = null
+    private var id: Int? = null
 
     /**
      * Represents the possible results of a shot.

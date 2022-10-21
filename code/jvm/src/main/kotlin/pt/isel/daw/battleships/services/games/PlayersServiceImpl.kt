@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.services.games
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.database.model.game.Game
 import pt.isel.daw.battleships.database.model.game.GameState
 import pt.isel.daw.battleships.database.model.ship.Ship
@@ -21,7 +22,6 @@ import pt.isel.daw.battleships.services.exceptions.NotFoundException
 import pt.isel.daw.battleships.services.exceptions.ShootTimeExpiredException
 import pt.isel.daw.battleships.utils.JwtProvider
 import java.sql.Timestamp
-import javax.transaction.Transactional
 
 /**
  * Service that handles the business logic of the players.

@@ -62,6 +62,12 @@ class GameConfig(
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
         if (shipTypes.toSet() == other.shipTypes.toSet()) return false
+        if (shipTypes.any { shipType ->
+            other.shipTypes.none { otherShipType ->
+                shipType == otherShipType
+            }
+        }
+        ) return false
 
         return true
     }

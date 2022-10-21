@@ -2,6 +2,7 @@ package pt.isel.daw.battleships.services.users
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.database.model.RefreshToken
 import pt.isel.daw.battleships.database.model.User
 import pt.isel.daw.battleships.database.repositories.RefreshTokenRepository
@@ -23,7 +24,6 @@ import pt.isel.daw.battleships.utils.JwtProvider
 import pt.isel.daw.battleships.utils.JwtProvider.JwtPayload
 import pt.isel.daw.battleships.utils.ServerConfiguration
 import java.time.Instant
-import javax.transaction.Transactional
 
 /**
  * Service that handles the business logic of the users.

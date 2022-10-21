@@ -14,6 +14,12 @@ spring:
     url: jdbc:postgresql://localhost/daw_g03
     username: postgres
     password: postgres
+
+  testDatasource:
+    url: jdbc:postgresql://localhost/daw_g03_test
+    username: postgres
+    password: postgres
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false

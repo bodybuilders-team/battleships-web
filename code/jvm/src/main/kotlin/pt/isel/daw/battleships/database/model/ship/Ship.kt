@@ -44,7 +44,7 @@ class Ship(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null
+    var id: Int? = null
 
     val coordinates
         get() = (0 until lives).map {

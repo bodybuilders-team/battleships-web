@@ -1,5 +1,13 @@
 package pt.isel.daw.battleships.services.games
 
-class PlayersServiceTests {
-    // TODO: Implement tests
-}
+// @SpringBootTest
+// class PlayersServiceTests(
+//    @MockBean
+//    val playersService: PlayersService
+// ) {
+//
+// //    @Test
+// //    fun `PlayersService creation is successful`() {
+// //        playersService.getFleet("", 1)
+// //    }
+// }
