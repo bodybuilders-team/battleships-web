@@ -27,12 +27,13 @@ import javax.persistence.Table
 @Entity
 @Table(name = "shots")
 class Shot(
+
     @Column(name = "round", nullable = false)
     val round: Int,
 
     @ManyToOne
     @JoinColumn(name = "player", nullable = false)
-    val player: Player? = null,
+    val player: Player,
 
     @Embedded
     val coordinate: Coordinate,

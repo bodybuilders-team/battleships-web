@@ -141,6 +141,10 @@ class Player(
         opponent: Player,
         coordinates: List<Coordinate>
     ): List<Shot> {
+        if (!coordinates.all { it.col in game.config.colsRange() && it.row in game.config.rowsRange() }) {
+            throw InvalidShotException("Shot is out of bounds")
+        }
+
         if (coordinates.distinctBy { it }.size != coordinates.size) {
             throw InvalidShotException("Shots must have distinct coordinates.")
         }
@@ -171,6 +175,7 @@ class Player(
                                 ship.lives = 0
                                 Shot.ShotResult.SUNK
                             }
+
                             else -> {
                                 ship.lives--
                                 Shot.ShotResult.HIT

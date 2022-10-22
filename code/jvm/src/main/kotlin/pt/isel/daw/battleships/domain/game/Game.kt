@@ -51,7 +51,9 @@ class Game(
     val players: MutableList<Player> = mutableListOf()
 
     init {
-        config.shipTypes.forEach { shipType ->
+        // This is a workaround for JPA instatiation of the entity with the no args constructor
+        @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY", "UNNECESSARY_SAFE_CALL")
+        config?.shipTypes?.forEach { shipType ->
             shipType.game = this
         }
     }

@@ -23,8 +23,8 @@ class GameConfigDTOTests {
         val gameConfig = GameConfig(
             gridSize = 1,
             maxTimePerRound = 2,
-            shotsPerRound = 3,
             maxTimeForLayoutPhase = 4,
+            shotsPerRound = 3,
             shipTypes = listOf()
         )
         val gameConfigDTO = GameConfigDTO(gameConfig)

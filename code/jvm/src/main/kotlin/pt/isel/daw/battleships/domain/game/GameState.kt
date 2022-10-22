@@ -35,11 +35,11 @@ class GameState(
     var phaseEndTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
 
     @Column(name = "round", nullable = false)
-    val round: Int? = null,
+    var round: Int? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "turn", nullable = true)
-    val turn: Player? = null,
+    var turn: Player? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "winner", nullable = true)

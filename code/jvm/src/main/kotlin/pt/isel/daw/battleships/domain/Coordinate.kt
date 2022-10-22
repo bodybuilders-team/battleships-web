@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.domain
 
+import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinate
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
@@ -17,6 +18,20 @@ class Coordinate(
     @Column(name = "row", nullable = false)
     val row: Int
 ) {
+    init {
+        if (col !in maxColsRange) {
+            throw InvalidCoordinate(
+                "Invalid Column"
+            )
+        }
+
+        if (row !in maxRowsRange) {
+            throw InvalidCoordinate(
+                "Invalid Row"
+            )
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -33,5 +48,10 @@ class Coordinate(
         var result = col.hashCode()
         result = 31 * result + row
         return result
+    }
+
+    companion object {
+        val maxColsRange = 'A' until 'R'
+        val maxRowsRange = 1 until 18
     }
 }

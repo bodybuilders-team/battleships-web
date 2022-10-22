@@ -35,9 +35,9 @@ data class GameConfigDTO(
     fun toGameConfig(): GameConfig =
         GameConfig(
             gridSize = gridSize,
+            maxTimePerRound = maxTimePerRound,
             maxTimeForLayoutPhase = maxTimeForLayoutPhase,
             shotsPerRound = shotsPerRound,
-            maxTimePerRound = maxTimePerRound,
             shipTypes = shipTypes.map { it.toShipType() }
         )
 }

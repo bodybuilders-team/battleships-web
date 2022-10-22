@@ -78,13 +78,12 @@ CREATE TABLE shots
 (
     id     SERIAL PRIMARY KEY,
     round  INT        NOT NULL,
-    game   INT        NOT NULL,
     player INT        NOT NULL REFERENCES players (id),
     col    CHAR       NOT NULL,
     row    INT        NOT NULL,
     result VARCHAR(4) NOT NULL,
 
-    UNIQUE (game, player, round),
+    UNIQUE (player, round),
 
     CONSTRAINT round_is_valid CHECK ( round >= 1),
     CONSTRAINT col_is_valid CHECK ( col >= 'A' AND col <= 'R' ),

@@ -21,8 +21,8 @@ class GameTests : DatabaseTest() {
     val defaultGameConfig = GameConfig(
         gridSize = 10,
         maxTimePerRound = 60,
-        shotsPerRound = 1,
         maxTimeForLayoutPhase = 60,
+        shotsPerRound = 1,
         shipTypes = listOf(
             ShipType("Carrier", 1, 5, 50),
             ShipType("Battleship", 1, 4, 40),
@@ -35,8 +35,8 @@ class GameTests : DatabaseTest() {
     val defaultGameConfigWithMinorError = GameConfig(
         gridSize = 10,
         maxTimePerRound = 60,
-        shotsPerRound = 1,
         maxTimeForLayoutPhase = 60,
+        shotsPerRound = 1,
         shipTypes = listOf(
             ShipType("Carrier", 1, 5, 50),
             ShipType("Battleship", 1, 4, 40),

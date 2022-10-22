@@ -27,8 +27,8 @@ class PlayerDTOTests {
                 config = GameConfig(
                     gridSize = 1,
                     maxTimePerRound = 2,
-                    shotsPerRound = 3,
                     maxTimeForLayoutPhase = 4,
+                    shotsPerRound = 3,
                     shipTypes = listOf()
                 ),
                 state = GameState(

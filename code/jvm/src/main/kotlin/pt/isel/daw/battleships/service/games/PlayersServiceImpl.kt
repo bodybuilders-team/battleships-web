@@ -13,6 +13,7 @@ import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
+import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.exceptions.ShootTimeExpiredException
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedFleetDTO
@@ -54,12 +55,12 @@ class PlayersServiceImpl(
         val opponent = game.getOpponent(user.username)
 
         if (game.state.phase != GameState.GamePhase.GRID_LAYOUT) {
-            game.state.phase = GameState.GamePhase.FINISHED
-            game.state.winner = opponent
             throw InvalidPhaseException("Game is not in the placing ships phase")
         }
 
         if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
+            game.state.phase = GameState.GamePhase.FINISHED
+            game.state.winner = opponent
             throw FleetDeployTimeExpiredException("The fleet deploy time has expired.")
         }
 
@@ -79,6 +80,8 @@ class PlayersServiceImpl(
         if (game.areFleetsDeployed()) {
             game.state.phase = GameState.GamePhase.IN_PROGRESS
             game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimePerRound.toLong()))
+            game.state.round = 1
+            game.state.turn = game.players.first()
         }
     }
 
@@ -108,6 +111,10 @@ class PlayersServiceImpl(
         val player = game.getPlayer(user.username)
         val opponent = game.getOpponent(user.username)
 
+        if (game.state.turn != player) {
+            throw InvalidTurnException("It's not your turn.")
+        }
+
         if (game.state.phase != GameState.GamePhase.IN_PROGRESS) {
             throw InvalidPhaseException("Game is not in progress.")
         }
@@ -129,6 +136,9 @@ class PlayersServiceImpl(
             game.state.phase = GameState.GamePhase.FINISHED
             game.state.winner = player
         } else {
+            game.state.turn = opponent
+            val currRound = game.state.round ?: throw IllegalStateException("Round is null")
+            game.state.round = currRound + 1
             game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimePerRound.toLong()))
         }
 

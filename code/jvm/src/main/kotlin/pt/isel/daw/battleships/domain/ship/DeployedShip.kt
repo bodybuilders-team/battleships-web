@@ -30,7 +30,7 @@ import javax.persistence.Table
 class DeployedShip(
     @ManyToOne
     @JoinColumn(name = "player", nullable = false)
-    val player: Player? = null,
+    val player: Player,
 
     @ManyToOne
     @JoinColumn(name = "type", nullable = false)

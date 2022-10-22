@@ -25,11 +25,11 @@ class GameConfig(
     @Column(name = "max_time_per_round", nullable = false)
     val maxTimePerRound: Int,
 
-    @Column(name = "shots_per_round", nullable = false)
-    val shotsPerRound: Int,
-
     @Column(name = "max_time_for_layout_phase", nullable = false)
     val maxTimeForLayoutPhase: Int,
+
+    @Column(name = "shots_per_round", nullable = false)
+    val shotsPerRound: Int,
 
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "game")

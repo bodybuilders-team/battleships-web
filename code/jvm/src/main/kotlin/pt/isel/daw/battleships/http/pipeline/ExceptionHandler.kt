@@ -15,6 +15,7 @@ import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.service.exceptions.InvalidShotException
+import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.exceptions.ShootTimeExpiredException
 
@@ -42,7 +43,8 @@ class ExceptionHandler {
             InvalidShotException::class,
             FleetDeployTimeExpiredException::class,
             ShootTimeExpiredException::class,
-            InvalidPaginationParams::class
+            InvalidPaginationParams::class,
+            InvalidTurnException::class
         ]
     )
     fun handleBadRequest(ex: Exception): ResponseEntity<Any> =
