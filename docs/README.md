@@ -30,19 +30,19 @@ Winter Semester of 2022/2023
 * [Project Structure](#project-structure);
 * [Modeling the Database](#modeling-the-database):
     * [Conceptual Model](#conceptual-model);
-    * [Physical Model](#physical-model),
+    * [Physical Model](#physical-model);
 * [Application Architecture](#application-architecture):
     * [Open-API Specification](#open-api-specification);
+    * [Presentation Layer](#presentation-layer);
+    * [Business Logic Layer](#business-logic-layer);
     * [Data Access Layer](#data-access-layer);
-    * [Service Layer](#service-layer);
-    * [HTTP Layer](#http-layer);
+    * [Data Representation](#data-representation);
     * [Authentication](#authentication);
     * [Error Handling](#error-handling);
     * [Use-Case Scenario](#use-case-scenario);
     * [Running the Application](#running-the-application);
     * [Testing the Application](#testing-the-application);
-* [Conclusions](#conclusions);
-    * [Critical Evaluation](#critical-evaluation).
+* [Conclusions - Critical Evaluatio](#conclusions---critical-evaluation);
 
 ---
 ---
@@ -80,10 +80,10 @@ The following diagram holds the Entity-Relationship model for the information ma
 
 <!--suppress ALL -->
 <p align="center">
-    <img src="battleships-db/battleships-db.svg" alt="Entity Relationship Diagram"/>
+    <img src="diagrams/battleships-diagrams-er-diagram.svg" alt="Entity Relationship Diagram"/>
 </p>
 
-The conceptual model is stored in the [`docs/battleships-db`](./battleships-db) folder.
+The conceptual model is stored in the [`docs/battleships-db`](./diagrams/battleships-diagrams-er-diagram.svg) folder.
 
 We highlight the following aspects:
 
@@ -156,15 +156,19 @@ We highlight the following aspects of this model:
 
 ## Application Architecture
 
+<p align="center">
+    <img src="diagrams/battleships-diagrams-system-architecture.svg" alt="System Architecture"/>
+</p>
+
 The JVM application is organized as follows:
 
-* [`/database`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain) - contains the database management code,
-  implemented using **Spring Data JPA**;
-* [`/dtos`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/dtos) - contains the DTOs used to transfer data between
-  the different layers of the application;
+* [`/domain`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain) - contains the domain classes
+  of the application, implemented using **Spring Data JPA**;
 * [`/http`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http) - contains the HTTP layer of the application,
   implemented using **Spring Web MVC**;
-* [`/services`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service) - contains the services that manage the
+* [`/repository`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/repository) - contains the repository layer of
+  the application, implemented using **Spring Data JPA**;
+* [`/service`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service) - contains the services that manage the
   business logic of the application;
 * [`/utils`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/utils) - contains utility classes used by the
   application;
@@ -189,22 +193,34 @@ In our Open-API specification, we highlight the following aspects:
 
 ---
 
-### [Data Access Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain)
+### [Presentation Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http)
 
-The data access layer is implemented using **Spring Data JPA**.
+The presentation layer is responsible for receiving the requests from the client, processing them, sending them to the
+service layer and returning the responses to the client.
+The **data representation** used in these requests and responses are **DTOs (Data Transfer Objects)**.
 
-The data access layer is organized as follows:
+This layer is implemented using **Spring Web MVC**.
 
-* [`/model`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain) - contains the database model;
-* [`/repositories`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/repository) - contains the
-  repositories that manage the database.
+The presentation layer is organized as follows:
+
+* [`/controllers`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/controllers) - contains the controllers
+  that manage the HTTP requests;
+* [`/pipeline`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/pipeline) - contains the pipeline that
+  process the HTTP requests;
+* [`/siren`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/siren) - contains the classes that implement the
+  [Siren](https://github.com/kevinswiber/siren) hypermedia format.
+
+The [`Uris`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/Uris.kt) object contains the URIs of the
+application used by the controllers.
 
 ---
 
-### [Service Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service)
+### [Business Logic Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service)
 
 The service layer is responsible for managing the business logic of the application, receiving the requests from the
-HTTP layer, processing them, sending them to the data access layer and returning the responses to the HTTP layer.
+presentation layer, processing them, sending them to the data access layer and returning the responses to the
+presentation layer.
+The **data representation** used in these requests and responses are **DTOs (Data Transfer Objects)**.
 
 Each service is responsible for managing a specific group of requests, and each service is implemented as a
 `@Service` class, which is injected into the controller that manages the requests.
@@ -221,24 +237,36 @@ that returns the authenticated user, given a token. This class is extended by th
 
 ---
 
-### [HTTP Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http)
+### [Data Access Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/repository)
 
-The HTTP layer is responsible for receiving the requests from the client, processing them, sending them to the service
-layer and returning the responses to the client.
+The data access layer is implemented using **Spring Data JPA**.
 
-The HTTP layer is implemented using **Spring Web MVC**.
+This layer is responsible for managing the data access of the application, receiving the requests from the service
+layer, processing them, sending them to the database and returning the responses to the service layer.
+The **data representation** used in these requests and responses is the **domain classes**, which are implemented
+using **Spring Data JPA**.
 
-The HTTP layer is organized as follows:
+---
 
-* [`/controllers`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/controllers) - contains the controllers
-  that manage the HTTP requests;
-* [`/pipeline`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/pipeline) - contains the pipeline that
-  process the HTTP requests;
-* [`/siren`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/siren) - contains the classes that implement the
-  [Siren](https://github.com/kevinswiber/siren) hypermedia format.
+### Data Representation
 
-The [`Uris`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/Uris.kt) object contains the URIs of the
-application used by the controllers.
+There are three types of data representation in the application:
+
+* **Models**;
+* **DTOs (Data Trasfer Objects)**;
+* **Entities/Domain Classes**.
+
+The **models** are used in the **presentation layer** to represent the request and response bodies. This representation
+is used to validate the request and response bodies, and to convert them to the **DTOs**, which are used in the
+**service layer**. The validation is done using [**Jakaarta Bean Validation**](https://beanvalidation.org/).
+
+The **DTOs** are the data representation used in the communication between the **presentation layer** and the
+**service layer**. The DTOs are a "raw" representation of the data, and they are converted to the
+**entities/domain classes**.
+
+The **entities/domain classes** are the data representation used in the communication between the **service layer** and
+the **data access layer**. The entities are implemented using 
+[**Spring Data JPA**](https://spring.io/projects/spring-data-jpa#overview).
 
 ---
 
@@ -324,4 +352,5 @@ The next steps for this project are:
 * Change `GameConfig` weak entity to a strong entity to improve the data model, saving memory by not having to store
   the same data in multiple tables, like the default game configuration that is used in the most of the games;
 * Implement surrendering a game and the game's history;
-* Implement private rooms.
+* Improve the error handling;
+* Implement private session mechanism.

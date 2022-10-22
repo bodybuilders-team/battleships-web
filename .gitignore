@@ -117,3 +117,6 @@ dist
 **/out
 **/bin
 **/build
+
+*.bkp
+*.dtmp
