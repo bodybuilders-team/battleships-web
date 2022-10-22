@@ -6,6 +6,7 @@
     - Review comments
     - Write documentation
     - Add postman collection to docs
+    - Falar sobre as representações e passagem de dados entre layers
 - Implementation:
     - Revoke tokens
     - Add tests

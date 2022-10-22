@@ -28,4 +28,10 @@ class Coordinate(
 
         return true
     }
+
+    override fun hashCode(): Int {
+        var result = col.hashCode()
+        result = 31 * result + row
+        return result
+    }
 }

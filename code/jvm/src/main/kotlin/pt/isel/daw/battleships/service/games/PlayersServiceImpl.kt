@@ -50,7 +50,7 @@ class PlayersServiceImpl(
     override fun deployFleet(token: String, gameId: Int, fleetDTO: UndeployedFleetDTO) {
         val user = authenticateUser(token)
         val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
+        val player = game.getPlayer(username = user.username)
         val opponent = game.getOpponent(user.username)
 
         if (game.state.phase != GameState.GamePhase.GRID_LAYOUT) {

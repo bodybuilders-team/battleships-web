@@ -186,12 +186,12 @@ class GamesController(private val gamesService: GamesService) {
     @GetMapping(Uris.GAMES_GAME_STATE)
     fun getGameState(
         @PathVariable gameId: Int
-    ): SirenEntity<GameStateModel> {
-        val gameState = gamesService.getGameState(gameId)
+    ): SirenEntity<GetGameStateOutputModel> {
+        val gameState = gamesService.getGameState(gameId = gameId)
 
         return SirenEntity(
             `class` = listOf("game-state"),
-            properties = GameStateModel(gameState),
+            properties = GetGameStateOutputModel(gameStateDTO = gameState),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),

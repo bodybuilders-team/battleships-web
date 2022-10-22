@@ -132,7 +132,7 @@ class Player(
      * Shoots the opponent player.
      *
      * @param opponent the opponent player
-     * @param inputShots the shots to make
+     * @param coordinates the coordinates of the shots
      *
      * @return the list of shots made
      * @throws InvalidShotException if a shot is invalid
@@ -141,26 +141,24 @@ class Player(
         opponent: Player,
         coordinates: List<Coordinate>
     ): List<Shot> {
-        if (inputShots.distinctBy { it.coordinate }.size != inputShots.size) {
-            throw InvalidShotException("Shots must be to distinct coordinates.")
+        if (coordinates.distinctBy { it }.size != coordinates.size) {
+            throw InvalidShotException("Shots must have distinct coordinates.")
         }
 
         if (
-            inputShots.any { shot ->
-                shot.coordinate in shots.map { existingShots ->
-                    CoordinateDTO(
-                        existingShots.coordinate
-                    )
+            coordinates.any { coordinate ->
+                coordinate in shots.map { existingShots ->
+                    existingShots.coordinate
                 }
             }
         ) {
             throw InvalidShotException("Shots must be to coordinates that have not been shot yet.")
         }
 
-        val madeShots = inputShots.map { shotDTO ->
+        val madeShots = coordinates.map { coordinate ->
             Shot(
                 player = this,
-                coordinate = shotDTO.coordinate.toCoordinate(),
+                coordinate = coordinate,
                 round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
                 result = opponent.deployedShips
                     .find { ship ->
@@ -173,7 +171,6 @@ class Player(
                                 ship.lives = 0
                                 Shot.ShotResult.SUNK
                             }
-
                             else -> {
                                 ship.lives--
                                 Shot.ShotResult.HIT
