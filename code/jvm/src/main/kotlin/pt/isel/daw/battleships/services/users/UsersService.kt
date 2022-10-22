@@ -1,12 +1,12 @@
 package pt.isel.daw.battleships.services.users
 
-import pt.isel.daw.battleships.dtos.users.UserDTO
-import pt.isel.daw.battleships.dtos.users.UsersDTO
-import pt.isel.daw.battleships.dtos.users.login.LoginUserInputDTO
-import pt.isel.daw.battleships.dtos.users.login.LoginUserOutputDTO
-import pt.isel.daw.battleships.dtos.users.refresh.RefreshTokenOutputDTO
-import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
-import pt.isel.daw.battleships.dtos.users.register.RegisterUserOutputDTO
+import pt.isel.daw.battleships.services.users.dtos.UserDTO
+import pt.isel.daw.battleships.services.users.dtos.UsersDTO
+import pt.isel.daw.battleships.services.users.dtos.login.LoginUserInputDTO
+import pt.isel.daw.battleships.services.users.dtos.login.LoginUserOutputDTO
+import pt.isel.daw.battleships.services.users.dtos.refresh.RefreshTokenOutputDTO
+import pt.isel.daw.battleships.services.users.dtos.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.services.users.dtos.register.RegisterUserOutputDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
 import pt.isel.daw.battleships.services.exceptions.NotFoundException

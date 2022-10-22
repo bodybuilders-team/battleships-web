@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.dtos.users
 
-import pt.isel.daw.battleships.database.model.User
+import pt.isel.daw.battleships.domain.User
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

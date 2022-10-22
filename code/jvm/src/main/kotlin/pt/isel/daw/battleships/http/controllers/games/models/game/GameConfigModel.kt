@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
-import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
 import pt.isel.daw.battleships.http.controllers.games.models.ship.ShipTypeModel
+import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 import javax.validation.constraints.Size

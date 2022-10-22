@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.daw.battleships.dtos.games.ship.InputFleetDTO
-import pt.isel.daw.battleships.dtos.games.shot.InputShotsDTO
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.games.models.ship.DeployFleetInputModel
 import pt.isel.daw.battleships.http.controllers.games.models.ship.DeployFleetOutputModel
@@ -86,7 +84,7 @@ class PlayersController(private val playersService: PlayersService) {
             .deployFleet(
                 token = token,
                 gameId = gameId,
-                fleetDTO = InputFleetDTO(fleet.ships.map { it.toInputShipDTO() })
+                fleetDTO = fleet.toUndeployedFleetDTO()
             )
 
         return SirenEntity(

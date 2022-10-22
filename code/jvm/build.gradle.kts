@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.model.NoArg
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "pt.isel.daw"
@@ -12,6 +13,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
+}
+
+noArg {
+    annotation(NoArg::class.java.`package`.name + "." + NoArg::class.java.simpleName)
+    invokeInitializers = true
 }
 
 repositories {

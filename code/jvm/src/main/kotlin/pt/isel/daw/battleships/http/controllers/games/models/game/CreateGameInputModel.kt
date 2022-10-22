@@ -1,8 +1,8 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
-import pt.isel.daw.battleships.dtos.games.game.CreateGameInputDTO
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameModel.Companion.MAX_NAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.games.models.game.GameModel.Companion.MIN_NAME_LENGTH
+import pt.isel.daw.battleships.services.games.dtos.game.CreateGameInputDTO
 import javax.validation.constraints.Size
 
 /**

@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
-import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GameStateDTO
 import javax.validation.constraints.Min
 import javax.validation.constraints.Pattern
 

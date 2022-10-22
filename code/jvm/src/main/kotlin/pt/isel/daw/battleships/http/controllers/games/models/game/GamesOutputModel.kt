@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.game
 
-import pt.isel.daw.battleships.dtos.games.game.GamesDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GamesDTO
 
 /**
  * Represents the response body of a game list request.

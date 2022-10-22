@@ -2,21 +2,20 @@ package pt.isel.daw.battleships.services.games
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.daw.battleships.database.model.game.Game
-import pt.isel.daw.battleships.database.model.game.GameState
-import pt.isel.daw.battleships.database.model.ship.Ship
-import pt.isel.daw.battleships.database.repositories.UsersRepository
-import pt.isel.daw.battleships.database.repositories.games.GamesRepository
-import pt.isel.daw.battleships.dtos.games.ship.InputFleetDTO
-import pt.isel.daw.battleships.dtos.games.ship.OutputFleetDTO
-import pt.isel.daw.battleships.dtos.games.ship.OutputShipDTO
-import pt.isel.daw.battleships.dtos.games.shot.InputShotsDTO
-import pt.isel.daw.battleships.dtos.games.shot.OutputShotDTO
-import pt.isel.daw.battleships.dtos.games.shot.OutputShotsDTO
+import pt.isel.daw.battleships.domain.game.Game
+import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.domain.ship.DeployedShip
+import pt.isel.daw.battleships.domain.ship.UndeployedShip
+import pt.isel.daw.battleships.repository.UsersRepository
+import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.services.AuthenticatedService
-import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.services.games.dtos.ship.OutputFleetDTO
+import pt.isel.daw.battleships.services.games.dtos.ship.OutputShipDTO
+import pt.isel.daw.battleships.services.games.dtos.ship.UndeployedFleetDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.InputShotsDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.OutputShotDTO
+import pt.isel.daw.battleships.services.games.dtos.shot.OutputShotsDTO
 import pt.isel.daw.battleships.services.exceptions.FleetDeployTimeExpiredException
-import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.services.exceptions.NotFoundException
@@ -45,10 +44,10 @@ class PlayersServiceImpl(
         val game = getGameById(gameId)
         val player = game.getPlayer(user.username)
 
-        return OutputFleetDTO(ships = player.ships.map { OutputShipDTO(it) })
+        return OutputFleetDTO(ships = player.deployedShips.map { OutputShipDTO(it) })
     }
 
-    override fun deployFleet(token: String, gameId: Int, fleetDTO: InputFleetDTO) {
+    override fun deployFleet(token: String, gameId: Int, fleetDTO: UndeployedFleetDTO) {
         val user = authenticateUser(token)
         val game = getGameById(gameId)
         val player = game.getPlayer(user.username)
@@ -64,21 +63,19 @@ class PlayersServiceImpl(
             throw FleetDeployTimeExpiredException("The fleet deploy time has expired.")
         }
 
-        if (player.ships.isNotEmpty()) {
-            throw FleetAlreadyDeployedException("Player already has a fleet")
-        }
-
-        if (game.config.isValidFleet(fleetDTO.ships)) {
-            throw InvalidFleetException("Invalid fleet for this game configuration.")
-        }
-
-        fleetDTO.ships.forEach { shipDTO ->
-            val shipType = game.config.shipTypes
-                .find { it.shipName == shipDTO.type }
+        val undeployedShips = fleetDTO.ships.map { shipDTO ->
+            val shipType = game.config.shipTypes.find { it.shipName == shipDTO.type }
                 ?: throw InvalidShipTypeException("Ship type '${shipDTO.type}' is invalid.")
 
-            player.addShip(shipDTO, shipType)
+            UndeployedShip(
+                shipType,
+                shipDTO.coordinate.toCoordinate(),
+                DeployedShip.Orientation.values().find { it.name == shipDTO.orientation }
+                    ?: throw InvalidShipTypeException("Ship orientation '${shipDTO.orientation}' is invalid.")
+            )
         }
+
+        player.deployFleet(undeployedShips)
 
         if (game.areFleetsDeployed()) {
             game.state.phase = GameState.GamePhase.IN_PROGRESS
@@ -92,8 +89,8 @@ class PlayersServiceImpl(
         val opponent = game.getOpponent(user.username)
 
         return OutputFleetDTO(
-            ships = opponent.ships
-                .filter(Ship::isSunk)
+            ships = opponent.deployedShips
+                .filter(DeployedShip::isSunk)
                 .map { OutputShipDTO(it) }
         )
     }
@@ -125,7 +122,7 @@ class PlayersServiceImpl(
 
         val shots = player.shoot(opponent, inputShotsDTO.shots)
 
-        if (opponent.ships.all(Ship::isSunk)) {
+        if (opponent.deployedShips.all(DeployedShip::isSunk)) {
             game.state.phase = GameState.GamePhase.FINISHED
             game.state.winner = player
         } else {

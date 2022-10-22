@@ -2,6 +2,7 @@ package pt.isel.daw.battleships.http.controllers.games.models.game
 
 import pt.isel.daw.battleships.dtos.games.game.GameDTO
 import pt.isel.daw.battleships.http.controllers.games.models.PlayerModel
+import pt.isel.daw.battleships.services.games.dtos.game.GameDTO
 import javax.validation.constraints.Size
 
 /**

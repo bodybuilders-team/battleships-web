@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.dtos.games.game
 
-import pt.isel.daw.battleships.database.model.game.GameState
+import pt.isel.daw.battleships.domain.game.GameState
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.test.Test

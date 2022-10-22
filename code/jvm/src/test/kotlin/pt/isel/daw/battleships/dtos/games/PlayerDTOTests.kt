@@ -1,10 +1,11 @@
 package pt.isel.daw.battleships.dtos.games
 
-import pt.isel.daw.battleships.database.model.Player
-import pt.isel.daw.battleships.database.model.User
-import pt.isel.daw.battleships.database.model.game.Game
-import pt.isel.daw.battleships.database.model.game.GameConfig
-import pt.isel.daw.battleships.database.model.game.GameState
+import pt.isel.daw.battleships.domain.Player
+import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.game.Game
+import pt.isel.daw.battleships.domain.game.GameConfig
+import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.services.games.dtos.PlayerDTO
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.test.Test

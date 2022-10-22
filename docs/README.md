@@ -158,7 +158,7 @@ We highlight the following aspects of this model:
 
 The JVM application is organized as follows:
 
-* [`/database`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/database) - contains the database management code,
+* [`/database`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain) - contains the database management code,
   implemented using **Spring Data JPA**;
 * [`/dtos`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/dtos) - contains the DTOs used to transfer data between
   the different layers of the application;
@@ -189,14 +189,14 @@ In our Open-API specification, we highlight the following aspects:
 
 ---
 
-### [Data Access Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/database)
+### [Data Access Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain)
 
 The data access layer is implemented using **Spring Data JPA**.
 
 The data access layer is organized as follows:
 
-* [`/model`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/database/model) - contains the database model;
-* [`/repositories`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/database/repositories) - contains the
+* [`/model`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain/model) - contains the database model;
+* [`/repositories`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain/repositories) - contains the
   repositories that manage the database.
 
 ---
@@ -323,4 +323,5 @@ The next steps for this project are:
 * Implement the web client of the Battleships application, that will be implemented in the next phase;
 * Change `GameConfig` weak entity to a strong entity to improve the data model, saving memory by not having to store
   the same data in multiple tables, like the default game configuration that is used in the most of the games;
-* Implement surrendering a game and the game's history.
+* Implement surrendering a game and the game's history;
+* Implement private rooms.

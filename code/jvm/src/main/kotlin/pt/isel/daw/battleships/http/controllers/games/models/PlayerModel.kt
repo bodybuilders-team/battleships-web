@@ -1,9 +1,9 @@
 package pt.isel.daw.battleships.http.controllers.games.models
 
-import pt.isel.daw.battleships.dtos.games.PlayerDTO
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_USERNAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MIN_POINTS
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MIN_USERNAME_LENGTH
+import pt.isel.daw.battleships.services.games.dtos.PlayerDTO
 import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 

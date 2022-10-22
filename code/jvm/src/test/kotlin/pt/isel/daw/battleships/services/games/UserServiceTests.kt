@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
-import pt.isel.daw.battleships.database.model.RefreshToken
-import pt.isel.daw.battleships.database.model.User
-import pt.isel.daw.battleships.database.repositories.RefreshTokenRepository
-import pt.isel.daw.battleships.database.repositories.UsersRepository
+import pt.isel.daw.battleships.domain.RefreshToken
+import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.repository.RefreshTokenRepository
+import pt.isel.daw.battleships.repository.UsersRepository
 import pt.isel.daw.battleships.dtos.users.UserDTO
 import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
 import pt.isel.daw.battleships.services.exceptions.NotFoundException

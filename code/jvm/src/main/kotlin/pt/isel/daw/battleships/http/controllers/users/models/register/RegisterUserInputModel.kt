@@ -6,6 +6,7 @@ import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_USERNAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MIN_EMAIL_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MIN_USERNAME_LENGTH
+import pt.isel.daw.battleships.services.users.dtos.register.RegisterUserInputDTO
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 

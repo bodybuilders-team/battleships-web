@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.shot
 
-import pt.isel.daw.battleships.dtos.games.CoordinateDTO
+import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
 import pt.isel.daw.battleships.dtos.games.shot.OutputShotDTO
 import pt.isel.daw.battleships.dtos.games.shot.ShotResultDTO
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel

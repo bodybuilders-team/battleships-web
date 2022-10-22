@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models.refreshToken
 
-import pt.isel.daw.battleships.dtos.users.refresh.RefreshTokenOutputDTO
+import pt.isel.daw.battleships.services.users.dtos.refresh.RefreshTokenOutputDTO
 
 /**
  * Represents the Refresh Token Output Model.

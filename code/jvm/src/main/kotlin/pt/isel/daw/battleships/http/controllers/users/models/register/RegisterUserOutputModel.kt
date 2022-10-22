@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models.register
 
-import pt.isel.daw.battleships.dtos.users.register.RegisterUserOutputDTO
+import pt.isel.daw.battleships.services.users.dtos.register.RegisterUserOutputDTO
 
 /**
  * Represents the response body of the create user operation.

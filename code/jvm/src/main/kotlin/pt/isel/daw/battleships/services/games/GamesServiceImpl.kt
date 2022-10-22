@@ -1,19 +1,19 @@
 package pt.isel.daw.battleships.services.games
 
 import org.springframework.stereotype.Service
-import pt.isel.daw.battleships.database.model.Player
-import pt.isel.daw.battleships.database.model.User
-import pt.isel.daw.battleships.database.model.game.Game
-import pt.isel.daw.battleships.database.model.game.GameState
-import pt.isel.daw.battleships.database.repositories.UsersRepository
-import pt.isel.daw.battleships.database.repositories.games.GamesRepository
-import pt.isel.daw.battleships.dtos.games.game.CreateGameInputDTO
-import pt.isel.daw.battleships.dtos.games.game.GameConfigDTO
-import pt.isel.daw.battleships.dtos.games.game.GameDTO
-import pt.isel.daw.battleships.dtos.games.game.GameStateDTO
-import pt.isel.daw.battleships.dtos.games.game.GamesDTO
-import pt.isel.daw.battleships.dtos.games.game.MatchmakeDTO
+import pt.isel.daw.battleships.domain.Player
+import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.game.Game
+import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.repository.UsersRepository
+import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.services.AuthenticatedService
+import pt.isel.daw.battleships.services.games.dtos.game.CreateGameInputDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GameDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GameStateDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GamesDTO
+import pt.isel.daw.battleships.services.games.dtos.game.MatchmakeDTO
 import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
 import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
@@ -79,7 +79,10 @@ class GamesServiceImpl(
             ?: (
                 createGame(
                     creator = user,
-                    createGameRequestDTO = CreateGameInputDTO(name = "Game", config = gameConfigDTO)
+                    createGameRequestDTO = CreateGameInputDTO(
+                        name = "Game",
+                        config = gameConfigDTO
+                    )
                 ) to true
                 )
 

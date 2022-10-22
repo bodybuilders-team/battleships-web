@@ -1,7 +1,8 @@
 package pt.isel.daw.battleships.dtos.games.game
 
-import pt.isel.daw.battleships.database.model.game.GameConfig
+import pt.isel.daw.battleships.domain.game.GameConfig
 import pt.isel.daw.battleships.dtos.games.ship.ShipTypeDTO
+import pt.isel.daw.battleships.services.games.dtos.game.GameConfigDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
