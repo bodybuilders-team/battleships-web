@@ -1,12 +1,11 @@
 package pt.isel.daw.battleships.http.controllers.users.models.register
 
-import pt.isel.daw.battleships.dtos.users.register.RegisterUserInputDTO
-import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.EMAIL_REGEX
-import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_EMAIL_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MAX_USERNAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MIN_EMAIL_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.UserModel.Companion.MIN_USERNAME_LENGTH
-import pt.isel.daw.battleships.services.users.dtos.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.EMAIL_REGEX
+import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MAX_EMAIL_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MAX_USERNAME_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_EMAIL_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_USERNAME_LENGTH
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
@@ -46,7 +45,7 @@ data class RegisterUserInputModel(
      *
      * @return the service DTO
      */
-    fun toRegisterDTO(): RegisterUserInputDTO = RegisterUserInputDTO(
+    fun toRegisterUserInputDTO() = RegisterUserInputDTO(
         username = username,
         email = email,
         password = password

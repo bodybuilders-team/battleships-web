@@ -16,6 +16,10 @@ abstract class DatabaseTest {
     @Autowired
     lateinit var entityManager: TestEntityManager
 
+    /**
+     * Clears the database before each test.
+     * This is done by running the script `cleanData.sql` located in the sql folder.
+     */
     @BeforeEach
     fun clearDatabase() {
         entityManager.runScript("..\\sql\\cleanData.sql")

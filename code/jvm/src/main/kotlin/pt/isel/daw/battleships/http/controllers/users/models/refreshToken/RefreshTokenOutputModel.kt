@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models.refreshToken
 
-import pt.isel.daw.battleships.services.users.dtos.refresh.RefreshTokenOutputDTO
+import pt.isel.daw.battleships.service.users.dtos.refreshToken.RefreshTokenOutputDTO
 
 /**
  * Represents the Refresh Token Output Model.
@@ -12,8 +12,8 @@ data class RefreshTokenOutputModel(
     val accessToken: String,
     val refreshToken: String
 ) {
-    constructor(refreshTokenDTO: RefreshTokenOutputDTO) : this(
-        accessToken = refreshTokenDTO.accessToken,
-        refreshToken = refreshTokenDTO.refreshToken
+    constructor(refreshTokenOutputDTO: RefreshTokenOutputDTO) : this(
+        accessToken = refreshTokenOutputDTO.accessToken,
+        refreshToken = refreshTokenOutputDTO.refreshToken
     )
 }

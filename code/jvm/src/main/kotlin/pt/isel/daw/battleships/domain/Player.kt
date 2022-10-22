@@ -2,14 +2,12 @@ package pt.isel.daw.battleships.domain
 
 import pt.isel.daw.battleships.domain.game.Game
 import pt.isel.daw.battleships.domain.ship.DeployedShip
-import pt.isel.daw.battleships.domain.ship.Ship.*
+import pt.isel.daw.battleships.domain.ship.Ship.Orientation
 import pt.isel.daw.battleships.domain.ship.UndeployedShip
-import pt.isel.daw.battleships.dtos.games.shot.InputShotDTO
-import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
-import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
-import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
-import pt.isel.daw.battleships.services.exceptions.InvalidShotException
-import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
+import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
+import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
+import pt.isel.daw.battleships.service.exceptions.InvalidShotException
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -75,12 +73,19 @@ class Player(
         }
 
         undeployedShips.forEach { undeployedShip ->
-            if(!isValidShipCoordinate(undeployedShip.coordinate, undeployedShip.orientation, undeployedShip.type.size))
+            if (!isValidShipCoordinate(
+                    undeployedShip.coordinate,
+                    undeployedShip.orientation,
+                    undeployedShip.type.size
+                )
+            ) {
                 throw InvalidShipTypeException("Ship is out of bounds")
+            }
 
             deployedShips.forEach { ship ->
-                if(ship.isOverlapping(undeployedShip))
+                if (ship.isOverlapping(undeployedShip)) {
                     throw InvalidShipTypeException("Ship is overlapping another ship")
+                }
             }
 
             deployedShips.add(
@@ -93,7 +98,6 @@ class Player(
                 )
             )
         }
-
     }
 
     /**
@@ -108,7 +112,7 @@ class Player(
     private fun isValidShipCoordinate(
         coordinate: Coordinate,
         orientation: Orientation,
-        size: Int,
+        size: Int
     ): Boolean {
         val colsRange = game.config.colsRange()
         val rowsRange = game.config.rowsRange()
@@ -124,7 +128,6 @@ class Player(
             )
     }
 
-
     /**
      * Shoots the opponent player.
      *
@@ -136,7 +139,7 @@ class Player(
      */
     fun shoot(
         opponent: Player,
-        inputShots: List<InputShotDTO>
+        coordinates: List<Coordinate>
     ): List<Shot> {
         if (inputShots.distinctBy { it.coordinate }.size != inputShots.size) {
             throw InvalidShotException("Shots must be to distinct coordinates.")
@@ -160,11 +163,9 @@ class Player(
                 coordinate = shotDTO.coordinate.toCoordinate(),
                 round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
                 result = opponent.deployedShips
-                    .find { ship -> shotDTO.coordinate in ship.coordinates.map {
-                        CoordinateDTO(
-                            it
-                        )
-                    } }
+                    .find { ship ->
+                        coordinate in ship.coordinates.map { it }
+                    }
                     .let { ship ->
                         when {
                             ship == null -> Shot.ShotResult.MISS

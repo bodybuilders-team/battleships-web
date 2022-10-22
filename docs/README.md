@@ -164,7 +164,7 @@ The JVM application is organized as follows:
   the different layers of the application;
 * [`/http`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http) - contains the HTTP layer of the application,
   implemented using **Spring Web MVC**;
-* [`/services`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/services) - contains the services that manage the
+* [`/services`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service) - contains the services that manage the
   business logic of the application;
 * [`/utils`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/utils) - contains utility classes used by the
   application;
@@ -195,13 +195,13 @@ The data access layer is implemented using **Spring Data JPA**.
 
 The data access layer is organized as follows:
 
-* [`/model`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain/model) - contains the database model;
-* [`/repositories`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain/repositories) - contains the
+* [`/model`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/domain) - contains the database model;
+* [`/repositories`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/repository) - contains the
   repositories that manage the database.
 
 ---
 
-### [Service Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/services)
+### [Service Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service)
 
 The service layer is responsible for managing the business logic of the application, receiving the requests from the
 HTTP layer, processing them, sending them to the data access layer and returning the responses to the HTTP layer.
@@ -275,7 +275,7 @@ which is annotated with `@ControllerAdvice`, and is responsible for intercepting
 appropriate response, with the appropriate status code and message.
 
 The service layer throws the specific exceptions that are handled by the `ErrorHandler` class, present in the
-[`/exceptions`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/services/exceptions) package. We decided to use the
+[`/exceptions`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/service/exceptions) package. We decided to use the
 specific exceptions, instead of the generic exceptions (e.g. `IllegalArgumentException`), because we wanted to have
 more control over the error messages and status codes.
 

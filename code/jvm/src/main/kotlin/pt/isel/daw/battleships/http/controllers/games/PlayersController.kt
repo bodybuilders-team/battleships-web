@@ -8,19 +8,24 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
-import pt.isel.daw.battleships.http.controllers.games.models.ship.DeployFleetInputModel
-import pt.isel.daw.battleships.http.controllers.games.models.ship.DeployFleetOutputModel
-import pt.isel.daw.battleships.http.controllers.games.models.ship.OutputShipModel
-import pt.isel.daw.battleships.http.controllers.games.models.ship.OutputShipsModel
-import pt.isel.daw.battleships.http.controllers.games.models.shot.CreateShotsInputModel
-import pt.isel.daw.battleships.http.controllers.games.models.shot.OutputShotModel
-import pt.isel.daw.battleships.http.controllers.games.models.shot.OutputShotsModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet.DeployFleetInputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet.DeployFleetOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.fireShots.FireShotsInputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.fireShots.FireShotsOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.getFleet.GetFleetOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.getOpponentFleet.GetOpponentFleetOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.getOpponentShots.GetOpponentShotsOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.getShots.GetShotsOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.ship.DeployedShipModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotsModel
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
-import pt.isel.daw.battleships.services.games.PlayersService
+import pt.isel.daw.battleships.service.games.PlayersService
+import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**
@@ -36,32 +41,35 @@ class PlayersController(private val playersService: PlayersService) {
     /**
      * Handles the request to get the fleet of a player.
      *
-     * @param gameId the id of the game
      * @param token the token of the user
+     * @param gameId the id of the game
      *
      * @return the fleet of the player
      */
     @GetMapping(Uris.PLAYERS_MY_FLEET)
     fun getFleet(
-        @PathVariable gameId: Int,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<OutputShipsModel> {
-        val ships = playersService.getFleet(token, gameId).ships
-            .map { OutputShipModel(it) }
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @PathVariable gameId: Int
+    ): SirenEntity<GetFleetOutputModel> {
+        val ships = playersService.getFleet(
+            token = token,
+            gameId = gameId
+        ).ships
+            .map { DeployedShipModel(deployedShipDTO = it) }
 
         return SirenEntity(
             `class` = listOf("my-fleet"),
-            properties = OutputShipsModel(ships),
+            properties = GetFleetOutputModel(ships = ships),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.myFleet(gameId)
+                    href = Uris.myFleet(gameId = gameId)
                 )
             ),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             )
         )
@@ -70,15 +78,15 @@ class PlayersController(private val playersService: PlayersService) {
     /**
      * Handles the request to deploy a fleet.
      *
+     * @param token the token of the user
      * @param gameId the id of the game
      * @param fleet the ships to be deployed
-     * @param token the token of the user
      */
     @PostMapping(Uris.PLAYERS_MY_FLEET)
     fun deployFleet(
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int,
-        @RequestBody fleet: DeployFleetInputModel,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
+        @RequestBody fleet: DeployFleetInputModel
     ): SirenEntity<DeployFleetOutputModel> {
         playersService
             .deployFleet(
@@ -92,11 +100,11 @@ class PlayersController(private val playersService: PlayersService) {
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("fleet"),
-                    href = Uris.myFleet(gameId)
+                    href = Uris.myFleet(gameId = gameId)
                 ),
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             )
         )
@@ -106,32 +114,35 @@ class PlayersController(private val playersService: PlayersService) {
      * Handles the request to get the opponent's fleet.
      * Only gets those that are sunk.
      *
-     * @param gameId the id of the game
      * @param token the token of the user
+     * @param gameId the id of the game
      *
-     * @return The fleet of the opponent
+     * @return the fleet of the opponent
      */
     @GetMapping(Uris.PLAYERS_OPPONENT_FLEET)
     fun getOpponentFleet(
-        @PathVariable gameId: Int,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<OutputShipsModel> {
-        val ships = playersService.getOpponentFleet(token, gameId).ships
-            .map { OutputShipModel(it) }
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @PathVariable gameId: Int
+    ): SirenEntity<GetOpponentFleetOutputModel> {
+        val ships = playersService.getOpponentFleet(
+            token = token,
+            gameId = gameId
+        ).ships
+            .map { DeployedShipModel(deployedShipDTO = it) }
 
         return SirenEntity(
             `class` = listOf("opponent-fleet"),
-            properties = OutputShipsModel(ships),
+            properties = GetFleetOutputModel(ships = ships),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.opponentFleet(gameId)
+                    href = Uris.opponentFleet(gameId = gameId)
                 )
             ),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             )
         )
@@ -140,32 +151,35 @@ class PlayersController(private val playersService: PlayersService) {
     /**
      * Handles the request to get the shots of the player.
      *
-     * @param gameId the id of the game
      * @param token the token of the user
+     * @param gameId the id of the game
      *
      * @return te shots of the player
      */
     @GetMapping(Uris.PLAYERS_MY_SHOTS)
     fun getShots(
-        @PathVariable gameId: Int,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<OutputShotsModel> {
-        val shots = playersService.getShots(token, gameId).shots
-            .map { OutputShotModel(it) }
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @PathVariable gameId: Int
+    ): SirenEntity<GetShotsOutputModel> {
+        val shots = playersService.getShots(
+            token = token,
+            gameId = gameId
+        ).shots
+            .map { FiredShotModel(firedShotDTO = it) }
 
         return SirenEntity(
             `class` = listOf("my-shots"),
-            properties = OutputShotsModel(shots),
+            properties = FiredShotsModel(shots),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.myShots(gameId)
+                    href = Uris.myShots(gameId = gameId)
                 )
             ),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             )
         )
@@ -181,29 +195,33 @@ class PlayersController(private val playersService: PlayersService) {
      * @return the shots made
      */
     @PostMapping(Uris.PLAYERS_MY_SHOTS)
-    fun shoot(
+    fun fireShots(
         @PathVariable gameId: Int,
-        @RequestBody shots: CreateShotsInputModel,
+        @RequestBody shots: FireShotsInputModel,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<OutputShotsModel> {
+    ): SirenEntity<FireShotsOutputModel> {
         val shotsModels = playersService
-            .shoot(token, gameId, InputShotsDTO(shots.shots.map { it.toInputShotDTO() }))
+            .fireShots(
+                token = token,
+                gameId = gameId,
+                unfiredShotsDTO = UnfiredShotsDTO(shots = shots.shots.map { it.toUnfiredShotDTO() })
+            )
             .shots
-            .map { OutputShotModel(it) }
+            .map { FiredShotModel(firedShotDTO = it) }
 
         return SirenEntity(
             `class` = listOf("my-shots"),
-            properties = OutputShotsModel(shotsModels),
+            properties = FiredShotsModel(shots = shotsModels),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.myShots(gameId)
+                    href = Uris.myShots(gameId = gameId)
                 )
             ),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             )
         )
@@ -221,23 +239,26 @@ class PlayersController(private val playersService: PlayersService) {
     fun getOpponentShots(
         @PathVariable gameId: Int,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<OutputShotsModel> {
-        val shots = playersService.getOpponentShots(token, gameId).shots
-            .map { OutputShotModel(it) }
+    ): SirenEntity<GetOpponentShotsOutputModel> {
+        val shots = playersService.getOpponentShots(
+            token = token,
+            gameId = gameId
+        ).shots
+            .map { FiredShotModel(firedShotDTO = it) }
 
         return SirenEntity(
             `class` = listOf("opponent-shots"),
-            properties = OutputShotsModel(shots),
+            properties = FiredShotsModel(shots = shots),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.opponentShots(gameId)
+                    href = Uris.opponentShots(gameId = gameId)
                 )
             ),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             )
         )

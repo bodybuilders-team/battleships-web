@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models
 
-import pt.isel.daw.battleships.services.games.dtos.PlayerDTO
+import pt.isel.daw.battleships.http.controllers.games.models.games.PlayerModel
+import pt.isel.daw.battleships.service.games.dtos.PlayerDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

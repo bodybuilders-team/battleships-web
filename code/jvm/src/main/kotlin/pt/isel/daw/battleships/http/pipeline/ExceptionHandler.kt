@@ -5,18 +5,18 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import pt.isel.daw.battleships.services.exceptions.AlreadyExistsException
-import pt.isel.daw.battleships.services.exceptions.AlreadyJoinedException
-import pt.isel.daw.battleships.services.exceptions.AuthenticationException
-import pt.isel.daw.battleships.services.exceptions.FleetAlreadyDeployedException
-import pt.isel.daw.battleships.services.exceptions.FleetDeployTimeExpiredException
-import pt.isel.daw.battleships.services.exceptions.InvalidFleetException
-import pt.isel.daw.battleships.services.exceptions.InvalidPaginationParams
-import pt.isel.daw.battleships.services.exceptions.InvalidPhaseException
-import pt.isel.daw.battleships.services.exceptions.InvalidShipTypeException
-import pt.isel.daw.battleships.services.exceptions.InvalidShotException
-import pt.isel.daw.battleships.services.exceptions.NotFoundException
-import pt.isel.daw.battleships.services.exceptions.ShootTimeExpiredException
+import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
+import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
+import pt.isel.daw.battleships.service.exceptions.AuthenticationException
+import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.service.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
+import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
+import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
+import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
+import pt.isel.daw.battleships.service.exceptions.InvalidShotException
+import pt.isel.daw.battleships.service.exceptions.NotFoundException
+import pt.isel.daw.battleships.service.exceptions.ShootTimeExpiredException
 
 /**
  * Handles exceptions thrown by the controllers.

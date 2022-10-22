@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.ship
 
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.ship.UndeployedShipModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -8,7 +9,7 @@ class InputDeployedShipModelTests {
 
     @Test
     fun `InputShipModel creation is successful`() {
-        InputShipModel(
+        UndeployedShipModel(
             type = "CARRIER",
             coordinate = CoordinateModel('A', 1),
             orientation = "HORIZONTAL"
@@ -17,15 +18,15 @@ class InputDeployedShipModelTests {
 
     @Test
     fun `InputShipModel to InputShipDTO conversion is successful`() {
-        val inputShipModel = InputShipModel(
+        val undeployedShipModel = UndeployedShipModel(
             type = "CARRIER",
             coordinate = CoordinateModel('A', 1),
             orientation = "HORIZONTAL"
         )
-        val inputShipDTO = inputShipModel.toInputShipDTO()
+        val inputShipDTO = undeployedShipModel.toUndeployedShipDTO()
 
-        assertEquals(inputShipModel.type, inputShipDTO.type)
-        assertEquals(inputShipModel.coordinate.toCoordinateDTO(), inputShipDTO.coordinate)
-        assertEquals(inputShipModel.orientation, inputShipDTO.orientation)
+        assertEquals(undeployedShipModel.type, inputShipDTO.type)
+        assertEquals(undeployedShipModel.coordinate.toCoordinateDTO(), inputShipDTO.coordinate)
+        assertEquals(undeployedShipModel.orientation, inputShipDTO.orientation)
     }
 }

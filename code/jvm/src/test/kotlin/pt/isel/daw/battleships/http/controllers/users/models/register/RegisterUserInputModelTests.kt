@@ -21,7 +21,7 @@ class RegisterUserInputModelTests {
             email = "email",
             password = "password"
         )
-        val createUserRequestDTO = registerUserInputModel.toRegisterDTO()
+        val createUserRequestDTO = registerUserInputModel.toRegisterUserInputDTO()
 
         assertEquals(registerUserInputModel.username, createUserRequestDTO.username)
         assertEquals(registerUserInputModel.email, createUserRequestDTO.email)

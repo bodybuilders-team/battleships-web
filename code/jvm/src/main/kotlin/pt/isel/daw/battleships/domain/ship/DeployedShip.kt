@@ -23,7 +23,6 @@ import javax.persistence.Table
  * @property coordinate the ship's coordinate
  * @property orientation the ship's orientation
  * @property lives the ship's lives
- * @property coordinates the ship's coordinates
  * @property isSunk true if the ship is sunk, false otherwise
  */
 @Entity
@@ -52,14 +51,6 @@ class DeployedShip(
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
-
-    val coordinates
-        get() = (0 until lives).map {
-            when (orientation) {
-                Orientation.HORIZONTAL -> Coordinate(coordinate.col + it, coordinate.row)
-                Orientation.VERTICAL -> Coordinate(coordinate.col, coordinate.row + it)
-            }
-        }
 
     val isSunk
         get() = lives == 0

@@ -1,11 +1,11 @@
 server:
   config:
     secrets:
-      passwordSecret: PeSgVkYp3s6v9y$B&E)H@McQfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G
-      accessTokenSecret: 9z$C&F)J@NcRfUjWnZr4u7x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4
-      refreshTokenSecret: D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F)J@NcRfUjXn2r5u8x
-      tokenHashSecret: QfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y$B&E)H
-    maxRefreshTokens: 3
+      password-secret: PeSgVkYp3s6v9y$B&E)H@McQfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G
+      access-token-secret: 9z$C&F)J@NcRfUjWnZr4u7x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4
+      refresh-token-secret: D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F)J@NcRfUjXn2r5u8x
+      token-hash-secret: QfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y$B&E)H
+    max-refresh-tokens: 3
 
   port: 8888
 
@@ -15,7 +15,7 @@ spring:
     username: postgres
     password: postgres
 
-  testDatasource:
+  test-datasource:
     url: jdbc:postgresql://localhost/daw_g03_test
     username: postgres
     password: postgres
@@ -23,5 +23,6 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
+
   jackson:
     default-property-inclusion: non_null

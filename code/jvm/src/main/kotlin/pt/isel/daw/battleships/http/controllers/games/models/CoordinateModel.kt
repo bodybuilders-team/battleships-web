@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models
 
-import pt.isel.daw.battleships.services.games.dtos.CoordinateDTO
+import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 import javax.validation.constraints.Pattern
@@ -19,9 +19,9 @@ data class CoordinateModel(
     @Max(MAX_ROW_SIZE.toLong(), message = "Row must be less than $MAX_ROW_SIZE")
     val row: Int
 ) {
-    constructor(coordinate: CoordinateDTO) : this(
-        col = coordinate.col,
-        row = coordinate.row
+    constructor(coordinateDTO: CoordinateDTO) : this(
+        col = coordinateDTO.col,
+        row = coordinateDTO.row
     )
 
     /**
@@ -29,11 +29,16 @@ data class CoordinateModel(
      *
      * @return the coordinate DTO
      */
-    fun toCoordinateDTO() = CoordinateDTO(col = col, row = row)
+    fun toCoordinateDTO() = CoordinateDTO(
+        col = col,
+        row = row
+    )
 
     companion object {
         private const val MIN_COL = 'A'
         private const val MAX_COL = 'R'
+
+        @Suppress("RegExpDuplicateCharacterInClass")
         private const val COL_REGEX = "[$MIN_COL-$MAX_COL]"
 
         private const val MIN_ROW_SIZE = 1

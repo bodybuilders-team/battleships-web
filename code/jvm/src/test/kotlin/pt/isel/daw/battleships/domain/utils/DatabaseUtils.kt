@@ -7,8 +7,7 @@ import java.io.File
 
 fun TestEntityManager.runScript(filepath: String) {
     val session: Session = entityManager.delegate as Session
-    val sql = File(filepath)
-        .readText()
+    val sql = File(filepath).readText()
     val query: NativeQuery<*> = session.createNativeQuery(sql)
     query.executeUpdate()
 }

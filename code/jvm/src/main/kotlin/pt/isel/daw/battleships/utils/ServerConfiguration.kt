@@ -14,18 +14,18 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class ServerConfiguration(
-    @Value("\${server.config.secrets.accessTokenSecret}")
+    @Value("\${server.config.secrets.access-token-secret}")
     val accessTokenSecret: String,
 
-    @Value("\${server.config.secrets.refreshTokenSecret}")
+    @Value("\${server.config.secrets.refresh-token-secret}")
     val refreshTokenSecret: String,
 
-    @Value("\${server.config.secrets.passwordSecret}")
+    @Value("\${server.config.secrets.password-secret}")
     val passwordSecret: String,
 
-    @Value("\${server.config.secrets.tokenHashSecret}")
+    @Value("\${server.config.secrets.token-hash-secret}")
     val tokenHashSecret: String,
 
-    @Value("\${server.config.maxRefreshTokens}")
+    @Value("\${server.config.max-refresh-tokens}")
     val maxRefreshTokens: Int
 )

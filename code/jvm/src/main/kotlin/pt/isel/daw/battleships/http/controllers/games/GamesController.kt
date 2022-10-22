@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
-import pt.isel.daw.battleships.http.controllers.games.models.game.CreateGameInputModel
-import pt.isel.daw.battleships.http.controllers.games.models.game.GameConfigModel
-import pt.isel.daw.battleships.http.controllers.games.models.game.GameModel
-import pt.isel.daw.battleships.http.controllers.games.models.game.GameStateModel
-import pt.isel.daw.battleships.http.controllers.games.models.game.GamesOutputModel
-import pt.isel.daw.battleships.http.controllers.games.models.game.JoinGameModel
-import pt.isel.daw.battleships.http.controllers.games.models.game.MatchmakeModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.GameConfigModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.createGame.CreateGameInputModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.getGame.GetGameOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.getGameState.GetGameStateOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.getGames.GetGamesOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.joinGame.JoinGameOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.matchmake.MatchmakeOutputModel
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.http.siren.Action
 import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
-import pt.isel.daw.battleships.services.games.GamesService
-import pt.isel.daw.battleships.services.utils.OffsetPageRequest.Companion.LIMIT_PARAM
-import pt.isel.daw.battleships.services.utils.OffsetPageRequest.Companion.OFFSET_PARAM
+import pt.isel.daw.battleships.service.games.GamesService
+import pt.isel.daw.battleships.service.utils.OffsetPageRequest.Companion.LIMIT_PARAM
+import pt.isel.daw.battleships.service.utils.OffsetPageRequest.Companion.OFFSET_PARAM
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**
@@ -48,12 +48,12 @@ class GamesController(private val gamesService: GamesService) {
     fun getGames(
         @RequestParam(OFFSET_PARAM) offset: Int,
         @RequestParam(LIMIT_PARAM) limit: Int
-    ): SirenEntity<GamesOutputModel> {
-        val games = gamesService.getGames(offset, limit)
+    ): SirenEntity<GetGamesOutputModel> {
+        val games = gamesService.getGames(offset = offset, limit = limit)
 
         return SirenEntity(
             `class` = listOf("games"),
-            properties = GamesOutputModel(games),
+            properties = GetGamesOutputModel(gamesDTO = games),
             links = listOf(
                 Link(
                     rel = listOf("self"),
@@ -66,43 +66,38 @@ class GamesController(private val gamesService: GamesService) {
                     href = Uris.gameById(it.id),
                     title = "Game ${it.id}"
                 )
-            },
-            actions = listOf(
-                /*Action(
-                    name = "join-game",
-                    title = "Join Game",
-                    method = "POST",
-                    href = URI("/games/{gameId}/join")
-                )*/
-            )
+            }
         )
     }
 
     /**
      * Handles the request to create a new game.
      *
-     * @param gameData the data of the game to be created
      * @param token the token of the user that is creating the game
+     * @param gameData the data of the game to be created
      *
      * @return the response to the request with the created game
      */
     @PostMapping(Uris.GAMES)
     @Authenticated
     fun createGame(
-        @RequestBody gameData: CreateGameInputModel,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestBody gameData: CreateGameInputModel
     ): SirenEntity<Unit> {
-        val gameId = gamesService.createGame(token, gameData.toCreateGameRequestDTO())
+        val gameId = gamesService.createGame(
+            token = token,
+            createGameRequestDTO = gameData.toCreateGameRequestDTO()
+        )
 
         return SirenEntity(
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 ),
                 EmbeddedLink(
                     rel = listOf("state"),
-                    href = Uris.gameState(gameId)
+                    href = Uris.gameState(gameId = gameId)
                 )
             )
         )
@@ -111,31 +106,34 @@ class GamesController(private val gamesService: GamesService) {
     /**
      * Handles the request to matchmake a game with a specific configuration.
      *
-     * @param gameConfig the configuration of the game to be matched
      * @param token the token of the user that is matchmaking
+     * @param gameConfig the configuration of the game to be matched
      *
      * @return the response to the request with the matched game
      */
     @PostMapping(Uris.GAMES_MATCHMAKE)
     @Authenticated
     fun matchmake(
-        @RequestBody gameConfig: GameConfigModel,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<MatchmakeModel> {
-        val matchmakeDTO = gamesService.matchmake(token, gameConfig.toGameConfigDTO())
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestBody gameConfig: GameConfigModel
+    ): SirenEntity<MatchmakeOutputModel> {
+        val matchmakeDTO = gamesService.matchmake(
+            token = token,
+            gameConfigDTO = gameConfig.toGameConfigDTO()
+        )
         val gameId = matchmakeDTO.game.id
 
         return SirenEntity(
             `class` = listOf("matchmake"),
-            properties = MatchmakeModel(matchmakeDTO),
+            properties = MatchmakeOutputModel(matchmakeResponseDTO = matchmakeDTO),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 ),
                 EmbeddedLink(
                     rel = listOf("state"),
-                    href = Uris.gameState(gameId)
+                    href = Uris.gameState(gameId = gameId)
                 )
             )
         )
@@ -150,22 +148,22 @@ class GamesController(private val gamesService: GamesService) {
     @GetMapping(Uris.GAMES_GET_BY_ID)
     fun getGame(
         @PathVariable gameId: Int
-    ): SirenEntity<GameModel> {
-        val game = gamesService.getGame(gameId)
+    ): SirenEntity<GetGameOutputModel> {
+        val game = gamesService.getGame(gameId = gameId)
 
         return SirenEntity(
             `class` = listOf("game"),
-            properties = GameModel(game),
+            properties = GetGameOutputModel(gameDTO = game),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("state"),
-                    href = Uris.gameState(gameId)
+                    href = Uris.gameState(gameId = gameId)
                 )
             ),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.gameById(game.id)
+                    href = Uris.gameById(gameId = game.id)
                 )
             ),
             actions = listOf(
@@ -173,7 +171,7 @@ class GamesController(private val gamesService: GamesService) {
                     name = "join",
                     title = "Join Game",
                     method = "POST",
-                    href = Uris.gameJoin(gameId)
+                    href = Uris.gameJoin(gameId = gameId)
                 )
             )
         )
@@ -197,13 +195,13 @@ class GamesController(private val gamesService: GamesService) {
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(gameId)
+                    href = Uris.gameById(gameId = gameId)
                 )
             ),
             links = listOf(
                 Link(
                     rel = listOf("self"),
-                    href = Uris.gameState(gameId)
+                    href = Uris.gameState(gameId = gameId)
                 )
             ),
             actions = listOf(
@@ -211,37 +209,37 @@ class GamesController(private val gamesService: GamesService) {
                     name = "deployFleet",
                     title = "Deploy Fleet",
                     method = "POST",
-                    href = Uris.myFleet(gameId)
+                    href = Uris.myFleet(gameId = gameId)
                 ),
                 Action(
                     name = "getMyFleet",
                     title = "Get My Fleet",
                     method = "GET",
-                    href = Uris.myFleet(gameId)
+                    href = Uris.myFleet(gameId = gameId)
                 ),
                 Action(
                     name = "getOpponentFleet",
                     title = "Get Opponent Fleet",
                     method = "GET",
-                    href = Uris.opponentFleet(gameId)
+                    href = Uris.opponentFleet(gameId = gameId)
                 ),
                 Action(
                     name = "getMyShots",
                     title = "Get My Shots",
                     method = "GET",
-                    href = Uris.myShots(gameId)
+                    href = Uris.myShots(gameId = gameId)
                 ),
                 Action(
                     name = "getOpponentShots",
                     title = "Get Opponent Shots",
                     method = "GET",
-                    href = Uris.opponentShots(gameId)
+                    href = Uris.opponentShots(gameId = gameId)
                 ),
                 Action(
-                    name = "shoot",
-                    title = "Shoot",
+                    name = "fireShots",
+                    title = "Fire",
                     method = "POST",
-                    href = Uris.myShots(gameId)
+                    href = Uris.myShots(gameId = gameId)
                 )
             )
         )
@@ -250,30 +248,33 @@ class GamesController(private val gamesService: GamesService) {
     /**
      * Handles the request to join a game.
      *
-     * @param gameId the id of the game to be joined
      * @param token the token of the user that is joining the game
+     * @param gameId the id of the game to be joined
      *
      * @return the response to the request with the joined game
      */
     @PostMapping(Uris.GAMES_JOIN)
     @Authenticated
     fun joinGame(
-        @PathVariable gameId: Int,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
-    ): SirenEntity<JoinGameModel> {
-        val game = gamesService.joinGame(token, gameId)
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @PathVariable gameId: Int
+    ): SirenEntity<JoinGameOutputModel> {
+        val game = gamesService.joinGame(
+            token = token,
+            gameId = gameId
+        )
 
         return SirenEntity(
             `class` = listOf("join-game"),
-            properties = JoinGameModel(game.id),
+            properties = JoinGameOutputModel(gameId = game.id),
             entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
-                    href = Uris.gameById(game.id)
+                    href = Uris.gameById(gameId = game.id)
                 ),
                 EmbeddedLink(
                     rel = listOf("state"),
-                    href = Uris.gameState(gameId)
+                    href = Uris.gameState(gameId = gameId)
                 )
             )
         )

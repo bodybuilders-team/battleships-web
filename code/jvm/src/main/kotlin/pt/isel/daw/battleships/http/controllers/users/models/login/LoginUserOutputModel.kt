@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.users.models.login
 
-import pt.isel.daw.battleships.services.users.dtos.login.LoginUserOutputDTO
+import pt.isel.daw.battleships.service.users.dtos.login.LoginUserOutputDTO
 
 /**
  * Represents the response of a login request.

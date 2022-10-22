@@ -17,13 +17,15 @@ class Coordinate(
     @Column(name = "row", nullable = false)
     val row: Int
 ) {
-    fun toPoint(): Pair<Int, Int> = Pair(col - FIRST_COL, row - 1)
-    fun fromPoint(x: Int, y: Int): Coordinate = Coordinate(
-        col = FIRST_COL + x,
-        row = y + 1
-    )
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    companion object {
-        const val FIRST_COL = 'A'
+        other as Coordinate
+
+        if (col != other.col) return false
+        if (row != other.row) return false
+
+        return true
     }
 }

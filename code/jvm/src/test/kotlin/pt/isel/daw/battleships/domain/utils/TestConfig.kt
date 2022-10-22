@@ -8,22 +8,27 @@ import javax.sql.DataSource
 
 @TestConfiguration
 class TestConfig(
-    @Value("\${spring.testDatasource.url}")
+    @Value("\${spring.test-datasource.url}")
     val dbUrl: String,
-    @Value("\${spring.testDatasource.username}")
+
+    @Value("\${spring.test-datasource.username}")
     val dbUsername: String,
-    @Value("\${spring.testDatasource.password}")
+
+    @Value("\${spring.test-datasource.password}")
     val dbPassword: String
 ) {
 
+    /**
+     * Configures the data source to be used by the tests.
+     *
+     * @return the data source to be used by the tests
+     */
     @Bean
-    fun dataSource(): DataSource? {
-        val dataSource = DriverManagerDataSource()
-
-        dataSource.setDriverClassName("org.postgresql.Driver")
-        dataSource.url = dbUrl
-        dataSource.username = dbUsername
-        dataSource.password = dbPassword
-        return dataSource
-    }
+    fun dataSource(): DataSource? = DriverManagerDataSource()
+        .also {
+            it.setDriverClassName("org.postgresql.Driver")
+            it.url = dbUrl
+            it.username = dbUsername
+            it.password = dbPassword
+        }
 }

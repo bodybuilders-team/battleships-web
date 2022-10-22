@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.shot
 
-import pt.isel.daw.battleships.dtos.games.shot.ShotResultDTO
+import pt.isel.daw.battleships.http.controllers.games.models.players.shot.ShotResultModel
+import pt.isel.daw.battleships.service.games.dtos.shot.ShotResultDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

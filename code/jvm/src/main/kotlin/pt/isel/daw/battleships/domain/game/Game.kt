@@ -2,7 +2,7 @@ package pt.isel.daw.battleships.domain.game
 
 import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.services.exceptions.NotFoundException
+import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
@@ -83,6 +83,7 @@ class Game(
      * @param username the username of the player
      * @return the player that is playing the game or null
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     fun getPlayerOrNull(username: String): Player? =
         players.find { it.user.username == username }
 
