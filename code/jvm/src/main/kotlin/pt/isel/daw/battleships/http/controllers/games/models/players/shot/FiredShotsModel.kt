@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.players.shot
 
 /**
- * Represents the output data for the create shots operation.
+ * Represents a Fired Shots Model.
  *
  * @property shots the list of shots created
  */

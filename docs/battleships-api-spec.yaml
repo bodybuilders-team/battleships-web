@@ -1,12 +1,12 @@
 openapi: 3.0.3
 info:
-  version: 0.0.1
   title: Battleships API
+  version: 0.0.1
   description: Web-based system that allows multiple players to play the Battleship game.
-  termsOfService: https://swagger.io/terms/
 
 servers:
-  - url: http://localhost:8888/api
+  - url: http://localhost:8888
+    description: Local server
 
 tags:
   - name: Home
@@ -30,43 +30,60 @@ paths:
       summary: Home page
       operationId: home
       responses:
-        '200':
+        200:
           description: Home page
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/Home'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetHomeOutputModel'
 
   /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      operationId: getUsers
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Object containing all users
+          content:
+            'application/vnd.siren+json':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetUsersOutputModel'
     post:
       tags:
         - Users
-      summary: Create user
-      operationId: createUser
+      summary: Register user
+      operationId: register
       requestBody:
-        description: Created user object
+        description: User registration information
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserInputModel'
+              $ref: '#/components/schemas/RegisterUserInputModel'
       responses:
         201:
           description: User was created
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/CreateUserOutputModel'
-        400:
-          $ref: '#/components/responses/InvalidRequestBodyResponse'
-        409:
-          description: User with the same username already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/RegisterUserOutputModel'
 
   /users/login:
     post:
@@ -85,23 +102,56 @@ paths:
         200:
           description: User was logged in
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/LoginUserOutputModel'
-        400:
-          description: Invalid username or password
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/LoginUserOutputModel'
+
+  /users/logout:
+    post:
+      tags:
+        - Users
+      summary: Logs a user out
+      operationId: logout
+      responses:
+        200:
+          description: User was logged out
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/AppError'
-        404:
-          description: No user with that email exists
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/LogoutUserOutputModel'
+
+  /users/refresh-token:
+    post:
+      tags:
+        - Users
+      summary: Refreshes a user's token
+      operationId: refreshToken
+      requestBody:
+        description: Refresh token
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenInputModel'
+      responses:
+        200:
+          description: User's token was refreshed
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/AppError'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/RefreshTokenOutputModel'
 
   /users/{username}:
     get:
@@ -110,33 +160,18 @@ paths:
       summary: Gets a user by username
       operationId: getUser
       parameters:
-        - name: username
-          in: path
-          description: User username
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/usernameParam'
       responses:
         200:
           description: User was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/UserModel'
-        400:
-          description: Invalid user username
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        404:
-          description: User was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetUserOutputModel'
 
   /games:
     get:
@@ -145,36 +180,27 @@ paths:
       summary: Gets all games
       operationId: getGames
       parameters:
-        - name: skip
-          in: query
-          description: Number of entities to skip
-          required: false
-          schema:
-            type: integer
-            default: 0
-
-        - name: limit
-          in: query
-          description: Number of entities that are returned
-          required: false
-          schema:
-            type: integer
-            default: 10
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         200:
           description: Games were found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/GamesOutputModel'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetGamesOutputModel'
 
     post:
       tags:
         - Games
       summary: Create a game
       operationId: createGame
+      security:
+        - bearerAuth: [ ]
       requestBody:
         description: Created game object
         required: true
@@ -186,13 +212,13 @@ paths:
         201:
           description: Game was created
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/CreateGameOutputModel'
-        400:
-          $ref: '#/components/responses/InvalidRequestBodyResponse'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/CreateGameOutputModel'
 
   /games/matchmake:
     post:
@@ -200,6 +226,8 @@ paths:
         - Games
       summary: Matchmake a game
       operationId: matchmake
+      security:
+        - bearerAuth: [ ]
       requestBody:
         description: Configuration of the game to be matched
         required: true
@@ -211,13 +239,13 @@ paths:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/MatchmakeModel'
-        400:
-          $ref: '#/components/responses/InvalidRequestBodyResponse'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/MatchmakeOutputModel'
 
   /games/{gameId}:
     get:
@@ -226,33 +254,18 @@ paths:
       summary: Gets a game by id
       operationId: getGame
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/GameModel'
-        400:
-          description: Invalid game id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        404:
-          description: Game was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetGameOutputModel'
 
   /games/{gameId}/state:
     get:
@@ -261,33 +274,18 @@ paths:
       summary: Gets a game state by id
       operationId: getGameState
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/GameStateModel'
-        400:
-          description: Invalid game id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        404:
-          description: Game was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetGameStateOutputModel'
 
   /games/{gameId}/join:
     post:
@@ -295,34 +293,21 @@ paths:
         - Games
       summary: Join a game
       operationId: joinGame
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: User joined the game
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/GameModel'
-        400:
-          description: Invalid game id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        404:
-          description: Game was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/JoinGameOutputModel'
 
   /games/{gameId}/players/self/fleet:
     get:
@@ -330,35 +315,31 @@ paths:
         - Players
       summary: Gets the player's fleet
       operationId: getFleet
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/OutputShipsModel'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetFleetOutputModel'
 
     post:
       tags:
         - Players
       summary: Deploy a fleet
       operationId: deployFleet
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       requestBody:
         description: Fleet object
         required: true
@@ -367,10 +348,38 @@ paths:
             schema:
               $ref: '#/components/schemas/DeployFleetInputModel'
       responses:
-        400:
-          $ref: '#/components/responses/InvalidRequestBodyResponse'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+        200:
+          description: Fleet was deployed
+          content:
+            'application/vnd.siren+json':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/DeployFleetOutputModel'
+
+  /games/{gameId}/players/self/board:
+    get:
+      tags:
+        - Players
+      summary: Gets the player's board
+      operationId: getBoard
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/gameIdParam'
+      responses:
+        200:
+          description: Game was found
+          content:
+            'application/vnd.siren+json':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetBoardOutputModel'
 
   /games/{gameId}/players/opponent/fleet:
     get:
@@ -378,22 +387,21 @@ paths:
         - Players
       summary: Gets the opponent's fleet
       operationId: getOpponentFleet
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/OutputShipsModel'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetOpponentFleetOutputModel'
 
   /games/{gameId}/players/self/shots:
     get:
@@ -401,35 +409,31 @@ paths:
         - Players
       summary: Gets the player's shots
       operationId: getShots
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/OutputShotsModel'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetShotsOutputModel'
 
     post:
       tags:
         - Players
-      summary: Create shots
-      operationId: createShots
+      summary: Fire shots
+      operationId: fireShots
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       requestBody:
         description: Shots object
         required: true
@@ -441,13 +445,13 @@ paths:
         201:
           description: Fleet was deployed
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/CreateShotsInputModel'
-        400:
-          $ref: '#/components/responses/InvalidRequestBodyResponse'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/CreateShotsOutputModel'
 
   /games/{gameId}/players/opponent/shots:
     get:
@@ -455,190 +459,68 @@ paths:
         - Players
       summary: Gets the opponent's shots
       operationId: getOpponentShots
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: gameId
-          in: path
-          description: Game id
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
           description: Game was found
           content:
-            application/json:
+            'application/vnd.siren+json':
               schema:
-                $ref: '#/components/schemas/OutputShotsModel'
-        500:
-          $ref: '#/components/responses/InternalServerErrorResponse'
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+                  - properties:
+                      properties:
+                        $ref: '#/components/schemas/GetOpponentShotsOutputModel'
 
 
 components:
-  responses:
-    InternalServerErrorResponse:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            type: object
-            description: Internal server error
-            required:
-              - name
-              - description
-            properties:
-              name:
-                type: string
-                description: Error name
-                example: INTERNAL_ERROR
-              description:
-                type: string
-                description: Error description message
-                example: An internal error occurred
-
-    InvalidRequestBodyResponse:
-      description: Invalid request body
-      content:
-        application/json:
-          schema:
-            type: object
-            description: Invalid request body error
-            required:
-              - name
-              - description
-            properties:
-              name:
-                type: string
-                description: Error name
-                example: BAD_REQUEST
-              description:
-                type: string
-                description: Error description message
-                example: The request body is not valid
-              extraInfo:
-                type: string
-                description: Extra error info
-                example: Route id must be positive
-
-
   schemas:
-    Home:
+    GetHomeOutputModel:
       type: object
-      description: Home object
-      required:
-        - name
-        - version
-        - description
-        - authors
-        - repository
-        - links
       properties:
-        name:
+        title:
           type: string
-          description: Name of the API
-          example: Battleship API
         version:
           type: string
-          description: Version of the API
-          example: 1.0.0
         description:
           type: string
-          description: Description of the API
-          example: A simple battleship API
         authors:
           type: array
-          description: Authors of the API
           items:
-            $ref: '#/components/schemas/Author'
+            $ref: '#/components/schemas/AuthorModel'
         repository:
-          type: object
-          description: Repository of the API
-          required:
-            - type
-            - url
-          properties:
-            type:
-              type: string
-              description: Type of repository
-              example: git
-            url:
-              type: string
-              description: URL of the repository
-              example: https://github.com/isel-leic-daw/2022-daw-leic51d-g03
-        links:
-          type: array
-          description: Links of the API
-          items:
-            $ref: '#/components/schemas/Link'
+          $ref: '#/components/schemas/VCRepositoryModel'
 
-    Author:
+    AuthorModel:
       type: object
-      description: Author object
-      required:
-        - name
-        - email
-        - githut
       properties:
         name:
           type: string
-          description: Name of the author
-          example: John Doe
         email:
           type: string
-          description: Email of the author
-          example: john@doe.org
         github:
           type: string
-          description: Github of the author
-          example: https://github.com/johndoe
 
-    Link:
+    VCRepositoryModel:
       type: object
-      description: Link object
-      required:
-        - rel
-        - href
-        - method
-        - requiresAuth
       properties:
-        rel:
+        type:
           type: string
-          description: Relation of the link
-          example: self
-        href:
+        url:
           type: string
-          description: URL of the link
-          example: /games
-        method:
-          type: string
-          description: Method of the link
-          example: GET
-        requiresAuth:
-          type: boolean
-          description: If the link requires authentication
-          example: false
 
-    UserModel:
+    RegisterUserOutputModel:
       type: object
-      description: User object
-      required:
-        - username
-        - email
-        - points
       properties:
-        username:
+        accessToken:
           type: string
-          description: User name
-          example: André Jesus
-        email:
+        refreshToken:
           type: string
-          description: User email
-          example: andre@pascoa.org
-        points:
-          type: integer
-          description: User points
-          example: 100
 
-    CreateUserInputModel:
+    RegisterUserInputModel:
       type: object
       required:
         - username
@@ -647,26 +529,42 @@ components:
       properties:
         username:
           type: string
-          description: User username
-          example: André Páscoa
         email:
           type: string
-          description: User email
-          example: andre@pascoa.org
         password:
           type: string
-          description: User password
-          example: LittleHomie123
 
-    CreateUserOutputModel:
+    RefreshTokenOutputModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+
+    RefreshTokenInputModel:
       type: object
       required:
-        - token
+        - refreshToken
       properties:
-        token:
+        refreshToken:
           type: string
-          description: User token
-          example: 663f6889-e7b8-4eb4-8698-38d72de4a956
+
+    LogoutUserInputModel:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+
+    LoginUserOutputModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
 
     LoginUserInputModel:
       type: object
@@ -676,47 +574,99 @@ components:
       properties:
         username:
           type: string
-          description: User username
-          example: andrepascoa
         password:
           type: string
-          description: User password
-          example: "LittleHomie123"
 
-    LoginUserOutputModel:
+    GetUsersOutputModel:
       type: object
-      required:
-        - token
       properties:
-        token:
-          type: string
-          description: User token
-          example: 663f6889-e7b8-4eb4-8698-38d72de4a956
+        totalCount:
+          type: integer
 
-
-    GameModel:
+    GetUserOutputModel:
       type: object
-      description: Game object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        points:
+          type: integer
+
+    PlayerModel:
+      type: object
+      properties:
+        username:
+          type: string
+        points:
+          type: integer
+
+    GameStateModel:
+      type: object
+      properties:
+        phase:
+          type: string
+        phaseEndTime:
+          type: integer
+        round:
+          type: integer
+        turn:
+          type: string
+        winner:
+          type: string
+
+    GameConfigModel:
+      type: object
       required:
-        - id
-        - name
-        - creator
-        - config
-        - state
-        - players
+        - gridSize
+        - maxTimeForLayoutPhase
+        - shotsPerRound
+        - maxTimePerShot
+        - shipTypes
+      properties:
+        gridSize:
+          type: integer
+        maxTimeForLayoutPhase:
+          type: integer
+        shotsPerRound:
+          type: integer
+        maxTimePerShot:
+          type: integer
+        shipTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipTypeModel'
+
+    MatchmakeOutputModel:
+      type: object
+      properties:
+        wasCreated:
+          type: boolean
+
+    JoinGameOutputModel:
+      type: object
+      properties:
+        gameId:
+          type: integer
+
+    GetGameStateOutputModel:
+      $ref: '#/components/schemas/GameStateModel'
+
+    GetGamesOutputModel:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+
+    GetGameOutputModel:
+      type: object
       properties:
         id:
           type: integer
-          description: Game id
-          example: 1
         name:
           type: string
-          description: Game name
-          example: "Game 1"
         creator:
           type: string
-          description: Game creator username
-          example: "andrepascoa"
         config:
           $ref: '#/components/schemas/GameConfigModel'
         state:
@@ -734,103 +684,64 @@ components:
       properties:
         name:
           type: string
-          description: Game name
-          example: "Game 1"
         config:
           $ref: '#/components/schemas/GameConfigModel'
 
-    CreateGameOutputModel:
+    DeployedShipModel:
       type: object
-      required:
-        - gameId
       properties:
-        gameId:
+        type:
+          type: string
+        coordinate:
+          $ref: '#/components/schemas/CoordinateModel'
+        orientation:
+          type: string
+        lives:
           type: integer
-          description: Game id
-          example: 1
 
-    GamesOutputModel:
+    GetShotsOutputModel:
+      $ref: '#/components/schemas/FiredShotsModel'
+
+    GetOpponentShotsOutputModel:
+      $ref: '#/components/schemas/FiredShotsModel'
+
+    GetOpponentFleetOutputModel:
+      $ref: '#/components/schemas/GetFleetOutputModel'
+
+    GetFleetOutputModel:
       type: object
-      required:
-        - games
       properties:
-        users:
+        ships:
           type: array
           items:
-            $ref: '#/components/schemas/GameModel'
-        totalCount:
-          type: integer
-          example: 10
+            $ref: '#/components/schemas/DeployedShipModel'
 
-    MatchmakeModel:
+    GetBoardOutputModel:
+      type: object
+      properties:
+        board:
+          type: array
+          items:
+            type: string
+
+    FireShotsOutputModel:
+      $ref: '#/components/schemas/FiredShotsModel'
+
+    FireShotsInputModel:
       type: object
       required:
-        - game
-        - wasCreated
+        - shots
       properties:
-        game:
-          $ref: '#/components/schemas/GameModel'
-        wasCreated:
+        shots:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnfiredShotModel'
+
+    DeployFleetOutputModel:
+      type: object
+      properties:
+        successfullyDeployed:
           type: boolean
-          description: Whether the game was created or not
-          example: true
-
-    GameConfigModel:
-      type: object
-      description: Game configuration
-      required:
-        - gridSize
-        - maxTimeForLayoutPhase
-        - shotsPerRound
-        - maxTimePerShot
-        - shipTypes
-      properties:
-        gridSize:
-          type: integer
-          description: Grid size
-          example: 10
-        maxTimeForLayoutPhase:
-          type: integer
-          description: Max time for layout phase
-          example: 60
-        shotsPerRound:
-          type: integer
-          description: Shots per round
-          example: 10
-        maxTimePerShot:
-          type: integer
-          description: Max time per shot
-          example: 10
-        shipTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipType'
-
-    GameStateModel:
-      type: object
-      description: Game state object
-      required:
-        - phase
-        - round
-        - turn
-        - winner
-      properties:
-        phase:
-          type: string
-          description: Game phase
-          example: "WAITING_FOR_PLAYERS"
-        round:
-          type: integer
-          description: Game round
-          example: 1
-        turn:
-          type: string
-          description: Game turn
-          example: "andrepascoa"
-        winner:
-          type: string
-          description: Game winner
-          example: "andrepascoa"
 
     DeployFleetInputModel:
       type: object
@@ -840,181 +751,159 @@ components:
         ships:
           type: array
           items:
-            $ref: '#/components/schemas/InputShipModel'
+            $ref: '#/components/schemas/UndeployedShipModel'
 
-    InputShipModel:
+    # Siren Base Models
+    Entity:
       type: object
-      description: Ship object
-      required:
-        - type
-        - coordinate
-        - orientation
       properties:
+        class:
+          type: array
+          items:
+            type: string
+        properties:
+          type: object
+          additionalProperties: true
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubEntity'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+
+    SubEntity:
+      type: object
+      required:
+        - rel
+      properties:
+        class:
+          type: array
+          items:
+            type: string
+        rel:
+          type: array
+          items:
+            type: string
+        href:
+          type: string
         type:
           type: string
-          description: Ship type
-          example: "CARRIER"
-        coordinate:
-          $ref: '#/components/schemas/CoordinateModel'
-        orientation:
+        title:
           type: string
-          description: Ship orientation
-          example: "H"
+        properties:
+          type: object
+          additionalProperties: true
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubEntity'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
 
-    OutputShipModel:
+    Action:
       type: object
-      description: Ship response object
       required:
-        - type
-        - coordinate
-        - orientation
-        - lives
+        - name
+        - href
       properties:
+        name:
+          type: string
+        title:
+          type: string
+        method:
+          type: string
+        href:
+          type: string
         type:
           type: string
-          description: Ship type
-          example: "CARRIER"
-        coordinate:
-          $ref: '#/components/schemas/CoordinateModel'
-        orientation:
-          type: string
-          description: Ship orientation
-          example: "H"
-        lives:
-          type: integer
-          description: Ship lives
-          example: 5
-
-    OutputShipsModel:
-      type: object
-      description: Ships response object
-      required:
-        - ships
-      properties:
-        ships:
+        fields:
           type: array
           items:
-            $ref: '#/components/schemas/OutputShipModel'
+            $ref: '#/components/schemas/Field'
 
-    ShipType:
+    Field:
       type: object
-      description: Ship type object
       required:
-        - shipName
-        - size
-        - quantity
-        - points
+        - name
       properties:
-        shipName:
+        name:
           type: string
-          description: Ship name
-          example: "CARRIER"
-        size:
-          type: integer
-          description: Ship size
-          example: 5
-        quantity:
-          type: integer
-          description: Quantity of ships of this type
-          example: 1
-        points:
-          type: integer
-          description: Ship points
-          example: 5
+        type:
+          type: string
+        value:
+          type: string
+        title:
+          type: string
 
-
-    InputShotModel:
-      type: object
-      description: Shot object
-      required:
-        - coordinate
-      properties:
-        coordinate:
-          $ref: '#/components/schemas/CoordinateModel'
-
-    OutputShotModel:
+    Link:
       type: object
       required:
-        - coordinate
-        - round
-        - result
+        - rel
+        - href
       properties:
-        coordinate:
-          $ref: '#/components/schemas/CoordinateModel'
-        round:
-          type: integer
-          description: Shot round
-          example: 1
-        result:
-          $ref: '#/components/schemas/ShotResultModel'
-
-    OutputShotsModel:
-      type: object
-      required:
-        - shots
-      properties:
-        shots:
+        rel:
           type: array
           items:
-            $ref: '#/components/schemas/OutputShotModel'
-        totalCount:
-          type: integer
-          example: 10
-
-    CreateShotsInputModel:
-      type: object
-      required:
-        - shots
-      properties:
-        shots:
-          type: array
-          items:
-            $ref: '#/components/schemas/CoordinateModel'
-
-    ShotResultModel:
-      type: object
-      required:
-        - result
-      properties:
-        result:
+            type: string
+        href:
           type: string
-          description: Shot result
-          example: "HIT"
-
-    CoordinateModel:
-      type: object
-      description: Coordinate object
-      required:
-        - col
-        - row
-      properties:
-        col:
+        type:
           type: string
-          description: Column
-          example: A
-        row:
-          type: integer
-          description: Row
-          example: 1
-
-    PlayerModel:
-      type: object
-      description: Player object
-      required:
-        - username
-        - points
-      properties:
-        username:
+        title:
           type: string
-          description: Player username
-          example: "andrepascoa"
-        points:
-          type: integer
-          description: Player points
-          example: 10
 
+  parameters:
+    offsetParam:
+      name: offset
+      in: query
+      description: The offset to start from
+      required: false
+      schema:
+        type: integer
+        default: 0
+
+    limitParam:
+      name: limit
+      in: query
+      description: The number of items to return
+      required: false
+      schema:
+        type: integer
+        default: 10
+
+    gameIdParam:
+      name: gameId
+      in: path
+      description: The id of the game
+      required: true
+      schema:
+        type: integer
+
+    usernameParam:
+      name: username
+      in: path
+      description: The username of the user
+      required: true
+      schema:
+        type: string
+
+  # TODO: responses and error handling
+  # TODO: examples
 
   securitySchemes:
-    token:
+    bearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT

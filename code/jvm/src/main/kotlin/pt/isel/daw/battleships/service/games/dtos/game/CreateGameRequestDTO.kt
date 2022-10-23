@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
 /**
- * Represents a DTO for a game creation request.
+ * Represents a Create Game Request DTO.
  *
  * @property name name of the game
  * @property config configuration of the game

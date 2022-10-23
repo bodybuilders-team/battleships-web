@@ -8,7 +8,7 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 
 /**
- * Represents a player.
+ * Represents a Player Model.
  *
  * @property username the player name
  * @property points the player points

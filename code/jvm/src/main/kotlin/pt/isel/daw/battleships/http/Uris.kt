@@ -23,10 +23,10 @@ object Uris {
     const val GAMES_JOIN = "/games/{gameId}/join"
 
     const val PLAYERS_MY_FLEET = "/games/{gameId}/players/self/fleet"
-    const val PLAYERS_MY_BOARD = "/games/{gameId}/players/self/board"
     const val PLAYERS_OPPONENT_FLEET = "/games/{gameId}/players/opponent/fleet"
     const val PLAYERS_MY_SHOTS = "/games/{gameId}/players/self/shots"
     const val PLAYERS_OPPONENT_SHOTS = "/games/{gameId}/players/opponent/shots"
+    const val PLAYERS_MY_BOARD = "/games/{gameId}/players/self/board"
 
     fun home(): URI = URI(HOME)
 
@@ -46,4 +46,5 @@ object Uris {
     fun opponentFleet(gameId: Int): URI = UriTemplate(PLAYERS_OPPONENT_FLEET).expand(gameId)
     fun myShots(gameId: Int): URI = UriTemplate(PLAYERS_MY_SHOTS).expand(gameId)
     fun opponentShots(gameId: Int): URI = UriTemplate(PLAYERS_OPPONENT_SHOTS).expand(gameId)
+    fun myBoard(gameId: Int): URI = UriTemplate(PLAYERS_MY_BOARD).expand(gameId)
 }

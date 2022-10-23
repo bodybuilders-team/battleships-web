@@ -57,9 +57,7 @@ class Game {
 
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(name: String, creator: User, config: GameConfig, state: GameState) {
-        config.shipTypes.forEach { shipType ->
-            shipType.game = this
-        }
+        config.shipTypes.forEach { shipType -> shipType.game = this }
 
         this.name = name
         this.creator = creator
@@ -132,11 +130,16 @@ class Game {
     fun areFleetsDeployed(): Boolean =
         players.all { it.deployedShips.isNotEmpty() }
 
-    // TODO: Comment function
+    /**
+     * Updayes the game phase and the game phase expiration time.
+     */
     fun updatePhase() {
-        state.phase = if (state.phase == GameState.GamePhase.IN_PROGRESS) {
-            state.phase
-        } else state.phase.next()
+        state.phase =
+            if (state.phase == GameState.GamePhase.IN_PROGRESS) {
+                state.phase
+            } else {
+                state.phase.next()
+            }
 
         state.phaseExpirationTime = Timestamp.from(
             Instant.now().plusSeconds(
@@ -149,30 +152,40 @@ class Game {
         )
     }
 
+    /**
+     * Changes the game phase to FINISHED in case the game is aborted.
+     */
     fun abortGame() {
         state.phase = GameState.GamePhase.FINISHED
     }
 
+    /**
+     * Finishes the game.
+     *
+     * @param winner the winner of the game
+     */
     fun finishGame(winner: Player) {
         state.phase = GameState.GamePhase.FINISHED
         state.winner = winner
 
-        players.forEach {
-            it.user.points += it.points
-        }
+        players.forEach { it.user.points += it.points }
     }
 
     /**
      * Updates the game state if the current phase has expired.
+     *
+     * @throws WaitingForPlayersTimeExpiredException if the waiting for players phase has expired
+     * @throws FleetDeployTimeExpiredException if the fleet deploy phase has expired
+     * @throws FiringShotsTimeExpiredException if the firing shots phase has expired
+     * @throws IllegalStateException if the game is already finished
      */
     fun updateIfPhaseExpired() {
-        if (!state.phaseExpired()) {
-            return
-        }
+        if (!state.phaseExpired()) return
 
         if (state.phase == GameState.GamePhase.IN_PROGRESS) {
-            val currentPlayer =
-                state.turn ?: throw IllegalStateException("Game is in progress but turn is null")
+            val currentPlayer = state.turn
+                ?: throw IllegalStateException("Game is in progress but turn is null")
+
             val winner = getOpponent(currentPlayer.user.username)
 
             finishGame(winner)
@@ -180,30 +193,22 @@ class Game {
             abortGame()
         }
 
-        when (state.phase) {
+        throw when (state.phase) {
             GameState.GamePhase.WAITING_FOR_PLAYERS ->
-                throw WaitingForPlayersTimeExpiredException("The waiting for players time has expired.")
+                WaitingForPlayersTimeExpiredException("The waiting for players time has expired.")
 
             GameState.GamePhase.DEPLOYING_FLEETS ->
-                throw FleetDeployTimeExpiredException("The fleet deploy time has expired.")
+                FleetDeployTimeExpiredException("The fleet deploy time has expired.")
 
             GameState.GamePhase.IN_PROGRESS ->
-                throw FiringShotsTimeExpiredException("The firing shots time has expired.")
+                FiringShotsTimeExpiredException("The firing shots time has expired.")
 
             GameState.GamePhase.FINISHED ->
-                throw IllegalStateException("Game is already finished")
+                IllegalStateException("Game is already finished")
         }
     }
 
-    fun isFinished(): Boolean = state.phase == GameState.GamePhase.FINISHED
-
     companion object {
         private const val MAX_GAME_PLAYERS = 2
-    }
-
-    enum class FinishedState {
-        NOT_FINISHED,
-        FINISHED,
-        ABORTED
     }
 }

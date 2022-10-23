@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.users.models.getUsers
 
 /**
- * Represents the response body of a user list request.
+ * Represents a Get Users Output Model.
  *
  * @property totalCount the total number of users
  */

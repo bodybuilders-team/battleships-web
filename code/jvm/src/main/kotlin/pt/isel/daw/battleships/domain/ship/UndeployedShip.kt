@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.domain.ship
 import pt.isel.daw.battleships.domain.Coordinate
 
 /**
- * Represents a UndeployedShip.
+ * The UndeployedShip entity.
  *
  * @property type the ship type
  * @property coordinate the coordinate of the ship

@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet
 
 /**
- * Represents the out data for the deployment fleet operation.
+ * Represents a Deploy Fleet Output Model.
  *
  * @property successfullyDeployed if the fleet was successfully deployed
  */

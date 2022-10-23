@@ -8,6 +8,7 @@ import java.net.URI
  * It is represented as a link with an embedded representation.
  */
 sealed class SubEntity {
+
     /**
      * A sub-entity that is an embedded link.
      *

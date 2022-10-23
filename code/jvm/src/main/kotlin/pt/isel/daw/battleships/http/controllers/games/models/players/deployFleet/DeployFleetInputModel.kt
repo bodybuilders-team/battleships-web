@@ -5,7 +5,7 @@ import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedFleetDTO
 import javax.validation.constraints.Size
 
 /**
- * Represents the input data for the deployment fleet operation.
+ * Represents a Deploy Fleet Input Model.
  *
  * @property ships the list of ships to be deployed
  */
@@ -14,7 +14,7 @@ data class DeployFleetInputModel(
     val ships: List<UndeployedShipModel>
 ) {
     fun toUndeployedFleetDTO() = UndeployedFleetDTO(
-        ships = ships.map { it.toUndeployedShipDTO() }
+        ships = ships.map(UndeployedShipModel::toUndeployedShipDTO)
     )
 
     companion object {

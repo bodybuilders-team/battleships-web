@@ -17,6 +17,6 @@ class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : Ga
 
     override fun findFirstAvailableGameWithConfig(user: User, config: GameConfig): Game? =
         gamesRepository
-            .findAllByStatePhase(GameState.GamePhase.WAITING_FOR_PLAYERS)
+            .findAllByStatePhase(phase = GameState.GamePhase.WAITING_FOR_PLAYERS)
             .find { game -> game.config == config && game.players.none { it.user == user } }
 }

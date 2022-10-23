@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.domain.ship.DeployedShip
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 
 /**
- * Ship DTO for services.
+ * Represents a Deployed Ship DTO.
  *
  * @property type the type of the ship
  * @property coordinate the coordinate of the ship

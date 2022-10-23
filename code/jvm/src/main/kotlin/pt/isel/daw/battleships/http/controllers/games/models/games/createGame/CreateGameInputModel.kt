@@ -7,7 +7,7 @@ import pt.isel.daw.battleships.service.games.dtos.game.CreateGameRequestDTO
 import javax.validation.constraints.Size
 
 /**
- * Represents the input data for the create game operation.
+ * Represents a Create Game Input Model.
  *
  * @property name the name of the game to be created
  * @property config the configuration of the game to be created

@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
 /**
- * Represents a User model.
+ * Represents a Get User Output Model.
  *
  * @property username the username of the user
  * @property email the email of the user

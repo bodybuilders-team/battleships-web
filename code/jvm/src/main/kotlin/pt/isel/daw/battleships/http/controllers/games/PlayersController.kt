@@ -34,11 +34,15 @@ import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
  * Controller that handles the requests to the game's player's resources.
  *
  * @property playersService the service that handles the requests to the game's player's resources
+ * @property gamesService the service that handles the requests to the game's resources
  */
 @RestController
 @RequestMapping(produces = [SIREN_TYPE])
 @Authenticated
-class PlayersController(private val playersService: PlayersService, private val gamesService: GamesService) {
+class PlayersController(
+    private val playersService: PlayersService,
+    private val gamesService: GamesService
+) {
 
     /**
      * Handles the request to get the fleet of a player.
@@ -53,11 +57,10 @@ class PlayersController(private val playersService: PlayersService, private val 
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetFleetOutputModel> {
-        val ships = playersService.getFleet(
-            token = token,
-            gameId = gameId
-        ).ships
-            .map { DeployedShipModel(deployedShipDTO = it) }
+        val ships = playersService
+            .getFleet(token = token, gameId = gameId)
+            .ships
+            .map(::DeployedShipModel)
 
         return SirenEntity(
             `class` = listOf("my-fleet"),
@@ -127,12 +130,9 @@ class PlayersController(private val playersService: PlayersService, private val 
     ): SirenEntity<GetBoardOutputModel> {
         val config = gamesService.getGame(gameId = gameId).config
         val types = config.shipTypes
-
         val boardSize = config.gridSize
 
-        val rows = Array(boardSize) {
-            CharArray(boardSize) { '·' }
-        }
+        val rows = Array(boardSize) { CharArray(boardSize) { '·' } }
 
         val fleet = playersService.getFleet(token = token, gameId = gameId).ships
         val shots = playersService.getOpponentShots(
@@ -142,8 +142,7 @@ class PlayersController(private val playersService: PlayersService, private val 
 
         fleet.forEach { ship ->
             val shipTypeIndex = types.indexOfFirst { it.shipName == ship.type }
-            val shipType = types[shipTypeIndex]
-            val shipSize = shipType.size
+            val shipSize = types[shipTypeIndex].size
             val shipOrientation = ship.orientation
             val shipPosition = ship.coordinate
 
@@ -165,12 +164,13 @@ class PlayersController(private val playersService: PlayersService, private val 
             val shotY = shot.coordinate.row - 1
 
             rows[shotY][shotX] =
-                if (shot.result.result == "HIT" ||
+                if (
+                    shot.result.result == "HIT" ||
                     shot.result.result == "SUNK"
                 ) 'X' else 'M'
         }
 
-        val board = rows.map { String(it) }
+        val board = rows.map(::String)
 
         return SirenEntity(
             `class` = listOf("my-board"),
@@ -204,11 +204,10 @@ class PlayersController(private val playersService: PlayersService, private val 
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetOpponentFleetOutputModel> {
-        val ships = playersService.getOpponentFleet(
-            token = token,
-            gameId = gameId
-        ).ships
-            .map { DeployedShipModel(deployedShipDTO = it) }
+        val ships = playersService
+            .getOpponentFleet(token = token, gameId = gameId)
+            .ships
+            .map(::DeployedShipModel)
 
         return SirenEntity(
             `class` = listOf("opponent-fleet"),
@@ -241,15 +240,14 @@ class PlayersController(private val playersService: PlayersService, private val 
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetShotsOutputModel> {
-        val shots = playersService.getShots(
-            token = token,
-            gameId = gameId
-        ).shots
-            .map { FiredShotModel(firedShotDTO = it) }
+        val shots = playersService
+            .getShots(token = token, gameId = gameId)
+            .shots
+            .map(::FiredShotModel)
 
         return SirenEntity(
             `class` = listOf("my-shots"),
-            properties = FiredShotsModel(shots),
+            properties = FiredShotsModel(shots = shots),
             links = listOf(
                 Link(
                     rel = listOf("self"),
@@ -320,11 +318,10 @@ class PlayersController(private val playersService: PlayersService, private val 
         @PathVariable gameId: Int,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): SirenEntity<GetOpponentShotsOutputModel> {
-        val shots = playersService.getOpponentShots(
-            token = token,
-            gameId = gameId
-        ).shots
-            .map { FiredShotModel(firedShotDTO = it) }
+        val shots = playersService
+            .getOpponentShots(token = token, gameId = gameId)
+            .shots
+            .map(::FiredShotModel)
 
         return SirenEntity(
             `class` = listOf("opponent-shots"),

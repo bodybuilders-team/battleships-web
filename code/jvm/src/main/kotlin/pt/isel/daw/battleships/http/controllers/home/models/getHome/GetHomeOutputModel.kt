@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.http.controllers.home.models.AuthorModel
 import pt.isel.daw.battleships.http.controllers.home.models.VCRepositoryModel
 
 /**
- * Represents the output model for the home page.
+ * Represents a Get Home Output Model.
  *
  * @property title the title of the application
  * @property version the version of the application
@@ -12,7 +12,7 @@ import pt.isel.daw.battleships.http.controllers.home.models.VCRepositoryModel
  * @property authors the authors of the application
  * @property repository the repository of the application
  */
-data class HomeOutputModel(
+data class GetHomeOutputModel(
     val title: String,
     val version: String,
     val description: String,

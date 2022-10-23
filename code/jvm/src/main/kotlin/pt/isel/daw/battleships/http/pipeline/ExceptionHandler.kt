@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
-import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinate
+import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinateException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
@@ -48,7 +48,7 @@ class ExceptionHandler {
             FleetDeployTimeExpiredException::class,
             FiringShotsTimeExpiredException::class,
             WaitingForPlayersTimeExpiredException::class,
-            InvalidCoordinate::class
+            InvalidCoordinateException::class
         ]
     )
     fun handleBadRequest(ex: Exception): ResponseEntity<Any> =

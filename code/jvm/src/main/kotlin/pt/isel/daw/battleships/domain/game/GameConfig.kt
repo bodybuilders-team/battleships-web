@@ -16,6 +16,8 @@ import javax.persistence.OneToMany
  * @property shotsPerRound the shots per round
  * @property maxTimeForLayoutPhase the maximum time for layout phase
  * @property shipTypes the ship types
+ * @property colsRange the columns range
+ * @property rowsRange the rows range
  */
 @Embeddable
 class GameConfig(
@@ -35,10 +37,11 @@ class GameConfig(
     @JoinColumn(name = "game")
     val shipTypes: List<ShipType>
 ) {
+    val colsRange
+        get() = 'A' until 'A' + gridSize
 
-    fun colsRange() = 'A' until 'A' + gridSize
-
-    fun rowsRange() = 1..gridSize
+    val rowsRange
+        get() = 1..gridSize
 
     /**
      * Validates a given fleet ship types against this configuration.

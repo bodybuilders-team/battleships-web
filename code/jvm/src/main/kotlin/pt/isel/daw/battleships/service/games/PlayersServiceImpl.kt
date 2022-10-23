@@ -39,16 +39,16 @@ class PlayersServiceImpl(
 ) : PlayersService, AuthenticatedService(usersRepository, jwtProvider) {
 
     override fun getFleet(token: String, gameId: Int): DeployedFleetDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId)
+        val player = game.getPlayer(username = user.username)
 
-        return DeployedFleetDTO(ships = player.deployedShips.map { DeployedShipDTO(it) })
+        return DeployedFleetDTO(ships = player.deployedShips.map(::DeployedShipDTO))
     }
 
     override fun deployFleet(token: String, gameId: Int, fleetDTO: UndeployedFleetDTO) {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId)
         val player = game.getPlayer(username = user.username)
 
         if (game.state.phase != GameState.GamePhase.DEPLOYING_FLEETS) {
@@ -71,32 +71,31 @@ class PlayersServiceImpl(
             )
         }
 
-        player.deployFleet(undeployedShips)
+        player.deployFleet(undeployedShips = undeployedShips)
 
         if (game.areFleetsDeployed()) {
             game.updatePhase()
-
             game.state.turn = game.players.first()
             game.state.round = 1
         }
     }
 
     override fun getOpponentFleet(token: String, gameId: Int): DeployedFleetDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId).also { it.getPlayer(user.username) }
-        val opponent = game.getOpponent(user.username)
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId).also { it.getPlayer(username = user.username) }
+        val opponent = game.getOpponent(username = user.username)
 
         return DeployedFleetDTO(
             ships = opponent.deployedShips
                 .filter(DeployedShip::isSunk)
-                .map { DeployedShipDTO(it) }
+                .map(::DeployedShipDTO)
         )
     }
 
     override fun getShots(token: String, gameId: Int): FiredShotsDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
-        val player = game.getPlayer(user.username)
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId)
+        val player = game.getPlayer(username = user.username)
 
         return FiredShotsDTO(shots = player.shots)
     }
@@ -116,18 +115,18 @@ class PlayersServiceImpl(
         }
 
         if (game.state.phaseExpired()) {
-            game.finishGame(player)
+            game.finishGame(winner = player)
             throw FiringShotsTimeExpiredException("The firing shots time has expired.")
         }
 
-        val shotsCoordinates = unfiredShotsDTO.shots.map {
-            it.coordinate.toCoordinate()
-        }
-
-        val shots = player.shoot(opponent, shotsCoordinates)
+        val shotsCoordinates = unfiredShotsDTO.shots.map { it.coordinate.toCoordinate() }
+        val shots = player.shoot(
+            opponent = opponent,
+            coordinates = shotsCoordinates
+        )
 
         if (opponent.deployedShips.all(DeployedShip::isSunk)) {
-            game.finishGame(player)
+            game.finishGame(winner = player)
         } else {
             game.updatePhase()
 
@@ -141,9 +140,9 @@ class PlayersServiceImpl(
     }
 
     override fun getOpponentShots(token: String, gameId: Int): FiredShotsDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId).also { it.getPlayer(user.username) }
-        val opponent = game.getOpponent(user.username)
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId).also { it.getPlayer(username = user.username) }
+        val opponent = game.getOpponent(username = user.username)
 
         return FiredShotsDTO(shots = opponent.shots)
     }
@@ -158,6 +157,6 @@ class PlayersServiceImpl(
      */
     private fun getGameById(gameId: Int): Game =
         gamesRepository
-            .findById(gameId)
+            .findById(id = gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
 }

@@ -28,7 +28,7 @@ class RefreshToken(
     @Column(name = "token_hash", nullable = false)
     val tokenHash: String,
 
-    //TODO: Maybe change to timestamp
+    // TODO: Maybe change to timestamp
     @Column(name = "expiration_date", nullable = false)
     val expirationDate: Instant
 ) {

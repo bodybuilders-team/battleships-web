@@ -52,8 +52,7 @@ class GameState(
      * @return true if the game phase has expired, false otherwise
      */
     fun phaseExpired(): Boolean =
-        phaseExpirationTime.time < System.currentTimeMillis() &&
-            phase != FINISHED
+        phaseExpirationTime.time < System.currentTimeMillis() && phase != FINISHED
 
     /**
      * Represents the game phases.

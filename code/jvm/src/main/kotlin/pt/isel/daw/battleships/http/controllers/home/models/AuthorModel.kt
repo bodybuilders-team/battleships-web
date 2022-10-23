@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.home.models
 
 /**
- * Represents the author model.
+ * Represents a Author Model.
  *
  * @property name the name of the author
  * @property email the email of the author

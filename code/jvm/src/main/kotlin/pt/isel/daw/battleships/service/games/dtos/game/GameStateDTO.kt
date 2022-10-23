@@ -18,11 +18,11 @@ data class GameStateDTO(
     val turn: String?,
     val winner: String?
 ) {
-    constructor(phase: GameState) : this(
-        phase = phase.phase.name,
-        phaseEndTime = phase.phaseExpirationTime.time,
-        round = phase.round,
-        turn = phase.turn?.user?.username,
-        winner = phase.winner?.user?.username
+    constructor(gameState: GameState) : this(
+        phase = gameState.phase.name,
+        phaseEndTime = gameState.phaseExpirationTime.time,
+        round = gameState.round,
+        turn = gameState.turn?.user?.username,
+        winner = gameState.winner?.user?.username
     )
 }

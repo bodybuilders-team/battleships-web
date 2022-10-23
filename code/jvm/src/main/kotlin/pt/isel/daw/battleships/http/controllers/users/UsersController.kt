@@ -128,6 +128,13 @@ class UsersController(private val usersService: UsersService) {
         )
     }
 
+    // TODO:Should be authenticated?
+    /**
+     * Handles the request to log out a user.
+     *
+     * @param logoutUserInputModel the data of the user to be logged out
+     * @return the response to the request
+     */
     @PostMapping(Uris.USERS_LOGOUT)
     fun logout(
         @RequestBody logoutUserInputModel: LogoutUserInputModel
@@ -145,11 +152,17 @@ class UsersController(private val usersService: UsersService) {
         )
     }
 
+    /**
+     * Handles the request to refresh the token of a user.
+     *
+     * @param refreshTokenInputModel the data of the user to be refreshed
+     * @return the response to the request with the new token of the user
+     */
     @PostMapping(Uris.USERS_REFRESH_TOKEN)
     fun refreshToken(
-        @RequestBody refreshTokenModel: RefreshTokenInputModel
+        @RequestBody refreshTokenInputModel: RefreshTokenInputModel
     ): SirenEntity<RefreshTokenOutputModel> {
-        val refreshDTO = usersService.refreshToken(refreshToken = refreshTokenModel.refreshToken)
+        val refreshDTO = usersService.refreshToken(refreshToken = refreshTokenInputModel.refreshToken)
 
         return SirenEntity(
             `class` = listOf("user"),

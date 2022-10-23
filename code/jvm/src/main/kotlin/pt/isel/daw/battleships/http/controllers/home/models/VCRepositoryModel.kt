@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.home.models
 
 /**
- * Represents the repository model.
+ * Represents a Version Control Repository Model.
  *
  * @property type the type of the repository, e.g. git
  * @property url the url of the repository

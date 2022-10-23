@@ -1,10 +1,10 @@
 package pt.isel.daw.battleships.http.controllers.games.models.players.getBoard
 
 /**
- * Represents the output model for the get board operation.
+ * Represents a Get Board Output Model.
  *
  * @property board the board
  */
-class GetBoardOutputModel(
+data class GetBoardOutputModel(
     val board: List<String>
 )

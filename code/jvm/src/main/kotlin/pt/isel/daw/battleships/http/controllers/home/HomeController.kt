@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.home.models.AuthorModel
 import pt.isel.daw.battleships.http.controllers.home.models.VCRepositoryModel
-import pt.isel.daw.battleships.http.controllers.home.models.getHome.HomeOutputModel
+import pt.isel.daw.battleships.http.controllers.home.models.getHome.GetHomeOutputModel
 import pt.isel.daw.battleships.http.siren.Action
 import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
@@ -25,7 +25,7 @@ class HomeController {
      * @return the response to the request with the home page
      */
     @GetMapping
-    fun getHome(): SirenEntity<HomeOutputModel> {
+    fun getHome(): SirenEntity<GetHomeOutputModel> {
         val authors = listOf(
             AuthorModel(
                 name = "André Jesus",
@@ -44,7 +44,7 @@ class HomeController {
             )
         )
 
-        val homeModel = HomeOutputModel(
+        val homeModel = GetHomeOutputModel(
             title = "Battleships",
             version = "0.0.1",
             description = "Battleships is a game where you have to sink all the ships of your opponent.",

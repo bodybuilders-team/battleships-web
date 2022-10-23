@@ -5,7 +5,7 @@ import pt.isel.daw.battleships.domain.ship.Ship.Orientation.HORIZONTAL
 import pt.isel.daw.battleships.domain.ship.Ship.Orientation.VERTICAL
 
 /**
- * Represents a Ship in the Battleships Game.
+ * Represents a Ship entity.
  * A ship can be undeployed or deployed.
  *
  * @property type the ship type
@@ -29,10 +29,10 @@ abstract class Ship(
     /**
      * Checks if this ship is overlapping with another ship.
      *
-     * @param other the other ship
+     * @param otherShip the other ship
      * @return true if the ships are overlapping, false otherwise
      */
-    fun isOverlapping(other: Ship): Boolean = other.coordinates.any { it in coordinates }
+    fun isOverlapping(otherShip: Ship): Boolean = otherShip.coordinates.any { it in coordinates }
 
     /**
      * Represents the possible orientations of a ship.

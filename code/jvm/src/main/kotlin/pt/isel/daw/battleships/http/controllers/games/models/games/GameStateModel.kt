@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.http.controllers.games.models.games
 import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTO
 
 /**
- * Represents a game state.
+ * Represents a Game State Model.
  *
  * @property phase the current game phase
  * @property phaseEndTime the time when the current phase ends

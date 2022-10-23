@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 /**
- * The Ship entity.
+ * The DeployedShip entity.
  *
  * @property id the ship's id
  * @property player the player that owns the ship

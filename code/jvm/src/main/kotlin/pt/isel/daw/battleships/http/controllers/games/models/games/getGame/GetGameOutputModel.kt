@@ -7,7 +7,7 @@ import pt.isel.daw.battleships.service.games.dtos.game.GameDTO
 import javax.validation.constraints.Size
 
 /**
- * Represents a game.
+ * Represents a Get Game Output Model.
  *
  * @property id the id of the game
  * @property name the name of the session

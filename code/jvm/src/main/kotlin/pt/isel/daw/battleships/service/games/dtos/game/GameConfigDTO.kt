@@ -19,12 +19,12 @@ data class GameConfigDTO(
     val maxTimePerRound: Int,
     val shipTypes: List<ShipTypeDTO>
 ) {
-    constructor(gridSize: GameConfig) : this(
-        gridSize = gridSize.gridSize,
-        maxTimeForLayoutPhase = gridSize.maxTimeForLayoutPhase,
-        shotsPerRound = gridSize.shotsPerRound,
-        maxTimePerRound = gridSize.maxTimePerRound,
-        shipTypes = gridSize.shipTypes.map { ShipTypeDTO(it) }
+    constructor(gameConfig: GameConfig) : this(
+        gridSize = gameConfig.gridSize,
+        maxTimeForLayoutPhase = gameConfig.maxTimeForLayoutPhase,
+        shotsPerRound = gameConfig.shotsPerRound,
+        maxTimePerRound = gameConfig.maxTimePerRound,
+        shipTypes = gameConfig.shipTypes.map { ShipTypeDTO(it) }
     )
 
     /**

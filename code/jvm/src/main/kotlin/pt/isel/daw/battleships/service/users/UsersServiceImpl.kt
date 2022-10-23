@@ -53,16 +53,13 @@ class UsersServiceImpl(
             throw InvalidPaginationParamsException("Limit must be less than $MAX_USERS_LIMIT")
         }
 
-        return usersRepository
-            .findAll(OffsetPageRequest(offset.toLong(), limit))
-            .toList()
-            .map { UserDTO(it) }
-            .let { users ->
-                UsersDTO(
-                    users = users,
-                    totalCount = usersRepository.count().toInt()
-                )
-            }
+        return UsersDTO(
+            users = usersRepository
+                .findAll(OffsetPageRequest(offset.toLong(), limit))
+                .toList()
+                .map(::UserDTO),
+            totalCount = usersRepository.count().toInt()
+        )
     }
 
     override fun register(registerUserInputDTO: RegisterUserInputDTO): RegisterUserOutputDTO {
@@ -85,7 +82,7 @@ class UsersServiceImpl(
 
         usersRepository.save(user)
 
-        val (accessToken, refreshToken) = createTokens(user)
+        val (accessToken, refreshToken) = createTokens(user = user)
 
         return RegisterUserOutputDTO(
             username = registerUserInputDTO.username,
@@ -107,7 +104,7 @@ class UsersServiceImpl(
             )
         ) throw NotFoundException("Invalid username or password")
 
-        val (accessToken, refreshToken) = createTokens(user)
+        val (accessToken, refreshToken) = createTokens(user = user)
 
         return LoginUserOutputDTO(
             accessToken = accessToken,
@@ -116,9 +113,8 @@ class UsersServiceImpl(
     }
 
     override fun logout(refreshToken: String) {
-        val user = getUserFromRefreshToken(refreshToken)
-
-        val refreshTokenHash = hashingUtils.hashToken(refreshToken)
+        val user = getUserFromRefreshToken(refreshToken = refreshToken)
+        val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
         if (!refreshTokenRepository.existsByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)) {
             throw NotFoundException("Refresh token not found")
@@ -128,9 +124,8 @@ class UsersServiceImpl(
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenOutputDTO {
-        val user = getUserFromRefreshToken(refreshToken)
-
-        val refreshTokenHash = hashingUtils.hashToken(refreshToken)
+        val user = getUserFromRefreshToken(refreshToken = refreshToken)
+        val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
         val refreshTokenEntity = refreshTokenRepository
             .findByUserAndTokenHash(
@@ -145,7 +140,7 @@ class UsersServiceImpl(
             throw NotFoundException("Refresh token expired")
         }
 
-        val (accessToken, newRefreshToken) = createTokens(refreshTokenEntity.user)
+        val (accessToken, newRefreshToken) = createTokens(user = refreshTokenEntity.user)
 
         return RefreshTokenOutputDTO(
             accessToken = accessToken,
@@ -169,7 +164,7 @@ class UsersServiceImpl(
      * @throws IllegalStateException if the user has no refresh tokens
      */
     private fun createTokens(user: User): Tokens {
-        if (refreshTokenRepository.countByUser(user) >= config.maxRefreshTokens) {
+        if (refreshTokenRepository.countByUser(user = user) >= config.maxRefreshTokens) {
             refreshTokenRepository
                 .getOldestRefreshTokensByUser(
                     user = user,
@@ -180,11 +175,11 @@ class UsersServiceImpl(
                 .ifPresent { refreshTokenRepository.delete(it) }
         }
 
-        val jwtPayload = JwtPayload(user.username)
-        val accessToken = jwtProvider.createAccessToken(jwtPayload)
-        val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload)
+        val jwtPayload = JwtPayload(username = user.username)
+        val accessToken = jwtProvider.createAccessToken(jwtPayload = jwtPayload)
+        val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload = jwtPayload)
 
-        val refreshTokenHash = hashingUtils.hashToken(refreshToken)
+        val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
         refreshTokenRepository.save(
             RefreshToken(
@@ -221,10 +216,10 @@ class UsersServiceImpl(
      * @throws NotFoundException if a user with the refresh token was not found
      */
     private fun getUserFromRefreshToken(refreshToken: String): User {
-        val tokenPayload = jwtProvider.validateRefreshToken(refreshToken)
+        val tokenPayload = jwtProvider.validateRefreshToken(token = refreshToken)
             ?: throw AuthenticationException("Invalid token")
 
-        return usersRepository.findByUsername(tokenPayload.username)
+        return usersRepository.findByUsername(username = tokenPayload.username)
             ?: throw NotFoundException("User not found")
     }
 

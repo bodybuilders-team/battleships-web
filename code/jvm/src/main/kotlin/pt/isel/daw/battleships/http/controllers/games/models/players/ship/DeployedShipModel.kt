@@ -5,7 +5,7 @@ import pt.isel.daw.battleships.service.games.dtos.ship.DeployedShipDTO
 import javax.validation.constraints.Pattern
 
 /**
- * Represents a ship.
+ * Represents a Deployed Ship Model.
  *
  * @property type the type of the ship
  * @property coordinate the coordinate of the ship

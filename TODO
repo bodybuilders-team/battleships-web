@@ -2,7 +2,6 @@
 - Review project structure:
 - Documentation:
     - Update swagger documentation
-    - Review comments
     - Write documentation
     - Add postman collection to docs
 - Implementation:
@@ -10,3 +9,4 @@
     - Add tests
     - Check validations
     - Review the professor's code
+    - Obtain statistical and ranking information, such as number of played games and users ranking, by an unauthenticated user.

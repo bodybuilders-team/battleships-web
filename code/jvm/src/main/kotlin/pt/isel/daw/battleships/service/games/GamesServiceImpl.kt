@@ -61,16 +61,18 @@ class GamesServiceImpl(
 
     override fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int =
         createGame(
-            creator = authenticateUser(token),
+            creator = authenticateUser(token = token),
             createGameRequestDTO = createGameRequestDTO
         ).id ?: throw IllegalStateException("Game id cannot be null")
 
     override fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeResponseDTO {
-        val user = authenticateUser(token)
+        val user = authenticateUser(token = token)
 
         while (true) {
-            val game = gamesRepository
-                .findFirstAvailableGameWithConfig(user, gameConfigDTO.toGameConfig())
+            val game = gamesRepository.findFirstAvailableGameWithConfig(
+                user = user,
+                config = gameConfigDTO.toGameConfig()
+            )
 
             if (game == null) {
                 val newGame = createGame(
@@ -82,47 +84,43 @@ class GamesServiceImpl(
                 )
 
                 return MatchmakeResponseDTO(
-                    game = GameDTO(newGame),
+                    game = GameDTO(game = newGame),
                     wasCreated = true
                 )
             }
 
             game.updateIfPhaseExpired()
 
-            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
-                continue
-            }
+            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) continue
 
-            if (game.hasPlayer(user.username)) {
+            if (game.hasPlayer(username = user.username)) {
                 throw AlreadyJoinedException("You have already joined this game")
             }
 
-            game.addPlayer(
-                player = Player(game = game, user = user)
-            )
+            game.addPlayer(player = Player(game = game, user = user))
 
             game.updatePhase()
 
             return MatchmakeResponseDTO(
-                game = GameDTO(game),
+                game = GameDTO(game = game),
                 wasCreated = false
             )
         }
     }
 
     override fun getGame(gameId: Int): GameDTO =
-        GameDTO(game = getGameById(gameId))
+        GameDTO(game = getGameById(gameId = gameId))
 
     override fun getGameState(gameId: Int): GameStateDTO =
-        GameStateDTO(phase = getGameById(gameId).state)
+        GameStateDTO(gameState = getGameById(gameId = gameId).state)
 
     override fun joinGame(token: String, gameId: Int): GameDTO {
-        val user = authenticateUser(token)
-        val game = getGameById(gameId)
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId)
 
-        joinGame(user, game)
+        joinGame(user = user, game = game)
 
-        return GameDTO(game)
+        return GameDTO(game = game)
     }
 
     /**
@@ -141,9 +139,7 @@ class GamesServiceImpl(
             state = GameState(phaseExpirationTime = Timestamp.from(Instant.now().plus(1L, ChronoUnit.DAYS)))
         )
 
-        game.addPlayer(
-            player = Player(game = game, user = creator)
-        )
+        game.addPlayer(player = Player(game = game, user = creator))
         return gamesRepository.save(game)
     }
 
@@ -166,14 +162,11 @@ class GamesServiceImpl(
             throw InvalidPhaseException("Waiting for players phase is over")
         }
 
-        if (game.hasPlayer(user.username)) {
+        if (game.hasPlayer(username = user.username)) {
             throw AlreadyJoinedException("You have already joined this game")
         }
 
-        game.addPlayer(
-            player = Player(game = game, user = user)
-        )
-
+        game.addPlayer(player = Player(game = game, user = user))
         game.updatePhase()
     }
 
@@ -187,7 +180,7 @@ class GamesServiceImpl(
      */
     private fun getGameById(gameId: Int): Game {
         val game = gamesRepository
-            .findById(gameId)
+            .findById(id = gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
 
         game.updateIfPhaseExpired()

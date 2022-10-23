@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
 /**
- * Represents the input data for the create user operation.
+ * Represents a Register User Input Model.
  *
  * @property username the username of the user to be created
  * @property email the email of the user to be created

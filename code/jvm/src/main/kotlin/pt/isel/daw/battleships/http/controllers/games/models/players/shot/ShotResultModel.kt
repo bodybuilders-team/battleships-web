@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.http.controllers.games.models.players.shot
 import pt.isel.daw.battleships.service.games.dtos.shot.ShotResultDTO
 
 /**
- * Represents a model for a shot result.
+ * Represents a Shot Result Model.
  *
  * @property result the result of the shot
  */

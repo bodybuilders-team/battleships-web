@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.domain.Shot
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 
 /**
- * Represents an output shot DTO.
+ * Represents a Fired Shot DTO.
  *
  * @property coordinate the coordinate of the shot
  * @property round the round of the shot

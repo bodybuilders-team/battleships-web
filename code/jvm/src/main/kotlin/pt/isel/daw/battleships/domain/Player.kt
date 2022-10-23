@@ -73,7 +73,8 @@ class Player(
         }
 
         undeployedShips.forEach { undeployedShip ->
-            if (!isValidShipCoordinate(
+            if (
+                !isValidShipCoordinate(
                     undeployedShip.coordinate,
                     undeployedShip.orientation,
                     undeployedShip.type.size
@@ -83,7 +84,7 @@ class Player(
             }
 
             deployedShips.forEach { ship ->
-                if (ship.isOverlapping(undeployedShip)) {
+                if (ship.isOverlapping(otherShip = undeployedShip)) {
                     throw InvalidShipTypeException("Ship is overlapping another ship")
                 }
             }
@@ -114,8 +115,8 @@ class Player(
         orientation: Orientation,
         size: Int
     ): Boolean {
-        val colsRange = game.config.colsRange()
-        val rowsRange = game.config.rowsRange()
+        val colsRange = game.config.colsRange
+        val rowsRange = game.config.rowsRange
 
         return (
             orientation == Orientation.HORIZONTAL &&
@@ -141,7 +142,7 @@ class Player(
         opponent: Player,
         coordinates: List<Coordinate>
     ): List<Shot> {
-        if (!coordinates.all { it.col in game.config.colsRange() && it.row in game.config.rowsRange() }) {
+        if (!coordinates.all { it.col in game.config.colsRange && it.row in game.config.rowsRange }) {
             throw InvalidShotException("Shot is out of bounds")
         }
 
@@ -165,9 +166,7 @@ class Player(
                 coordinate = coordinate,
                 round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
                 result = opponent.deployedShips
-                    .find { ship ->
-                        coordinate in ship.coordinates.map { it }
-                    }
+                    .find { ship -> coordinate in ship.coordinates.map { it } }
                     .let { ship ->
                         when {
                             ship == null -> Shot.ShotResult.MISS
@@ -177,6 +176,7 @@ class Player(
 
                                 Shot.ShotResult.SUNK
                             }
+
                             else -> {
                                 ship.lives--
 

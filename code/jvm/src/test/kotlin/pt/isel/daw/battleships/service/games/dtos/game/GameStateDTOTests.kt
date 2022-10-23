@@ -28,7 +28,7 @@ class GameStateDTOTests {
             turn = null,
             winner = null
         )
-        val gameStateDTO = GameStateDTO(phase = gameState)
+        val gameStateDTO = GameStateDTO(gameState = gameState)
 
         assertEquals(gameState.phase.name, gameStateDTO.phase)
         assertEquals(gameState.round, gameStateDTO.round)

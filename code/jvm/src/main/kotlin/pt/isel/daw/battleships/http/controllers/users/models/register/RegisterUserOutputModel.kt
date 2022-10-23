@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.http.controllers.users.models.register
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserOutputDTO
 
 /**
- * Represents the response body of the create user operation.
+ * Represents a Register User Output Model.
  *
  * @property accessToken the access token of the user
  * @property refreshToken the refresh token of the user

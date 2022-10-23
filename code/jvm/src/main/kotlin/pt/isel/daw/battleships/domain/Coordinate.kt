@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.domain
 
-import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinate
+import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinateException
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
@@ -20,17 +20,8 @@ class Coordinate {
 
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(col: Char, row: Int) {
-        if (col !in maxColsRange) {
-            throw InvalidCoordinate(
-                "Invalid Column"
-            )
-        }
-
-        if (row !in maxRowsRange) {
-            throw InvalidCoordinate(
-                "Invalid Row"
-            )
-        }
+        if (col !in maxColsRange) throw InvalidCoordinateException("Invalid Column")
+        if (row !in maxRowsRange) throw InvalidCoordinateException("Invalid Row")
 
         this.col = col
         this.row = row

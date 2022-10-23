@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
 /**
- * Represents a model for a ship creation request.
+ * Represents an Undeployed Ship Model.
  *
  * @property type type of the ship
  * @property coordinate coordinate of the ship
