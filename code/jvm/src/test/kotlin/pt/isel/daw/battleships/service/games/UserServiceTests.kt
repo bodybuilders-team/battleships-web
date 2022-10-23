@@ -37,7 +37,7 @@ class UserServiceTests {
             .thenReturn(User("bob", "bob@bob.com", "password"))
 
         val user = userService.getUser("bob")
-        assertEquals(user, UserDTO("bob", "bob@bob.com", 0))
+        assertEquals(user, UserDTO("bob", "bob@bob.com", 0, 0))
     }
 
     @Test

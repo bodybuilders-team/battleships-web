@@ -21,7 +21,8 @@ class GetUserOutputModelTests {
         val userDTO = UserDTO(
             username = "username",
             email = "email",
-            points = 0
+            points = 0,
+            numberOfGamesPlayed = 0
         )
         val getUserOutputModel = GetUserOutputModel(userDTO)
 

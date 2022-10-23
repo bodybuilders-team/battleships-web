@@ -11,7 +11,8 @@ import org.springframework.data.domain.Sort
  */
 class OffsetPageRequest(
     private val offset: Long,
-    private val limit: Int
+    private val limit: Int,
+    private val sort: Sort? = null
 ) : Pageable {
 
     init {
@@ -25,7 +26,7 @@ class OffsetPageRequest(
 
     override fun getOffset(): Long = offset
 
-    override fun getSort(): Sort = Sort.unsorted()
+    override fun getSort(): Sort = sort ?: Sort.unsorted()
 
     override fun next(): Pageable = OffsetPageRequest(
         offset = offset + limit,
@@ -55,8 +56,5 @@ class OffsetPageRequest(
     companion object {
         private const val MIN_OFFSET = 0
         private const val MIN_LIMIT = 1
-
-        const val OFFSET_PARAM = "offset"
-        const val LIMIT_PARAM = "limit"
     }
 }

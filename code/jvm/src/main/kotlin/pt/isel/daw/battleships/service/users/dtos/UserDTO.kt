@@ -12,11 +12,13 @@ import pt.isel.daw.battleships.domain.User
 data class UserDTO(
     val username: String,
     val email: String,
-    val points: Int
+    val points: Int,
+    val numberOfGamesPlayed: Int
 ) {
     constructor(user: User) : this(
         username = user.username,
         email = user.email,
-        points = user.points
+        points = user.points,
+        numberOfGamesPlayed = user.numberOfGamesPlayed
     )
 }

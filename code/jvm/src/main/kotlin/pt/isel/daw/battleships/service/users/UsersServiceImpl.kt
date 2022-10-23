@@ -44,7 +44,7 @@ class UsersServiceImpl(
     private val config: ServerConfiguration
 ) : UsersService {
 
-    override fun getUsers(offset: Int, limit: Int): UsersDTO {
+    override fun getUsers(offset: Int, limit: Int, orderBy: UsersOrder, ascending: Boolean): UsersDTO {
         if (offset < 0 || limit < 0) {
             throw InvalidPaginationParamsException("Offset and limit must be positive")
         }
@@ -55,7 +55,16 @@ class UsersServiceImpl(
 
         return UsersDTO(
             users = usersRepository
-                .findAll(OffsetPageRequest(offset.toLong(), limit))
+                .let {
+                    val pageable =
+                        OffsetPageRequest(
+                            offset = offset.toLong(),
+                            limit = limit,
+                            sort = orderBy.toSort(ascending)
+                        )
+
+                    usersRepository.findAll(/* pageable = */ pageable)
+                }
                 .toList()
                 .map(::UserDTO),
             totalCount = usersRepository.count().toInt()
@@ -148,12 +157,15 @@ class UsersServiceImpl(
         )
     }
 
-    override fun getUser(username: String): UserDTO =
-        UserDTO(
-            user = usersRepository
-                .findByUsername(username)
+    override fun getUser(username: String): UserDTO {
+        val user = usersRepository
+            .findByUsername(username)
+
+        return UserDTO(
+            user = user
                 ?: throw NotFoundException("User with username $username not found")
         )
+    }
 
     /**
      * Creates the access and refresh tokens for the given user.

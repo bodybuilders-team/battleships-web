@@ -4,6 +4,7 @@ import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import java.sql.Timestamp
@@ -75,7 +76,7 @@ class Game {
      */
     fun getPlayer(username: String): Player =
         getPlayerOrNull(username)
-            ?: throw NotFoundException("Player with username $username is not part of the game")
+            ?: throw UserNotInGameException("Player with username $username is not part of the game")
 
     /**
      * Checks if the player is playing the game.
@@ -99,13 +100,13 @@ class Game {
     /**
      * Returns the opponent of the player that is playing the game.
      *
-     * @param username the username of the player
+     * @param player the player
      *
      * @return the opponent of the player that is playing the game
      * @throws NotFoundException if there is no opponent yet
      */
-    fun getOpponent(username: String): Player =
-        players.find { it.user.username != username }
+    fun getOpponent(player: Player): Player =
+        players.find { it.user.username != player.user.username }
             ?: throw NotFoundException("There's no opponent yet")
 
     /**
@@ -119,6 +120,7 @@ class Game {
             throw IllegalStateException("Game already has two players")
         }
 
+        player.user.numberOfGamesPlayed++
         players.add(player)
     }
 
@@ -186,7 +188,7 @@ class Game {
             val currentPlayer = state.turn
                 ?: throw IllegalStateException("Game is in progress but turn is null")
 
-            val winner = getOpponent(currentPlayer.user.username)
+            val winner = getOpponent(currentPlayer)
 
             finishGame(winner)
         } else {

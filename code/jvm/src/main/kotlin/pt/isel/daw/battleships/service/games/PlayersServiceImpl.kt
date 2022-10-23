@@ -82,8 +82,10 @@ class PlayersServiceImpl(
 
     override fun getOpponentFleet(token: String, gameId: Int): DeployedFleetDTO {
         val user = authenticateUser(token = token)
-        val game = getGameById(gameId = gameId).also { it.getPlayer(username = user.username) }
-        val opponent = game.getOpponent(username = user.username)
+        val game = getGameById(gameId = gameId)
+
+        val player = game.getPlayer(username = user.username)
+        val opponent = game.getOpponent(player)
 
         return DeployedFleetDTO(
             ships = opponent.deployedShips
@@ -103,8 +105,9 @@ class PlayersServiceImpl(
     override fun fireShots(token: String, gameId: Int, unfiredShotsDTO: UnfiredShotsDTO): FiredShotsDTO {
         val user = authenticateUser(token)
         val game = getGameById(gameId)
+
         val player = game.getPlayer(user.username)
-        val opponent = game.getOpponent(user.username)
+        val opponent = game.getOpponent(player)
 
         if (game.state.phase != GameState.GamePhase.IN_PROGRESS) {
             throw InvalidPhaseException("Game is not in progress.")
@@ -141,8 +144,10 @@ class PlayersServiceImpl(
 
     override fun getOpponentShots(token: String, gameId: Int): FiredShotsDTO {
         val user = authenticateUser(token = token)
-        val game = getGameById(gameId = gameId).also { it.getPlayer(username = user.username) }
-        val opponent = game.getOpponent(username = user.username)
+        val game = getGameById(gameId = gameId)
+
+        val player = game.getPlayer(username = user.username)
+        val opponent = game.getOpponent(player)
 
         return FiredShotsDTO(shots = opponent.shots)
     }

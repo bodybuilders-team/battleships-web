@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.daw.battleships.http.Params
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.games.models.games.GameConfigModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.createGame.CreateGameInputModel
@@ -23,8 +24,6 @@ import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.games.GamesService
-import pt.isel.daw.battleships.service.utils.OffsetPageRequest.Companion.LIMIT_PARAM
-import pt.isel.daw.battleships.service.utils.OffsetPageRequest.Companion.OFFSET_PARAM
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 
 /**
@@ -46,8 +45,8 @@ class GamesController(private val gamesService: GamesService) {
      */
     @GetMapping(Uris.GAMES)
     fun getGames(
-        @RequestParam(OFFSET_PARAM) offset: Int,
-        @RequestParam(LIMIT_PARAM) limit: Int
+        @RequestParam(Params.OFFSET_PARAM) offset: Int,
+        @RequestParam(Params.LIMIT_PARAM) limit: Int
     ): SirenEntity<GetGamesOutputModel> {
         val games = gamesService.getGames(offset = offset, limit = limit)
 

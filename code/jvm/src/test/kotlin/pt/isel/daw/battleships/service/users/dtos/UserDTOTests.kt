@@ -11,7 +11,8 @@ class UserDTOTests {
         UserDTO(
             username = "username",
             email = "email",
-            points = 0
+            points = 0,
+            numberOfGamesPlayed = 0
         )
     }
 

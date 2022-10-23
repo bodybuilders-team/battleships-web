@@ -10,15 +10,17 @@ DROP TABLE IF EXISTS ship_types CASCADE;
 
 CREATE TABLE users
 (
-    id            SERIAL PRIMARY KEY,
-    username      VARCHAR(40)  NOT NULL UNIQUE,
-    email         VARCHAR(320) NOT NULL UNIQUE,
-    password_hash VARCHAR(512) NOT NULL,
-    points        INT          NOT NULL,
+    id                     SERIAL PRIMARY KEY,
+    username               VARCHAR(40)  NOT NULL UNIQUE,
+    email                  VARCHAR(320) NOT NULL UNIQUE,
+    password_hash          VARCHAR(512) NOT NULL,
+    points                 INT          NOT NULL,
+    number_of_games_played INT          NOT NULL,
 
     CONSTRAINT username_length CHECK (char_length(username) >= 3),
     CONSTRAINT email_is_valid CHECK ( email ~ '^[A-Za-z0-9+_.-]+@(.+)$'),
-    CONSTRAINT points_are_valid CHECK ( points >= 0 )
+    CONSTRAINT points_are_valid CHECK ( points >= 0 ),
+    CONSTRAINT number_of_games_played_are_valid CHECK ( number_of_games_played >= 0 )
 );
 
 CREATE TABLE refresh_tokens
@@ -54,7 +56,6 @@ CREATE TABLE games
     CONSTRAINT max_time_per_round_is_valid CHECK ( max_time_per_round >= 10 AND max_time_per_round <= 120 ),
     CONSTRAINT phase_is_valid CHECK ( phase IN ('WAITING_FOR_PLAYERS', 'DEPLOYING_FLEETS', 'IN_PROGRESS', 'FINISHED') ),
     CONSTRAINT round_is_valid CHECK ( round >= 1 )
-
 );
 
 CREATE TABLE players

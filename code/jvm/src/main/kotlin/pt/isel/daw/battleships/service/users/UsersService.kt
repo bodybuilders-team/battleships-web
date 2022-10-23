@@ -21,11 +21,13 @@ interface UsersService {
      *
      * @param offset the offset of the pagination
      * @param limit the limit of the pagination
+     * @param orderBy the order by of the pagination
+     * @param ascending if the users should be ordered by points in ascending order
      *
      * @return the DTO with the information of the users
      * @throws InvalidPaginationParamsException if the offset or limit are invalid
      */
-    fun getUsers(offset: Int, limit: Int): UsersDTO
+    fun getUsers(offset: Int, limit: Int, orderBy: UsersOrder, ascending: Boolean): UsersDTO
 
     /**
      * Registers a new user.

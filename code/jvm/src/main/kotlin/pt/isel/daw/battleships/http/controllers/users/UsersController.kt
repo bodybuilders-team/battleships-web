@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.daw.battleships.http.Params
 import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.getUsers.GetUsersOutputModel
@@ -21,9 +22,8 @@ import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
+import pt.isel.daw.battleships.service.users.UsersOrder
 import pt.isel.daw.battleships.service.users.UsersService
-import pt.isel.daw.battleships.service.utils.OffsetPageRequest.Companion.LIMIT_PARAM
-import pt.isel.daw.battleships.service.utils.OffsetPageRequest.Companion.OFFSET_PARAM
 
 /**
  * Controller that handles the requests related to the users.
@@ -39,15 +39,33 @@ class UsersController(private val usersService: UsersService) {
      *
      * @param offset the offset of the users to be returned
      * @param limit the limit of the users to be returned
+     * @param sortByStr the order by of the users to be returned
+     * @param sortDirectionStr if the users should be ordered by points in ascending order
      *
      * @return the response to the request with all the users
      */
     @GetMapping(Uris.USERS)
     fun getUsers(
-        @RequestParam(OFFSET_PARAM) offset: Int,
-        @RequestParam(LIMIT_PARAM) limit: Int
+        @RequestParam(Params.OFFSET_PARAM) offset: Int,
+        @RequestParam(Params.LIMIT_PARAM) limit: Int,
+        @RequestParam(Params.ORDER_BY_PARAM) sortByStr: String? = null,
+        @RequestParam(Params.SORT_DIRECTION_PARAM) sortDirectionStr: String? = null
     ): SirenEntity<GetUsersOutputModel> {
-        val users = usersService.getUsers(offset = offset, limit = limit)
+        val ascending = when (sortDirectionStr) {
+            "ASC" -> true
+            "DESC" -> false
+            null -> true
+            else -> throw IllegalArgumentException("Invalid sort order, must be ASC or DESC")
+        }
+
+        val sortBy = if (sortByStr != null) UsersOrder.valueOf(sortByStr) else UsersOrder.POINTS
+
+        val users = usersService.getUsers(
+            offset = offset,
+            limit = limit,
+            orderBy = sortBy,
+            ascending = ascending
+        )
 
         return SirenEntity(
             `class` = listOf("users"),
