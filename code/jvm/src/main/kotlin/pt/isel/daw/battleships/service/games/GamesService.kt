@@ -1,8 +1,11 @@
 package pt.isel.daw.battleships.service.games
 
+import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
+import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
+import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.games.dtos.game.CreateGameRequestDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameConfigDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameDTO
@@ -23,6 +26,7 @@ interface GamesService {
      *
      * @return the DTO with the information of the games
      * @throws InvalidPaginationParamsException if the offset or limit are invalid
+     * @throws NotFoundException if the user is not found
      */
     fun getGames(offset: Int, limit: Int): GamesDTO
 
@@ -34,6 +38,8 @@ interface GamesService {
      *
      * @return the id of the new game
      * @throws IllegalStateException if the game's id is null
+     * @throws AuthenticationException if the token is invalid
+     * @throws NotFoundException if the user is not found
      */
     fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int
 
@@ -44,6 +50,11 @@ interface GamesService {
      * @param gameConfigDTO the DTO with the game's configuration
      *
      * @return the DTO with the information of the matched game
+     *
+     * @throws AuthenticationException if the token is invalid
+     * @throws NotFoundException if the user is not found
+     * @throws AlreadyJoinedException if the user is already in a found game
+     * @throws WaitingForPlayersTimeExpiredException if the waiting for players phase has expired
      */
     fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeResponseDTO
 
@@ -51,7 +62,9 @@ interface GamesService {
      * Gets a game by id.
      *
      * @param gameId the id of the game
+     *
      * @return the DTO with the information of the game
+     * @throws NotFoundException if the game does not exist
      */
     fun getGame(gameId: Int): GameDTO
 
@@ -59,7 +72,9 @@ interface GamesService {
      * Gets the state of a game.
      *
      * @param gameId the id of the game
+     *
      * @return the DTO with the state of the game
+     * @throws NotFoundException if the game does not exist
      */
     fun getGameState(gameId: Int): GameStateDTO
 
@@ -72,6 +87,8 @@ interface GamesService {
      * @return the DTO with the information of the game
      * @throws InvalidPhaseException if the game is not in the matchmaking phase
      * @throws AlreadyJoinedException if the user is already in the game
+     * @throws AuthenticationException if the token is invalid
+     * @throws NotFoundException if the user is not found or the game is not found
      */
     fun joinGame(token: String, gameId: Int): GameDTO
 }

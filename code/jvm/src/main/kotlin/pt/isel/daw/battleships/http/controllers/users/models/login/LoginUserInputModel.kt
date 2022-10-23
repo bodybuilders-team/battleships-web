@@ -1,9 +1,9 @@
 package pt.isel.daw.battleships.http.controllers.users.models.login
 
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MAX_USERNAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_USERNAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MAX_PASSWORD_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MAX_USERNAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MIN_PASSWORD_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MIN_USERNAME_LENGTH
 import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
 import javax.validation.constraints.Size
 

@@ -14,7 +14,7 @@ class GameConfigModelTests {
             gridSize = 1,
             maxTimeForLayoutPhase = 2,
             shotsPerRound = 3,
-            maxTimePerShot = 4,
+            maxTimePerRound = 4,
             shipTypes = listOf()
         )
     }
@@ -34,7 +34,7 @@ class GameConfigModelTests {
         assertEquals(gameConfigDTO.gridSize, gameConfig.gridSize)
         assertEquals(gameConfigDTO.maxTimeForLayoutPhase, gameConfig.maxTimeForLayoutPhase)
         assertEquals(gameConfigDTO.shotsPerRound, gameConfig.shotsPerRound)
-        assertEquals(gameConfigDTO.maxTimePerRound, gameConfig.maxTimePerShot)
+        assertEquals(gameConfigDTO.maxTimePerRound, gameConfig.maxTimePerRound)
         assertEquals(gameConfigDTO.shipTypes, gameConfig.shipTypes.map { it.toShipTypeDTO() })
     }
 
@@ -45,7 +45,7 @@ class GameConfigModelTests {
             gridSize = 1,
             maxTimeForLayoutPhase = 2,
             shotsPerRound = 3,
-            maxTimePerShot = 4,
+            maxTimePerRound = 4,
             shipTypes = listOf(shipType)
         )
         val gameConfigDTO = gameConfigModel.toGameConfigDTO()
@@ -53,7 +53,7 @@ class GameConfigModelTests {
         assertEquals(gameConfigModel.gridSize, gameConfigDTO.gridSize)
         assertEquals(gameConfigModel.maxTimeForLayoutPhase, gameConfigDTO.maxTimeForLayoutPhase)
         assertEquals(gameConfigModel.shotsPerRound, gameConfigDTO.shotsPerRound)
-        assertEquals(gameConfigModel.maxTimePerShot, gameConfigDTO.maxTimePerRound)
+        assertEquals(gameConfigModel.maxTimePerRound, gameConfigDTO.maxTimePerRound)
         assertEquals(gameConfigModel.shipTypes.map { it.toShipTypeDTO() }, gameConfigDTO.shipTypes)
     }
 

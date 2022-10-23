@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.service.users
 
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
+import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
@@ -54,7 +55,8 @@ interface UsersService {
      *
      * @param refreshToken the refresh token of the user
      *
-     * @throws NotFoundException if the refresh token does not exist
+     * @throws NotFoundException if the refresh token does not exist or if it is expired
+     * @throws AuthenticationException if the refresh token is invalid
      */
     fun logout(refreshToken: String)
 
@@ -65,6 +67,7 @@ interface UsersService {
      *
      * @return the new JWT token for the user
      * @throws NotFoundException if the refresh token does not exist or if the refresh token is expired
+     * @throws AuthenticationException if the refresh token is invalid
      */
     fun refreshToken(refreshToken: String): RefreshTokenOutputDTO
 

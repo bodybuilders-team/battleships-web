@@ -1,8 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.games.createGame
 
 import pt.isel.daw.battleships.http.controllers.games.models.games.GameConfigModel
-import pt.isel.daw.battleships.http.controllers.games.models.games.getGame.GetGameOutputModel.Companion.MAX_NAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.games.models.games.getGame.GetGameOutputModel.Companion.MIN_NAME_LENGTH
 import pt.isel.daw.battleships.service.games.dtos.game.CreateGameRequestDTO
 import javax.validation.constraints.Size
 
@@ -31,4 +29,9 @@ data class CreateGameInputModel(
         name = name,
         config = config.toGameConfigDTO()
     )
+
+    companion object {
+        const val MIN_NAME_LENGTH = 1
+        const val MAX_NAME_LENGTH = 40
+    }
 }

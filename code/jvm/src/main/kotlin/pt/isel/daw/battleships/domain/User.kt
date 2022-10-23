@@ -15,6 +15,7 @@ import javax.persistence.Table
  * @property email the email of the user
  * @property passwordHash the hashed password of the user
  * @property points the points of the user
+ * @property numberOfGamesPlayed the number of games played by the user
  */
 @Entity
 @Table(name = "users")

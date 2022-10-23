@@ -1,8 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.games
 
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MAX_USERNAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_POINTS
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_USERNAME_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MAX_USERNAME_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MIN_USERNAME_LENGTH
 import pt.isel.daw.battleships.service.games.dtos.PlayerDTO
 import javax.validation.constraints.Min
 import javax.validation.constraints.Size
@@ -28,4 +27,8 @@ data class PlayerModel(
         username = playerDTO.username,
         points = playerDTO.points
     )
+
+    companion object {
+        const val MIN_POINTS = 0
+    }
 }

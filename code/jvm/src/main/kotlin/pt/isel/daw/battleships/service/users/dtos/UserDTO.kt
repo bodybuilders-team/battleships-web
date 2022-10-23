@@ -8,6 +8,7 @@ import pt.isel.daw.battleships.domain.User
  * @property username the username of the user
  * @property email the email of the user
  * @property points the points of the user
+ * @property numberOfGamesPlayed the number of games played by the user
  */
 data class UserDTO(
     val username: String,

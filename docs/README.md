@@ -353,4 +353,5 @@ The next steps for this project are:
   the same data in multiple tables, like the default game configuration that is used in the most of the games;
 * Implement surrendering a game and the game's history;
 * Improve the error handling;
+* Improve token mechanism, by implementing a blacklist of revoked access tokens;
 * Implement private session mechanism.

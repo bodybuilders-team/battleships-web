@@ -239,6 +239,12 @@ class GamesController(private val gamesService: GamesService) {
                     title = "Fire",
                     method = "POST",
                     href = Uris.myShots(gameId = gameId)
+                ),
+                Action(
+                    name = "getMyBoard",
+                    title = "Get My Board",
+                    method = "GET",
+                    href = Uris.myBoard(gameId = gameId)
                 )
             )
         )

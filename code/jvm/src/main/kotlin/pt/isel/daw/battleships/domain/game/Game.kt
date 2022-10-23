@@ -72,7 +72,7 @@ class Game {
      * @param username the username of the player
      *
      * @return the player that is playing the game
-     * @throws NotFoundException if the player is not playing the game
+     * @throws UserNotInGameException if the player is not playing the game
      */
     fun getPlayer(username: String): Player =
         getPlayerOrNull(username)
@@ -180,6 +180,7 @@ class Game {
      * @throws FleetDeployTimeExpiredException if the fleet deploy phase has expired
      * @throws FiringShotsTimeExpiredException if the firing shots phase has expired
      * @throws IllegalStateException if the game is already finished
+     * @throws NotFoundException if there is no opponent yet
      */
     fun updateIfPhaseExpired() {
         if (!state.phaseExpired()) return

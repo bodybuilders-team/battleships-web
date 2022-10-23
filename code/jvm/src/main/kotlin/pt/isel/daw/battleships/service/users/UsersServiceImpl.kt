@@ -160,11 +160,9 @@ class UsersServiceImpl(
     override fun getUser(username: String): UserDTO {
         val user = usersRepository
             .findByUsername(username)
+            ?: throw NotFoundException("User with username $username not found")
 
-        return UserDTO(
-            user = user
-                ?: throw NotFoundException("User with username $username not found")
-        )
+        return UserDTO(user = user)
     }
 
     /**

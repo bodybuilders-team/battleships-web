@@ -19,7 +19,7 @@ class GetGameOutputModelTests {
                 gridSize = 1,
                 maxTimeForLayoutPhase = 2,
                 shotsPerRound = 3,
-                maxTimePerShot = 4,
+                maxTimePerRound = 4,
                 shipTypes = listOf()
             ),
             state = GameStateModel(

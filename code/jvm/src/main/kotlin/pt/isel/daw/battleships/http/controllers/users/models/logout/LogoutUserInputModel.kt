@@ -6,5 +6,5 @@ package pt.isel.daw.battleships.http.controllers.users.models.logout
  * @property refreshToken the refresh token of the user
  */
 data class LogoutUserInputModel(
-    val refreshToken: String
+    val refreshToken: String // TODO: Add validation
 )

@@ -13,6 +13,9 @@ data class DeployFleetInputModel(
     @Size(min = MIN_SHIPS_COUNT, message = "The fleet must have at least $MIN_SHIPS_COUNT ships")
     val ships: List<UndeployedShipModel>
 ) {
+    /**
+     * Converts the deploy fleet input model to a DTO.
+     */
     fun toUndeployedFleetDTO() = UndeployedFleetDTO(
         ships = ships.map(UndeployedShipModel::toUndeployedShipDTO)
     )

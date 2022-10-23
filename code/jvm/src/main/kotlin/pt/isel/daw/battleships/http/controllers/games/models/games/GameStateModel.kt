@@ -12,7 +12,7 @@ import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTO
  * @property winner the winner of the game
  */
 data class GameStateModel(
-    val phase: String,
+    val phase: String, // TODO: Add validation
     val phaseEndTime: Long,
     val round: Int?,
     val turn: String?,

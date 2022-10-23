@@ -1,10 +1,10 @@
 -- Script to insert some data into the database
 
-INSERT INTO users(username, email, password_hash, points)
-VALUES ('guest', 'guest@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0),
-       ('andre-j3sus', 'andre@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0),
-       ('nyckoka', 'nyck@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0),
-       ('devandrepascoa', 'andre@parcoa.org', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0);
+INSERT INTO users(username, email, password_hash, points, number_of_games_played)
+VALUES ('guest', 'guest@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0, 0),
+       ('andre-j3sus', 'andre@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0, 0),
+       ('nyckoka', 'nyck@mail.com', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0, 0),
+       ('devandrepascoa', 'andre@parcoa.org', '9f9fe9550947eeaa9e5d9df64145c80bf78f91725e75187468075518c09cbf14', 0, 0);
 
 INSERT INTO games(creator, name, grid_size, max_time_for_layout_phase, shots_per_round, max_time_per_round, phase,
                   phase_expiration_time, round, turn, winner)

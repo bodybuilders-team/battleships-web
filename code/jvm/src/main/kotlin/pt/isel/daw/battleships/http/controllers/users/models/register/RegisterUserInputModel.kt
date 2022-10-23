@@ -1,10 +1,5 @@
 package pt.isel.daw.battleships.http.controllers.users.models.register
 
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.EMAIL_REGEX
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MAX_EMAIL_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MAX_USERNAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_EMAIL_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel.Companion.MIN_USERNAME_LENGTH
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
@@ -54,5 +49,12 @@ data class RegisterUserInputModel(
     companion object {
         const val MIN_PASSWORD_LENGTH = 8
         const val MAX_PASSWORD_LENGTH = 127
+
+        const val MIN_USERNAME_LENGTH = 3
+        const val MAX_USERNAME_LENGTH = 40
+
+        const val MIN_EMAIL_LENGTH = 3
+        const val MAX_EMAIL_LENGTH = 320
+        const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)\$"
     }
 }

@@ -1,12 +1,10 @@
 - Database:
 - Review project structure:
 - Documentation:
-    - Update swagger documentation
-    - Write documentation
+    - Review swagger (and maybe add links and actions?)
+    - Review and end finish report
     - Add postman collection to docs
 - Implementation:
-    - Revoke tokens
     - Add tests
     - Check validations
     - Review the professor's code
-    - Obtain statistical and ranking information, such as number of played games and users ranking, by an unauthenticated user.

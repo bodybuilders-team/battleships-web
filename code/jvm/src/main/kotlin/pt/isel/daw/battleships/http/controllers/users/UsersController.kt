@@ -39,7 +39,7 @@ class UsersController(private val usersService: UsersService) {
      *
      * @param offset the offset of the users to be returned
      * @param limit the limit of the users to be returned
-     * @param sortByStr the order by of the users to be returned
+     * @param orderBy the order by of the users to be returned
      * @param sortDirectionStr if the users should be ordered by points in ascending order
      *
      * @return the response to the request with all the users
@@ -48,7 +48,7 @@ class UsersController(private val usersService: UsersService) {
     fun getUsers(
         @RequestParam(Params.OFFSET_PARAM) offset: Int,
         @RequestParam(Params.LIMIT_PARAM) limit: Int,
-        @RequestParam(Params.ORDER_BY_PARAM) sortByStr: String? = null,
+        @RequestParam(Params.ORDER_BY_PARAM) orderBy: String? = null,
         @RequestParam(Params.SORT_DIRECTION_PARAM) sortDirectionStr: String? = null
     ): SirenEntity<GetUsersOutputModel> {
         val ascending = when (sortDirectionStr) {
@@ -58,7 +58,7 @@ class UsersController(private val usersService: UsersService) {
             else -> throw IllegalArgumentException("Invalid sort order, must be ASC or DESC")
         }
 
-        val sortBy = if (sortByStr != null) UsersOrder.valueOf(sortByStr) else UsersOrder.POINTS
+        val sortBy = if (orderBy != null) UsersOrder.valueOf(orderBy) else UsersOrder.POINTS
 
         val users = usersService.getUsers(
             offset = offset,
@@ -146,7 +146,6 @@ class UsersController(private val usersService: UsersService) {
         )
     }
 
-    // TODO:Should be authenticated?
     /**
      * Handles the request to log out a user.
      *

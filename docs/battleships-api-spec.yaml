@@ -40,6 +40,8 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetHomeOutputModel'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /users:
     get:
@@ -50,6 +52,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/orderByParam'
+        - $ref: '#/components/parameters/sortDirectionParam'
       responses:
         200:
           description: Object containing all users
@@ -61,6 +65,11 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetUsersOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
     post:
       tags:
         - Users
@@ -84,6 +93,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/RegisterUserOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /users/login:
     post:
@@ -109,6 +122,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/LoginUserOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /users/logout:
     post:
@@ -127,6 +144,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/LogoutUserOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /users/refresh-token:
     post:
@@ -152,6 +173,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/RefreshTokenOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /users/{username}:
     get:
@@ -172,6 +197,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetUserOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games:
     get:
@@ -193,6 +222,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetGamesOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
     post:
       tags:
@@ -219,6 +252,12 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/CreateGameOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/matchmake:
     post:
@@ -246,6 +285,12 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/MatchmakeOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}:
     get:
@@ -266,6 +311,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetGameOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/state:
     get:
@@ -277,7 +326,7 @@ paths:
         - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
-          description: Game was found
+          description: Game state was found
           content:
             'application/vnd.siren+json':
               schema:
@@ -286,6 +335,10 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetGameStateOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/join:
     post:
@@ -308,6 +361,12 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/JoinGameOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/players/self/fleet:
     get:
@@ -321,7 +380,7 @@ paths:
         - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
-          description: Game was found
+          description: Fleet was found
           content:
             'application/vnd.siren+json':
               schema:
@@ -330,6 +389,14 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetFleetOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
     post:
       tags:
@@ -358,6 +425,14 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/DeployFleetOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/players/self/board:
     get:
@@ -380,6 +455,14 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetBoardOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/players/opponent/fleet:
     get:
@@ -393,7 +476,7 @@ paths:
         - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
-          description: Game was found
+          description: Fleet was found
           content:
             'application/vnd.siren+json':
               schema:
@@ -402,6 +485,14 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetOpponentFleetOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/players/self/shots:
     get:
@@ -415,7 +506,7 @@ paths:
         - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
-          description: Game was found
+          description: Shots were found
           content:
             'application/vnd.siren+json':
               schema:
@@ -424,6 +515,14 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetShotsOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
     post:
       tags:
@@ -440,7 +539,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateShotsInputModel'
+              $ref: '#/components/schemas/FireShotsInputModel'
       responses:
         201:
           description: Fleet was deployed
@@ -451,7 +550,15 @@ paths:
                   - $ref: '#/components/schemas/Entity'
                   - properties:
                       properties:
-                        $ref: '#/components/schemas/CreateShotsOutputModel'
+                        $ref: '#/components/schemas/FireShotsOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /games/{gameId}/players/opponent/shots:
     get:
@@ -465,7 +572,7 @@ paths:
         - $ref: '#/components/parameters/gameIdParam'
       responses:
         200:
-          description: Game was found
+          description: Shots were found
           content:
             'application/vnd.siren+json':
               schema:
@@ -474,6 +581,14 @@ paths:
                   - properties:
                       properties:
                         $ref: '#/components/schemas/GetOpponentShotsOutputModel'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
 
 components:
@@ -483,10 +598,13 @@ components:
       properties:
         title:
           type: string
+          example: Battleship API
         version:
           type: string
+          example: 1.0.0
         description:
           type: string
+          example: This is the Battleship API
         authors:
           type: array
           items:
@@ -499,26 +617,33 @@ components:
       properties:
         name:
           type: string
+          example: John Doe
         email:
           type: string
+          example: john@doe.org
         github:
           type: string
+          example: johndoe
 
     VCRepositoryModel:
       type: object
       properties:
         type:
           type: string
+          example: git
         url:
           type: string
+          example: https://github.com/isel-leic-daw/2022-daw-leic51d-g03
 
     RegisterUserOutputModel:
       type: object
       properties:
         accessToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4NzEzNywiZXhwIjoxNjY2MzkwNzM3fQ.Dk3vJVZfeldVPcLSsmAduu52AOS7EyvCkzeDJMcPPhHS31hI8N0mXQeqJUmY3V_o26msseYmzqXf4GvPf33tNA
         refreshToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4NzEzNywiZXhwIjoxNjY2NDczNTM3fQ.n38mWAZVW6sfCVkvxfKrwerYKhTXdkAxGVPUikiGwldQPWwYNZ0oMRbkWPQIdi0cP1NDgklS8Da6RchdgdOUaw
 
     RegisterUserInputModel:
       type: object
@@ -529,18 +654,23 @@ components:
       properties:
         username:
           type: string
+          example: guest1
         email:
           type: string
+          example: guest1@mail.com
         password:
           type: string
+          example: guest
 
     RefreshTokenOutputModel:
       type: object
       properties:
         accessToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2MzkzMzQ4fQ.Zh6mjDKVbBH239u3l0AAGnBnQdPrvDsf6qubJsILDquDh8Wec3YAMKIB2uzcNElBVEhKN8QAMhldROhtYGYncg
         refreshToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2NDc2MTQ4fQ.hjkkN1ORnLC0Qmp0xEpElhGMwit3CnW7dDBzibMUMd3qJVNkoJVrSp9G4AwizAMeF1v28s3nD5OVERzlNDvDLQ
 
     RefreshTokenInputModel:
       type: object
@@ -549,6 +679,7 @@ components:
       properties:
         refreshToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2NDc2MTQ4fQ.hjkkN1ORnLC0Qmp0xEpElhGMwit3CnW7dDBzibMUMd3qJVNkoJVrSp9G4AwizAMeF1v28s3nD5OVERzlNDvDLQ
 
     LogoutUserInputModel:
       type: object
@@ -557,14 +688,17 @@ components:
       properties:
         refreshToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2NDc2MTQ4fQ.hjkkN1ORnLC0Qmp0xEpElhGMwit3CnW7dDBzibMUMd3qJVNkoJVrSp9G4AwizAMeF1v28s3nD5OVERzlNDvDLQ
 
     LoginUserOutputModel:
       type: object
       properties:
         accessToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2MzkzMzQ4fQ.Zh6mjDKVbBH239u3l0AAGnBnQdPrvDsf6qubJsILDquDh8Wec3YAMKIB2uzcNElBVEhKN8QAMhldROhtYGYncg
         refreshToken:
           type: string
+          example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2NDc2MTQ4fQ.hjkkN1ORnLC0Qmp0xEpElhGMwit3CnW7dDBzibMUMd3qJVNkoJVrSp9G4AwizAMeF1v28s3nD5OVERzlNDvDLQ
 
     LoginUserInputModel:
       type: object
@@ -574,46 +708,59 @@ components:
       properties:
         username:
           type: string
+          example: guest1
         password:
           type: string
+          example: guest
 
     GetUsersOutputModel:
       type: object
       properties:
         totalCount:
           type: integer
+          example: 10
 
     GetUserOutputModel:
       type: object
       properties:
         username:
           type: string
+          example: guest1
         email:
           type: string
+          example: guest1@guest.org
         points:
           type: integer
+          example: 100
 
     PlayerModel:
       type: object
       properties:
         username:
           type: string
+          example: guest1
         points:
           type: integer
+          example: 100
 
     GameStateModel:
       type: object
       properties:
         phase:
           type: string
+          example: WAITING_FOR_PLAYERS
         phaseEndTime:
           type: integer
+          example: 1666201815147
         round:
           type: integer
+          example: 1
         turn:
           type: string
+          example: guest1
         winner:
           type: string
+          example: guest1
 
     GameConfigModel:
       type: object
@@ -621,17 +768,21 @@ components:
         - gridSize
         - maxTimeForLayoutPhase
         - shotsPerRound
-        - maxTimePerShot
+        - maxTimePerRound
         - shipTypes
       properties:
         gridSize:
           type: integer
+          example: 10
         maxTimeForLayoutPhase:
           type: integer
+          example: 60
         shotsPerRound:
           type: integer
-        maxTimePerShot:
+          example: 5
+        maxTimePerRound:
           type: integer
+          example: 40
         shipTypes:
           type: array
           items:
@@ -642,12 +793,14 @@ components:
       properties:
         wasCreated:
           type: boolean
+          example: true
 
     JoinGameOutputModel:
       type: object
       properties:
         gameId:
           type: integer
+          example: 1
 
     GetGameStateOutputModel:
       $ref: '#/components/schemas/GameStateModel'
@@ -657,16 +810,20 @@ components:
       properties:
         totalCount:
           type: integer
+          example: 10
 
     GetGameOutputModel:
       type: object
       properties:
         id:
           type: integer
+          example: 1
         name:
           type: string
+          example: game1
         creator:
           type: string
+          example: guest1
         config:
           $ref: '#/components/schemas/GameConfigModel'
         state:
@@ -684,6 +841,7 @@ components:
       properties:
         name:
           type: string
+          example: game1
         config:
           $ref: '#/components/schemas/GameConfigModel'
 
@@ -692,12 +850,15 @@ components:
       properties:
         type:
           type: string
+          example: DESTROYER
         coordinate:
           $ref: '#/components/schemas/CoordinateModel'
         orientation:
           type: string
+          example: HORIZONTAL
         lives:
           type: integer
+          example: 2
 
     GetShotsOutputModel:
       $ref: '#/components/schemas/FiredShotsModel'
@@ -737,11 +898,46 @@ components:
           items:
             $ref: '#/components/schemas/UnfiredShotModel'
 
+    UnfiredShotModel:
+      type: object
+      required:
+        - coordinate
+      properties:
+        coordinate:
+          $ref: '#/components/schemas/CoordinateModel'
+
+    ShotResultModel:
+      type: object
+      properties:
+        result:
+          type: string
+          example: HIT
+
+    FiredShotsModel:
+      type: object
+      properties:
+        shots:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiredShotModel'
+
+    FiredShotModel:
+      type: object
+      properties:
+        coordinate:
+          $ref: '#/components/schemas/CoordinateModel'
+        round:
+          type: integer
+          example: 1
+        result:
+          $ref: '#/components/schemas/ShotResultModel'
+
     DeployFleetOutputModel:
       type: object
       properties:
         successfullyDeployed:
           type: boolean
+          example: true
 
     DeployFleetInputModel:
       type: object
@@ -753,6 +949,56 @@ components:
           items:
             $ref: '#/components/schemas/UndeployedShipModel'
 
+    UndeployedShipModel:
+      type: object
+      required:
+        - type
+        - coordinate
+        - orientation
+      properties:
+        type:
+          type: string
+          example: DESTROYER
+        coordinate:
+          $ref: '#/components/schemas/CoordinateModel'
+        orientation:
+          type: string
+          example: HORIZONTAL
+
+    ShipTypeModel:
+      type: object
+      required:
+        - shipName
+        - quantity
+        - size
+        - points
+      properties:
+        shipName:
+          type: string
+          example: DESTROYER
+        quantity:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 2
+        points:
+          type: integer
+          example: 2
+
+    CoordinateModel:
+      type: object
+      required:
+        - col
+        - row
+      properties:
+        col:
+          type: string
+          example: A
+        row:
+          type: integer
+          example: 1
+
     # Siren Base Models
     Entity:
       type: object
@@ -763,7 +1009,7 @@ components:
             type: string
         properties:
           type: object
-          additionalProperties: true
+          additionalProperties: false
         entities:
           type: array
           items:
@@ -798,7 +1044,7 @@ components:
           type: string
         properties:
           type: object
-          additionalProperties: true
+          additionalProperties: false
         entities:
           type: array
           items:
@@ -864,12 +1110,24 @@ components:
         title:
           type: string
 
+    ErrorModel:
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        error:
+          type: string
+        path:
+          type: string
+
   parameters:
     offsetParam:
       name: offset
       in: query
       description: The offset to start from
-      required: false
+      required: true
       schema:
         type: integer
         default: 0
@@ -878,10 +1136,34 @@ components:
       name: limit
       in: query
       description: The number of items to return
-      required: false
+      required: true
       schema:
         type: integer
         default: 10
+
+    orderByParam:
+      name: orderBy
+      in: query
+      description: The field to order by
+      required: false
+      schema:
+        type: string
+        enum:
+          - points
+          - number_of_games_played
+        default: points
+
+    sortDirectionParam:
+      name: sortDirection
+      in: query
+      description: The direction to sort by
+      required: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+        default: ASC
 
     gameIdParam:
       name: gameId
@@ -890,6 +1172,7 @@ components:
       required: true
       schema:
         type: integer
+        example: 1
 
     usernameParam:
       name: username
@@ -898,9 +1181,36 @@ components:
       required: true
       schema:
         type: string
+        example: 'bob'
 
-  # TODO: responses and error handling
-  # TODO: examples
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
 
   securitySchemes:
     bearerAuth:

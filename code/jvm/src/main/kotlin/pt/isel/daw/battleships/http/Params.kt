@@ -1,5 +1,8 @@
 package pt.isel.daw.battleships.http
 
+/**
+ * Contains the parameters used in the application.
+ */
 object Params {
     const val OFFSET_PARAM = "offset"
     const val LIMIT_PARAM = "limit"
