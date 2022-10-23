@@ -41,7 +41,7 @@ class Player(
     val user: User,
 
     @Column(name = "points", nullable = false)
-    val points: Int = 0
+    var points: Int = 0
 ) {
     @Id
     @Column(name = "id")
@@ -173,11 +173,13 @@ class Player(
                             ship == null -> Shot.ShotResult.MISS
                             ship.lives == 1 -> {
                                 ship.lives = 0
+                                points += ship.type.points
+
                                 Shot.ShotResult.SUNK
                             }
-
                             else -> {
                                 ship.lives--
+
                                 Shot.ShotResult.HIT
                             }
                         }

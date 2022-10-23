@@ -1,8 +1,8 @@
 package pt.isel.daw.battleships.domain.game
 
 import pt.isel.daw.battleships.domain.Player
+import pt.isel.daw.battleships.domain.game.GameState.GamePhase.DEPLOYING_FLEETS
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.FINISHED
-import pt.isel.daw.battleships.domain.game.GameState.GamePhase.GRID_LAYOUT
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.IN_PROGRESS
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.WAITING_FOR_PLAYERS
 import java.io.Serializable
@@ -20,7 +20,7 @@ import javax.persistence.OneToOne
  * The GameState entity.
  *
  * @property phase the phase of the game
- * @property phaseEndTime the time when the current phase ends
+ * @property phaseExpirationTime the time when the current phase ends
  * @property round the current round
  * @property turn the current player
  * @property winner the winner player
@@ -31,8 +31,8 @@ class GameState(
     @Enumerated(EnumType.STRING)
     var phase: GamePhase = WAITING_FOR_PLAYERS,
 
-    @Column(name = "phase_end_time", nullable = false)
-    var phaseEndTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
+    @Column(name = "phase_expiration_time", nullable = false)
+    var phaseExpirationTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
 
     @Column(name = "round", nullable = false)
     var round: Int? = null,
@@ -47,18 +47,40 @@ class GameState(
 ) : Serializable {
 
     /**
+     * Checks if the game phase has expired.
+     *
+     * @return true if the game phase has expired, false otherwise
+     */
+    fun phaseExpired(): Boolean =
+        phaseExpirationTime.time < System.currentTimeMillis() &&
+            phase != FINISHED
+
+    /**
      * Represents the game phases.
      *
      * @property WAITING_FOR_PLAYERS the game is waiting for players to join
-     * @property GRID_LAYOUT the game is waiting for players to place their ships
+     * @property DEPLOYING_FLEETS the game is waiting for players to place their ships
      * @property IN_PROGRESS the game is in progress
      * @property FINISHED the game is finished
      */
     enum class GamePhase {
         WAITING_FOR_PLAYERS,
-        GRID_LAYOUT,
+        DEPLOYING_FLEETS,
         IN_PROGRESS,
-        FINISHED
+        FINISHED;
+
+        /**
+         * Gets the next game phase.
+         *
+         * @return the next game phase
+         */
+        fun next(): GamePhase =
+            when (this) {
+                WAITING_FOR_PLAYERS -> DEPLOYING_FLEETS
+                DEPLOYING_FLEETS -> IN_PROGRESS
+                IN_PROGRESS -> FINISHED
+                FINISHED -> throw IllegalStateException("Cannot advance from FINISHED phase.")
+            }
     }
 
     companion object {

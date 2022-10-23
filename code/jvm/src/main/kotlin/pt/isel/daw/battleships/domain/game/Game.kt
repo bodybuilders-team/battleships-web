@@ -2,7 +2,12 @@ package pt.isel.daw.battleships.domain.game
 
 import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
+import java.sql.Timestamp
+import java.time.Instant
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
@@ -27,20 +32,20 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "games")
-class Game(
+class Game {
     @Column(name = "name")
-    val name: String,
+    val name: String
 
     @ManyToOne
     @JoinColumn(name = "creator")
-    val creator: User,
+    val creator: User
 
     @Embedded
-    val config: GameConfig,
+    val config: GameConfig
 
     @Embedded
     val state: GameState
-) {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,12 +55,16 @@ class Game(
     @JoinColumn(name = "game")
     val players: MutableList<Player> = mutableListOf()
 
-    init {
-        // This is a workaround for JPA instatiation of the entity with the no args constructor
-        @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY", "UNNECESSARY_SAFE_CALL")
-        config?.shipTypes?.forEach { shipType ->
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(name: String, creator: User, config: GameConfig, state: GameState) {
+        config.shipTypes.forEach { shipType ->
             shipType.game = this
         }
+
+        this.name = name
+        this.creator = creator
+        this.config = config
+        this.state = state
     }
 
     /**
@@ -123,7 +132,78 @@ class Game(
     fun areFleetsDeployed(): Boolean =
         players.all { it.deployedShips.isNotEmpty() }
 
+    // TODO: Comment function
+    fun updatePhase() {
+        state.phase = if (state.phase == GameState.GamePhase.IN_PROGRESS) {
+            state.phase
+        } else state.phase.next()
+
+        state.phaseExpirationTime = Timestamp.from(
+            Instant.now().plusSeconds(
+                when (state.phase) {
+                    GameState.GamePhase.DEPLOYING_FLEETS -> config.maxTimeForLayoutPhase
+                    GameState.GamePhase.IN_PROGRESS -> config.maxTimePerRound
+                    else -> 0
+                }.toLong()
+            )
+        )
+    }
+
+    fun abortGame() {
+        state.phase = GameState.GamePhase.FINISHED
+    }
+
+    fun finishGame(winner: Player) {
+        state.phase = GameState.GamePhase.FINISHED
+        state.winner = winner
+
+        players.forEach {
+            it.user.points += it.points
+        }
+    }
+
+    /**
+     * Updates the game state if the current phase has expired.
+     */
+    fun updateIfPhaseExpired() {
+        if (!state.phaseExpired()) {
+            return
+        }
+
+        if (state.phase == GameState.GamePhase.IN_PROGRESS) {
+            val currentPlayer =
+                state.turn ?: throw IllegalStateException("Game is in progress but turn is null")
+            val winner = getOpponent(currentPlayer.user.username)
+
+            finishGame(winner)
+        } else {
+            abortGame()
+        }
+
+        when (state.phase) {
+            GameState.GamePhase.WAITING_FOR_PLAYERS ->
+                throw WaitingForPlayersTimeExpiredException("The waiting for players time has expired.")
+
+            GameState.GamePhase.DEPLOYING_FLEETS ->
+                throw FleetDeployTimeExpiredException("The fleet deploy time has expired.")
+
+            GameState.GamePhase.IN_PROGRESS ->
+                throw FiringShotsTimeExpiredException("The firing shots time has expired.")
+
+            GameState.GamePhase.FINISHED ->
+                throw IllegalStateException("Game is already finished")
+        }
+    }
+
+    fun isFinished(): Boolean = state.phase == GameState.GamePhase.FINISHED
+
     companion object {
         private const val MAX_GAME_PLAYERS = 2
+    }
+
+    enum class FinishedState {
+        NOT_FINISHED,
+        FINISHED,
+        ABORTED
     }
 }

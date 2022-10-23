@@ -20,7 +20,7 @@ data class GameStateDTO(
 ) {
     constructor(phase: GameState) : this(
         phase = phase.phase.name,
-        phaseEndTime = phase.phaseEndTime.time,
+        phaseEndTime = phase.phaseExpirationTime.time,
         round = phase.round,
         turn = phase.turn?.user?.username,
         winner = phase.winner?.user?.username

@@ -41,7 +41,7 @@ CREATE TABLE games
     shots_per_round           INT         NOT NULL,
     max_time_per_round        INT         NOT NULL,
     phase                     VARCHAR(20) NOT NULL,
-    phase_end_time            TIMESTAMP   NOT NULL,
+    phase_expiration_time     TIMESTAMP   NOT NULL,
     round                     INT,
     turn                      INT,
     winner                    INT,
@@ -52,8 +52,9 @@ CREATE TABLE games
         CHECK ( max_time_for_layout_phase >= 10 AND max_time_for_layout_phase <= 120 ),
     CONSTRAINT shots_per_round_is_valid CHECK ( shots_per_round >= 1 AND shots_per_round <= 5 ),
     CONSTRAINT max_time_per_round_is_valid CHECK ( max_time_per_round >= 10 AND max_time_per_round <= 120 ),
-    CONSTRAINT phase_is_valid CHECK ( phase IN ('WAITING_FOR_PLAYERS', 'GRID_LAYOUT', 'IN_PROGRESS', 'FINISHED') ),
+    CONSTRAINT phase_is_valid CHECK ( phase IN ('WAITING_FOR_PLAYERS', 'DEPLOYING_FLEETS', 'IN_PROGRESS', 'FINISHED') ),
     CONSTRAINT round_is_valid CHECK ( round >= 1 )
+
 );
 
 CREATE TABLE players

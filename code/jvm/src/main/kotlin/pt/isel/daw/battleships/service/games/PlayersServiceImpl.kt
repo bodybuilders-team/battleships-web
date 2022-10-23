@@ -2,6 +2,8 @@ package pt.isel.daw.battleships.service.games
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.domain.game.Game
 import pt.isel.daw.battleships.domain.game.GameState
 import pt.isel.daw.battleships.domain.ship.DeployedShip
@@ -10,20 +12,16 @@ import pt.isel.daw.battleships.domain.ship.UndeployedShip
 import pt.isel.daw.battleships.repository.UsersRepository
 import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
-import pt.isel.daw.battleships.service.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
-import pt.isel.daw.battleships.service.exceptions.ShootTimeExpiredException
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedFleetDTO
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedShipDTO
 import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedFleetDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.FiredShotsDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
 import pt.isel.daw.battleships.utils.JwtProvider
-import java.sql.Timestamp
-import java.time.Instant
 
 /**
  * Service that handles the business logic of the players.
@@ -52,15 +50,13 @@ class PlayersServiceImpl(
         val user = authenticateUser(token)
         val game = getGameById(gameId)
         val player = game.getPlayer(username = user.username)
-        val opponent = game.getOpponent(user.username)
 
-        if (game.state.phase != GameState.GamePhase.GRID_LAYOUT) {
-            throw InvalidPhaseException("Game is not in the placing ships phase")
+        if (game.state.phase != GameState.GamePhase.DEPLOYING_FLEETS) {
+            throw InvalidPhaseException("Game is not in the deploying fleet phase")
         }
 
-        if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
-            game.state.phase = GameState.GamePhase.FINISHED
-            game.state.winner = opponent
+        if (game.state.phaseExpired()) {
+            game.abortGame()
             throw FleetDeployTimeExpiredException("The fleet deploy time has expired.")
         }
 
@@ -78,10 +74,10 @@ class PlayersServiceImpl(
         player.deployFleet(undeployedShips)
 
         if (game.areFleetsDeployed()) {
-            game.state.phase = GameState.GamePhase.IN_PROGRESS
-            game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimePerRound.toLong()))
-            game.state.round = 1
+            game.updatePhase()
+
             game.state.turn = game.players.first()
+            game.state.round = 1
         }
     }
 
@@ -111,19 +107,17 @@ class PlayersServiceImpl(
         val player = game.getPlayer(user.username)
         val opponent = game.getOpponent(user.username)
 
-        if (game.state.turn != player) {
-            throw InvalidTurnException("It's not your turn.")
-        }
-
         if (game.state.phase != GameState.GamePhase.IN_PROGRESS) {
             throw InvalidPhaseException("Game is not in progress.")
         }
 
-        if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
-            game.state.phase = GameState.GamePhase.FINISHED
-            game.state.winner = opponent
+        if (game.state.turn != player) {
+            throw InvalidTurnException("It's not your turn.")
+        }
 
-            throw ShootTimeExpiredException("The shoot time has expired.")
+        if (game.state.phaseExpired()) {
+            game.finishGame(player)
+            throw FiringShotsTimeExpiredException("The firing shots time has expired.")
         }
 
         val shotsCoordinates = unfiredShotsDTO.shots.map {
@@ -133,13 +127,14 @@ class PlayersServiceImpl(
         val shots = player.shoot(opponent, shotsCoordinates)
 
         if (opponent.deployedShips.all(DeployedShip::isSunk)) {
-            game.state.phase = GameState.GamePhase.FINISHED
-            game.state.winner = player
+            game.finishGame(player)
         } else {
+            game.updatePhase()
+
             game.state.turn = opponent
+
             val currRound = game.state.round ?: throw IllegalStateException("Round is null")
             game.state.round = currRound + 1
-            game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimePerRound.toLong()))
         }
 
         return FiredShotsDTO(shots = shots)

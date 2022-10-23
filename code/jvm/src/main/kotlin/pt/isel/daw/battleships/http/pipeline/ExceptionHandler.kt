@@ -5,19 +5,21 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinate
+import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
-import pt.isel.daw.battleships.service.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
-import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
+import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.service.exceptions.InvalidShotException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
-import pt.isel.daw.battleships.service.exceptions.ShootTimeExpiredException
 
 /**
  * Handles exceptions thrown by the controllers.
@@ -34,17 +36,19 @@ class ExceptionHandler {
     @ExceptionHandler(
         value = [
             AlreadyExistsException::class,
-            NotFoundException::class,
             AlreadyJoinedException::class,
-            InvalidPhaseException::class,
             FleetAlreadyDeployedException::class,
             InvalidFleetException::class,
+            InvalidPaginationParamsException::class,
+            InvalidPhaseException::class,
             InvalidShipTypeException::class,
             InvalidShotException::class,
+            InvalidTurnException::class,
+            NotFoundException::class,
             FleetDeployTimeExpiredException::class,
-            ShootTimeExpiredException::class,
-            InvalidPaginationParams::class,
-            InvalidTurnException::class
+            FiringShotsTimeExpiredException::class,
+            WaitingForPlayersTimeExpiredException::class,
+            InvalidCoordinate::class
         ]
     )
     fun handleBadRequest(ex: Exception): ResponseEntity<Any> =

@@ -1,12 +1,12 @@
 package pt.isel.daw.battleships.service.games
 
+import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
-import pt.isel.daw.battleships.service.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.service.exceptions.InvalidShotException
-import pt.isel.daw.battleships.service.exceptions.ShootTimeExpiredException
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedFleetDTO
 import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedFleetDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.FiredShotsDTO
@@ -73,7 +73,7 @@ interface PlayersService {
      * @return the shots shot
      * @throws InvalidPhaseException if the game is not in progress
      * @throws InvalidShotException if a shot is invalid
-     * @throws ShootTimeExpiredException if the player tries to shoot after the shoot time has expired
+     * @throws FiringShotsTimeExpiredException if the player tries to shoot after the shoot time has expired
      */
     fun fireShots(token: String, gameId: Int, unfiredShotsDTO: UnfiredShotsDTO): FiredShotsDTO
 

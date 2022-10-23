@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.service.exceptions
+package pt.isel.daw.battleships.domain.exceptions
 
 /**
  * Exception thrown when a player tries to deploy a fleet after the deployment time has expired.

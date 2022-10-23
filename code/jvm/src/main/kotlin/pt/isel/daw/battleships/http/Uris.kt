@@ -23,6 +23,7 @@ object Uris {
     const val GAMES_JOIN = "/games/{gameId}/join"
 
     const val PLAYERS_MY_FLEET = "/games/{gameId}/players/self/fleet"
+    const val PLAYERS_MY_BOARD = "/games/{gameId}/players/self/board"
     const val PLAYERS_OPPONENT_FLEET = "/games/{gameId}/players/opponent/fleet"
     const val PLAYERS_MY_SHOTS = "/games/{gameId}/players/self/shots"
     const val PLAYERS_OPPONENT_SHOTS = "/games/{gameId}/players/opponent/shots"

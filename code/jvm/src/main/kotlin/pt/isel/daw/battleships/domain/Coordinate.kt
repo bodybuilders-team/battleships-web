@@ -11,14 +11,15 @@ import javax.persistence.Embeddable
  * @property row the row of the coordinate
  */
 @Embeddable
-class Coordinate(
+class Coordinate {
     @Column(name = "col", nullable = false)
-    val col: Char,
+    val col: Char
 
     @Column(name = "row", nullable = false)
     val row: Int
-) {
-    init {
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(col: Char, row: Int) {
         if (col !in maxColsRange) {
             throw InvalidCoordinate(
                 "Invalid Column"
@@ -30,6 +31,9 @@ class Coordinate(
                 "Invalid Row"
             )
         }
+
+        this.col = col
+        this.row = row
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.users
 
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
-import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
+import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
@@ -23,7 +23,7 @@ interface UsersService {
      * @param limit the limit of the pagination
      *
      * @return the DTO with the information of the users
-     * @throws InvalidPaginationParams if the offset or limit are invalid
+     * @throws InvalidPaginationParamsException if the offset or limit are invalid
      */
     fun getUsers(offset: Int, limit: Int): UsersDTO
 

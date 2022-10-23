@@ -29,7 +29,7 @@ class User(
     val passwordHash: String,
 
     @Column(name = "points", nullable = false)
-    val points: Int = 0
+    var points: Int = 0
 ) {
     @Id
     @Column(name = "id")

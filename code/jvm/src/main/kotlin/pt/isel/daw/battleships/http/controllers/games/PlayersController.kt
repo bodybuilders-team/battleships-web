@@ -12,6 +12,7 @@ import pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet
 import pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet.DeployFleetOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.fireShots.FireShotsInputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.fireShots.FireShotsOutputModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.getBoard.GetBoardOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.getFleet.GetFleetOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.getOpponentFleet.GetOpponentFleetOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.getOpponentShots.GetOpponentShotsOutputModel
@@ -24,6 +25,7 @@ import pt.isel.daw.battleships.http.siren.Link
 import pt.isel.daw.battleships.http.siren.SirenEntity
 import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
+import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.service.games.PlayersService
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
@@ -36,7 +38,7 @@ import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 @RestController
 @RequestMapping(produces = [SIREN_TYPE])
 @Authenticated
-class PlayersController(private val playersService: PlayersService) {
+class PlayersController(private val playersService: PlayersService, private val gamesService: GamesService) {
 
     /**
      * Handles the request to get the fleet of a player.
@@ -102,6 +104,84 @@ class PlayersController(private val playersService: PlayersService) {
                     rel = listOf("fleet"),
                     href = Uris.myFleet(gameId = gameId)
                 ),
+                EmbeddedLink(
+                    rel = listOf("game"),
+                    href = Uris.gameById(gameId = gameId)
+                )
+            )
+        )
+    }
+
+    /**
+     * Handles the request to get the board of a player.
+     *
+     * @param token the token of the user
+     * @param gameId the id of the game
+     *
+     * @return the board of the player
+     */
+    @GetMapping(Uris.PLAYERS_MY_BOARD)
+    fun getBoard(
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @PathVariable gameId: Int
+    ): SirenEntity<GetBoardOutputModel> {
+        val config = gamesService.getGame(gameId = gameId).config
+        val types = config.shipTypes
+
+        val boardSize = config.gridSize
+
+        val rows = Array(boardSize) {
+            CharArray(boardSize) { '·' }
+        }
+
+        val fleet = playersService.getFleet(token = token, gameId = gameId).ships
+        val shots = playersService.getOpponentShots(
+            token = token,
+            gameId = gameId
+        ).shots
+
+        fleet.forEach { ship ->
+            val shipTypeIndex = types.indexOfFirst { it.shipName == ship.type }
+            val shipType = types[shipTypeIndex]
+            val shipSize = shipType.size
+            val shipOrientation = ship.orientation
+            val shipPosition = ship.coordinate
+
+            val shipStartX = shipPosition.col - 'A'
+            val shipStartY = shipPosition.row - 1
+
+            val shipEndX = if (shipOrientation == "HORIZONTAL") shipStartX + shipSize - 1 else shipStartX
+            val shipEndY = if (shipOrientation == "VERTICAL") shipStartY + shipSize - 1 else shipStartY
+
+            for (x in shipStartX..shipEndX) {
+                for (y in shipStartY..shipEndY) {
+                    rows[y][x] = '0' + shipTypeIndex
+                }
+            }
+        }
+
+        shots.forEach { shot ->
+            val shotX = shot.coordinate.col - 'A'
+            val shotY = shot.coordinate.row - 1
+
+            rows[shotY][shotX] =
+                if (shot.result.result == "HIT" ||
+                    shot.result.result == "SUNK"
+                ) 'X' else 'M'
+        }
+
+        val board = rows.map { String(it) }
+
+        return SirenEntity(
+            `class` = listOf("my-board"),
+            properties = GetBoardOutputModel(board = board),
+            links = listOf(
+                Link(
+                    rel = listOf("self"),
+                    href = Uris.myFleet(gameId = gameId)
+                )
+            ),
+            entities = listOf(
                 EmbeddedLink(
                     rel = listOf("game"),
                     href = Uris.gameById(gameId = gameId)

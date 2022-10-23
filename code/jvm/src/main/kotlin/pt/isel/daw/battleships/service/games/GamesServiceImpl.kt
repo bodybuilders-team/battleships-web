@@ -9,7 +9,7 @@ import pt.isel.daw.battleships.repository.UsersRepository
 import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
-import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
+import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.games.dtos.game.CreateGameRequestDTO
@@ -42,23 +42,21 @@ class GamesServiceImpl(
 
     override fun getGames(offset: Int, limit: Int): GamesDTO {
         if (offset < 0 || limit < 0) {
-            throw InvalidPaginationParams("Offset and limit must be positive")
+            throw InvalidPaginationParamsException("Offset and limit must be positive")
         }
 
         if (limit > MAX_GAMES_LIMIT) {
-            throw InvalidPaginationParams("Limit must be less than $MAX_GAMES_LIMIT")
+            throw InvalidPaginationParamsException("Limit must be less than $MAX_GAMES_LIMIT")
         }
 
-        return gamesRepository
-            .findAll(OffsetPageRequest(offset.toLong(), limit))
-            .toList()
-            .map { GameDTO(it) }
-            .let { games ->
-                GamesDTO(
-                    games = games,
-                    totalCount = usersRepository.count().toInt()
-                )
-            }
+        return GamesDTO(
+            games = gamesRepository
+                .findAll(OffsetPageRequest(offset.toLong(), limit))
+                .toList()
+                .onEach(Game::updateIfPhaseExpired)
+                .map(::GameDTO),
+            totalCount = gamesRepository.count().toInt()
+        )
     }
 
     override fun createGame(token: String, createGameRequestDTO: CreateGameRequestDTO): Int =
@@ -70,26 +68,46 @@ class GamesServiceImpl(
     override fun matchmake(token: String, gameConfigDTO: GameConfigDTO): MatchmakeResponseDTO {
         val user = authenticateUser(token)
 
-        val (game, wasCreated) = gamesRepository
-            .findFirstAvailableGameWithConfig(user, gameConfigDTO.toGameConfig())
-            ?.let { foundGame ->
-                joinGame(user = user, game = foundGame)
-                foundGame to false
-            }
-            ?: (
-                createGame(
+        while (true) {
+            val game = gamesRepository
+                .findFirstAvailableGameWithConfig(user, gameConfigDTO.toGameConfig())
+
+            if (game == null) {
+                val newGame = createGame(
                     creator = user,
                     createGameRequestDTO = CreateGameRequestDTO(
                         name = "Game",
                         config = gameConfigDTO
                     )
-                ) to true
                 )
 
-        return MatchmakeResponseDTO(
-            game = GameDTO(game),
-            wasCreated = wasCreated
-        )
+                return MatchmakeResponseDTO(
+                    game = GameDTO(newGame),
+                    wasCreated = true
+                )
+            }
+
+            game.updateIfPhaseExpired()
+
+            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
+                continue
+            }
+
+            if (game.hasPlayer(user.username)) {
+                throw AlreadyJoinedException("You have already joined this game")
+            }
+
+            game.addPlayer(
+                player = Player(game = game, user = user)
+            )
+
+            game.updatePhase()
+
+            return MatchmakeResponseDTO(
+                game = GameDTO(game),
+                wasCreated = false
+            )
+        }
     }
 
     override fun getGame(gameId: Int): GameDTO =
@@ -120,7 +138,7 @@ class GamesServiceImpl(
             name = createGameRequestDTO.name,
             creator = creator,
             config = createGameRequestDTO.config.toGameConfig(),
-            state = GameState(phaseEndTime = Timestamp.from(Instant.now().plus(1L, ChronoUnit.DAYS)))
+            state = GameState(phaseExpirationTime = Timestamp.from(Instant.now().plus(1L, ChronoUnit.DAYS)))
         )
 
         game.addPlayer(
@@ -143,8 +161,8 @@ class GamesServiceImpl(
             throw InvalidPhaseException("Waiting for players phase is over")
         }
 
-        if (game.state.phaseEndTime.time < System.currentTimeMillis()) {
-            game.state.phase = GameState.GamePhase.FINISHED
+        if (game.state.phaseExpired()) {
+            game.abortGame()
             throw InvalidPhaseException("Waiting for players phase is over")
         }
 
@@ -155,8 +173,8 @@ class GamesServiceImpl(
         game.addPlayer(
             player = Player(game = game, user = user)
         )
-        game.state.phase = GameState.GamePhase.GRID_LAYOUT
-        game.state.phaseEndTime = Timestamp.from(Instant.now().plusSeconds(game.config.maxTimeForLayoutPhase.toLong()))
+
+        game.updatePhase()
     }
 
     /**
@@ -167,10 +185,15 @@ class GamesServiceImpl(
      * @return the game
      * @throws NotFoundException if the game does not exist
      */
-    private fun getGameById(gameId: Int): Game =
-        gamesRepository
+    private fun getGameById(gameId: Int): Game {
+        val game = gamesRepository
             .findById(gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
+
+        game.updateIfPhaseExpired()
+
+        return game
+    }
 
     companion object {
         const val MAX_GAMES_LIMIT = 100

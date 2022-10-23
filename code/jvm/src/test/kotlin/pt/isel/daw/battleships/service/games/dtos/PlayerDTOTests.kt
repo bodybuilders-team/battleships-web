@@ -33,7 +33,7 @@ class PlayerDTOTests {
                 ),
                 state = GameState(
                     phase = GameState.GamePhase.WAITING_FOR_PLAYERS,
-                    phaseEndTime = Timestamp(Instant.now().epochSecond),
+                    phaseExpirationTime = Timestamp(Instant.now().epochSecond),
                     round = 1,
                     turn = null,
                     winner = null

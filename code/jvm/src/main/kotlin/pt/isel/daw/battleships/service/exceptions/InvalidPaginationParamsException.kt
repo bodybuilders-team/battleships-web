@@ -5,4 +5,4 @@ package pt.isel.daw.battleships.service.exceptions
  *
  * @param msg exception message
  */
-class InvalidPaginationParams(msg: String) : Exception(msg)
+class InvalidPaginationParamsException(msg: String) : Exception(msg)

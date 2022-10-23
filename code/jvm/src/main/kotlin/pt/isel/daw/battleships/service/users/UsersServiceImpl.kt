@@ -9,7 +9,7 @@ import pt.isel.daw.battleships.repository.RefreshTokenRepository
 import pt.isel.daw.battleships.repository.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
-import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
+import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
@@ -46,11 +46,11 @@ class UsersServiceImpl(
 
     override fun getUsers(offset: Int, limit: Int): UsersDTO {
         if (offset < 0 || limit < 0) {
-            throw InvalidPaginationParams("Offset and limit must be positive")
+            throw InvalidPaginationParamsException("Offset and limit must be positive")
         }
 
         if (limit > MAX_USERS_LIMIT) {
-            throw InvalidPaginationParams("Limit must be less than $MAX_USERS_LIMIT")
+            throw InvalidPaginationParamsException("Limit must be less than $MAX_USERS_LIMIT")
         }
 
         return usersRepository

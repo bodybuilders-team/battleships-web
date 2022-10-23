@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.games
 
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
-import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParams
+import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.games.dtos.game.CreateGameRequestDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameConfigDTO
@@ -22,7 +22,7 @@ interface GamesService {
      * @param limit the limit of the pagination
      *
      * @return the DTO with the information of the games
-     * @throws InvalidPaginationParams if the offset or limit are invalid
+     * @throws InvalidPaginationParamsException if the offset or limit are invalid
      */
     fun getGames(offset: Int, limit: Int): GamesDTO
 

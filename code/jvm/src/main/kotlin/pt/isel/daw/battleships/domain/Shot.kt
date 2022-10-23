@@ -27,7 +27,6 @@ import javax.persistence.Table
 @Entity
 @Table(name = "shots")
 class Shot(
-
     @Column(name = "round", nullable = false)
     val round: Int,
 
