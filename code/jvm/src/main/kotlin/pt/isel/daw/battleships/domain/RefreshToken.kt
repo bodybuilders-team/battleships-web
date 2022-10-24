@@ -34,6 +34,7 @@ class RefreshToken {
     val tokenHash: String
 
     // TODO: Maybe change to timestamp
+    // TODO: Needs validation?
     @Column(name = "expiration_date", nullable = false)
     val expirationDate: Instant
 
@@ -43,9 +44,17 @@ class RefreshToken {
         tokenHash: String,
         expirationDate: Instant
     ) {
-        // TODO: Add Validations
+        // TODO: Check this
+        /*if (tokenHash.length != TOKEN_HASH_LENGTH) {
+            throw InvalidRefreshTokenException("The token hash must have a length of $TOKEN_HASH_LENGTH")
+        }*/
+
         this.user = user
         this.tokenHash = tokenHash
         this.expirationDate = expirationDate
+    }
+
+    companion object {
+        private const val TOKEN_HASH_LENGTH = 128
     }
 }

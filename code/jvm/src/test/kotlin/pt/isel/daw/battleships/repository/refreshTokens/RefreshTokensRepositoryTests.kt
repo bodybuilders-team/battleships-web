@@ -35,7 +35,6 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             )
         )
 
-
         val token = refreshTokensRepository.findByUserAndTokenHash(user, "tokenHash")
 
         assertNotNull(token)
@@ -207,5 +206,4 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
         assertEquals(0, foundTokens.size)
         assertEquals(emptyList(), foundTokens)
     }
-
 }

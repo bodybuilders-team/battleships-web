@@ -42,10 +42,10 @@ data class RegisterUserInputModel(
     )
 
     companion object {
-        const val MIN_PASSWORD_LENGTH = 8
-        const val MAX_PASSWORD_LENGTH = 127
-
         const val MIN_USERNAME_LENGTH = 3
         const val MAX_USERNAME_LENGTH = 40
+
+        const val MIN_PASSWORD_LENGTH = 8
+        const val MAX_PASSWORD_LENGTH = 127
     }
 }

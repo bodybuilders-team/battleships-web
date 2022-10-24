@@ -1,6 +1,8 @@
 package pt.isel.daw.battleships.domain.game
 
 import pt.isel.daw.battleships.domain.Player
+import pt.isel.daw.battleships.domain.exceptions.InvalidGameStateException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.DEPLOYING_FLEETS
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.FINISHED
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.IN_PROGRESS
@@ -52,7 +54,24 @@ class GameState { // TODO: Was Serializable?!?
         turn: Player? = null,
         winner: Player? = null
     ) {
-        // TODO: Add Validations
+        if (round != null && round < 0) throw InvalidShotException("Round must be positive")
+
+        if (turn != null && phase != IN_PROGRESS) {
+            throw InvalidGameStateException("Turn can only be set when the game is in progress")
+        }
+
+        if (turn == null && phase == IN_PROGRESS) {
+            throw InvalidGameStateException("Turn must be set when the game is in progress")
+        }
+
+        if (winner != null && phase != FINISHED) {
+            throw InvalidGameStateException("Winner can only be set when the game is finished")
+        }
+
+        if (winner == null && phase == FINISHED) {
+            throw InvalidGameStateException("Winner must be set when the game is finished")
+        }
+
         this.phase = phase
         this.phaseExpirationTime = phaseExpirationTime
         this.round = round

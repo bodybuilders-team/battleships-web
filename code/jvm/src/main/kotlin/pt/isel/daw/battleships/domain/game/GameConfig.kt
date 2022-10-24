@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.domain.game
 
+import pt.isel.daw.battleships.domain.exceptions.InvalidGameConfigException
 import pt.isel.daw.battleships.domain.ship.ShipType
 import pt.isel.daw.battleships.domain.ship.UndeployedShip
 import javax.persistence.CascadeType
@@ -20,28 +21,69 @@ import javax.persistence.OneToMany
  * @property rowsRange the rows range
  */
 @Embeddable
-class GameConfig(
+class GameConfig {
     @Column(name = "grid_size", nullable = false)
-    val gridSize: Int,
+    val gridSize: Int
 
     @Column(name = "max_time_per_round", nullable = false)
-    val maxTimePerRound: Int,
+    val maxTimePerRound: Int
 
     @Column(name = "max_time_for_layout_phase", nullable = false)
-    val maxTimeForLayoutPhase: Int,
+    val maxTimeForLayoutPhase: Int
 
     @Column(name = "shots_per_round", nullable = false)
-    val shotsPerRound: Int,
+    val shotsPerRound: Int
 
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "game")
     val shipTypes: List<ShipType>
-) {
+
     val colsRange
         get() = 'A' until 'A' + gridSize
 
     val rowsRange
         get() = 1..gridSize
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        gridSize: Int,
+        maxTimePerRound: Int,
+        maxTimeForLayoutPhase: Int,
+        shotsPerRound: Int,
+        shipTypes: List<ShipType>
+    ) {
+        if (gridSize !in MIN_GRID_SIZE..MAX_GRID_SIZE) {
+            throw InvalidGameConfigException("Grid size must be between $MIN_GRID_SIZE and $MAX_GRID_SIZE")
+        }
+
+        if (maxTimePerRound !in MIN_MAX_TIME_PER_ROUND..MAX_MAX_TIME_PER_ROUND) {
+            throw InvalidGameConfigException(
+                "Max time per round must be between $MIN_MAX_TIME_PER_ROUND and $MAX_MAX_TIME_PER_ROUND"
+            )
+        }
+
+        if (maxTimeForLayoutPhase !in MIN_MAX_TIME_FOR_LAYOUT_PHASE..MAX_MAX_TIME_FOR_LAYOUT_PHASE) {
+            throw InvalidGameConfigException(
+                "Max time for layout phase must be between $MIN_MAX_TIME_FOR_LAYOUT_PHASE and $MAX_MAX_TIME_FOR_LAYOUT_PHASE"
+            )
+        }
+
+        if (shotsPerRound !in MIN_SHOTS_PER_ROUND..MAX_SHOTS_PER_ROUND) {
+            throw InvalidGameConfigException(
+                "Shots per round must be between $MIN_SHOTS_PER_ROUND and $MAX_SHOTS_PER_ROUND"
+            )
+        }
+
+        if (shipTypes.isEmpty()) {
+            throw InvalidGameConfigException("Ship types must not be empty")
+        }
+
+        this.gridSize = gridSize
+        this.maxTimePerRound = maxTimePerRound
+        this.maxTimeForLayoutPhase = maxTimeForLayoutPhase
+        this.shotsPerRound = shotsPerRound
+        this.shipTypes = shipTypes
+    }
 
     /**
      * Validates a given fleet ship types against this configuration.
@@ -55,7 +97,7 @@ class GameConfig(
      */
     fun testShipTypes(ships: List<UndeployedShip>): Boolean =
         shipTypes.sumOf { shipType -> shipType.quantity } == ships.size &&
-                shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
+            shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -69,10 +111,10 @@ class GameConfig(
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
         if (shipTypes.any { shipType ->
-                other.shipTypes.none { otherShipType ->
-                    shipType == otherShipType
-                }
+            other.shipTypes.none { otherShipType ->
+                shipType == otherShipType
             }
+        }
         ) return false
 
         return true
@@ -85,5 +127,19 @@ class GameConfig(
         result = 31 * result + maxTimeForLayoutPhase
         result = 31 * result + shipTypes.hashCode()
         return result
+    }
+
+    companion object {
+        private const val MIN_GRID_SIZE = 7
+        private const val MAX_GRID_SIZE = 18
+
+        private const val MIN_MAX_TIME_FOR_LAYOUT_PHASE = 10
+        private const val MAX_MAX_TIME_FOR_LAYOUT_PHASE = 120
+
+        private const val MIN_SHOTS_PER_ROUND = 1
+        private const val MAX_SHOTS_PER_ROUND = 5
+
+        private const val MIN_MAX_TIME_PER_ROUND = 10
+        private const val MAX_MAX_TIME_PER_ROUND = 120
     }
 }

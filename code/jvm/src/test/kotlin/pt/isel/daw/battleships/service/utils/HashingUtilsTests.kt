@@ -61,7 +61,6 @@ class HashingUtilsTests {
             .doFinal((string).toByteArray())
             .fold("") { str, it -> str + "%02x".format(it) }
 
-
     @Test
     fun `hashPassword returns the generated hash of the password`() {
         val username = "bob"

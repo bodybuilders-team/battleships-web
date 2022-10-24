@@ -16,7 +16,6 @@ class UrisTests {
         assertEquals(uri, homeUri)
     }
 
-
     @Test
     fun `users returns correct Uri`() {
         val uri = URI(Uris.USERS)
@@ -62,7 +61,6 @@ class UrisTests {
 
         assertEquals(uri, userByUsernameUri)
     }
-
 
     @Test
     fun `games returns correct Uri`() {
@@ -111,7 +109,6 @@ class UrisTests {
 
         assertEquals(uri, gameJoinUri)
     }
-
 
     @Test
     fun `myFleet returns correct Uri`() {

@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.domain
 
+import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
 import pt.isel.daw.battleships.domain.game.Game
 import pt.isel.daw.battleships.domain.ship.DeployedShip
 import pt.isel.daw.battleships.domain.ship.Ship.Orientation
@@ -62,7 +63,8 @@ class Player {
         user: User,
         points: Int = 0
     ) {
-        // TODO: Add Validations
+        if (points < 0) throw InvalidPlayerException("The points must be greater than or equal to 0.")
+
         this.game = game
         this.user = user
         this.points = points
@@ -131,14 +133,14 @@ class Player {
         val rowsRange = game.config.rowsRange
 
         return (
-                orientation == Orientation.HORIZONTAL &&
-                        (coordinate.col + size - 1) in colsRange &&
-                        coordinate.row in rowsRange
-                ) || (
-                orientation == Orientation.VERTICAL &&
-                        (coordinate.row + size - 1) in rowsRange &&
-                        coordinate.col in colsRange
-                )
+            orientation == Orientation.HORIZONTAL &&
+                (coordinate.col + size - 1) in colsRange &&
+                coordinate.row in rowsRange
+            ) || (
+            orientation == Orientation.VERTICAL &&
+                (coordinate.row + size - 1) in rowsRange &&
+                coordinate.col in colsRange
+            )
     }
 
     /**

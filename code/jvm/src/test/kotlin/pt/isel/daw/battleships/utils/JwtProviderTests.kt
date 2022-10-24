@@ -176,5 +176,4 @@ class JwtProviderTests {
     fun `RefreshTokenDetails creation is successful`() {
         JwtProvider.RefreshTokenDetails(token = "token", expirationDate = Instant.now())
     }
-
 }

@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.domain.ship
 
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.domain.game.Game
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -51,7 +52,30 @@ class ShipType {
         size: Int,
         points: Int
     ) {
-        // TODO: Add Validations
+        if (shipName.length !in MIN_SHIP_NAME_LENGTH..MAX_SHIP_NAME_LENGTH) {
+            throw InvalidShipTypeException(
+                "Ship type name must be between $MIN_SHIP_NAME_LENGTH and $MAX_SHIP_NAME_LENGTH characters long"
+            )
+        }
+
+        if (quantity !in MIN_SHIP_QUANTITY..MAX_SHIP_QUANTITY) {
+            throw InvalidShipTypeException(
+                "Ship type quantity must be between $MIN_SHIP_QUANTITY and $MAX_SHIP_QUANTITY"
+            )
+        }
+
+        if (size !in MIN_SHIP_SIZE..MAX_SHIP_SIZE) {
+            throw InvalidShipTypeException(
+                "Ship type size must be between $MIN_SHIP_SIZE and $MAX_SHIP_SIZE"
+            )
+        }
+
+        if (points !in MIN_SHIP_POINTS..MAX_SHIP_POINTS) {
+            throw InvalidShipTypeException(
+                "Ship type points must be between $MIN_SHIP_POINTS and $MAX_SHIP_POINTS"
+            )
+        }
+
         this.shipName = shipName
         this.quantity = quantity
         this.size = size
@@ -80,5 +104,19 @@ class ShipType {
         result = 31 * result + (game?.hashCode() ?: 0)
         result = 31 * result + (id ?: 0)
         return result
+    }
+
+    companion object {
+        private const val MIN_SHIP_NAME_LENGTH = 1
+        private const val MAX_SHIP_NAME_LENGTH = 40
+
+        private const val MIN_SHIP_QUANTITY = 0
+        private const val MAX_SHIP_QUANTITY = 10
+
+        private const val MIN_SHIP_SIZE = 1
+        private const val MAX_SHIP_SIZE = 7
+
+        private const val MIN_SHIP_POINTS = 1
+        private const val MAX_SHIP_POINTS = 100
     }
 }

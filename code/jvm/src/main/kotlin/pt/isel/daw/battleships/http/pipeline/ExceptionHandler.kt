@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinateException
+import pt.isel.daw.battleships.domain.exceptions.InvalidDeployedShipException
+import pt.isel.daw.battleships.domain.exceptions.InvalidGameConfigException
+import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
+import pt.isel.daw.battleships.domain.exceptions.InvalidGameStateException
+import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
+import pt.isel.daw.battleships.domain.exceptions.InvalidRefreshTokenException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
+import pt.isel.daw.battleships.domain.exceptions.InvalidUserException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
@@ -18,8 +27,6 @@ import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
-import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
-import pt.isel.daw.battleships.service.exceptions.InvalidShotException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import java.time.LocalDateTime
@@ -30,7 +37,6 @@ import javax.servlet.http.HttpServletRequest
  */
 @ControllerAdvice
 class ExceptionHandler {
-
     /**
      * Handles Bad Request exceptions.
      *
@@ -46,14 +52,21 @@ class ExceptionHandler {
             InvalidFleetException::class,
             InvalidPaginationParamsException::class,
             InvalidPhaseException::class,
-            InvalidShipTypeException::class,
-            InvalidShotException::class,
             InvalidTurnException::class,
             NotFoundException::class,
             FleetDeployTimeExpiredException::class,
             FiringShotsTimeExpiredException::class,
             WaitingForPlayersTimeExpiredException::class,
-            InvalidCoordinateException::class
+            InvalidCoordinateException::class,
+            InvalidUserException::class,
+            InvalidPlayerException::class,
+            InvalidRefreshTokenException::class,
+            InvalidDeployedShipException::class,
+            InvalidGameStateException::class,
+            InvalidGameConfigException::class,
+            InvalidGameException::class,
+            InvalidShipTypeException::class,
+            InvalidShotException::class
         ]
     )
     fun handleBadRequest(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =

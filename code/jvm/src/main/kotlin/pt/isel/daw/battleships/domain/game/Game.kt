@@ -4,6 +4,7 @@ import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
@@ -63,7 +64,10 @@ class Game {
         config: GameConfig,
         state: GameState
     ) {
-        // TODO: Add Validations
+        if (name.length !in MIN_NAME_LENGTH..MAX_NAME_LENGTH) {
+            throw InvalidGameException("Name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long.")
+        }
+
         this.name = name
         this.creator = creator
 
@@ -220,5 +224,8 @@ class Game {
 
     companion object {
         private const val MAX_GAME_PLAYERS = 2
+
+        private const val MIN_NAME_LENGTH = 1
+        private const val MAX_NAME_LENGTH = 40
     }
 }

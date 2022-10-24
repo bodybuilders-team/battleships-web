@@ -75,7 +75,7 @@ class GamesRepositoryTests : DatabaseTest() {
                 name = "test2",
                 creator = user,
                 config = defaultGameConfig,
-                state = GameState(GameState.GamePhase.FINISHED)
+                state = GameState(GameState.GamePhase.DEPLOYING_FLEETS)
             )
         )
 

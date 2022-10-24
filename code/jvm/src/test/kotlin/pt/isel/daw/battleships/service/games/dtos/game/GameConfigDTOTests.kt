@@ -47,11 +47,13 @@ class GameConfigDTOTests {
     companion object {
         val defaultGameConfigDTO
             get() = GameConfigDTO(
-                gridSize = 1,
-                maxTimeForLayoutPhase = 2,
+                gridSize = 7,
+                maxTimeForLayoutPhase = 60,
                 shotsPerRound = 3,
-                maxTimePerRound = 4,
-                shipTypes = listOf()
+                maxTimePerRound = 60,
+                shipTypes = listOf(
+                    ShipTypeDTO("Carrier", 1, 5, 50)
+                )
             )
     }
 }

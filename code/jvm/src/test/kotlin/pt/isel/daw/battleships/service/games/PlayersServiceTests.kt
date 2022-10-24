@@ -12,6 +12,5 @@ class PlayersServiceTests {
 
     @Test
     fun `A`() {
-
     }
 }

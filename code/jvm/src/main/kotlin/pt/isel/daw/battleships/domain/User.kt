@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.domain
 
+import pt.isel.daw.battleships.domain.exceptions.InvalidUserException
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -48,11 +49,42 @@ class User {
         points: Int = 0,
         numberOfGamesPlayed: Int = 0
     ) {
-        // TODO: Add Validations
+        if (username.length !in MIN_USERNAME_LENGTH..MAX_USERNAME_LENGTH) {
+            throw InvalidUserException(
+                "Username must be between $MIN_USERNAME_LENGTH and $MAX_USERNAME_LENGTH characters long."
+            )
+        }
+
+        if (!email.matches(EMAIL_REGEX.toRegex())) {
+            throw InvalidUserException("Email must be a valid email address.")
+        }
+
+        // TODO: Check this
+        /*if (passwordHash.length != PASSWORD_HASH_LENGTH) {
+            throw InvalidUserException("Password hash must have a length of $PASSWORD_HASH_LENGTH.")
+        }*/
+
+        if (points < 0) {
+            throw InvalidUserException("Points must be a positive integer.")
+        }
+
+        if (numberOfGamesPlayed < 0) {
+            throw InvalidUserException("Number of games played must be a positive integer.")
+        }
+
         this.username = username
         this.email = email
         this.passwordHash = passwordHash
         this.points = points
         this.numberOfGamesPlayed = numberOfGamesPlayed
+    }
+
+    companion object {
+        private const val MIN_USERNAME_LENGTH = 3
+        private const val MAX_USERNAME_LENGTH = 40
+
+        private const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)\$"
+
+        private const val PASSWORD_HASH_LENGTH = 128
     }
 }

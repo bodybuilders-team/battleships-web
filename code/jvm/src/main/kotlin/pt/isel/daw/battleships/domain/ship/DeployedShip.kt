@@ -2,6 +2,7 @@ package pt.isel.daw.battleships.domain.ship
 
 import pt.isel.daw.battleships.domain.Coordinate
 import pt.isel.daw.battleships.domain.Player
+import pt.isel.daw.battleships.domain.exceptions.InvalidDeployedShipException
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -59,7 +60,11 @@ class DeployedShip : Ship {
         orientation: Orientation,
         lives: Int
     ) : super(type, coordinate, orientation) { // TODO: Check this
-        // TODO: Add Validations
+
+        if (lives !in 0..type.size) {
+            throw InvalidDeployedShipException("Ship lives must be between 0 and ${type.size}")
+        }
+
         this.player = player
         this.type = type
         this.coordinate = coordinate

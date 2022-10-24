@@ -3,6 +3,7 @@ package pt.isel.daw.battleships.domain
 import pt.isel.daw.battleships.domain.Shot.ShotResult.HIT
 import pt.isel.daw.battleships.domain.Shot.ShotResult.MISS
 import pt.isel.daw.battleships.domain.Shot.ShotResult.SUNK
+import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -53,7 +54,8 @@ class Shot {
         coordinate: Coordinate,
         result: ShotResult
     ) {
-        // TODO: Add Validations
+        if (round < 1) throw InvalidShotException("Round must be greater than 0")
+
         this.round = round
         this.player = player
         this.coordinate = coordinate
