@@ -5,8 +5,8 @@ import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.game.Game
 import pt.isel.daw.battleships.domain.game.GameState
-import pt.isel.daw.battleships.repository.UsersRepository
 import pt.isel.daw.battleships.repository.games.GamesRepository
+import pt.isel.daw.battleships.repository.users.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
@@ -19,6 +19,7 @@ import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GamesDTO
 import pt.isel.daw.battleships.service.games.dtos.game.MatchmakeResponseDTO
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
+import pt.isel.daw.battleships.service.utils.findFirstOrNull
 import pt.isel.daw.battleships.utils.JwtProvider
 import java.sql.Timestamp
 import java.time.Instant
@@ -69,10 +70,12 @@ class GamesServiceImpl(
         val user = authenticateUser(token = token)
 
         while (true) {
-            val game = gamesRepository.findFirstAvailableGameWithConfig(
-                user = user,
-                config = gameConfigDTO.toGameConfig()
-            )
+            val game = gamesRepository
+                .findAllAvailableGamesWithConfig(
+                    config = gameConfigDTO.toGameConfig()
+                )
+                .filter { game -> game.players.none { it.user == user } }
+                .findFirstOrNull()
 
             if (game == null) {
                 val newGame = createGame(

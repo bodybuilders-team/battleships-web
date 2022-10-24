@@ -15,12 +15,18 @@ class LoginUserInputModelTests {
 
     @Test
     fun `LoginUserInputModel to LoginUserInputDTO conversion is successful`() {
-        val loginUserInputModel = LoginUserInputModel(
-            username = "username",
-            password = "password"
-        )
+        val loginUserInputModel = defaultLoginUserInputModel
+
         val loginUserInputDTO = loginUserInputModel.toLoginUserInputDTO()
 
         assertEquals(loginUserInputModel.username, loginUserInputDTO.username)
+    }
+
+    companion object {
+        val defaultLoginUserInputModel
+            get() = LoginUserInputModel(
+                username = "username",
+                password = "password"
+            )
     }
 }

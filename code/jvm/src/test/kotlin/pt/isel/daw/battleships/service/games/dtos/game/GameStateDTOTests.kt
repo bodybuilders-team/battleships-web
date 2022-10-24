@@ -1,8 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
-import pt.isel.daw.battleships.domain.game.GameState
-import java.sql.Timestamp
-import java.time.Instant
+import pt.isel.daw.battleships.domain.game.GameStateTests.Companion.defaultGameState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,7 +9,7 @@ class GameStateDTOTests {
     @Test
     fun `GameStateDTO creation is successful`() {
         GameStateDTO(
-            phase = "phase",
+            phase = "WAITING_FOR_PLAYERS",
             phaseEndTime = 1L,
             round = 1,
             turn = null,
@@ -21,18 +19,24 @@ class GameStateDTOTests {
 
     @Test
     fun `GameStateDTO from GameState conversion is successful`() {
-        val gameState = GameState(
-            phase = GameState.GamePhase.WAITING_FOR_PLAYERS,
-            phaseExpirationTime = Timestamp(Instant.now().epochSecond),
-            round = 1,
-            turn = null,
-            winner = null
-        )
+        val gameState = defaultGameState
+
         val gameStateDTO = GameStateDTO(gameState = gameState)
 
         assertEquals(gameState.phase.name, gameStateDTO.phase)
         assertEquals(gameState.round, gameStateDTO.round)
         assertEquals(gameState.turn?.user?.username, gameStateDTO.turn)
         assertEquals(gameState.winner?.user?.username, gameStateDTO.winner)
+    }
+
+    companion object {
+        val defaultGameStateDTO
+            get() = GameStateDTO(
+                phase = "WAITING_FOR_PLAYERS",
+                phaseEndTime = 1L,
+                round = 1,
+                turn = null,
+                winner = null
+            )
     }
 }

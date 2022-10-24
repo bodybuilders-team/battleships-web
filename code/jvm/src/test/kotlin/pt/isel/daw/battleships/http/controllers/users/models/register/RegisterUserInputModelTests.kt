@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class RegisterUserInputModelTests {
 
     @Test
-    fun `CreateUserInputModel creation is successful`() {
+    fun `RegisterUserInputModel creation is successful`() {
         RegisterUserInputModel(
             username = "username",
             email = "email",
@@ -15,16 +15,22 @@ class RegisterUserInputModelTests {
     }
 
     @Test
-    fun `CreateUserInputModel to CreateUserRequestDTO conversion is successful`() {
-        val registerUserInputModel = RegisterUserInputModel(
-            username = "username",
-            email = "email",
-            password = "password"
-        )
-        val createUserRequestDTO = registerUserInputModel.toRegisterUserInputDTO()
+    fun `RegisterUserInputModel to RegisterUserInputDTO conversion is successful`() {
+        val registerUserInputModel = defaultRegisterUserInputModel
 
-        assertEquals(registerUserInputModel.username, createUserRequestDTO.username)
-        assertEquals(registerUserInputModel.email, createUserRequestDTO.email)
-        assertEquals(registerUserInputModel.password, createUserRequestDTO.password)
+        val registerUserInputDTO = registerUserInputModel.toRegisterUserInputDTO()
+
+        assertEquals(registerUserInputModel.username, registerUserInputDTO.username)
+        assertEquals(registerUserInputModel.email, registerUserInputDTO.email)
+        assertEquals(registerUserInputModel.password, registerUserInputDTO.password)
+    }
+
+    companion object {
+        val defaultRegisterUserInputModel
+            get() = RegisterUserInputModel(
+                username = "username",
+                email = "email",
+                password = "password"
+            )
     }
 }

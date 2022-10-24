@@ -9,8 +9,8 @@ import pt.isel.daw.battleships.domain.game.GameState
 import pt.isel.daw.battleships.domain.ship.DeployedShip
 import pt.isel.daw.battleships.domain.ship.Ship
 import pt.isel.daw.battleships.domain.ship.UndeployedShip
-import pt.isel.daw.battleships.repository.UsersRepository
 import pt.isel.daw.battleships.repository.games.GamesRepository
+import pt.isel.daw.battleships.repository.users.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException

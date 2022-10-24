@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
-import pt.isel.daw.battleships.domain.game.GameConfig
+import pt.isel.daw.battleships.domain.game.GameConfigTests.Companion.defaultGameConfig
 import pt.isel.daw.battleships.service.games.dtos.ship.ShipTypeDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,13 +20,8 @@ class GameConfigDTOTests {
 
     @Test
     fun `GameConfigDTO from GameConfig conversion is successful`() {
-        val gameConfig = GameConfig(
-            gridSize = 1,
-            maxTimePerRound = 2,
-            maxTimeForLayoutPhase = 4,
-            shotsPerRound = 3,
-            shipTypes = listOf()
-        )
+        val gameConfig = defaultGameConfig
+
         val gameConfigDTO = GameConfigDTO(gameConfig)
 
         assertEquals(gameConfig.gridSize, gameConfigDTO.gridSize)
@@ -38,13 +33,8 @@ class GameConfigDTOTests {
 
     @Test
     fun `GameConfigDTO to GameConfig conversion is successful`() {
-        val gameConfigDTO = GameConfigDTO(
-            gridSize = 1,
-            maxTimeForLayoutPhase = 2,
-            shotsPerRound = 3,
-            maxTimePerRound = 4,
-            shipTypes = listOf()
-        )
+        val gameConfigDTO = defaultGameConfigDTO
+
         val gameConfig = gameConfigDTO.toGameConfig()
 
         assertEquals(gameConfigDTO.gridSize, gameConfig.gridSize)
@@ -52,5 +42,16 @@ class GameConfigDTOTests {
         assertEquals(gameConfigDTO.shotsPerRound, gameConfig.shotsPerRound)
         assertEquals(gameConfigDTO.maxTimeForLayoutPhase, gameConfig.maxTimeForLayoutPhase)
         assertEquals(gameConfigDTO.shipTypes.map { it.toShipType() }, gameConfig.shipTypes)
+    }
+
+    companion object {
+        val defaultGameConfigDTO
+            get() = GameConfigDTO(
+                gridSize = 1,
+                maxTimeForLayoutPhase = 2,
+                shotsPerRound = 3,
+                maxTimePerRound = 4,
+                shipTypes = listOf()
+            )
     }
 }

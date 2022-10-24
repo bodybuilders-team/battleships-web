@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.games
 
-import pt.isel.daw.battleships.http.controllers.games.models.players.ship.ShipTypeModel
+import pt.isel.daw.battleships.http.controllers.games.models.ShipTypeModel
 import pt.isel.daw.battleships.service.games.dtos.game.GameConfigDTO
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
@@ -30,8 +30,14 @@ data class GameConfigModel(
     )
     val maxTimeForLayoutPhase: Int,
 
-    @field:Min(value = MIN_SHOTS_PER_ROUND.toLong(), message = "The shots per round must be at least $MIN_SHOTS_PER_ROUND")
-    @field:Max(value = MAX_SHOTS_PER_ROUND.toLong(), message = "The shots per round must be at most $MAX_SHOTS_PER_ROUND")
+    @field:Min(
+        value = MIN_SHOTS_PER_ROUND.toLong(),
+        message = "The shots per round must be at least $MIN_SHOTS_PER_ROUND"
+    )
+    @field:Max(
+        value = MAX_SHOTS_PER_ROUND.toLong(),
+        message = "The shots per round must be at most $MAX_SHOTS_PER_ROUND"
+    )
     val shotsPerRound: Int,
 
     @field:Min(value = MIN_MAX_TIME_PER_ROUND.toLong(), message = "The time must be at least $MIN_MAX_TIME_PER_ROUND")

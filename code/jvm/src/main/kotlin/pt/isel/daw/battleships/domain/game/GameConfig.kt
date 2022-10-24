@@ -55,7 +55,7 @@ class GameConfig(
      */
     fun testShipTypes(ships: List<UndeployedShip>): Boolean =
         shipTypes.sumOf { shipType -> shipType.quantity } == ships.size &&
-            shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
+                shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -68,12 +68,11 @@ class GameConfig(
         if (shotsPerRound != other.shotsPerRound) return false
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
-        if (shipTypes.toSet() == other.shipTypes.toSet()) return false
         if (shipTypes.any { shipType ->
-            other.shipTypes.none { otherShipType ->
-                shipType == otherShipType
+                other.shipTypes.none { otherShipType ->
+                    shipType == otherShipType
+                }
             }
-        }
         ) return false
 
         return true

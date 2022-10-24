@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.users.dtos
 
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.UserTests.Companion.defaultUser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -18,16 +18,22 @@ class UserDTOTests {
 
     @Test
     fun `UserDTO from User conversion is successful`() {
-        val user = User(
-            username = "username",
-            email = "email",
-            passwordHash = "password",
-            points = 0
-        )
+        val user = defaultUser
+
         val userDTO = UserDTO(user)
 
         assertEquals(user.username, userDTO.username)
         assertEquals(user.email, userDTO.email)
         assertEquals(user.points, userDTO.points)
+    }
+
+    companion object {
+        val defaultUserDTO
+            get() = UserDTO(
+                username = "username",
+                email = "email",
+                points = 0,
+                numberOfGamesPlayed = 0
+            )
     }
 }

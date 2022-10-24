@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.service.users.dtos
 
+import pt.isel.daw.battleships.service.users.dtos.UserDTOTests.Companion.defaultUserDTO
 import kotlin.test.Test
 
 class UsersDTOTests {
@@ -7,15 +8,16 @@ class UsersDTOTests {
     @Test
     fun `UsersDTO creation is successful`() {
         UsersDTO(
-            users = listOf(
-                UserDTO(
-                    username = "Player 1",
-                    email = "abc@mail.org",
-                    points = 0,
-                    numberOfGamesPlayed = 0
-                )
-            ),
+            users = listOf(defaultUserDTO),
             totalCount = 1
         )
+    }
+
+    companion object {
+        val defaultUsersDTO
+            get() = UsersDTO(
+                users = listOf(defaultUserDTO),
+                totalCount = 1
+            )
     }
 }

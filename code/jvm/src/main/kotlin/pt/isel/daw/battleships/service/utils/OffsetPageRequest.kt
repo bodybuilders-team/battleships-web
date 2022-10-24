@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort
  * @property offset the offset of the page
  * @property limit the limit of the page
  */
-class OffsetPageRequest(
+data class OffsetPageRequest(
     private val offset: Long,
     private val limit: Int,
     private val sort: Sort? = null
@@ -36,7 +36,7 @@ class OffsetPageRequest(
     override fun previousOrFirst(): Pageable =
         if (hasPrevious()) {
             OffsetPageRequest(
-                offset = offset - limit,
+                offset = if (offset >= limit) offset - limit else 0,
                 limit = limit
             )
         } else this
@@ -51,7 +51,7 @@ class OffsetPageRequest(
         limit = limit
     )
 
-    override fun hasPrevious(): Boolean = offset > limit
+    override fun hasPrevious(): Boolean = offset > 0
 
     companion object {
         private const val MIN_OFFSET = 0

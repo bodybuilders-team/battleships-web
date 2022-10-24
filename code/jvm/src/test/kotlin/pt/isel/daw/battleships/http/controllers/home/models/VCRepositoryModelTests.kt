@@ -11,4 +11,12 @@ class VCRepositoryModelTests {
             url = "url"
         )
     }
+
+    companion object {
+        val defaultVCRepositoryModel
+            get() = VCRepositoryModel(
+                type = "git",
+                url = "url"
+            )
+    }
 }

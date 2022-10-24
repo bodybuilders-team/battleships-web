@@ -1,65 +1,40 @@
 package pt.isel.daw.battleships.service.games.dtos.shot
 
-import pt.isel.daw.battleships.domain.Coordinate
-import pt.isel.daw.battleships.domain.Player
-import pt.isel.daw.battleships.domain.Shot
-import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.game.GameConfig
-import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.domain.ShotTests.Companion.defaultShot
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
-import java.sql.Timestamp
-import java.time.Instant
+import pt.isel.daw.battleships.service.games.dtos.CoordinateDTOTests.Companion.defaultCoordinateDTO
+import pt.isel.daw.battleships.service.games.dtos.shot.ShotResultDTOTests.Companion.defaultShotResultDTO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class FiredShotDTOTests {
 
     @Test
-    fun `OutputShotDTO creation is successful`() {
+    fun `FiredShotDTO creation is successful`() {
         FiredShotDTO(
-            coordinate = CoordinateDTO(col = 'A', row = 1),
+            coordinate = defaultCoordinateDTO,
             round = 1,
-            result = ShotResultDTO(result = "HIT")
+            result = defaultShotResultDTO
         )
     }
 
     @Test
-    fun `OutputShotDTO from Shot conversion is successful`() {
-        val user = User(username = "username", email = "email", passwordHash = "password", points = 0)
-        val player = Player(
-            game = Game(
-                name = "game",
-                creator = user,
-                config = GameConfig(
-                    gridSize = 1,
-                    maxTimePerRound = 2,
-                    maxTimeForLayoutPhase = 4,
-                    shotsPerRound = 3,
-                    shipTypes = listOf()
-                ),
-                state = GameState(
-                    phase = GameState.GamePhase.WAITING_FOR_PLAYERS,
-                    phaseExpirationTime = Timestamp(Instant.now().epochSecond),
-                    round = 1,
-                    turn = null,
-                    winner = null
-                )
-            ),
-            user = user,
-            points = 0
-        )
+    fun `FiredShotDTO from Shot conversion is successful`() {
+        val shot = defaultShot
 
-        val shot = Shot(
-            player = player,
-            coordinate = Coordinate(col = 'A', row = 1),
-            round = 1,
-            result = Shot.ShotResult.HIT
-        )
         val firedShotDTO = FiredShotDTO(shot)
 
         assertEquals(CoordinateDTO(shot.coordinate), firedShotDTO.coordinate)
         assertEquals(shot.round, firedShotDTO.round)
         assertEquals(ShotResultDTO(shot.result), firedShotDTO.result)
+    }
+
+    companion object {
+        val defaultFiredShotDTO
+            get() = FiredShotDTO(
+                coordinate = defaultCoordinateDTO,
+                round = 1,
+                result = defaultShotResultDTO
+            )
     }
 }

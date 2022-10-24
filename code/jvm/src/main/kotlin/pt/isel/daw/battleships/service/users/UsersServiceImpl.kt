@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.domain.RefreshToken
 import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.repository.RefreshTokenRepository
-import pt.isel.daw.battleships.repository.UsersRepository
+import pt.isel.daw.battleships.repository.refreshTokens.RefreshTokensRepository
+import pt.isel.daw.battleships.repository.users.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
@@ -29,7 +29,7 @@ import java.time.Instant
  * Service that handles the business logic of the users.
  *
  * @property usersRepository the repository of the users
- * @property refreshTokenRepository the repository of the refresh tokens
+ * @property refreshTokensRepository the repository of the refresh tokens
  * @property hashingUtils the utils for password operations
  * @property jwtProvider the JWT provider
  * @property config the server configuration
@@ -38,7 +38,7 @@ import java.time.Instant
 @Transactional
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
-    private val refreshTokenRepository: RefreshTokenRepository,
+    private val refreshTokensRepository: RefreshTokensRepository,
     private val hashingUtils: HashingUtils,
     private val jwtProvider: JwtProvider,
     private val config: ServerConfiguration
@@ -109,7 +109,7 @@ class UsersServiceImpl(
             !hashingUtils.checkPassword(
                 username = loginUserInputDTO.username,
                 password = loginUserInputDTO.password,
-                hashedPassword = user.passwordHash
+                passwordHash = user.passwordHash
             )
         ) throw NotFoundException("Invalid username or password")
 
@@ -125,25 +125,25 @@ class UsersServiceImpl(
         val user = getUserFromRefreshToken(refreshToken = refreshToken)
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
-        if (!refreshTokenRepository.existsByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)) {
+        if (!refreshTokensRepository.existsByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)) {
             throw NotFoundException("Refresh token not found")
         }
 
-        refreshTokenRepository.deleteByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)
+        refreshTokensRepository.deleteByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenOutputDTO {
         val user = getUserFromRefreshToken(refreshToken = refreshToken)
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
-        val refreshTokenEntity = refreshTokenRepository
+        val refreshTokenEntity = refreshTokensRepository
             .findByUserAndTokenHash(
                 user = user,
                 tokenHash = refreshTokenHash
             )
             ?: throw NotFoundException("Refresh token not found")
 
-        refreshTokenRepository.delete(refreshTokenEntity)
+        refreshTokensRepository.delete(refreshTokenEntity)
 
         if (refreshTokenEntity.expirationDate.isBefore(Instant.now())) {
             throw NotFoundException("Refresh token expired")
@@ -174,15 +174,15 @@ class UsersServiceImpl(
      * @throws IllegalStateException if the user has no refresh tokens
      */
     private fun createTokens(user: User): Tokens {
-        if (refreshTokenRepository.countByUser(user = user) >= config.maxRefreshTokens) {
-            refreshTokenRepository
-                .getOldestRefreshTokensByUser(
+        if (refreshTokensRepository.countByUser(user = user) >= config.maxRefreshTokens) {
+            refreshTokensRepository
+                .getRefreshTokensOfUserOrderedByExpirationDate(
                     user = user,
                     pageable = PageRequest.of(/* page = */ 0, /* size = */ 1)
                 )
                 .get()
                 .findFirst()
-                .ifPresent { refreshTokenRepository.delete(it) }
+                .ifPresent { refreshTokensRepository.delete(it) }
         }
 
         val jwtPayload = JwtPayload(username = user.username)
@@ -191,7 +191,7 @@ class UsersServiceImpl(
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
-        refreshTokenRepository.save(
+        refreshTokensRepository.save(
             RefreshToken(
                 user = user,
                 tokenHash = refreshTokenHash,

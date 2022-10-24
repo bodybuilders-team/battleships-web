@@ -1,7 +1,8 @@
 package pt.isel.daw.battleships.service.games.dtos
 
-import pt.isel.daw.battleships.domain.Coordinate
+import pt.isel.daw.battleships.domain.CoordinateTests.Companion.defaultCoordinate
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class CoordinateDTOTests {
 
@@ -12,19 +13,26 @@ class CoordinateDTOTests {
 
     @Test
     fun `CoordinateDTO from Coordinate conversion is successful`() {
-        val coordinate = Coordinate(col = 'A', row = 1)
+        val coordinate = defaultCoordinate
+
         val coordinateDTO = CoordinateDTO(coordinate)
 
-        assert(coordinateDTO.col == coordinate.col)
-        assert(coordinateDTO.row == coordinate.row)
+        assertEquals(coordinate.col, coordinateDTO.col)
+        assertEquals(coordinate.row, coordinateDTO.row)
     }
 
     @Test
     fun `CoordinateDTO to Coordinate conversion is successful`() {
-        val coordinateDTO = CoordinateDTO(col = 'A', row = 1)
+        val coordinateDTO = defaultCoordinateDTO
+
         val coordinate = coordinateDTO.toCoordinate()
 
-        assert(coordinate.col == coordinateDTO.col)
-        assert(coordinate.row == coordinateDTO.row)
+        assertEquals(coordinateDTO.col, coordinate.col)
+        assertEquals(coordinateDTO.row, coordinate.row)
+    }
+
+    companion object {
+        val defaultCoordinateDTO
+            get() = CoordinateDTO(col = 'A', row = 1)
     }
 }

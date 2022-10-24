@@ -1,8 +1,8 @@
 package pt.isel.daw.battleships.http.controllers.games.models.players.ship
 
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
-import pt.isel.daw.battleships.http.controllers.games.models.players.ship.ShipTypeModel.Companion.MAX_SHIP_NAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.games.models.players.ship.ShipTypeModel.Companion.MIN_SHIP_NAME_LENGTH
+import pt.isel.daw.battleships.http.controllers.games.models.ShipTypeModel.Companion.MAX_SHIP_NAME_LENGTH
+import pt.isel.daw.battleships.http.controllers.games.models.ShipTypeModel.Companion.MIN_SHIP_NAME_LENGTH
 import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedShipDTO
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size

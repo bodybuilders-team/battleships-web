@@ -16,12 +16,12 @@ import javax.crypto.spec.SecretKeySpec
 @Component
 class HashingUtils(private val serverConfig: ServerConfiguration) {
 
-    val tokenKey: SecretKey = SecretKeySpec(
+    private val tokenKey: SecretKey = SecretKeySpec(
         /* key = */ serverConfig.tokenHashSecret.toByteArray(),
         /* algorithm = */ SECRET_KEY_ALGORITHM
     )
 
-    val passwordKey: SecretKey = SecretKeySpec(
+    private val passwordKey: SecretKey = SecretKeySpec(
         /* key = */ serverConfig.passwordSecret.toByteArray(),
         /* algorithm = */ SECRET_KEY_ALGORITHM
     )
@@ -47,16 +47,16 @@ class HashingUtils(private val serverConfig: ServerConfiguration) {
         (token).hmac(tokenKey)
 
     /**
-     * Generates a hash for the given [password] and compares it to the given [hashedPassword].
+     * Generates a hash for the given [password] and compares it to the given [passwordHash].
      *
      * @param username the username to be hashed
      * @param password the password to be hashed
-     * @param hashedPassword the hashed password to be compared to
+     * @param passwordHash the hashed password to be compared to
      *
      * @return true if the passwords match, false otherwise
      */
-    fun checkPassword(username: String, password: String, hashedPassword: String): Boolean =
-        hashPassword(username, password) == hashedPassword
+    fun checkPassword(username: String, password: String, passwordHash: String): Boolean =
+        hashPassword(username, password) == passwordHash
 
     /**
      * Generates a MAC for this given string using the given [key].

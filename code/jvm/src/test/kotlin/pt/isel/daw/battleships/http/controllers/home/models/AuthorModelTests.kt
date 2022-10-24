@@ -12,4 +12,13 @@ class AuthorModelTests {
             github = "joao@github.com"
         )
     }
+
+    companion object {
+        val defaultAuthorModel
+            get() = AuthorModel(
+                name = "João",
+                email = "joao@mail.com",
+                github = "joao@github.com"
+            )
+    }
 }

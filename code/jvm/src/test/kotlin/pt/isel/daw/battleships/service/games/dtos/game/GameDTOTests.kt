@@ -1,6 +1,11 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
+import pt.isel.daw.battleships.domain.game.GameTests.Companion.defaultGame
+import pt.isel.daw.battleships.service.games.dtos.PlayerDTO
+import pt.isel.daw.battleships.service.games.dtos.game.GameConfigDTOTests.Companion.defaultGameConfigDTO
+import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTOTests.Companion.defaultGameStateDTO
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class GameDTOTests {
 
@@ -10,39 +15,35 @@ class GameDTOTests {
             id = 1,
             name = "name",
             creator = "creator",
-            config = GameConfigDTO(
-                gridSize = 1,
-                maxTimeForLayoutPhase = 2,
-                shotsPerRound = 3,
-                maxTimePerRound = 4,
-                shipTypes = listOf()
-            ),
-            state = GameStateDTO(
-                phase = "WAITING_FOR_PLAYERS",
-                phaseEndTime = 1L,
-                round = 1,
-                turn = null,
-                winner = null
-            ),
+            config = defaultGameConfigDTO,
+            state = defaultGameStateDTO,
             players = listOf()
         )
     }
 
     @Test
     fun `GameDTO from Game conversion is successful`() {
-        /*val game = Game(
-            "name",
-            User("Player 1", "haram@email.com", "1234", 0),
-            GameConfig(1, 2, 3, 4, listOf()),
-            GameState(GameState.GamePhase.WAITING_FOR_PLAYERS, 1, null, null)
-        )
-        val gameDTO = GameDTO(game) // ID NOT CREATED YET
+        val game = defaultGame.also { it.id = 1 }
+
+        val gameDTO = GameDTO(game)
 
         assertEquals(game.id, gameDTO.id)
         assertEquals(game.name, gameDTO.name)
         assertEquals(game.creator.username, gameDTO.creator)
-        assertEquals(game.config, gameDTO.config.toGameConfig())
+        assertEquals(GameConfigDTO(game.config), gameDTO.config)
         assertEquals(GameStateDTO(game.state), gameDTO.state)
-        assertEquals(game.players.map { PlayerDTO(it) }, gameDTO.players)*/
+        assertEquals(game.players.map { PlayerDTO(it) }, gameDTO.players)
+    }
+
+    companion object {
+        val defaultGameDTO
+            get() = GameDTO(
+                id = 1,
+                name = "name",
+                creator = "creator",
+                config = defaultGameConfigDTO,
+                state = defaultGameStateDTO,
+                players = listOf()
+            )
     }
 }

@@ -1,10 +1,10 @@
 package pt.isel.daw.battleships.repository.games
 
 import org.springframework.data.jpa.repository.JpaRepository
-import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.game.Game
 import pt.isel.daw.battleships.domain.game.GameConfig
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase
+import java.util.stream.Stream
 
 /**
  * Repository for the [Game] entity.
@@ -23,9 +23,9 @@ interface GamesRepository : JpaRepository<Game, String>, GamesRepositoryCustom {
      * Finds all games that are in the given phase.
      *
      * @param phase the phase of the games
-     * @return the games that are in the given phase
+     * @return stream with all the games that are in the given phase
      */
-    fun findAllByStatePhase(phase: GamePhase): List<Game>
+    fun findAllByStatePhase(phase: GamePhase): Stream<Game>
 }
 
 /**
@@ -34,12 +34,11 @@ interface GamesRepository : JpaRepository<Game, String>, GamesRepositoryCustom {
 interface GamesRepositoryCustom {
 
     /**
-     * Finds the first available game with the given configuration and wich the given user is not in it.
+     * Finds all available games with the given configuration.
      *
-     * @param user the user that is looking for a game
      * @param config the configuration of the game
      *
-     * @return the first available game with the given configuration or null if there is none
+     * @return stream with all the available games with the given configuration
      */
-    fun findFirstAvailableGameWithConfig(user: User, config: GameConfig): Game?
+    fun findAllAvailableGamesWithConfig(config: GameConfig): Stream<Game>
 }

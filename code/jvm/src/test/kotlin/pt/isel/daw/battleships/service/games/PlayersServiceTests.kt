@@ -1,13 +1,17 @@
 package pt.isel.daw.battleships.service.games
 
-// @SpringBootTest
-// class PlayersServiceTests(
-//    @MockBean
-//    val playersService: PlayersService
-// ) {
-//
-// //    @Test
-// //    fun `PlayersService creation is successful`() {
-// //        playersService.getFleet("", 1)
-// //    }
-// }
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit4.SpringRunner
+
+@RunWith(SpringRunner::class)
+@SpringBootTest
+class PlayersServiceTests {
+    // TODO: Implement tests
+
+    @Test
+    fun `A`() {
+
+    }
+}
