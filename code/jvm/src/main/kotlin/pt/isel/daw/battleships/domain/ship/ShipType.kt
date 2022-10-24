@@ -22,27 +22,41 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "ship_types")
-class ShipType(
-    @Column(name = "ship_name", nullable = false)
-    val shipName: String,
-
-    @Column(name = "quantity", nullable = false)
-    val quantity: Int,
-
-    @Column(name = "size", nullable = false)
-    val size: Int,
-
-    @Column(name = "points", nullable = false)
-    val points: Int
-) {
+class ShipType {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
 
+    @Column(name = "ship_name", nullable = false)
+    val shipName: String
+
+    @Column(name = "quantity", nullable = false)
+    val quantity: Int
+
+    @Column(name = "size", nullable = false)
+    val size: Int
+
+    @Column(name = "points", nullable = false)
+    val points: Int
+
     @OneToOne
     @JoinColumn(name = "game", nullable = false)
     var game: Game? = null
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        shipName: String,
+        quantity: Int,
+        size: Int,
+        points: Int
+    ) {
+        // TODO: Add Validations
+        this.shipName = shipName
+        this.quantity = quantity
+        this.size = size
+        this.points = points
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

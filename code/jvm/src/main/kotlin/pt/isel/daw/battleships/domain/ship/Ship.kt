@@ -14,8 +14,8 @@ import pt.isel.daw.battleships.domain.ship.Ship.Orientation.VERTICAL
  * @property coordinates the ship's coordinates
  */
 abstract class Ship(
-    open val type: ShipType? = null,
-    open val coordinate: Coordinate? = null, // defaults needed for JPA
+    open val type: ShipType? = null, // Defaults needed for JPA
+    open val coordinate: Coordinate? = null,
     open val orientation: Orientation? = null
 ) {
 

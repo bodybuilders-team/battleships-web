@@ -31,22 +31,22 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "players")
-class Player(
-    @ManyToOne
-    @JoinColumn(name = "game", nullable = false)
-    val game: Game,
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
-
-    @Column(name = "points", nullable = false)
-    var points: Int = 0
-) {
+class Player {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
+
+    @ManyToOne
+    @JoinColumn(name = "game", nullable = false)
+    val game: Game
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User
+
+    @Column(name = "points", nullable = false)
+    var points: Int
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player")
@@ -55,6 +55,18 @@ class Player(
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "player")
     val shots: MutableList<Shot> = mutableListOf()
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        game: Game,
+        user: User,
+        points: Int = 0
+    ) {
+        // TODO: Add Validations
+        this.game = game
+        this.user = user
+        this.points = points
+    }
 
     /**
      * Deploys a fleet of ships.

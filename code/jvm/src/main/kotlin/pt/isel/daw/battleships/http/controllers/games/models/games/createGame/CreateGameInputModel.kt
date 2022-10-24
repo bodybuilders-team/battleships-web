@@ -17,6 +17,7 @@ data class CreateGameInputModel(
         message = "Name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long."
     )
     val name: String,
+
     val config: GameConfigModel
 ) {
 

@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.users.models.register
 
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
-import javax.validation.constraints.Pattern
+import javax.validation.constraints.Email
 import javax.validation.constraints.Size
 
 /**
@@ -19,12 +19,7 @@ data class RegisterUserInputModel(
     )
     val username: String,
 
-    @field:Size(
-        min = MIN_EMAIL_LENGTH,
-        max = MAX_EMAIL_LENGTH,
-        message = "Email must be between $MIN_EMAIL_LENGTH and $MAX_EMAIL_LENGTH characters long."
-    )
-    @field:Pattern(regexp = EMAIL_REGEX)
+    @field:Email(message = "Email must be a valid email address.")
     val email: String,
 
     @field:Size(
@@ -52,9 +47,5 @@ data class RegisterUserInputModel(
 
         const val MIN_USERNAME_LENGTH = 3
         const val MAX_USERNAME_LENGTH = 40
-
-        const val MIN_EMAIL_LENGTH = 3
-        const val MAX_EMAIL_LENGTH = 320
-        const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)\$"
     }
 }

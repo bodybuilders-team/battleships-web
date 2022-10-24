@@ -26,25 +26,39 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "shots")
-class Shot(
-    @Column(name = "round", nullable = false)
-    val round: Int,
-
-    @ManyToOne
-    @JoinColumn(name = "player", nullable = false)
-    val player: Player,
-
-    @Embedded
-    val coordinate: Coordinate,
-
-    @Column(name = "result", nullable = false)
-    @Enumerated(EnumType.STRING)
-    val result: ShotResult
-) {
+class Shot {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Int? = null
+
+    @Column(name = "round", nullable = false)
+    val round: Int
+
+    @ManyToOne
+    @JoinColumn(name = "player", nullable = false)
+    val player: Player
+
+    @Embedded
+    val coordinate: Coordinate
+
+    @Column(name = "result", nullable = false)
+    @Enumerated(EnumType.STRING)
+    val result: ShotResult
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        round: Int,
+        player: Player,
+        coordinate: Coordinate,
+        result: ShotResult
+    ) {
+        // TODO: Add Validations
+        this.round = round
+        this.player = player
+        this.coordinate = coordinate
+        this.result = result
+    }
 
     /**
      * Represents the possible results of a shot.

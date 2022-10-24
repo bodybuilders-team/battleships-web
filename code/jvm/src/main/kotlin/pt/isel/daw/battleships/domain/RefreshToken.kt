@@ -20,20 +20,32 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "refresh_tokens")
-class RefreshToken(
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
-
-    @Column(name = "token_hash", nullable = false)
-    val tokenHash: String,
-
-    // TODO: Maybe change to timestamp
-    @Column(name = "expiration_date", nullable = false)
-    val expirationDate: Instant
-) {
+class RefreshToken {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User
+
+    @Column(name = "token_hash", nullable = false)
+    val tokenHash: String
+
+    // TODO: Maybe change to timestamp
+    @Column(name = "expiration_date", nullable = false)
+    val expirationDate: Instant
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        user: User,
+        tokenHash: String,
+        expirationDate: Instant
+    ) {
+        // TODO: Add Validations
+        this.user = user
+        this.tokenHash = tokenHash
+        this.expirationDate = expirationDate
+    }
 }

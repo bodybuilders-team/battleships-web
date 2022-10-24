@@ -19,24 +19,40 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "users")
-class User(
-    @Column(name = "username", nullable = false, unique = true)
-    val username: String,
-
-    @Column(name = "email", nullable = false, unique = true)
-    val email: String,
-
-    @Column(name = "password_hash", nullable = false)
-    val passwordHash: String,
-
-    @Column(name = "points", nullable = false)
-    var points: Int = 0,
-
-    @Column(name = "number_of_games_played", nullable = false)
-    var numberOfGamesPlayed: Int = 0
-) {
+class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
+
+    @Column(name = "username", nullable = false, unique = true)
+    val username: String
+
+    @Column(name = "email", nullable = false, unique = true)
+    val email: String
+
+    @Column(name = "password_hash", nullable = false)
+    val passwordHash: String
+
+    @Column(name = "points", nullable = false)
+    var points: Int
+
+    @Column(name = "number_of_games_played", nullable = false)
+    var numberOfGamesPlayed: Int
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        username: String,
+        email: String,
+        passwordHash: String,
+        points: Int = 0,
+        numberOfGamesPlayed: Int = 0
+    ) {
+        // TODO: Add Validations
+        this.username = username
+        this.email = email
+        this.passwordHash = passwordHash
+        this.points = points
+        this.numberOfGamesPlayed = numberOfGamesPlayed
+    }
 }

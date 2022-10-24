@@ -5,7 +5,6 @@ import pt.isel.daw.battleships.domain.game.GameState.GamePhase.DEPLOYING_FLEETS
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.FINISHED
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.IN_PROGRESS
 import pt.isel.daw.battleships.domain.game.GameState.GamePhase.WAITING_FOR_PLAYERS
-import java.io.Serializable
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.CascadeType
@@ -26,25 +25,40 @@ import javax.persistence.OneToOne
  * @property winner the winner player
  */
 @Embeddable
-class GameState(
+class GameState { // TODO: Was Serializable?!?
     @Column(name = "phase", nullable = false)
     @Enumerated(EnumType.STRING)
-    var phase: GamePhase = WAITING_FOR_PLAYERS,
+    var phase: GamePhase
 
     @Column(name = "phase_expiration_time", nullable = false)
-    var phaseExpirationTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
+    var phaseExpirationTime: Timestamp
 
     @Column(name = "round", nullable = false)
-    var round: Int? = null,
+    var round: Int?
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "turn", nullable = true)
-    var turn: Player? = null,
+    var turn: Player?
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "winner", nullable = true)
-    var winner: Player? = null
-) : Serializable {
+    var winner: Player?
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        phase: GamePhase = WAITING_FOR_PLAYERS,
+        phaseExpirationTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
+        round: Int? = null,
+        turn: Player? = null,
+        winner: Player? = null
+    ) {
+        // TODO: Add Validations
+        this.phase = phase
+        this.phaseExpirationTime = phaseExpirationTime
+        this.round = round
+        this.turn = turn
+        this.winner = winner
+    }
 
     /**
      * Checks if the game phase has expired.

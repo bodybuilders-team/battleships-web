@@ -1,7 +1,6 @@
 package pt.isel.daw.battleships.http.controllers.games.models.players.ship
 
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
-import pt.isel.daw.battleships.http.controllers.games.models.players.ship.DeployedShipModel.Companion.ORIENTATION_REGEX
 import pt.isel.daw.battleships.http.controllers.games.models.players.ship.ShipTypeModel.Companion.MAX_SHIP_NAME_LENGTH
 import pt.isel.daw.battleships.http.controllers.games.models.players.ship.ShipTypeModel.Companion.MIN_SHIP_NAME_LENGTH
 import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedShipDTO
@@ -22,6 +21,7 @@ data class UndeployedShipModel(
         message = "Ship type name must be between $MIN_SHIP_NAME_LENGTH and $MAX_SHIP_NAME_LENGTH characters long"
     )
     val type: String,
+
     val coordinate: CoordinateModel,
 
     @field:Pattern(regexp = ORIENTATION_REGEX, message = "Orientation must be either HORIZONTAL or VERTICAL")
@@ -38,4 +38,8 @@ data class UndeployedShipModel(
         coordinate = coordinate.toCoordinateDTO(),
         orientation = orientation
     )
+
+    companion object {
+        const val ORIENTATION_REGEX = "HORIZONTAL|VERTICAL"
+    }
 }

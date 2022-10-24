@@ -2,7 +2,6 @@ package pt.isel.daw.battleships.http.controllers.games.models.players.ship
 
 import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedShipDTO
-import javax.validation.constraints.Pattern
 
 /**
  * Represents a Deployed Ship Model.
@@ -15,10 +14,7 @@ import javax.validation.constraints.Pattern
 data class DeployedShipModel(
     val type: String,
     val coordinate: CoordinateModel,
-
-    @field:Pattern(regexp = ORIENTATION_REGEX, message = "Orientation must be either HORIZONTAL or VERTICAL")
     val orientation: String,
-
     val lives: Int
 ) {
     constructor(deployedShipDTO: DeployedShipDTO) : this(
@@ -27,8 +23,4 @@ data class DeployedShipModel(
         orientation = deployedShipDTO.orientation,
         lives = deployedShipDTO.lives
     )
-
-    companion object {
-        const val ORIENTATION_REGEX = "HORIZONTAL|VERTICAL"
-    }
 }

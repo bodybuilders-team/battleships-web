@@ -10,7 +10,6 @@ import pt.isel.daw.battleships.service.games.dtos.shot.ShotResultDTO
 data class ShotResultModel(
     val result: String
 ) {
-
     constructor(shotResultDTO: ShotResultDTO) : this(
         result = shotResultDTO.result
     )

@@ -34,6 +34,11 @@ import javax.persistence.Table
 @Entity
 @Table(name = "games")
 class Game {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null
+
     @Column(name = "name")
     val name: String
 
@@ -47,22 +52,24 @@ class Game {
     @Embedded
     val state: GameState
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
-
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "game")
     val players: MutableList<Player> = mutableListOf()
 
     @Suppress("ConvertSecondaryConstructorToPrimary")
-    constructor(name: String, creator: User, config: GameConfig, state: GameState) {
-        config.shipTypes.forEach { shipType -> shipType.game = this }
-
+    constructor(
+        name: String,
+        creator: User,
+        config: GameConfig,
+        state: GameState
+    ) {
+        // TODO: Add Validations
         this.name = name
         this.creator = creator
+
+        config.shipTypes.forEach { shipType -> shipType.game = this }
         this.config = config
+
         this.state = state
     }
 

@@ -27,30 +27,45 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "ships")
-class DeployedShip(
-    @ManyToOne
-    @JoinColumn(name = "player", nullable = false)
-    val player: Player,
-
-    @ManyToOne
-    @JoinColumn(name = "type", nullable = false)
-    override val type: ShipType,
-
-    @Embedded
-    override val coordinate: Coordinate,
-
-    @Column(name = "orientation", nullable = false)
-    @Enumerated(EnumType.STRING)
-    override val orientation: Orientation,
-
-    @Column(name = "lives", nullable = false)
-    var lives: Int
-) : Ship(type, coordinate, orientation) {
-
+class DeployedShip : Ship {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
+
+    @ManyToOne
+    @JoinColumn(name = "player", nullable = false)
+    val player: Player
+
+    @ManyToOne
+    @JoinColumn(name = "type", nullable = false)
+    override val type: ShipType
+
+    @Embedded
+    override val coordinate: Coordinate
+
+    @Column(name = "orientation", nullable = false)
+    @Enumerated(EnumType.STRING)
+    override val orientation: Orientation
+
+    @Column(name = "lives", nullable = false)
+    var lives: Int
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(
+        player: Player,
+        type: ShipType,
+        coordinate: Coordinate,
+        orientation: Orientation,
+        lives: Int
+    ) : super(type, coordinate, orientation) { // TODO: Check this
+        // TODO: Add Validations
+        this.player = player
+        this.type = type
+        this.coordinate = coordinate
+        this.orientation = orientation
+        this.lives = lives
+    }
 
     val isSunk
         get() = lives == 0

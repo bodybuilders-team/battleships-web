@@ -19,7 +19,10 @@ class Coordinate {
     val row: Int
 
     @Suppress("ConvertSecondaryConstructorToPrimary")
-    constructor(col: Char, row: Int) {
+    constructor(
+        col: Char,
+        row: Int
+    ) {
         if (col !in maxColsRange) throw InvalidCoordinateException("Invalid Column")
         if (row !in maxRowsRange) throw InvalidCoordinateException("Invalid Row")
 

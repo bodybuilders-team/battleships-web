@@ -14,7 +14,7 @@ data class DeployFleetInputModel(
     val ships: List<UndeployedShipModel>
 ) {
     /**
-     * Converts the deploy fleet input model to a DTO.
+     * Converts the deployment fleet input model to a DTO.
      */
     fun toUndeployedFleetDTO() = UndeployedFleetDTO(
         ships = ships.map(UndeployedShipModel::toUndeployedShipDTO)
