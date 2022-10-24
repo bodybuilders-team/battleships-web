@@ -16,7 +16,7 @@ import javax.validation.constraints.Size
  * @property orientation orientation of the ship
  */
 data class UndeployedShipModel(
-    @Size(
+    @field:Size(
         min = MIN_SHIP_NAME_LENGTH,
         max = MAX_SHIP_NAME_LENGTH,
         message = "Ship type name must be between $MIN_SHIP_NAME_LENGTH and $MAX_SHIP_NAME_LENGTH characters long"
@@ -24,7 +24,7 @@ data class UndeployedShipModel(
     val type: String,
     val coordinate: CoordinateModel,
 
-    @Pattern(regexp = ORIENTATION_REGEX, message = "Orientation must be either HORIZONTAL or VERTICAL")
+    @field:Pattern(regexp = ORIENTATION_REGEX, message = "Orientation must be either HORIZONTAL or VERTICAL")
     val orientation: String
 ) {
 

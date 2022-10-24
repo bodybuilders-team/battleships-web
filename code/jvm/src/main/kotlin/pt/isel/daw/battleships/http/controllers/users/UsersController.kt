@@ -24,6 +24,7 @@ import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.users.UsersOrder
 import pt.isel.daw.battleships.service.users.UsersService
+import javax.validation.Valid
 
 /**
  * Controller that handles the requests related to the users.
@@ -94,7 +95,8 @@ class UsersController(private val usersService: UsersService) {
      */
     @PostMapping(Uris.USERS)
     fun register(
-        @RequestBody userData: RegisterUserInputModel
+        @Valid @RequestBody
+        userData: RegisterUserInputModel
     ): SirenEntity<RegisterUserOutputModel> {
         val registerDTO = usersService.register(registerUserInputDTO = userData.toRegisterUserInputDTO())
 
@@ -124,7 +126,8 @@ class UsersController(private val usersService: UsersService) {
      */
     @PostMapping(Uris.USERS_LOGIN)
     fun login(
-        @RequestBody userData: LoginUserInputModel
+        @Valid @RequestBody
+        userData: LoginUserInputModel
     ): SirenEntity<LoginUserOutputModel> {
         val loginDTO = usersService.login(loginUserInputDTO = userData.toLoginUserInputDTO())
 
@@ -154,7 +157,8 @@ class UsersController(private val usersService: UsersService) {
      */
     @PostMapping(Uris.USERS_LOGOUT)
     fun logout(
-        @RequestBody logoutUserInputModel: LogoutUserInputModel
+        @Valid @RequestBody
+        logoutUserInputModel: LogoutUserInputModel
     ): SirenEntity<Unit> {
         usersService.logout(refreshToken = logoutUserInputModel.refreshToken)
 
@@ -177,7 +181,8 @@ class UsersController(private val usersService: UsersService) {
      */
     @PostMapping(Uris.USERS_REFRESH_TOKEN)
     fun refreshToken(
-        @RequestBody refreshTokenInputModel: RefreshTokenInputModel
+        @Valid @RequestBody
+        refreshTokenInputModel: RefreshTokenInputModel
     ): SirenEntity<RefreshTokenOutputModel> {
         val refreshDTO = usersService.refreshToken(refreshToken = refreshTokenInputModel.refreshToken)
 

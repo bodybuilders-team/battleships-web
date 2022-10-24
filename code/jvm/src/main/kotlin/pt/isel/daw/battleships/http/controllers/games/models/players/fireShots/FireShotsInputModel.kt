@@ -9,7 +9,7 @@ import javax.validation.constraints.Size
  * @property shots the list of shots to be created
  */
 data class FireShotsInputModel(
-    @Size(min = MIN_SHOTS_COUNT, message = "The number of shots must be at least $MIN_SHOTS_COUNT")
+    @field:Size(min = MIN_SHOTS_COUNT, message = "The number of shots must be at least $MIN_SHOTS_COUNT")
     val shots: List<UnfiredShotModel>
 ) {
 

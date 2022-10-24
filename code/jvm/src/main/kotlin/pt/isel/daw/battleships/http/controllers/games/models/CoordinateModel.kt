@@ -12,11 +12,11 @@ import javax.validation.constraints.Pattern
  * @property row the row of the coordinate
  */
 data class CoordinateModel(
-    @Pattern(regexp = COL_REGEX, message = "Column must be between $MIN_COL and $MAX_COL.")
+    @field:Pattern(regexp = COL_REGEX, message = "Column must be between $MIN_COL and $MAX_COL.")
     val col: Char,
 
-    @Min(MIN_ROW_SIZE.toLong(), message = "Row must be greater than $MIN_ROW_SIZE")
-    @Max(MAX_ROW_SIZE.toLong(), message = "Row must be less than $MAX_ROW_SIZE")
+    @field:Min(MIN_ROW_SIZE.toLong(), message = "Row must be greater than $MIN_ROW_SIZE")
+    @field:Max(MAX_ROW_SIZE.toLong(), message = "Row must be less than $MAX_ROW_SIZE")
     val row: Int
 ) {
     constructor(coordinateDTO: CoordinateDTO) : this(

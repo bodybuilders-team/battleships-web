@@ -16,7 +16,7 @@ data class DeployedShipModel(
     val type: String,
     val coordinate: CoordinateModel,
 
-    @Pattern(regexp = ORIENTATION_REGEX, message = "Orientation must be either HORIZONTAL or VERTICAL")
+    @field:Pattern(regexp = ORIENTATION_REGEX, message = "Orientation must be either HORIZONTAL or VERTICAL")
     val orientation: String,
 
     val lives: Int

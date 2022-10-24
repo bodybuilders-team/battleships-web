@@ -11,7 +11,7 @@ import javax.validation.constraints.Size
  * @property config the configuration of the game to be created
  */
 data class CreateGameInputModel(
-    @Size(
+    @field:Size(
         min = MIN_NAME_LENGTH,
         max = MAX_NAME_LENGTH,
         message = "Name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long."

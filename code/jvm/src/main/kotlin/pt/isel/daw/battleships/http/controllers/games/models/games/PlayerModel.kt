@@ -13,14 +13,14 @@ import javax.validation.constraints.Size
  * @property points the player points
  */
 data class PlayerModel(
-    @Size(
+    @field:Size(
         min = MIN_USERNAME_LENGTH,
         max = MAX_USERNAME_LENGTH,
         message = "Username must be between $MIN_USERNAME_LENGTH and $MAX_USERNAME_LENGTH characters long."
     )
     val username: String,
 
-    @Min(value = MIN_POINTS.toLong(), message = "Points must be greater than or equal to $MIN_POINTS.")
+    @field:Min(value = MIN_POINTS.toLong(), message = "Points must be greater than or equal to $MIN_POINTS.")
     val points: Int
 ) {
     constructor(playerDTO: PlayerDTO) : this(

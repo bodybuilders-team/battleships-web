@@ -3,6 +3,7 @@ package pt.isel.daw.battleships.http.pipeline
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
@@ -56,11 +57,32 @@ class ExceptionHandler {
         ]
     )
     fun handleBadRequest(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =
-        handleException(
-            ex = ex,
+        handleErrorMessage(
+            message = ex.message ?: "Bad Request",
             status = HttpStatus.BAD_REQUEST,
             path = request.requestURI
         )
+
+    /**
+     * Handles validation exceptions.
+     *
+     * @param ex exception to handle
+     * @param request the HTTP request
+     * @return response entity with the error message
+     */
+    @ExceptionHandler(value = [MethodArgumentNotValidException::class])
+    fun handleValidationExceptions(
+        request: HttpServletRequest,
+        ex: MethodArgumentNotValidException
+    ): ResponseEntity<Any> {
+        val message = ex.bindingResult.fieldErrors.firstOrNull()?.defaultMessage ?: "Validation Error"
+
+        return handleErrorMessage(
+            message = message,
+            status = HttpStatus.BAD_REQUEST,
+            path = request.requestURI
+        )
+    }
 
     /**
      * Handles Unauthorized exceptions.
@@ -71,8 +93,8 @@ class ExceptionHandler {
      */
     @ExceptionHandler(value = [AuthenticationException::class])
     fun handleUnauthorized(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =
-        handleException(
-            ex = ex,
+        handleErrorMessage(
+            message = ex.message ?: "Unauthorized",
             status = HttpStatus.UNAUTHORIZED,
             path = request.requestURI
         )
@@ -86,8 +108,8 @@ class ExceptionHandler {
      */
     @ExceptionHandler(value = [UserNotInGameException::class])
     fun handleForbidden(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =
-        handleException(
-            ex = ex,
+        handleErrorMessage(
+            message = ex.message ?: "Forbidden",
             status = HttpStatus.FORBIDDEN,
             path = request.requestURI
         )
@@ -101,17 +123,17 @@ class ExceptionHandler {
         /**
          * Handles an exception.
          *
-         * @param ex exception to handle
+         * @param message the error message
          * @param status status to return
          * @param path path of the request
          *
          * @return response entity with the error message
          */
-        private fun handleException(ex: Exception, status: HttpStatus, path: String): ResponseEntity<Any> {
+        private fun handleErrorMessage(message: String, status: HttpStatus, path: String): ResponseEntity<Any> {
             val body = mutableMapOf<String, Any>()
             body[TIMESTAMP_KEY] = LocalDateTime.now()
             body[STATUS_CODE_KEY] = status.value()
-            body[ERROR_MESSAGE_KEY] = ex.message ?: "An error occurred"
+            body[ERROR_MESSAGE_KEY] = message
             body[PATH_KEY] = path
 
             return ResponseEntity

@@ -14,29 +14,29 @@ import javax.validation.constraints.Size
  * @property points the points of the ship type
  */
 data class ShipTypeModel(
-    @Size(
+    @field:Size(
         min = MIN_SHIP_NAME_LENGTH,
         max = MAX_SHIP_NAME_LENGTH,
         message = "Ship type name must be between $MIN_SHIP_NAME_LENGTH and $MAX_SHIP_NAME_LENGTH characters long"
     )
     val shipName: String,
 
-    @Min(
+    @field:Min(
         value = MIN_SHIP_QUANTITY.toLong(),
         message = "Ship type quantity must be greater or equal than $MIN_SHIP_QUANTITY"
     )
-    @Max(
+    @field:Max(
         value = MAX_SHIP_QUANTITY.toLong(),
         message = "Ship type quantity must be less or equal than $MAX_SHIP_QUANTITY"
     )
     val quantity: Int,
 
-    @Min(value = MIN_SHIP_SIZE.toLong(), message = "Ship type size must be greater or equal than $MIN_SHIP_SIZE")
-    @Max(value = MAX_SHIP_SIZE.toLong(), message = "Ship type size must be less or equal than $MAX_SHIP_SIZE")
+    @field:Min(value = MIN_SHIP_SIZE.toLong(), message = "Ship type size must be greater or equal than $MIN_SHIP_SIZE")
+    @field:Max(value = MAX_SHIP_SIZE.toLong(), message = "Ship type size must be less or equal than $MAX_SHIP_SIZE")
     val size: Int,
 
-    @Min(value = MIN_SHIP_POINTS.toLong(), message = "Ship type points must be greater or equal than $MIN_SHIP_POINTS")
-    @Max(value = MAX_SHIP_POINTS.toLong(), message = "Ship type points must be less or equal than $MAX_SHIP_POINTS")
+    @field:Min(value = MIN_SHIP_POINTS.toLong(), message = "Ship type points must be greater or equal than $MIN_SHIP_POINTS")
+    @field:Max(value = MAX_SHIP_POINTS.toLong(), message = "Ship type points must be less or equal than $MAX_SHIP_POINTS")
     val points: Int
 ) {
     constructor(shipTypeDTO: ShipTypeDTO) : this(

@@ -10,7 +10,7 @@ import javax.validation.constraints.Size
  * @property ships the list of ships to be deployed
  */
 data class DeployFleetInputModel(
-    @Size(min = MIN_SHIPS_COUNT, message = "The fleet must have at least $MIN_SHIPS_COUNT ships")
+    @field:Size(min = MIN_SHIPS_COUNT, message = "The fleet must have at least $MIN_SHIPS_COUNT ships")
     val ships: List<UndeployedShipModel>
 ) {
     /**

@@ -12,22 +12,22 @@ import javax.validation.constraints.Size
  * @property password the password of the user to be created
  */
 data class RegisterUserInputModel(
-    @Size(
+    @field:Size(
         min = MIN_USERNAME_LENGTH,
         max = MAX_USERNAME_LENGTH,
         message = "Username must be between $MIN_USERNAME_LENGTH and $MAX_USERNAME_LENGTH characters long."
     )
     val username: String,
 
-    @Size(
+    @field:Size(
         min = MIN_EMAIL_LENGTH,
         max = MAX_EMAIL_LENGTH,
         message = "Email must be between $MIN_EMAIL_LENGTH and $MAX_EMAIL_LENGTH characters long."
     )
-    @Pattern(regexp = EMAIL_REGEX)
+    @field:Pattern(regexp = EMAIL_REGEX)
     val email: String,
 
-    @Size(
+    @field:Size(
         min = MIN_PASSWORD_LENGTH,
         max = MAX_PASSWORD_LENGTH,
         message = "Password must be between $MIN_PASSWORD_LENGTH and $MAX_PASSWORD_LENGTH characters long."

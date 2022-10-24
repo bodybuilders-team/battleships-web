@@ -132,6 +132,7 @@ class GamesServiceImpl(
      * @return the new game
      */
     private fun createGame(creator: User, createGameRequestDTO: CreateGameRequestDTO): Game {
+        // TODO validate game config
         val game = Game(
             name = createGameRequestDTO.name,
             creator = creator,

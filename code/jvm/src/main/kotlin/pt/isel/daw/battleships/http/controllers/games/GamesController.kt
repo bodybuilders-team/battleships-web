@@ -25,6 +25,7 @@ import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
 import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
+import javax.validation.Valid
 
 /**
  * Controller that handles the requests to the /games endpoint.
@@ -81,7 +82,8 @@ class GamesController(private val gamesService: GamesService) {
     @Authenticated
     fun createGame(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
-        @RequestBody gameData: CreateGameInputModel
+        @Valid @RequestBody
+        gameData: CreateGameInputModel
     ): SirenEntity<Unit> {
         val gameId = gamesService.createGame(
             token = token,
@@ -114,7 +116,8 @@ class GamesController(private val gamesService: GamesService) {
     @Authenticated
     fun matchmake(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
-        @RequestBody gameConfig: GameConfigModel
+        @Valid @RequestBody
+        gameConfig: GameConfigModel
     ): SirenEntity<MatchmakeOutputModel> {
         val matchmakeDTO = gamesService.matchmake(
             token = token,

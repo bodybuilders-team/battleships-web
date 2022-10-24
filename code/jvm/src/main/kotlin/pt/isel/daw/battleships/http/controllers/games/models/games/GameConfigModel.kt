@@ -16,29 +16,29 @@ import javax.validation.constraints.Size
  * @property shipTypes the types of ships that can be placed in the game
  */
 data class GameConfigModel(
-    @Min(value = MIN_GRID_SIZE.toLong(), message = "The grid size must be at least $MIN_GRID_SIZE")
-    @Max(value = MAX_GRID_SIZE.toLong(), message = "The grid size must be at most $MAX_GRID_SIZE")
+    @field:Min(value = MIN_GRID_SIZE.toLong(), message = "The grid size must be at least $MIN_GRID_SIZE")
+    @field:Max(value = MAX_GRID_SIZE.toLong(), message = "The grid size must be at most $MAX_GRID_SIZE")
     val gridSize: Int,
 
-    @Min(
+    @field:Min(
         value = MIN_MAX_TIME_FOR_LAYOUT_PHASE.toLong(),
         message = "The time must be at least $MIN_MAX_TIME_FOR_LAYOUT_PHASE"
     )
-    @Max(
+    @field:Max(
         value = MAX_MAX_TIME_FOR_LAYOUT_PHASE.toLong(),
         message = "The time must be at most $MAX_MAX_TIME_FOR_LAYOUT_PHASE"
     )
     val maxTimeForLayoutPhase: Int,
 
-    @Min(value = MIN_SHOTS_PER_ROUND.toLong(), message = "The shots per round must be at least $MIN_SHOTS_PER_ROUND")
-    @Max(value = MAX_SHOTS_PER_ROUND.toLong(), message = "The shots per round must be at most $MAX_SHOTS_PER_ROUND")
+    @field:Min(value = MIN_SHOTS_PER_ROUND.toLong(), message = "The shots per round must be at least $MIN_SHOTS_PER_ROUND")
+    @field:Max(value = MAX_SHOTS_PER_ROUND.toLong(), message = "The shots per round must be at most $MAX_SHOTS_PER_ROUND")
     val shotsPerRound: Int,
 
-    @Min(value = MIN_MAX_TIME_PER_ROUND.toLong(), message = "The time must be at least $MIN_MAX_TIME_PER_ROUND")
-    @Max(value = MAX_MAX_TIME_PER_ROUND.toLong(), message = "The time must be at most $MAX_MAX_TIME_PER_ROUND")
+    @field:Min(value = MIN_MAX_TIME_PER_ROUND.toLong(), message = "The time must be at least $MIN_MAX_TIME_PER_ROUND")
+    @field:Max(value = MAX_MAX_TIME_PER_ROUND.toLong(), message = "The time must be at most $MAX_MAX_TIME_PER_ROUND")
     val maxTimePerRound: Int,
 
-    @Size(min = MIN_SHIP_TYPE_COUNT, message = "There must be at least $MIN_SHIP_TYPE_COUNT ship types")
+    @field:Size(min = MIN_SHIP_TYPE_COUNT, message = "There must be at least $MIN_SHIP_TYPE_COUNT ship types")
     val shipTypes: List<ShipTypeModel>
 ) {
     constructor(gameConfigDTO: GameConfigDTO) : this(

@@ -29,6 +29,7 @@ import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.service.games.PlayersService
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
+import javax.validation.Valid
 
 /**
  * Controller that handles the requests to the game's player's resources.
@@ -91,7 +92,8 @@ class PlayersController(
     fun deployFleet(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int,
-        @RequestBody fleet: DeployFleetInputModel
+        @Valid @RequestBody
+        fleet: DeployFleetInputModel
     ): SirenEntity<DeployFleetOutputModel> {
         playersService
             .deployFleet(
@@ -275,7 +277,8 @@ class PlayersController(
     @PostMapping(Uris.PLAYERS_MY_SHOTS)
     fun fireShots(
         @PathVariable gameId: Int,
-        @RequestBody shots: FireShotsInputModel,
+        @Valid @RequestBody
+        shots: FireShotsInputModel,
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String
     ): SirenEntity<FireShotsOutputModel> {
         val shotsModels = playersService
