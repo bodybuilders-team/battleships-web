@@ -3,7 +3,6 @@ package pt.isel.daw.battleships.repository.users
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.repository.users.users.UsersRepository
 import pt.isel.daw.battleships.testUtils.DatabaseTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

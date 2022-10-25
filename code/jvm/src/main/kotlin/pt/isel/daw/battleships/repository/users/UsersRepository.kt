@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.repository.users.users
+package pt.isel.daw.battleships.repository.users
 
 import org.springframework.data.jpa.repository.JpaRepository
 import pt.isel.daw.battleships.domain.User

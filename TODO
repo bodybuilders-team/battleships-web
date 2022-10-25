@@ -1,10 +1,15 @@
 - Database:
 - Review project structure:
+    - Domain structure -> users and games?
+    - Hypermedia Package? Maybe rename it to media? ou mediaTypes?
 - Documentation:
-    - Review swagger (and maybe add links and actions?)
-    - Review and end finish report
+    - Review and finish report
     - Add postman collection to docs
+    - Prepare presentationn
 - Implementation:
     - Add tests
     - Review validations
     - Review the professor's code
+    - Maybe add user-home (to discussion)
+    - Docker Compose
+    - Add application/problem+json to media type

@@ -18,10 +18,12 @@ import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.Refres
 import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.RefreshTokenOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserOutputModel
-import pt.isel.daw.battleships.http.siren.Link
-import pt.isel.daw.battleships.http.siren.SirenEntity
-import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
-import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
+import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.Action
+import pt.isel.daw.battleships.http.media.siren.Link
+import pt.isel.daw.battleships.http.media.siren.SirenEntity
+import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.users.UsersOrder
 import pt.isel.daw.battleships.service.users.UsersService
 import javax.validation.Valid
@@ -32,7 +34,7 @@ import javax.validation.Valid
  * @property usersService the service that handles the business logic related to the users
  */
 @RestController
-@RequestMapping(produces = [SIREN_TYPE])
+@RequestMapping(produces = [SIREN_MEDIA_TYPE, PROBLEM_MEDIA_TYPE])
 class UsersController(private val usersService: UsersService) {
 
     /**
@@ -114,6 +116,14 @@ class UsersController(private val usersService: UsersService) {
                     rel = listOf("user"),
                     href = Uris.userByUsername(username = userData.username)
                 )
+            ),
+            actions = listOf(
+                Action(
+                    name = "refresh-token",
+                    title = "Refresh Token",
+                    method = "POST",
+                    href = Uris.usersRefreshToken()
+                )
             )
         )
     }
@@ -145,6 +155,14 @@ class UsersController(private val usersService: UsersService) {
                     rel = listOf("user"),
                     href = Uris.userByUsername(username = userData.username)
                 )
+            ),
+            actions = listOf(
+                Action(
+                    name = "refresh-token",
+                    title = "Refresh Token",
+                    method = "POST",
+                    href = Uris.usersRefreshToken()
+                )
             )
         )
     }
@@ -168,6 +186,20 @@ class UsersController(private val usersService: UsersService) {
                 Link(
                     rel = listOf("home"),
                     href = Uris.home()
+                )
+            ),
+            actions = listOf(
+                Action(
+                    name = "register",
+                    title = "Register",
+                    method = "POST",
+                    href = Uris.users()
+                ),
+                Action(
+                    name = "login",
+                    title = "Login",
+                    method = "POST",
+                    href = Uris.usersLogin()
                 )
             )
         )

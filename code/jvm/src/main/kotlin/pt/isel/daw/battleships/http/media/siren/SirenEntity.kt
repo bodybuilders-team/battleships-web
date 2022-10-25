@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.http.siren
+package pt.isel.daw.battleships.http.media.siren
 
 import org.springframework.http.MediaType
 
@@ -25,7 +25,7 @@ data class SirenEntity<T>(
     companion object {
         private const val APPLICATION_TYPE = "application"
         private const val SIREN_SUBTYPE = "vnd.siren+json"
-        const val SIREN_TYPE = "$APPLICATION_TYPE/$SIREN_SUBTYPE"
+        const val SIREN_MEDIA_TYPE = "$APPLICATION_TYPE/$SIREN_SUBTYPE"
 
         @Suppress("unused")
         val sirenMediaType = MediaType(APPLICATION_TYPE, SIREN_SUBTYPE)

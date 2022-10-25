@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
 import pt.isel.daw.battleships.domain.UserTests.Companion.defaultUser
-import pt.isel.daw.battleships.repository.users.users.UsersRepository
+import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.utils.JwtProvider

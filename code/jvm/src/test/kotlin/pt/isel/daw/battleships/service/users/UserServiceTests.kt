@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner
 import pt.isel.daw.battleships.domain.RefreshToken
 import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.UserTests.Companion.defaultUser
-import pt.isel.daw.battleships.repository.refreshTokens.RefreshTokensRepository
-import pt.isel.daw.battleships.repository.users.users.UsersRepository
+import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
+import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO

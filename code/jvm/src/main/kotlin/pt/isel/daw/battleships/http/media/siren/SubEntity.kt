@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.http.siren
+package pt.isel.daw.battleships.http.media.siren
 
 import org.springframework.http.MediaType
 import java.net.URI

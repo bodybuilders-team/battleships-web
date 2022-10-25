@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.repository.refreshTokens
+package pt.isel.daw.battleships.repository.users
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

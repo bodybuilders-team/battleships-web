@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  db-tests:
+    container_name: db-tests
+    build:
+      context: .
+      dockerfile: ./tests/Dockerfile-db-test
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=daw_g03
+    ports:
+      - "5432:5432"

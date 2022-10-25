@@ -6,7 +6,7 @@ import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.game.Game
 import pt.isel.daw.battleships.domain.game.GameState
 import pt.isel.daw.battleships.repository.games.GamesRepository
-import pt.isel.daw.battleships.repository.users.users.UsersRepository
+import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException

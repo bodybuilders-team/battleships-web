@@ -4,15 +4,15 @@
 
 The project documentation is available [here](docs/README.md).
 
-The HTTP API documentation is available [here](docs/battleships-api-spec.yaml).
+The HTTP API specification is available [here](docs/battleships-api-spec.yaml).
 
 ---
 
 ## Authors
 
-- 48089 [André Páscoa](https://github.com/devandrepascoa)
-- 48280 [André Jesus](https://github.com/andre-j3sus)
-- 48287 [Nyckollas Brandão](https://github.com/Nyckoka)
+- [48089 André Páscoa](https://github.com/devandrepascoa)
+- [48280 André Jesus](https://github.com/andre-j3sus)
+- [48287 Nyckollas Brandão](https://github.com/Nyckoka)
 
 Professor: Eng. Pedro Félix
 

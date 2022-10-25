@@ -7,16 +7,17 @@ import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.home.models.AuthorModel
 import pt.isel.daw.battleships.http.controllers.home.models.VCRepositoryModel
 import pt.isel.daw.battleships.http.controllers.home.models.getHome.GetHomeOutputModel
-import pt.isel.daw.battleships.http.siren.Action
-import pt.isel.daw.battleships.http.siren.Link
-import pt.isel.daw.battleships.http.siren.SirenEntity
-import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
+import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.Action
+import pt.isel.daw.battleships.http.media.siren.Link
+import pt.isel.daw.battleships.http.media.siren.SirenEntity
+import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
 
 /**
  * Controller that handles the requests related to the home.
  */
 @RestController
-@RequestMapping(Uris.HOME, produces = [SIREN_TYPE])
+@RequestMapping(Uris.HOME, produces = [SIREN_MEDIA_TYPE, PROBLEM_MEDIA_TYPE])
 class HomeController {
 
     /**

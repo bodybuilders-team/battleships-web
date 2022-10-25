@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import pt.isel.daw.battleships.domain.RefreshToken
 import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
 import pt.isel.daw.battleships.testUtils.DatabaseTest
 import java.time.Instant
 import kotlin.test.Test

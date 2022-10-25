@@ -17,12 +17,13 @@ import pt.isel.daw.battleships.http.controllers.games.models.games.getGameState.
 import pt.isel.daw.battleships.http.controllers.games.models.games.getGames.GetGamesOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.joinGame.JoinGameOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.matchmake.MatchmakeOutputModel
+import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.Action
+import pt.isel.daw.battleships.http.media.siren.Link
+import pt.isel.daw.battleships.http.media.siren.SirenEntity
+import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
-import pt.isel.daw.battleships.http.siren.Action
-import pt.isel.daw.battleships.http.siren.Link
-import pt.isel.daw.battleships.http.siren.SirenEntity
-import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
-import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
 import javax.validation.Valid
@@ -33,7 +34,7 @@ import javax.validation.Valid
  * @property gamesService the service that handles the business logic for the games
  */
 @RestController
-@RequestMapping(produces = [SIREN_TYPE])
+@RequestMapping(produces = [SIREN_MEDIA_TYPE, PROBLEM_MEDIA_TYPE])
 class GamesController(private val gamesService: GamesService) {
 
     /**

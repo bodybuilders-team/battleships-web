@@ -20,11 +20,12 @@ import pt.isel.daw.battleships.http.controllers.games.models.players.getShots.Ge
 import pt.isel.daw.battleships.http.controllers.games.models.players.ship.DeployedShipModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotsModel
+import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.Link
+import pt.isel.daw.battleships.http.media.siren.SirenEntity
+import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
-import pt.isel.daw.battleships.http.siren.Link
-import pt.isel.daw.battleships.http.siren.SirenEntity
-import pt.isel.daw.battleships.http.siren.SirenEntity.Companion.SIREN_TYPE
-import pt.isel.daw.battleships.http.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.service.games.PlayersService
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
@@ -38,7 +39,7 @@ import javax.validation.Valid
  * @property gamesService the service that handles the requests to the game's resources
  */
 @RestController
-@RequestMapping(produces = [SIREN_TYPE])
+@RequestMapping(produces = [SIREN_MEDIA_TYPE, PROBLEM_MEDIA_TYPE])
 @Authenticated
 class PlayersController(
     private val playersService: PlayersService,

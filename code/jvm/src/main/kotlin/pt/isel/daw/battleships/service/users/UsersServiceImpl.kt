@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.domain.RefreshToken
 import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.repository.refreshTokens.RefreshTokensRepository
-import pt.isel.daw.battleships.repository.users.users.UsersRepository
+import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
+import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
