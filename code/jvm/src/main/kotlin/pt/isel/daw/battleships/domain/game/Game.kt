@@ -116,7 +116,7 @@ class Game {
      * @return the opponent of the player that is playing the game
      * @throws NotFoundException if there is no opponent yet
      */
-    fun getOpponent(player: Player): Player =
+    fun getOpponent(player: Player): Player = // TODO check if the player is playing the game
         players.find { it.user.username != player.user.username }
             ?: throw NotFoundException("There's no opponent yet")
 
@@ -144,7 +144,7 @@ class Game {
         players.all { it.deployedShips.isNotEmpty() }
 
     /**
-     * Updayes the game phase and the game phase expiration time.
+     * Updates the game phase and the game phase expiration time.
      */
     fun updatePhase() {
         state.phase =
@@ -196,7 +196,9 @@ class Game {
     fun updateIfPhaseExpired() {
         if (!state.phaseExpired()) return
 
-        if (state.phase == GameState.GamePhase.IN_PROGRESS) {
+        val phase = state.phase
+
+        if (phase == GameState.GamePhase.IN_PROGRESS) {
             val currentPlayer = state.turn
                 ?: throw IllegalStateException("Game is in progress but turn is null")
 
@@ -207,7 +209,7 @@ class Game {
             abortGame()
         }
 
-        throw when (state.phase) {
+        throw when (phase) {
             GameState.GamePhase.WAITING_FOR_PLAYERS ->
                 WaitingForPlayersTimeExpiredException("The waiting for players time has expired.")
 

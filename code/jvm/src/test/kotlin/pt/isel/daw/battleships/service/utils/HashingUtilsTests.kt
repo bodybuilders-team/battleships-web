@@ -45,10 +45,6 @@ class HashingUtilsTests {
             .first { it.name == "hmac" }.also { it.isAccessible = true }
     }
 
-    private val hashingUtilsHmacPrivateFunction: (String, SecretKey) -> String = { data, key ->
-        hashingUtilsHmacPrivateKFunction.call(hashingUtils, data, key) as String
-    }
-
     /**
      * Hmac function created for the purpose of testing the private hmac function by comparison of the value returned.
      *
@@ -115,7 +111,7 @@ class HashingUtilsTests {
         )
         val hmac = testHmac(string, key)
 
-        val hmacResult = hashingUtilsHmacPrivateFunction(string, key)
+        val hmacResult = hashingUtilsHmacPrivateKFunction.call(hashingUtils, string, key) as String
 
         assertEquals(128, hmacResult.length)
         assertEquals(hmac, hmacResult)

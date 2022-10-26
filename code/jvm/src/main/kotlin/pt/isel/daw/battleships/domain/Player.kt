@@ -82,7 +82,7 @@ class Player {
             throw FleetAlreadyDeployedException("Player has already deployed a fleet")
         }
 
-        if (config.testShipTypes(undeployedShips)) {
+        if (!config.testShipTypes(undeployedShips)) {
             throw InvalidFleetException("Invalid fleet for this game configuration.")
         }
 
@@ -133,14 +133,14 @@ class Player {
         val rowsRange = game.config.rowsRange
 
         return (
-            orientation == Orientation.HORIZONTAL &&
-                (coordinate.col + size - 1) in colsRange &&
-                coordinate.row in rowsRange
-            ) || (
-            orientation == Orientation.VERTICAL &&
-                (coordinate.row + size - 1) in rowsRange &&
-                coordinate.col in colsRange
-            )
+                orientation == Orientation.HORIZONTAL &&
+                        (coordinate.col + size - 1) in colsRange &&
+                        coordinate.row in rowsRange
+                ) || (
+                orientation == Orientation.VERTICAL &&
+                        (coordinate.row + size - 1) in rowsRange &&
+                        coordinate.col in colsRange
+                )
     }
 
     /**

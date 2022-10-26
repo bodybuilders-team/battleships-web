@@ -142,7 +142,7 @@ class GamesServiceImpl(
             state = GameState(phaseExpirationTime = Timestamp.from(Instant.now().plus(1L, ChronoUnit.DAYS)))
         )
 
-        game.addPlayer(player = Player(game = game, user = creator))
+        game.addPlayer(player = Player(game = game, user = creator)) // TODO add player in Game constructor?
         return gamesRepository.save(game)
     }
 

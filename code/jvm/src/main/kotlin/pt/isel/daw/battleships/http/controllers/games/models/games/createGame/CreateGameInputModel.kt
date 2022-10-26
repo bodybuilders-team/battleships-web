@@ -32,7 +32,7 @@ data class CreateGameInputModel(
     )
 
     companion object {
-        const val MIN_NAME_LENGTH = 1
-        const val MAX_NAME_LENGTH = 40
+        private const val MIN_NAME_LENGTH = 1
+        private const val MAX_NAME_LENGTH = 40
     }
 }

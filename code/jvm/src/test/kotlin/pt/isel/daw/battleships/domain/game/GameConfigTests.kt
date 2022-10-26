@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.domain.game
 
-import pt.isel.daw.battleships.domain.ship.ShipType
+import pt.isel.daw.battleships.domain.ship.ShipTypeTests.Companion.defaultShipType
 import kotlin.test.Test
 
 class GameConfigTests {
@@ -12,9 +12,7 @@ class GameConfigTests {
             maxTimePerRound = 60,
             maxTimeForLayoutPhase = 60,
             shotsPerRound = 4,
-            shipTypes = listOf(
-                ShipType("Carrier", 1, 5, 50)
-            )
+            shipTypes = listOf(defaultShipType)
         )
     }
 
@@ -25,9 +23,7 @@ class GameConfigTests {
                 maxTimePerRound = 60,
                 maxTimeForLayoutPhase = 60,
                 shotsPerRound = 4,
-                shipTypes = listOf(
-                    ShipType("Carrier", 1, 5, 50)
-                )
+                shipTypes = listOf(defaultShipType)
             )
     }
 }

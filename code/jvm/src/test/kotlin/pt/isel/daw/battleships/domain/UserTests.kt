@@ -6,11 +6,11 @@ class UserTests {
 
     @Test
     fun `User creation is successful`() {
-        User("Player 1", "haram@email.com", "12345678", 0)
+        User(username = "Player 1", email = "haram@email.com", passwordHash = "12345678", points = 0)
     }
 
     companion object {
         val defaultUser
-            get() = User("Player 1", "haram@email.com", "12345678", 0)
+            get() = User(username = "Player 1", email = "haram@email.com", passwordHash = "12345678", points = 0)
     }
 }
