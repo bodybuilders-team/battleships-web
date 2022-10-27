@@ -43,6 +43,22 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  /users/home:
+    get:
+      tags:
+        - Users
+      summary: Home page for users
+      operationId: userHome
+      responses:
+        200:
+          description: Home page for users
+          content:
+            'application/vnd.siren+json':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Entity'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /users:
     get:
       tags:
@@ -141,9 +157,6 @@ paths:
               schema:
                 allOf:
                   - $ref: '#/components/schemas/Entity'
-                  - properties:
-                      properties:
-                        $ref: '#/components/schemas/LogoutUserOutputModel'
         400:
           $ref: '#/components/responses/BadRequest'
         500:

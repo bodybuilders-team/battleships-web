@@ -6,15 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.validation.DataBinder
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
+import pt.isel.daw.battleships.http.media.Problem
 import javax.validation.Valid
-import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.jvm.isAccessible
 import kotlin.test.assertEquals
 
 @RunWith(SpringRunner::class)
@@ -24,11 +22,6 @@ class ExceptionHandlerTests {
     @Autowired
     lateinit var handler: ExceptionHandler
 
-    private val exceptionHandlerHandleErrorMessagePrivateKFunction by lazy {
-        ExceptionHandler.Companion::class.declaredFunctions
-            .first { it.name == "handleErrorMessage" }.also { it.isAccessible = true }
-    }
-
     @Test
     fun `handleBadRequest returns ResponseEntity with BadRequest error`() {
         val httpServletRequest = MockHttpServletRequest()
@@ -36,8 +29,11 @@ class ExceptionHandlerTests {
         val responseEntity = handler.handleBadRequest(httpServletRequest, Exception("test"))
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.statusCode)
-        assertEquals("[application/json]", responseEntity.headers["Content-Type"].toString())
-        assertEquals("test", (responseEntity.body as Map<*, *>)["error"])
+        assertEquals(
+            Problem.PROBLEM_MEDIA_TYPE,
+            responseEntity.headers["Content-Type"].toString().removeSurrounding("[", "]")
+        )
+        assertEquals("test", (responseEntity.body as Problem).title)
     }
 
     @Test
@@ -65,8 +61,11 @@ class ExceptionHandlerTests {
         )
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.statusCode)
-        assertEquals("[application/json]", responseEntity.headers["Content-Type"].toString())
-        assertEquals("test", (responseEntity.body as Map<*, *>)["error"])
+        assertEquals(
+            Problem.PROBLEM_MEDIA_TYPE,
+            responseEntity.headers["Content-Type"].toString().removeSurrounding("[", "]")
+        )
+        assertEquals("test", (responseEntity.body as Problem).title)
     }
 
     @Test
@@ -76,8 +75,11 @@ class ExceptionHandlerTests {
         val responseEntity = handler.handleUnauthorized(httpServletRequest, Exception("test"))
 
         assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.statusCode)
-        assertEquals("[application/json]", responseEntity.headers["Content-Type"].toString())
-        assertEquals("test", (responseEntity.body as Map<*, *>)["error"])
+        assertEquals(
+            Problem.PROBLEM_MEDIA_TYPE,
+            responseEntity.headers["Content-Type"].toString().removeSurrounding("[", "]")
+        )
+        assertEquals("test", (responseEntity.body as Problem).title)
     }
 
     @Test
@@ -87,24 +89,10 @@ class ExceptionHandlerTests {
         val responseEntity = handler.handleForbidden(httpServletRequest, Exception("test"))
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.statusCode)
-        assertEquals("[application/json]", responseEntity.headers["Content-Type"].toString())
-        assertEquals("test", (responseEntity.body as Map<*, *>)["error"])
-    }
-
-    @Test
-    fun `handleErrorMessage returns ResponseEntity with the error message`() {
-        val responseEntity = exceptionHandlerHandleErrorMessagePrivateKFunction.call(
-            ExceptionHandler.Companion,
-            "test",
-            HttpStatus.I_AM_A_TEAPOT,
-            "/test"
-        ) as ResponseEntity<*>
-
-        val body = responseEntity.body as Map<*, *>
-
-        assertEquals(HttpStatus.I_AM_A_TEAPOT, responseEntity.statusCode)
-        assertEquals(HttpStatus.I_AM_A_TEAPOT.value(), body["status"])
-        assertEquals("test", body["error"])
-        assertEquals("/test", body["path"])
+        assertEquals(
+            Problem.PROBLEM_MEDIA_TYPE,
+            responseEntity.headers["Content-Type"].toString().removeSurrounding("[", "]")
+        )
+        assertEquals("test", (responseEntity.body as Problem).title)
     }
 }

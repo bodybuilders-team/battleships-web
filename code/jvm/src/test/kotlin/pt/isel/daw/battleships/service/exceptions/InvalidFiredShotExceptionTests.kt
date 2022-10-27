@@ -3,17 +3,17 @@ package pt.isel.daw.battleships.service.exceptions
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class InvalidShotExceptionTests {
+class InvalidFiredShotExceptionTests {
 
     @Test
     fun `InvalidShotException creation is successful`() {
-        InvalidShotException("Test")
+        InvalidFiredShotException("Test")
     }
 
     @Test
     fun `InvalidShotException thrown successfully`() {
-        assertFailsWith<InvalidShotException> {
-            throw InvalidShotException("Test")
+        assertFailsWith<InvalidFiredShotException> {
+            throw InvalidFiredShotException("Test")
         }
     }
 }

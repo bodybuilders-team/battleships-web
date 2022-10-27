@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.domain.games.game.Game
 import pt.isel.daw.battleships.domain.games.game.GameState
 import pt.isel.daw.battleships.domain.games.ship.DeployedShip
@@ -13,7 +14,6 @@ import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
-import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedFleetDTO
@@ -111,7 +111,7 @@ class PlayersServiceImpl(
 
         when {
             game.state.phase == GameState.GamePhase.FINISHED &&
-                    game.state.turn != game.state.winner && game.state.turn == player ->
+                game.state.turn != game.state.winner && game.state.turn == player ->
                 throw FiringShotsTimeExpiredException("The firing shots time has expired. Game is finished.")
 
             game.state.phase != GameState.GamePhase.IN_PROGRESS -> throw InvalidPhaseException("Game is not in progress.")

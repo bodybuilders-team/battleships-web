@@ -1,14 +1,8 @@
 - Database:
-- Review project structure:
+- Project structure:
 - Documentation:
-    - Review and finish report
-    - Add postman collection to docs
-    - Prepare presentationn
+    - Review and improve report
 - Implementation:
-    - Add tests
+    - Add more tests
     - Review validations
-    - Review the professor's code
-    - Maybe add user-home (to discussion)
-    - Docker Compose
-    - Add application/problem+json to media type
     - Add logger

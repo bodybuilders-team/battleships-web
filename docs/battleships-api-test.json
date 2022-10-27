@@ -1,0 +1,1915 @@
+{
+  "info": {
+    "_postman_id": "37c44f1a-5ca5-4b68-a09d-1cb555485beb",
+    "name": "Battleships",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18351569"
+  },
+  "item": [
+    {
+      "name": "Home",
+      "item": [
+        {
+          "name": "Home",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Home",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 27 Oct 2022 22:15:51 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"home\"\n    ],\n    \"properties\": {\n        \"title\": \"Battleships\",\n        \"version\": \"0.0.1\",\n        \"description\": \"Battleships is a game where you have to sink all the ships of your opponent.\",\n        \"authors\": [\n            {\n                \"name\": \"André Jesus\",\n                \"email\": \"andre.jesus.pilar@gmail.com\",\n                \"github\": \"https://github.com/andre-j3sus\"\n            },\n            {\n                \"name\": \"André Páscoa\",\n                \"email\": \"andre@pascoa.org\",\n                \"github\": \"https://github.com/devandrepascoa\"\n            },\n            {\n                \"name\": \"Nyckollas Brandão\",\n                \"email\": \"nyckbrandao1236@gmail.com\",\n                \"github\": \"https://github.com/nyckoka\"\n            }\n        ],\n        \"repository\": {\n            \"type\": \"git\",\n            \"url\": \"https://github.com/isel-leic-daw/2022-daw-leic51d-g03\"\n        }\n    },\n    \"actions\": [\n        {\n            \"name\": \"list-users\",\n            \"method\": \"GET\",\n            \"href\": \"/users\",\n            \"title\": \"List Users\"\n        },\n        {\n            \"name\": \"register\",\n            \"method\": \"POST\",\n            \"href\": \"/users\",\n            \"title\": \"Register\"\n        },\n        {\n            \"name\": \"login\",\n            \"method\": \"POST\",\n            \"href\": \"/users/login\",\n            \"title\": \"Login\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\",\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "User Home",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/home",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "home"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "User Home",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/home",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "home"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 27 Oct 2022 22:16:04 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"user-home\"\n    ],\n    \"actions\": [\n        {\n            \"name\": \"logout\",\n            \"method\": \"POST\",\n            \"href\": \"/users/logout\",\n            \"title\": \"Logout\"\n        },\n        {\n            \"name\": \"refresh-token\",\n            \"method\": \"POST\",\n            \"href\": \"/users/refresh-token\",\n            \"title\": \"Refresh Token\"\n        },\n        {\n            \"name\": \"matchmake\",\n            \"method\": \"POST\",\n            \"href\": \"/games/matchmake\",\n            \"title\": \"Matchmake\"\n        },\n        {\n            \"name\": \"list-games\",\n            \"method\": \"GET\",\n            \"href\": \"/games\",\n            \"title\": \"List Games\"\n        },\n        {\n            \"name\": \"create-game\",\n            \"method\": \"POST\",\n            \"href\": \"/games\",\n            \"title\": \"Create Game\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\"\n            ],\n            \"href\": \"/users/home\"\n        },\n        {\n            \"rel\": [\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?limit=10&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get Users",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users?limit=10&offset=0",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:46:35 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"users\"\n    ],\n    \"properties\": {\n        \"totalCount\": 5\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"item\",\n                \"user-guest\"\n            ],\n            \"href\": \"/users/guest\",\n            \"title\": \"guest\"\n        },\n        {\n            \"rel\": [\n                \"item\",\n                \"user-andre-j3sus\"\n            ],\n            \"href\": \"/users/andre-j3sus\",\n            \"title\": \"andre-j3sus\"\n        },\n        {\n            \"rel\": [\n                \"item\",\n                \"user-nyckoka\"\n            ],\n            \"href\": \"/users/nyckoka\",\n            \"title\": \"nyckoka\"\n        },\n        {\n            \"rel\": [\n                \"item\",\n                \"user-devandrepascoa\"\n            ],\n            \"href\": \"/users/devandrepascoa\",\n            \"title\": \"devandrepascoa\"\n        },\n        {\n            \"rel\": [\n                \"item\",\n                \"user-guest1\"\n            ],\n            \"href\": \"/users/guest1\",\n            \"title\": \"guest1\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\"\n            ],\n            \"href\": \"/users\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = JSON.parse(responseBody);\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"refresh_token\", json[\"properties\"][\"refreshToken\"]);\r",
+                  "pm.collectionVariables.set(\"access_token\", json[\"properties\"][\"accessToken\"]);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"guest2\",\r\n    \"email\": \"guest2@mail.com\",\r\n    \"password\":\"guestguest\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"guest1\",\r\n    \"email\": \"guest1@mail.com\",\r\n    \"password\":\"guest\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:18:57 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"user\"\n    ],\n    \"properties\": {\n        \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4NzEzNywiZXhwIjoxNjY2MzkwNzM3fQ.Dk3vJVZfeldVPcLSsmAduu52AOS7EyvCkzeDJMcPPhHS31hI8N0mXQeqJUmY3V_o26msseYmzqXf4GvPf33tNA\",\n        \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4NzEzNywiZXhwIjoxNjY2NDczNTM3fQ.n38mWAZVW6sfCVkvxfKrwerYKhTXdkAxGVPUikiGwldQPWwYNZ0oMRbkWPQIdi0cP1NDgklS8Da6RchdgdOUaw\"\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"user\"\n            ],\n            \"href\": \"/users/guest1\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = JSON.parse(responseBody);\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"refresh_token\", json[\"properties\"][\"refreshToken\"]);\r",
+                  "pm.collectionVariables.set(\"access_token\", json[\"properties\"][\"accessToken\"]);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"guest{{SELECTED_PLAYER}}\",\r\n    \"password\":\"guest\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"guest1\",\r\n    \"password\":\"guest\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:19:42 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"user\"\n    ],\n    \"properties\": {\n        \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4NzE4MiwiZXhwIjoxNjY2MzkwNzgyfQ.tAYbA_BoRUJeNJGEzoXkfLRWyPh9bOdRG8kupsdbotsbgtMSLycUH8XDQ3GIereICHM4butz-Uw5aMSKAbu6Sw\",\n        \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4NzE4MiwiZXhwIjoxNjY2NDczNTgyfQ.K0IJCuJCrxYD4HP1QOUKAPzzddFlu1x4W1UETWkcRp36JmvAvQwA9j4D1xJqs7mVSCS_wGj1YsSIHNi8LjdzMQ\"\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"user\"\n            ],\n            \"href\": \"/users/guest1\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"refreshToken\" : \"{{refresh_token}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Logout",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"refreshToken\" : \"{{refresh_token}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/logout",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:45:51 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"user\"\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = JSON.parse(responseBody);\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"refresh_token\", json[\"properties\"][\"refreshToken\"]);\r",
+                  "pm.collectionVariables.set(\"access_token\", json[\"properties\"][\"accessToken\"]);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"refreshToken\" : \"{{refresh_token}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/refresh-token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Refresh Token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"refreshToken\" : \"{{refresh_token}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/refresh-token",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "refresh-token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 22:02:28 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"user\"\n    ],\n    \"properties\": {\n        \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2MzkzMzQ4fQ.Zh6mjDKVbBH239u3l0AAGnBnQdPrvDsf6qubJsILDquDh8Wec3YAMKIB2uzcNElBVEhKN8QAMhldROhtYGYncg\",\n        \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0MSIsImlhdCI6MTY2NjM4OTc0OCwiZXhwIjoxNjY2NDc2MTQ4fQ.hjkkN1ORnLC0Qmp0xEpElhGMwit3CnW7dDBzibMUMd3qJVNkoJVrSp9G4AwizAMeF1v28s3nD5OVERzlNDvDLQ\"\n    },\n    \"links\": [\n        {\n            \"rel\": [\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/:iusername",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                ":iusername"
+              ],
+              "variable": [
+                {
+                  "key": "iusername",
+                  "value": "guest"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get User",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/:iusername",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":iusername"
+                  ],
+                  "variable": [
+                    {
+                      "key": "iusername",
+                      "value": "guest"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:48:24 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"user\"\n    ],\n    \"properties\": {\n        \"username\": \"guest\",\n        \"email\": \"guest@mail.com\",\n        \"points\": 0\n    },\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\"\n            ],\n            \"href\": \"/users/guest\"\n        },\n        {\n            \"rel\": [\n                \"home\"\n            ],\n            \"href\": \"/\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Game",
+      "item": [
+        {
+          "name": "Get Games",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games?limit=10&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get Games",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/games?limit=10&offset=0",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "games"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:50:05 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"games\"\n    ],\n    \"properties\": {\n        \"totalCount\": 5\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"item\",\n                \"game-1\"\n            ],\n            \"href\": \"/games/1\",\n            \"title\": \"Game 1\"\n        },\n        {\n            \"rel\": [\n                \"item\",\n                \"game-2\"\n            ],\n            \"href\": \"/games/2\",\n            \"title\": \"Game 2\"\n        },\n        {\n            \"rel\": [\n                \"item\",\n                \"game-3\"\n            ],\n            \"href\": \"/games/3\",\n            \"title\": \"Game 3\"\n        }\n    ],\n    \"actions\": [],\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\"\n            ],\n            \"href\": \"/games\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Game",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"SUPPP\",\r\n    \"config\": {{default_game_config}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create Game",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"SUPPP\",\r\n    \"config\": {\r\n        \"gridSize\" : 10,\r\n        \"maxTimeForLayoutPhase\": 100,\r\n        \"shotsPerRound\": 1,\r\n        \"maxTimePerShot\": 100,\r\n        \"shipTypes\": [\r\n            {\r\n                \"shipName\":\"Carrier\",\r\n                \"size\": 5,\r\n                \"quantity\": 2,\r\n                \"points\": 50\r\n            }\r\n        ]\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/games",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "games"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 21:50:38 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"entities\": [\n        {\n            \"rel\": [\n                \"game\"\n            ],\n            \"href\": \"/games/4\"\n        },\n        {\n            \"rel\": [\n                \"state\"\n            ],\n            \"href\": \"/games/4/state\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Matchmake",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{{default_game_config}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/matchmake",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                "matchmake"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Matchmake",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{{default_game_config}}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/games/matchmake",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "games",
+                    "matchmake"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 22:13:48 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"matchmake\"\n    ],\n    \"properties\": {\n        \"wasCreated\": true\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"game\"\n            ],\n            \"href\": \"/games/12\"\n        },\n        {\n            \"rel\": [\n                \"state\"\n            ],\n            \"href\": \"/games/12/state\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Game",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get Game",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/games/:gameId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "games",
+                    ":gameId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "gameId",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 22:12:34 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"game\"\n    ],\n    \"properties\": {\n        \"id\": 1,\n        \"name\": \"Game 1\",\n        \"creator\": \"andre-j3sus\",\n        \"config\": {\n            \"gridSize\": 10,\n            \"maxTimeForLayoutPhase\": 60,\n            \"shotsPerRound\": 1,\n            \"maxTimePerShot\": 10,\n            \"shipTypes\": []\n        },\n        \"state\": {\n            \"phase\": \"WAITING_FOR_PLAYERS\",\n            \"phaseEndTime\": 1666201815147\n        },\n        \"players\": [\n            {\n                \"username\": \"andre-j3sus\",\n                \"points\": 0\n            }\n        ]\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"state\"\n            ],\n            \"href\": \"/games/1/state\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"name\": \"join\",\n            \"method\": \"POST\",\n            \"href\": \"/games/1/join\",\n            \"title\": \"Join Game\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\"\n            ],\n            \"href\": \"/games/1\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Game State",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/state",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "state"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get Game State",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/games/:gameId/state",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "games",
+                    ":gameId",
+                    "state"
+                  ],
+                  "variable": [
+                    {
+                      "key": "gameId",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 22:13:20 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"game-state\"\n    ],\n    \"properties\": {\n        \"phase\": \"WAITING_FOR_PLAYERS\",\n        \"phaseEndTime\": 1666201815147\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"game\"\n            ],\n            \"href\": \"/games/1\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"name\": \"deployFleet\",\n            \"method\": \"POST\",\n            \"href\": \"/games/1/players/self/fleet\",\n            \"title\": \"Deploy Fleet\"\n        },\n        {\n            \"name\": \"getMyFleet\",\n            \"method\": \"GET\",\n            \"href\": \"/games/1/players/self/fleet\",\n            \"title\": \"Get My Fleet\"\n        },\n        {\n            \"name\": \"getOpponentFleet\",\n            \"method\": \"GET\",\n            \"href\": \"/games/1/players/opponent/fleet\",\n            \"title\": \"Get Opponent Fleet\"\n        },\n        {\n            \"name\": \"getMyShots\",\n            \"method\": \"GET\",\n            \"href\": \"/games/1/players/self/shots\",\n            \"title\": \"Get My Shots\"\n        },\n        {\n            \"name\": \"getOpponentShots\",\n            \"method\": \"GET\",\n            \"href\": \"/games/1/players/opponent/shots\",\n            \"title\": \"Get Opponent Shots\"\n        },\n        {\n            \"name\": \"shoot\",\n            \"method\": \"POST\",\n            \"href\": \"/games/1/players/self/shots\",\n            \"title\": \"Shoot\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": [\n                \"self\"\n            ],\n            \"href\": \"/games/1/state\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Join game",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/join",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "join"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Join game",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/games/:gameId/join",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "games",
+                    ":gameId",
+                    "join"
+                  ],
+                  "variable": [
+                    {
+                      "key": "gameId",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.siren+json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 21 Oct 2022 22:17:04 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"class\": [\n        \"join-game\"\n    ],\n    \"properties\": {\n        \"gameId\": 1\n    },\n    \"entities\": [\n        {\n            \"rel\": [\n                \"game\"\n            ],\n            \"href\": \"/games/1\"\n        },\n        {\n            \"rel\": [\n                \"state\"\n            ],\n            \"href\": \"/games/1/state\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Player",
+      "item": [
+        {
+          "name": "Get My Fleet",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/fleet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "fleet"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deploy Fleet",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ships\": [\r\n        {\r\n            \"type\": \"Carrier\",\r\n            \"coordinate\": {\r\n                \"col\": \"A\",\r\n                \"row\": 1\r\n            },\r\n            \"orientation\": \"HORIZONTAL\"\r\n        },\r\n        {\r\n            \"type\": \"Battleship\",\r\n            \"coordinate\": {\r\n                \"col\": \"C\",\r\n                \"row\": 3\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        },\r\n        {\r\n            \"type\": \"Cruiser\",\r\n            \"coordinate\": {\r\n                \"col\": \"F\",\r\n                \"row\": 5\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        },\r\n        {\r\n            \"type\": \"Submarine\",\r\n            \"coordinate\": {\r\n                \"col\": \"D\",\r\n                \"row\": 8\r\n            },\r\n            \"orientation\": \"HORIZONTAL\"\r\n        },\r\n        {\r\n            \"type\": \"Destroyer\",\r\n            \"coordinate\": {\r\n                \"col\": \"G\",\r\n                \"row\": 3\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/fleet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "fleet"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Opponent Fleet",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/opponent/fleet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "opponent",
+                "fleet"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Shots",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/shots",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "shots"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fire Shot",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"shots\": [\r\n        {\r\n            \"coordinate\": {\r\n                \"col\": \"A\",\r\n                \"row\": 1\r\n            }\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/shots",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "shots"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Opponent Shots",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/opponent/shots",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "opponent",
+                "shots"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Board",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/board",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "board"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Use Case Scenario",
+      "item": [
+        {
+          "name": "Register Guest 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = JSON.parse(responseBody);\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"test_refresh_token_1\", json[\"properties\"][\"refreshToken\"]);\r",
+                  "pm.collectionVariables.set(\"test_access_token_1\", json[\"properties\"][\"accessToken\"]);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"guest1\",\r\n    \"email\": \"guest@guest.com\",\r\n    \"password\":\"guestguest\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Guest 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = JSON.parse(responseBody);\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"test_refresh_token_2\", json[\"properties\"][\"refreshToken\"]);\r",
+                  "pm.collectionVariables.set(\"test_access_token_2\", json[\"properties\"][\"accessToken\"]);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"guest2\",\r\n    \"email\": \"guest2@guest.com\",\r\n    \"password\":\"guestguest\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Game by Guest 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"SUPPP\",\r\n    \"config\": {{default_game_config}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Matchmake by Guest 2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{{default_game_config}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/matchmake",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                "matchmake"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deploy Fleet by Guest 1",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ships\": [\r\n        {\r\n            \"type\": \"Carrier\",\r\n            \"coordinate\": {\r\n                \"col\": \"A\",\r\n                \"row\": 1\r\n            },\r\n            \"orientation\": \"HORIZONTAL\"\r\n        },\r\n        {\r\n            \"type\": \"Battleship\",\r\n            \"coordinate\": {\r\n                \"col\": \"C\",\r\n                \"row\": 3\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        },\r\n        {\r\n            \"type\": \"Cruiser\",\r\n            \"coordinate\": {\r\n                \"col\": \"F\",\r\n                \"row\": 5\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        },\r\n        {\r\n            \"type\": \"Submarine\",\r\n            \"coordinate\": {\r\n                \"col\": \"D\",\r\n                \"row\": 8\r\n            },\r\n            \"orientation\": \"HORIZONTAL\"\r\n        },\r\n        {\r\n            \"type\": \"Destroyer\",\r\n            \"coordinate\": {\r\n                \"col\": \"G\",\r\n                \"row\": 3\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/fleet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "fleet"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deploy Fleet by Guest 2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ships\": [\r\n        {\r\n            \"type\": \"Carrier\",\r\n            \"coordinate\": {\r\n                \"col\": \"A\",\r\n                \"row\": 1\r\n            },\r\n            \"orientation\": \"HORIZONTAL\"\r\n        },\r\n        {\r\n            \"type\": \"Battleship\",\r\n            \"coordinate\": {\r\n                \"col\": \"C\",\r\n                \"row\": 3\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        },\r\n        {\r\n            \"type\": \"Cruiser\",\r\n            \"coordinate\": {\r\n                \"col\": \"F\",\r\n                \"row\": 5\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        },\r\n        {\r\n            \"type\": \"Submarine\",\r\n            \"coordinate\": {\r\n                \"col\": \"D\",\r\n                \"row\": 8\r\n            },\r\n            \"orientation\": \"HORIZONTAL\"\r\n        },\r\n        {\r\n            \"type\": \"Destroyer\",\r\n            \"coordinate\": {\r\n                \"col\": \"G\",\r\n                \"row\": 3\r\n            },\r\n            \"orientation\": \"VERTICAL\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/fleet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "fleet"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Board by Guest 1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/board",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "board"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fire Shot at A1 by Guest 1",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"shots\": [\r\n        {\r\n            \"coordinate\": {\r\n                \"col\": \"A\",\r\n                \"row\": 1\r\n            }\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/shots",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "shots"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fire Shot at A1 by Guest 2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{test_access_token_2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"shots\": [\r\n        {\r\n            \"coordinate\": {\r\n                \"col\": \"F\",\r\n                \"row\": 1\r\n            }\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/games/:gameId/players/self/shots",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "games",
+                ":gameId",
+                "players",
+                "self",
+                "shots"
+              ],
+              "variable": [
+                {
+                  "key": "gameId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "default_game_config",
+      "value": "{\n        \"gridSize\": 10,\n        \"maxTimeForLayoutPhase\": 100,\n        \"shotsPerRound\": 1,\n        \"maxTimePerShot\": 100,\n        \"shipTypes\": [\n            {\n                \"shipName\": \"Carrier\",\n                \"size\": 5,\n                \"quantity\": 1,\n                \"points\": 50\n            },\n            {\n                \"shipName\": \"Battleship\",\n                \"size\": 4,\n                \"quantity\": 1,\n                \"points\": 40\n            },\n            {\n                \"shipName\": \"Cruiser\",\n                \"size\": 3,\n                \"quantity\": 2,\n                \"points\": 30\n            },\n            {\n                \"shipName\": \"Submarine\",\n                \"size\": 3,\n                \"quantity\": 2,\n                \"points\": 30\n            },\n            {\n                \"shipName\": \"Destroyer\",\n                \"size\": 2,\n                \"quantity\": 3,\n                \"points\": 30\n            }\n        ]\n    }",
+      "type": "string"
+    },
+    {
+      "key": "test_refresh_token_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "test_access_token_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "test_refresh_token_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "test_access_token_2",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

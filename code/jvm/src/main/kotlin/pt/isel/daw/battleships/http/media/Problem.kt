@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.media
 
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import java.net.URI
 
 /**
@@ -18,10 +18,18 @@ import java.net.URI
 data class Problem(
     val type: URI,
     val title: String,
-    val status: HttpStatus, // TODO: Check this types
+    val status: Int,
     val detail: String? = null,
     val instance: URI? = null
 ) {
+
+    /**
+     * Converts this problem to a [ResponseEntity].
+     */
+    fun toResponse() = ResponseEntity
+        .status(status)
+        .header("Content-Type", PROBLEM_MEDIA_TYPE)
+        .body<Any>(this)
 
     companion object {
         private const val APPLICATION_TYPE = "application"

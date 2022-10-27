@@ -1,7 +1,6 @@
 package pt.isel.daw.battleships.http.pipeline
 
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -19,6 +18,7 @@ import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
 import pt.isel.daw.battleships.domain.exceptions.InvalidUserException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
+import pt.isel.daw.battleships.http.media.Problem
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
@@ -28,7 +28,7 @@ import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsExcepti
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
-import java.time.LocalDateTime
+import java.net.URI
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -68,12 +68,15 @@ class ExceptionHandler {
             InvalidShotException::class
         ]
     )
-    fun handleBadRequest(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =
-        handleErrorMessage(
-            message = ex.message ?: "Bad Request",
-            status = HttpStatus.BAD_REQUEST,
-            path = request.requestURI
-        )
+    fun handleBadRequest(
+        request: HttpServletRequest,
+        ex: Exception
+    ): ResponseEntity<Any> =
+        Problem(
+            type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
+            title = ex.message ?: "Bad Request",
+            status = HttpStatus.BAD_REQUEST.value()
+        ).toResponse()
 
     /**
      * Handles validation exceptions.
@@ -86,15 +89,12 @@ class ExceptionHandler {
     fun handleValidationExceptions(
         request: HttpServletRequest,
         ex: MethodArgumentNotValidException
-    ): ResponseEntity<Any> {
-        val message = ex.bindingResult.fieldErrors.firstOrNull()?.defaultMessage ?: "Validation Error"
-
-        return handleErrorMessage(
-            message = message,
-            status = HttpStatus.BAD_REQUEST,
-            path = request.requestURI
-        )
-    }
+    ): ResponseEntity<Any> =
+        Problem(
+            type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
+            title = ex.bindingResult.fieldErrors.firstOrNull()?.defaultMessage ?: "Validation Error",
+            status = HttpStatus.BAD_REQUEST.value()
+        ).toResponse()
 
     /**
      * Handles Unauthorized exceptions.
@@ -104,12 +104,15 @@ class ExceptionHandler {
      * @return response entity with the error message
      */
     @ExceptionHandler(value = [AuthenticationException::class])
-    fun handleUnauthorized(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =
-        handleErrorMessage(
-            message = ex.message ?: "Unauthorized",
-            status = HttpStatus.UNAUTHORIZED,
-            path = request.requestURI
-        )
+    fun handleUnauthorized(
+        request: HttpServletRequest,
+        ex: Exception
+    ): ResponseEntity<Any> =
+        Problem(
+            type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
+            title = ex.message ?: "Unauthorized",
+            status = HttpStatus.UNAUTHORIZED.value()
+        ).toResponse()
 
     /**
      * Handles Forbidden exceptions.
@@ -119,39 +122,29 @@ class ExceptionHandler {
      * @return response entity with the error message
      */
     @ExceptionHandler(value = [UserNotInGameException::class])
-    fun handleForbidden(request: HttpServletRequest, ex: Exception): ResponseEntity<Any> =
-        handleErrorMessage(
-            message = ex.message ?: "Forbidden",
-            status = HttpStatus.FORBIDDEN,
-            path = request.requestURI
-        )
+    fun handleForbidden(
+        request: HttpServletRequest,
+        ex: Exception
+    ): ResponseEntity<Any> =
+        Problem(
+            type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
+            title = ex.message ?: "Forbidden",
+            status = HttpStatus.FORBIDDEN.value()
+        ).toResponse()
 
     companion object {
-        private const val ERROR_MESSAGE_KEY = "error"
-        private const val TIMESTAMP_KEY = "timestamp"
-        private const val PATH_KEY = "path"
-        private const val STATUS_CODE_KEY = "status"
+        private const val PROBLEMS_DOCS_URI =
+            "https://github.com/isel-leic-daw/2022-daw-leic51d-g03/tree/main/docs/problems/"
 
         /**
-         * Handles an exception.
+         * Converts an exception to a problem type name, in kebab-case.
          *
-         * @param message the error message
-         * @param status status to return
-         * @param path path of the request
-         *
-         * @return response entity with the error message
+         * @return the problem type name
          */
-        private fun handleErrorMessage(message: String, status: HttpStatus, path: String): ResponseEntity<Any> {
-            val body = mutableMapOf<String, Any>()
-            body[TIMESTAMP_KEY] = LocalDateTime.now()
-            body[STATUS_CODE_KEY] = status.value()
-            body[ERROR_MESSAGE_KEY] = message
-            body[PATH_KEY] = path
-
-            return ResponseEntity
-                .status(status)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(body)
-        }
+        fun Exception.toProblemType(): String =
+            (this::class.simpleName ?: "Unknown")
+                .replace("Exception", "")
+                .replace(Regex("([a-z])([A-Z])")) { "${it.groupValues[1]}-${it.groupValues[2]}" }
+                .lowercase()
     }
 }

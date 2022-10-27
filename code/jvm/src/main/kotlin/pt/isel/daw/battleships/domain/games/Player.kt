@@ -1,15 +1,15 @@
 package pt.isel.daw.battleships.domain.games
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.domain.games.game.Game
 import pt.isel.daw.battleships.domain.games.ship.DeployedShip
 import pt.isel.daw.battleships.domain.games.ship.Ship.Orientation
 import pt.isel.daw.battleships.domain.games.ship.UndeployedShip
 import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.service.exceptions.InvalidFiredShotException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
-import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
-import pt.isel.daw.battleships.service.exceptions.InvalidShotException
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -151,18 +151,18 @@ class Player {
      * @param coordinates the coordinates of the shots
      *
      * @return the list of shots made
-     * @throws InvalidShotException if a shot is invalid
+     * @throws InvalidFiredShotException if a shot is invalid
      */
     fun shoot(
         opponent: Player,
         coordinates: List<Coordinate>
     ): List<Shot> {
         if (!coordinates.all { it.col in game.config.colsRange && it.row in game.config.rowsRange }) {
-            throw InvalidShotException("Shot is out of bounds")
+            throw InvalidFiredShotException("Shot is out of bounds")
         }
 
         if (coordinates.distinctBy { it }.size != coordinates.size) {
-            throw InvalidShotException("Shots must have distinct coordinates.")
+            throw InvalidFiredShotException("Shots must have distinct coordinates.")
         }
 
         if (
@@ -172,7 +172,7 @@ class Player {
                 }
             }
         ) {
-            throw InvalidShotException("Shots must be to coordinates that have not been shot yet.")
+            throw InvalidFiredShotException("Shots must be to coordinates that have not been shot yet.")
         }
 
         val madeShots = coordinates.map { coordinate ->

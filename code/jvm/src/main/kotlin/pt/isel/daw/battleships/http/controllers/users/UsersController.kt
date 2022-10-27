@@ -38,6 +38,58 @@ import javax.validation.Valid
 class UsersController(private val usersService: UsersService) {
 
     /**
+     * Handles the request to get the user home page.
+     *
+     * @return the response to the request with the user home page
+     */
+    @GetMapping(Uris.USER_HOME)
+    fun getUserHome() = SirenEntity<Unit>(
+        `class` = listOf("user-home"),
+        actions = listOf(
+            Action(
+                name = "logout",
+                title = "Logout",
+                method = "POST",
+                href = Uris.usersLogout()
+            ),
+            Action(
+                name = "refresh-token",
+                title = "Refresh Token",
+                method = "POST",
+                href = Uris.usersRefreshToken()
+            ),
+            Action(
+                name = "matchmake",
+                title = "Matchmake",
+                method = "POST",
+                href = Uris.gamesMatchmake()
+            ),
+            Action(
+                name = "list-games",
+                title = "List Games",
+                method = "GET",
+                href = Uris.games()
+            ),
+            Action(
+                name = "create-game",
+                title = "Create Game",
+                method = "POST",
+                href = Uris.games()
+            )
+        ),
+        links = listOf(
+            Link(
+                rel = listOf("self"),
+                href = Uris.userHome()
+            ),
+            Link(
+                rel = listOf("home"),
+                href = Uris.home()
+            )
+        )
+    )
+
+    /**
      * Handles the request to get all the users.
      *
      * @param offset the offset of the users to be returned
@@ -109,6 +161,10 @@ class UsersController(private val usersService: UsersService) {
                 Link(
                     rel = listOf("home"),
                     href = Uris.home()
+                ),
+                Link(
+                    rel = listOf("user-home"),
+                    href = Uris.userHome()
                 )
             ),
             entities = listOf(
@@ -148,6 +204,10 @@ class UsersController(private val usersService: UsersService) {
                 Link(
                     rel = listOf("home"),
                     href = Uris.home()
+                ),
+                Link(
+                    rel = listOf("user-home"),
+                    href = Uris.userHome()
                 )
             ),
             entities = listOf(

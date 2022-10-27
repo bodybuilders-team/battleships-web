@@ -2,13 +2,13 @@ package pt.isel.daw.battleships.service.games
 
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
+import pt.isel.daw.battleships.service.exceptions.InvalidFiredShotException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
-import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
-import pt.isel.daw.battleships.service.exceptions.InvalidShotException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedFleetDTO
@@ -91,7 +91,7 @@ interface PlayersService {
      *
      * @return the shots shot
      * @throws InvalidPhaseException if the game is not in progress
-     * @throws InvalidShotException if a shot is invalid
+     * @throws InvalidFiredShotException if a shot is invalid
      * @throws FiringShotsTimeExpiredException if the player tries to shoot after the shoot time has expired
      * @throws AuthenticationException if the token is invalid
      * @throws NotFoundException if the user is not found

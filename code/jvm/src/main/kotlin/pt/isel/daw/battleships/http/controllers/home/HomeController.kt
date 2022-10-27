@@ -83,36 +83,6 @@ class HomeController {
                     title = "Login",
                     method = "POST",
                     href = Uris.usersLogin()
-                ),
-                Action(
-                    name = "logout",
-                    title = "Logout",
-                    method = "POST",
-                    href = Uris.usersLogout()
-                ),
-                Action(
-                    name = "refresh-token",
-                    title = "Refresh Token",
-                    method = "POST",
-                    href = Uris.usersRefreshToken()
-                ),
-                Action(
-                    name = "matchmake",
-                    title = "Matchmake",
-                    method = "POST",
-                    href = Uris.gamesMatchmake()
-                ),
-                Action(
-                    name = "list-games",
-                    title = "List Games",
-                    method = "GET",
-                    href = Uris.games()
-                ),
-                Action(
-                    name = "create-game",
-                    title = "Create Game",
-                    method = "POST",
-                    href = Uris.games()
                 )
             )
         )

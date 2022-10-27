@@ -191,6 +191,12 @@ In our Open-API specification, we highlight the following aspects:
 * The `Content-Type` header in all the responses is `application/vnd.siren+json`, since we are using
   the [Siren](https://github.com/kevinswiber/siren) hypermedia format.
 
+The **API journey** is as represented in the following diagram:
+
+<p align="center">
+    <img src="diagrams/battleships-diagrams-resource-link-relations.svg" alt="Entity Relationship Diagram"/>
+</p>
+
 ---
 
 ### [Presentation Layer](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http)
@@ -207,11 +213,13 @@ The presentation layer is organized as follows:
   that manage the HTTP requests;
 * [`/pipeline`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/pipeline) - contains the pipeline that
   process the HTTP requests;
-* [`/siren`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/siren) - contains the classes that implement the
-  [Siren](https://github.com/kevinswiber/siren) hypermedia format.
+* [`/media`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/media) - contains the classes that represent
+  the media types used in the application, such as `application/vnd.siren+json` and `application/problem+json`.
 
 The [`Uris`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/Uris.kt) object contains the URIs of the
 application used by the controllers.
+
+The [`Params`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/Params.kt) object contains the parameters
 
 ---
 
@@ -265,7 +273,7 @@ The **DTOs** are the data representation used in the communication between the *
 **entities/domain classes**.
 
 The **entities/domain classes** are the data representation used in the communication between the **service layer** and
-the **data access layer**. The entities are implemented using 
+the **data access layer**. The entities are implemented using
 [**Spring Data JPA**](https://spring.io/projects/spring-data-jpa#overview).
 
 ---
@@ -283,6 +291,8 @@ implemented using **JSON Web Tokens**. The authentication process is the followi
 * When the access token expires, the client sends a request to the `/user/refresh` endpoint, sending the refresh token
   in the body of the request; the server generates a new access token and returns it to the client in the response.
 
+<!-- Add diagram -->
+
 To authenticate a user inside a controller, we implemented
 the [`@Authenticated`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/pipeline/authentication/Authenticated.kt)
 annotation, which is used in controllers and handlers, indicating that the user must be authenticated to access the
@@ -298,7 +308,7 @@ This class has an override of the `preHandle` method, which is called before the
 ### Error Handling
 
 To handle errors/exceptions, we implemented
-the [`ErrorHandler`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/pipeline/ExceptionHandler.kt) class,
+the [`ExceptionHandler`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/pipeline/ExceptionHandler.kt) class,
 which is annotated with `@ControllerAdvice`, and is responsible for intercepting the exceptions and returning the
 appropriate response, with the appropriate status code and message.
 
@@ -311,25 +321,24 @@ Generic exceptions are thrown when there's an illegal state or an unexpected err
 nullable game ID, or a database error. These exceptions are considered application errors, and need to be fixed by the
 developers.
 
----
+The response format of the errors is the **Problem Details for HTTP APIs**. The response body is a JSON object with
+the following properties:
 
-### Use-Case Scenario
-
-To illustrate the use of the API, we present a use-case scenario.
-
-...
+* `type` - a URI that identifies the problem type;
+* `title` - a short, human-readable summary of the problem type;
+* `status` - the HTTP status code for this occurrence of the problem;
+* `detail` - a human-readable explanation specific to this occurrence of the problem;
+* `instance` - a URI reference that identifies the specific occurrence of the problem.
 
 ---
 
 ### Running the Application
 
-...
+To run the application, you need to have Docker desktop installed, and run the following command:
 
----
-
-### Testing the Application
-
-...
+```bash
+docker-compose up
+```
 
 ---
 ---

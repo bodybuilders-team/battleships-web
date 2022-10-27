@@ -17,6 +17,15 @@ class UrisTests {
     }
 
     @Test
+    fun `userHome returns correct Uri`() {
+        val uri = URI(Uris.USER_HOME)
+
+        val userHomeUri = Uris.userHome()
+
+        assertEquals(uri, userHomeUri)
+    }
+
+    @Test
     fun `users returns correct Uri`() {
         val uri = URI(Uris.USERS)
 
