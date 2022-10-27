@@ -59,7 +59,7 @@ class DeployedShip : Ship {
         coordinate: Coordinate,
         orientation: Orientation,
         lives: Int
-    ) : super(type, coordinate, orientation) { // TODO: Check this
+    ) {
 
         if (lives !in 0..type.size) {
             throw InvalidDeployedShipException("Ship lives must be between 0 and ${type.size}")

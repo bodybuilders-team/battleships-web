@@ -1,10 +1,7 @@
 package pt.isel.daw.battleships.domain.games.game
 
-import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
-import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
-import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.domain.games.Player
 import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
@@ -104,7 +101,6 @@ class Game {
      * @param username the username of the player
      * @return the player that is playing the game or null
      */
-    @Suppress("MemberVisibilityCanBePrivate")
     fun getPlayerOrNull(username: String): Player? =
         players.find { it.user.username == username }
 
@@ -187,18 +183,11 @@ class Game {
     /**
      * Updates the game state if the current phase has expired.
      *
-     * @throws WaitingForPlayersTimeExpiredException if the waiting for players phase has expired
-     * @throws FleetDeployTimeExpiredException if the fleet deploy phase has expired
-     * @throws FiringShotsTimeExpiredException if the firing shots phase has expired
-     * @throws IllegalStateException if the game is already finished
-     * @throws NotFoundException if there is no opponent yet
      */
     fun updateIfPhaseExpired() {
         if (!state.phaseExpired()) return
 
-        val phase = state.phase
-
-        if (phase == GameState.GamePhase.IN_PROGRESS) {
+        if (state.phase == GameState.GamePhase.IN_PROGRESS) {
             val currentPlayer = state.turn
                 ?: throw IllegalStateException("Game is in progress but turn is null")
 
@@ -207,20 +196,6 @@ class Game {
             finishGame(winner)
         } else {
             abortGame()
-        }
-
-        throw when (phase) {
-            GameState.GamePhase.WAITING_FOR_PLAYERS ->
-                WaitingForPlayersTimeExpiredException("The waiting for players time has expired.")
-
-            GameState.GamePhase.DEPLOYING_FLEETS ->
-                FleetDeployTimeExpiredException("The fleet deploy time has expired.")
-
-            GameState.GamePhase.IN_PROGRESS ->
-                FiringShotsTimeExpiredException("The firing shots time has expired.")
-
-            GameState.GamePhase.FINISHED ->
-                IllegalStateException("Game is already finished")
         }
     }
 

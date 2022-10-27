@@ -54,7 +54,7 @@ class GameState {
         turn: Player? = null,
         winner: Player? = null
     ) {
-        if (round != null && round < 0) throw InvalidShotException("Round must be positive")
+        if (round != null && round < 0) throw InvalidGameStateException("Round must be positive")
 
         if (turn != null && phase != IN_PROGRESS) {
             throw InvalidGameStateException("Turn can only be set when the game is in progress")

@@ -109,17 +109,13 @@ class PlayersServiceImpl(
         val player = game.getPlayer(user.username)
         val opponent = game.getOpponent(player)
 
-        if (game.state.phase != GameState.GamePhase.IN_PROGRESS) {
-            throw InvalidPhaseException("Game is not in progress.")
-        }
+        when {
+            game.state.phase == GameState.GamePhase.FINISHED &&
+                    game.state.turn != game.state.winner && game.state.turn == player ->
+                throw FiringShotsTimeExpiredException("The firing shots time has expired. Game is finished.")
 
-        if (game.state.turn != player) {
-            throw InvalidTurnException("It's not your turn.")
-        }
-
-        if (game.state.phaseExpired()) {
-            game.finishGame(winner = player)
-            throw FiringShotsTimeExpiredException("The firing shots time has expired.")
+            game.state.phase != GameState.GamePhase.IN_PROGRESS -> throw InvalidPhaseException("Game is not in progress.")
+            game.state.turn != player -> throw InvalidTurnException("It is not your turn")
         }
 
         val shotsCoordinates = unfiredShotsDTO.shots.map { it.coordinate.toCoordinate() }
@@ -160,8 +156,13 @@ class PlayersServiceImpl(
      * @return the game
      * @throws NotFoundException if the game does not exist
      */
-    private fun getGameById(gameId: Int): Game =
-        gamesRepository
+    private fun getGameById(gameId: Int): Game {
+        val game = gamesRepository
             .findById(id = gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
+
+        game.updateIfPhaseExpired()
+
+        return game
+    }
 }

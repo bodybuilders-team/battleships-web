@@ -11,3 +11,4 @@
     - Maybe add user-home (to discussion)
     - Docker Compose
     - Add application/problem+json to media type
+    - Add logger

@@ -486,10 +486,16 @@ class GameTests {
     }
 
     @Test
-    fun `updateIfPhaseExpired finishes game if the game phase is IN_PROGRESS`() {
-        /*val game = defaultGame
+    fun `updateIfPhaseExpired finishes game if the game phase expired and is IN_PROGRESS`() {
+        val game = defaultGame
         val user = defaultUser
-        val user2 = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+        val user2 = User(
+            username = "Player 2",
+            email = "haram2@email.com",
+            passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+            points = 0
+        )
+
         val player = Player(game = game, user = user)
         val player2 = Player(game = game, user = user2)
         game.addPlayer(player = player)
@@ -502,7 +508,23 @@ class GameTests {
         game.updateIfPhaseExpired()
 
         assertEquals(GameState.GamePhase.FINISHED, game.state.phase)
-        assertEquals(player2, game.state.winner)*/
+        assertEquals(player2, game.state.winner)
+    }
+
+    @Test
+    fun `updateIfPhaseExpired aborts game if the game phase expired and is not IN_PROGRESS`() {
+        val game = defaultGame
+        val user = defaultUser
+        val player = Player(game = game, user = user)
+        game.addPlayer(player = player)
+
+        game.state.phaseExpirationTime = Timestamp.from(Instant.now().minusSeconds(1))
+        game.state.phase = GameState.GamePhase.WAITING_FOR_PLAYERS
+
+        game.updateIfPhaseExpired()
+
+        assertEquals(GameState.GamePhase.FINISHED, game.state.phase)
+        assertNull(game.state.winner)
     }
 
     companion object {

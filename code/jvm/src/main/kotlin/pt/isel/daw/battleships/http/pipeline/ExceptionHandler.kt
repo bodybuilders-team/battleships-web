@@ -12,7 +12,6 @@ import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinateException
 import pt.isel.daw.battleships.domain.exceptions.InvalidDeployedShipException
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameConfigException
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
-import pt.isel.daw.battleships.domain.exceptions.InvalidGameStateException
 import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
 import pt.isel.daw.battleships.domain.exceptions.InvalidRefreshTokenException
 import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
@@ -63,7 +62,6 @@ class ExceptionHandler {
             InvalidPlayerException::class,
             InvalidRefreshTokenException::class,
             InvalidDeployedShipException::class,
-            InvalidGameStateException::class,
             InvalidGameConfigException::class,
             InvalidGameException::class,
             InvalidShipTypeException::class,
