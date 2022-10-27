@@ -1,0 +1,36 @@
+ARG DEPENDENCY=./code/jvm
+ARG APP_HOME=/usr/app
+
+FROM gradle:jdk17 AS CACHE_IMAGE
+ARG DEPENDENCY
+ARG APP_HOME
+ENV GRADLE_USER_HOME=$APP_HOME/.gradle
+
+RUN mkdir -p $APP_HOME
+COPY $DEPENDENCY/build.gradle.kts $APP_HOME
+WORKDIR $APP_HOME
+RUN gradle --no-daemon
+
+FROM gradle:jdk17 AS BUILDER_IMAGE
+ARG DEPENDENCY
+ARG APP_HOME
+ENV GRADLE_USER_HOME=$APP_HOME/.gradle
+COPY --from=CACHE_IMAGE $APP_HOME/.gradle $APP_HOME/.gradle
+
+ADD $DEPENDENCY/settings.gradle.kts $APP_HOME
+ADD $DEPENDENCY/build.gradle.kts $APP_HOME
+ADD $DEPENDENCY/src $APP_HOME/src
+
+WORKDIR $APP_HOME
+
+RUN gradle bootJar --no-daemon
+
+FROM openjdk:17-alpine
+ENV ARTIFACT_NAME=battleships-0.0.1-SNAPSHOT.jar
+ARG APP_HOME
+
+WORKDIR $APP_HOME
+COPY --from=BUILDER_IMAGE $APP_HOME/build/libs/$ARTIFACT_NAME .
+
+EXPOSE 8080
+ENTRYPOINT exec java -jar ${ARTIFACT_NAME}
