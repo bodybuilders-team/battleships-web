@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import java.security.SignatureException
+import java.sql.Timestamp
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
@@ -70,7 +71,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     data class RefreshTokenDetails(
         val token: String,
-        val expirationDate: Instant
+        val expirationDate: Timestamp
     )
 
     /**
@@ -108,7 +109,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
                 .setExpiration(Date.from(expirationDate))
                 .signWith(refreshTokenKey)
                 .compact(),
-            expirationDate = expirationDate
+            expirationDate = Timestamp.from(expirationDate)
         )
     }
 

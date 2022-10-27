@@ -1,12 +1,12 @@
-package pt.isel.daw.battleships.domain.game
+package pt.isel.daw.battleships.domain.games.game
 
-import pt.isel.daw.battleships.domain.Player
-import pt.isel.daw.battleships.domain.User
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
+import pt.isel.daw.battleships.domain.games.Player
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import java.sql.Timestamp
 import java.time.Instant

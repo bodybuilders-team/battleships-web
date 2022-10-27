@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.shot
 
-import pt.isel.daw.battleships.domain.Shot
+import pt.isel.daw.battleships.domain.games.Shot
 import kotlin.test.Test
 
 class ShotResultDTOTests {

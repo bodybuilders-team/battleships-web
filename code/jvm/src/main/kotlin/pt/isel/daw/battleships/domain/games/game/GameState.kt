@@ -1,12 +1,12 @@
-package pt.isel.daw.battleships.domain.game
+package pt.isel.daw.battleships.domain.games.game
 
-import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameStateException
 import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
-import pt.isel.daw.battleships.domain.game.GameState.GamePhase.DEPLOYING_FLEETS
-import pt.isel.daw.battleships.domain.game.GameState.GamePhase.FINISHED
-import pt.isel.daw.battleships.domain.game.GameState.GamePhase.IN_PROGRESS
-import pt.isel.daw.battleships.domain.game.GameState.GamePhase.WAITING_FOR_PLAYERS
+import pt.isel.daw.battleships.domain.games.Player
+import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.DEPLOYING_FLEETS
+import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.FINISHED
+import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.IN_PROGRESS
+import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.WAITING_FOR_PLAYERS
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.CascadeType
@@ -27,7 +27,7 @@ import javax.persistence.OneToOne
  * @property winner the winner player
  */
 @Embeddable
-class GameState { // TODO: Was Serializable?!?
+class GameState {
     @Column(name = "phase", nullable = false)
     @Enumerated(EnumType.STRING)
     var phase: GamePhase

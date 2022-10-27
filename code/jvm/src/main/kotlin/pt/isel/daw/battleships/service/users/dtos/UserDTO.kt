@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.users.dtos
 
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.User
 
 /**
  * Represents a User DTO.

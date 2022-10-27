@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.repository.users
 
 import org.springframework.data.jpa.repository.JpaRepository
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.User
 
 /**
  * Repository for the [User] entity.

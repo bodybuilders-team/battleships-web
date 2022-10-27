@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.domain.game
+package pt.isel.daw.battleships.domain.games.game
 
 import java.sql.Timestamp
 import java.time.Instant

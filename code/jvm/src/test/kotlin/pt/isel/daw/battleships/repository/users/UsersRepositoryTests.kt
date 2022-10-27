@@ -2,7 +2,7 @@ package pt.isel.daw.battleships.repository.users
 
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.testUtils.DatabaseTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,7 +21,7 @@ class UsersRepositoryTests(
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -44,7 +44,7 @@ class UsersRepositoryTests(
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -62,7 +62,7 @@ class UsersRepositoryTests(
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 

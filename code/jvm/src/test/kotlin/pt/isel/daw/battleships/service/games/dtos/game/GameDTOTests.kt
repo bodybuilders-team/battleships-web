@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
-import pt.isel.daw.battleships.domain.game.GameTests.Companion.defaultGame
+import pt.isel.daw.battleships.domain.games.game.GameTests.Companion.defaultGame
 import pt.isel.daw.battleships.service.games.dtos.PlayerDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameConfigDTOTests.Companion.defaultGameConfigDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTOTests.Companion.defaultGameStateDTO

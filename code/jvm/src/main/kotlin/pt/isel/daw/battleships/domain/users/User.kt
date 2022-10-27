@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.domain
+package pt.isel.daw.battleships.domain.users
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidUserException
 import javax.persistence.Column
@@ -59,10 +59,9 @@ class User {
             throw InvalidUserException("Email must be a valid email address.")
         }
 
-        // TODO: Check this
-        /*if (passwordHash.length != PASSWORD_HASH_LENGTH) {
+        if (passwordHash.length != PASSWORD_HASH_LENGTH) {
             throw InvalidUserException("Password hash must have a length of $PASSWORD_HASH_LENGTH.")
-        }*/
+        }
 
         if (points < 0) {
             throw InvalidUserException("Points must be a positive integer.")
@@ -85,6 +84,6 @@ class User {
 
         private const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)\$"
 
-        private const val PASSWORD_HASH_LENGTH = 128
+        const val PASSWORD_HASH_LENGTH = 128
     }
 }

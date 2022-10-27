@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos
 
-import pt.isel.daw.battleships.domain.CoordinateTests.Companion.defaultCoordinate
+import pt.isel.daw.battleships.domain.games.CoordinateTests.Companion.defaultCoordinate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

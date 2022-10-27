@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
-import pt.isel.daw.battleships.domain.game.GameStateTests.Companion.defaultGameState
+import pt.isel.daw.battleships.domain.games.game.GameStateTests.Companion.defaultGameState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.domain
+package pt.isel.daw.battleships.domain.games
 
 import kotlin.test.Test
 

@@ -1,7 +1,5 @@
 - Database:
 - Review project structure:
-    - Domain structure -> users and games?
-    - Hypermedia Package? Maybe rename it to media? ou mediaTypes?
 - Documentation:
     - Review and finish report
     - Add postman collection to docs

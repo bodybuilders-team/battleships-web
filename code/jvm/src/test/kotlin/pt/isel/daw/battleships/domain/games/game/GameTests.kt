@@ -1,13 +1,13 @@
-package pt.isel.daw.battleships.domain.game
+package pt.isel.daw.battleships.domain.games.game
 
-import pt.isel.daw.battleships.domain.Player
-import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.domain.UserTests.Companion.defaultUser
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
-import pt.isel.daw.battleships.domain.game.GameConfigTests.Companion.defaultGameConfig
-import pt.isel.daw.battleships.domain.game.GameStateTests.Companion.defaultGameState
-import pt.isel.daw.battleships.domain.ship.UndeployedShipTests.Companion.defaultUndeployedShip
+import pt.isel.daw.battleships.domain.games.Player
+import pt.isel.daw.battleships.domain.games.game.GameConfigTests.Companion.defaultGameConfig
+import pt.isel.daw.battleships.domain.games.game.GameStateTests.Companion.defaultGameState
+import pt.isel.daw.battleships.domain.games.ship.UndeployedShipTests.Companion.defaultUndeployedShip
+import pt.isel.daw.battleships.domain.users.User
+import pt.isel.daw.battleships.domain.users.UserTests.Companion.defaultUser
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import java.sql.Timestamp
 import java.time.Instant
@@ -123,7 +123,12 @@ class GameTests {
         game.addPlayer(player = player)
         val opponent = Player(
             game = game,
-            user = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+            user = User(
+                username = "Player 2",
+                email = "haram2@email.com",
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+                points = 0
+            )
         )
         game.addPlayer(player = opponent)
 
@@ -159,14 +164,24 @@ class GameTests {
         val player = Player(game = game, user = defaultUser)
         val player2 = Player(
             game = game,
-            user = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+            user = User(
+                username = "Player 2",
+                email = "haram2@email.com",
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+                points = 0
+            )
         )
         game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         val player3 = Player(
             game = game,
-            user = User(username = "Player 3", email = "haram3@email.com", passwordHash = "12345678", points = 0)
+            user = User(
+                username = "Player 3",
+                email = "haram3@email.com",
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+                points = 0
+            )
         )
 
         assertFailsWith<IllegalStateException> {
@@ -180,7 +195,12 @@ class GameTests {
         val player = Player(game = game, user = defaultUser)
         val player2 = Player(
             game = game,
-            user = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+            user = User(
+                username = "Player 2",
+                email = "haram2@email.com",
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+                points = 0
+            )
         )
         game.addPlayer(player = player)
         game.addPlayer(player = player2)
@@ -198,7 +218,12 @@ class GameTests {
         val player = Player(game = game, user = defaultUser)
         val player2 = Player(
             game = game,
-            user = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+            user = User(
+                username = "Player 2",
+                email = "haram2@email.com",
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+                points = 0
+            )
         )
         game.addPlayer(player = player)
         game.addPlayer(player = player2)
@@ -214,7 +239,12 @@ class GameTests {
         val player = Player(game = game, user = defaultUser)
         val player2 = Player(
             game = game,
-            user = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+            user = User(
+                username = "Player 2",
+                email = "haram2@email.com",
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+                points = 0
+            )
         )
         game.addPlayer(player = player)
         game.addPlayer(player = player2)
@@ -250,11 +280,11 @@ class GameTests {
         assertEquals(GameState.GamePhase.DEPLOYING_FLEETS, game.state.phase)
         assertTrue(
             phaseExpirationTimeInstantIfBefore == phaseExpirationTimeInstant ||
-                    phaseExpirationTimeInstantIfBefore.isBefore(phaseExpirationTimeInstant)
+                phaseExpirationTimeInstantIfBefore.isBefore(phaseExpirationTimeInstant)
         )
         assertTrue(
             phaseExpirationTimeInstantIfAfter == phaseExpirationTimeInstant ||
-                    phaseExpirationTimeInstantIfAfter.isAfter(phaseExpirationTimeInstant)
+                phaseExpirationTimeInstantIfAfter.isAfter(phaseExpirationTimeInstant)
         )
     }
 
@@ -285,11 +315,11 @@ class GameTests {
         assertEquals(GameState.GamePhase.IN_PROGRESS, game.state.phase)
         assertTrue(
             phaseExpirationTimeInstantIfBefore == phaseExpirationTimeInstant ||
-                    phaseExpirationTimeInstantIfBefore.isBefore(phaseExpirationTimeInstant)
+                phaseExpirationTimeInstantIfBefore.isBefore(phaseExpirationTimeInstant)
         )
         assertTrue(
             phaseExpirationTimeInstantIfAfter == phaseExpirationTimeInstant ||
-                    phaseExpirationTimeInstantIfAfter.isAfter(phaseExpirationTimeInstant)
+                phaseExpirationTimeInstantIfAfter.isAfter(phaseExpirationTimeInstant)
         )
     }
 
@@ -320,11 +350,11 @@ class GameTests {
         assertEquals(GameState.GamePhase.IN_PROGRESS, game.state.phase)
         assertTrue(
             phaseExpirationTimeInstantIfBefore == phaseExpirationTimeInstant ||
-                    phaseExpirationTimeInstantIfBefore.isBefore(phaseExpirationTimeInstant)
+                phaseExpirationTimeInstantIfBefore.isBefore(phaseExpirationTimeInstant)
         )
         assertTrue(
             phaseExpirationTimeInstantIfAfter == phaseExpirationTimeInstant ||
-                    phaseExpirationTimeInstantIfAfter.isAfter(phaseExpirationTimeInstant)
+                phaseExpirationTimeInstantIfAfter.isAfter(phaseExpirationTimeInstant)
         )
     }
 
@@ -367,7 +397,12 @@ class GameTests {
     fun `finishGame changes game phase to FINISHED`() {
         val game = defaultGame
         val user = defaultUser
-        val user2 = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+        val user2 = User(
+            username = "Player 2",
+            email = "haram2@email.com",
+            passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+            points = 0
+        )
         val player = Player(game = game, user = user)
         val player2 = Player(game = game, user = user2)
         game.addPlayer(player = player)
@@ -384,7 +419,12 @@ class GameTests {
     fun `finishGame sets winner of the game`() {
         val game = defaultGame
         val user = defaultUser
-        val user2 = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+        val user2 = User(
+            username = "Player 2",
+            email = "haram2@email.com",
+            passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+            points = 0
+        )
         val player = Player(game = game, user = user)
         val player2 = Player(game = game, user = user2)
         game.addPlayer(player = player)
@@ -401,7 +441,12 @@ class GameTests {
     fun `finishGame updates users points`() {
         val game = defaultGame
         val user = defaultUser
-        val user2 = User(username = "Player 2", email = "haram2@email.com", passwordHash = "12345678", points = 0)
+        val user2 = User(
+            username = "Player 2",
+            email = "haram2@email.com",
+            passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
+            points = 0
+        )
         val player = Player(game = game, user = user)
         val player2 = Player(game = game, user = user2)
         game.addPlayer(player = player)

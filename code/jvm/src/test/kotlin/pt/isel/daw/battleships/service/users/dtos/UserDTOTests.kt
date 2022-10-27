@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.users.dtos
 
-import pt.isel.daw.battleships.domain.UserTests.Companion.defaultUser
+import pt.isel.daw.battleships.domain.users.UserTests.Companion.defaultUser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

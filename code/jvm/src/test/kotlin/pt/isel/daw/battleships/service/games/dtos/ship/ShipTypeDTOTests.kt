@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.ship
 
-import pt.isel.daw.battleships.domain.ship.ShipTypeTests.Companion.defaultShipType
+import pt.isel.daw.battleships.domain.games.ship.ShipTypeTests.Companion.defaultShipType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

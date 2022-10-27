@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
-import pt.isel.daw.battleships.domain.game.GameConfig
+import pt.isel.daw.battleships.domain.games.game.GameConfig
 import pt.isel.daw.battleships.service.games.dtos.ship.ShipTypeDTO
 
 /**

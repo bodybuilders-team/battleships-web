@@ -1,6 +1,6 @@
-package pt.isel.daw.battleships.domain.ship
+package pt.isel.daw.battleships.domain.games.ship
 
-import pt.isel.daw.battleships.domain.Coordinate
+import pt.isel.daw.battleships.domain.games.Coordinate
 
 /**
  * The UndeployedShip entity.

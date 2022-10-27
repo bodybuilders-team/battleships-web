@@ -1,8 +1,8 @@
-package pt.isel.daw.battleships.domain.game
+package pt.isel.daw.battleships.domain.games.game
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameConfigException
-import pt.isel.daw.battleships.domain.ship.ShipType
-import pt.isel.daw.battleships.domain.ship.UndeployedShip
+import pt.isel.daw.battleships.domain.games.ship.ShipType
+import pt.isel.daw.battleships.domain.games.ship.UndeployedShip
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -97,7 +97,7 @@ class GameConfig {
      */
     fun testShipTypes(ships: List<UndeployedShip>): Boolean =
         shipTypes.sumOf { shipType -> shipType.quantity } == ships.size &&
-                shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
+            shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -111,10 +111,10 @@ class GameConfig {
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
         if (shipTypes.any { shipType ->
-                other.shipTypes.none { otherShipType ->
-                    shipType == otherShipType
-                }
+            other.shipTypes.none { otherShipType ->
+                shipType == otherShipType
             }
+        }
         ) return false
 
         return true

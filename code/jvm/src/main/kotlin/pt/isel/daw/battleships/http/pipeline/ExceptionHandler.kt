@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletRequest
  */
 @ControllerAdvice
 class ExceptionHandler {
+
     /**
      * Handles Bad Request exceptions.
      *

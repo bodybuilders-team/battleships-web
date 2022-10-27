@@ -1,9 +1,9 @@
-package pt.isel.daw.battleships.domain
+package pt.isel.daw.battleships.domain.games
 
-import pt.isel.daw.battleships.domain.Shot.ShotResult.HIT
-import pt.isel.daw.battleships.domain.Shot.ShotResult.MISS
-import pt.isel.daw.battleships.domain.Shot.ShotResult.SUNK
 import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
+import pt.isel.daw.battleships.domain.games.Shot.ShotResult.HIT
+import pt.isel.daw.battleships.domain.games.Shot.ShotResult.MISS
+import pt.isel.daw.battleships.domain.games.Shot.ShotResult.SUNK
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity

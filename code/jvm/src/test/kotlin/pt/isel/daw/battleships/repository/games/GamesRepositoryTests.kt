@@ -1,12 +1,12 @@
 package pt.isel.daw.battleships.repository.games
 
 import org.springframework.beans.factory.annotation.Autowired
-import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.game.GameConfig
-import pt.isel.daw.battleships.domain.game.GameConfigTests.Companion.defaultGameConfig
-import pt.isel.daw.battleships.domain.game.GameState
-import pt.isel.daw.battleships.domain.ship.ShipType
+import pt.isel.daw.battleships.domain.games.game.Game
+import pt.isel.daw.battleships.domain.games.game.GameConfig
+import pt.isel.daw.battleships.domain.games.game.GameConfigTests.Companion.defaultGameConfig
+import pt.isel.daw.battleships.domain.games.game.GameState
+import pt.isel.daw.battleships.domain.games.ship.ShipType
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.testUtils.DatabaseTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,7 +23,7 @@ class GamesRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -55,7 +55,7 @@ class GamesRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -91,7 +91,7 @@ class GamesRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 

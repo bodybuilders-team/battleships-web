@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos
 
-import pt.isel.daw.battleships.domain.Player
+import pt.isel.daw.battleships.domain.games.Player
 
 /**
  * Represents a Player DTO.

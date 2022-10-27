@@ -3,8 +3,8 @@ package pt.isel.daw.battleships.service.users
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.daw.battleships.domain.RefreshToken
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.RefreshToken
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
@@ -23,6 +23,7 @@ import pt.isel.daw.battleships.service.utils.OffsetPageRequest
 import pt.isel.daw.battleships.utils.JwtProvider
 import pt.isel.daw.battleships.utils.JwtProvider.JwtPayload
 import pt.isel.daw.battleships.utils.ServerConfiguration
+import java.sql.Timestamp
 import java.time.Instant
 
 /**
@@ -145,7 +146,7 @@ class UsersServiceImpl(
 
         refreshTokensRepository.delete(refreshTokenEntity)
 
-        if (refreshTokenEntity.expirationDate.isBefore(Instant.now())) {
+        if (refreshTokenEntity.expirationDate.before(Timestamp.from(Instant.now()))) {
             throw NotFoundException("Refresh token expired")
         }
 

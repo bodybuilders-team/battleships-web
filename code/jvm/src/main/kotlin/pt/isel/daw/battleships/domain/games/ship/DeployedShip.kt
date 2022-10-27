@@ -1,8 +1,8 @@
-package pt.isel.daw.battleships.domain.ship
+package pt.isel.daw.battleships.domain.games.ship
 
-import pt.isel.daw.battleships.domain.Coordinate
-import pt.isel.daw.battleships.domain.Player
 import pt.isel.daw.battleships.domain.exceptions.InvalidDeployedShipException
+import pt.isel.daw.battleships.domain.games.Coordinate
+import pt.isel.daw.battleships.domain.games.Player
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity

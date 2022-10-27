@@ -1,10 +1,11 @@
-package pt.isel.daw.battleships.domain
+package pt.isel.daw.battleships.domain.games
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.ship.DeployedShip
-import pt.isel.daw.battleships.domain.ship.Ship.Orientation
-import pt.isel.daw.battleships.domain.ship.UndeployedShip
+import pt.isel.daw.battleships.domain.games.game.Game
+import pt.isel.daw.battleships.domain.games.ship.DeployedShip
+import pt.isel.daw.battleships.domain.games.ship.Ship.Orientation
+import pt.isel.daw.battleships.domain.games.ship.UndeployedShip
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.service.exceptions.InvalidShipTypeException
@@ -133,14 +134,14 @@ class Player {
         val rowsRange = game.config.rowsRange
 
         return (
-                orientation == Orientation.HORIZONTAL &&
-                        (coordinate.col + size - 1) in colsRange &&
-                        coordinate.row in rowsRange
-                ) || (
-                orientation == Orientation.VERTICAL &&
-                        (coordinate.row + size - 1) in rowsRange &&
-                        coordinate.col in colsRange
-                )
+            orientation == Orientation.HORIZONTAL &&
+                (coordinate.col + size - 1) in colsRange &&
+                coordinate.row in rowsRange
+            ) || (
+            orientation == Orientation.VERTICAL &&
+                (coordinate.row + size - 1) in rowsRange &&
+                coordinate.col in colsRange
+            )
     }
 
     /**

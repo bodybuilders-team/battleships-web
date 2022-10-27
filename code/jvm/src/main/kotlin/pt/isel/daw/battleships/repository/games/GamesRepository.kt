@@ -1,9 +1,9 @@
 package pt.isel.daw.battleships.repository.games
 
 import org.springframework.data.jpa.repository.JpaRepository
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.game.GameConfig
-import pt.isel.daw.battleships.domain.game.GameState.GamePhase
+import pt.isel.daw.battleships.domain.games.game.Game
+import pt.isel.daw.battleships.domain.games.game.GameConfig
+import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase
 import java.util.stream.Stream
 
 /**

@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.game.GameState
-import pt.isel.daw.battleships.domain.ship.DeployedShip
-import pt.isel.daw.battleships.domain.ship.Ship
-import pt.isel.daw.battleships.domain.ship.UndeployedShip
+import pt.isel.daw.battleships.domain.games.game.Game
+import pt.isel.daw.battleships.domain.games.game.GameState
+import pt.isel.daw.battleships.domain.games.ship.DeployedShip
+import pt.isel.daw.battleships.domain.games.ship.Ship
+import pt.isel.daw.battleships.domain.games.ship.UndeployedShip
 import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService

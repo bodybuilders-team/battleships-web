@@ -2,9 +2,9 @@ package pt.isel.daw.battleships.repository.games
 
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.game.GameConfig
-import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.domain.games.game.Game
+import pt.isel.daw.battleships.domain.games.game.GameConfig
+import pt.isel.daw.battleships.domain.games.game.GameState
 import java.util.stream.Stream
 
 /**
@@ -19,5 +19,4 @@ class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : Ga
         gamesRepository
             .findAllByStatePhase(phase = GameState.GamePhase.WAITING_FOR_PLAYERS)
             .filter { game -> game.config == config }
-
 }

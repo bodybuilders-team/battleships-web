@@ -6,6 +6,7 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
+import java.sql.Timestamp
 import java.time.Instant
 import javax.crypto.SecretKey
 import kotlin.reflect.full.declaredMemberProperties
@@ -174,6 +175,6 @@ class JwtProviderTests {
 
     @Test
     fun `RefreshTokenDetails creation is successful`() {
-        JwtProvider.RefreshTokenDetails(token = "token", expirationDate = Instant.now())
+        JwtProvider.RefreshTokenDetails(token = "token", expirationDate = Timestamp.from(Instant.now()))
     }
 }

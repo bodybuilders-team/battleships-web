@@ -4,8 +4,8 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import pt.isel.daw.battleships.domain.RefreshToken
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.RefreshToken
+import pt.isel.daw.battleships.domain.users.User
 
 /**
  * Repository for the [RefreshToken] entity.

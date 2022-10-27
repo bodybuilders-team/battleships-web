@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.ship
 
-import pt.isel.daw.battleships.domain.ship.DeployedShipTests.Companion.defaultDeployedShip
+import pt.isel.daw.battleships.domain.games.ship.DeployedShipTests.Companion.defaultDeployedShip
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTOTests.Companion.defaultCoordinateDTO
 import kotlin.test.Test

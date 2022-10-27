@@ -1,10 +1,10 @@
 package pt.isel.daw.battleships.service.games
 
 import org.springframework.stereotype.Service
-import pt.isel.daw.battleships.domain.Player
-import pt.isel.daw.battleships.domain.User
-import pt.isel.daw.battleships.domain.game.Game
-import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.domain.games.Player
+import pt.isel.daw.battleships.domain.games.game.Game
+import pt.isel.daw.battleships.domain.games.game.GameState
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.repository.games.GamesRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService

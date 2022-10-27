@@ -1,7 +1,7 @@
-package pt.isel.daw.battleships.domain.ship
+package pt.isel.daw.battleships.domain.games.ship
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
-import pt.isel.daw.battleships.domain.game.Game
+import pt.isel.daw.battleships.domain.games.game.Game
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

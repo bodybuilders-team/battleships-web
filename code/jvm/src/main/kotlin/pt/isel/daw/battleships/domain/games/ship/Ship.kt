@@ -1,8 +1,8 @@
-package pt.isel.daw.battleships.domain.ship
+package pt.isel.daw.battleships.domain.games.ship
 
-import pt.isel.daw.battleships.domain.Coordinate
-import pt.isel.daw.battleships.domain.ship.Ship.Orientation.HORIZONTAL
-import pt.isel.daw.battleships.domain.ship.Ship.Orientation.VERTICAL
+import pt.isel.daw.battleships.domain.games.Coordinate
+import pt.isel.daw.battleships.domain.games.ship.Ship.Orientation.HORIZONTAL
+import pt.isel.daw.battleships.domain.games.ship.Ship.Orientation.VERTICAL
 
 /**
  * Represents a Ship entity.

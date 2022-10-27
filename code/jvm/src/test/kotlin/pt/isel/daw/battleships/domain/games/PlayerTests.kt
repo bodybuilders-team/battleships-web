@@ -1,7 +1,7 @@
-package pt.isel.daw.battleships.domain
+package pt.isel.daw.battleships.domain.games
 
-import pt.isel.daw.battleships.domain.UserTests.Companion.defaultUser
-import pt.isel.daw.battleships.domain.game.GameTests.Companion.defaultGame
+import pt.isel.daw.battleships.domain.games.game.GameTests.Companion.defaultGame
+import pt.isel.daw.battleships.domain.users.UserTests.Companion.defaultUser
 import kotlin.test.Test
 
 class PlayerTests {

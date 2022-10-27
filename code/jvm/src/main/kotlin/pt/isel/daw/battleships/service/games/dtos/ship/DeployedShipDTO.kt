@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.ship
 
-import pt.isel.daw.battleships.domain.ship.DeployedShip
+import pt.isel.daw.battleships.domain.games.ship.DeployedShip
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 
 /**

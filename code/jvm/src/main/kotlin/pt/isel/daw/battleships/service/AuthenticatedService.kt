@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service
 
 import org.springframework.stereotype.Service
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException

@@ -1,6 +1,6 @@
-package pt.isel.daw.battleships.domain.game
+package pt.isel.daw.battleships.domain.games.game
 
-import pt.isel.daw.battleships.domain.ship.ShipTypeTests.Companion.defaultShipType
+import pt.isel.daw.battleships.domain.games.ship.ShipTypeTests.Companion.defaultShipType
 import kotlin.test.Test
 
 class GameConfigTests {

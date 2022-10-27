@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos
 
-import pt.isel.daw.battleships.domain.Coordinate
+import pt.isel.daw.battleships.domain.games.Coordinate
 
 /**
  * Represents a Coordinate DTO.

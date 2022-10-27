@@ -1,8 +1,8 @@
-package pt.isel.daw.battleships.domain.ship
+package pt.isel.daw.battleships.domain.games.ship
 
-import pt.isel.daw.battleships.domain.Coordinate
-import pt.isel.daw.battleships.domain.CoordinateTests.Companion.defaultCoordinate
-import pt.isel.daw.battleships.domain.ship.ShipTypeTests.Companion.defaultShipType
+import pt.isel.daw.battleships.domain.games.Coordinate
+import pt.isel.daw.battleships.domain.games.CoordinateTests.Companion.defaultCoordinate
+import pt.isel.daw.battleships.domain.games.ship.ShipTypeTests.Companion.defaultShipType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

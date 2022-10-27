@@ -1,6 +1,7 @@
-package pt.isel.daw.battleships.domain
+package pt.isel.daw.battleships.domain.users
 
-import java.time.Instant
+import pt.isel.daw.battleships.domain.exceptions.InvalidRefreshTokenException
+import java.sql.Timestamp
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -33,21 +34,18 @@ class RefreshToken {
     @Column(name = "token_hash", nullable = false)
     val tokenHash: String
 
-    // TODO: Maybe change to timestamp
-    // TODO: Needs validation?
     @Column(name = "expiration_date", nullable = false)
-    val expirationDate: Instant
+    val expirationDate: Timestamp
 
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(
         user: User,
         tokenHash: String,
-        expirationDate: Instant
+        expirationDate: Timestamp
     ) {
-        // TODO: Check this
-        /*if (tokenHash.length != TOKEN_HASH_LENGTH) {
+        if (tokenHash.length != TOKEN_HASH_LENGTH) {
             throw InvalidRefreshTokenException("The token hash must have a length of $TOKEN_HASH_LENGTH")
-        }*/
+        }
 
         this.user = user
         this.tokenHash = tokenHash
@@ -55,6 +53,6 @@ class RefreshToken {
     }
 
     companion object {
-        private const val TOKEN_HASH_LENGTH = 128
+        const val TOKEN_HASH_LENGTH = 128
     }
 }

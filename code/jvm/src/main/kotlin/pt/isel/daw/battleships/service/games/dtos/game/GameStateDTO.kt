@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.game
 
-import pt.isel.daw.battleships.domain.game.GameState
+import pt.isel.daw.battleships.domain.games.game.GameState
 
 /**
  * Represents a Game State DTO.

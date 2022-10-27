@@ -2,10 +2,11 @@ package pt.isel.daw.battleships.repository.refreshTokens
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
-import pt.isel.daw.battleships.domain.RefreshToken
-import pt.isel.daw.battleships.domain.User
+import pt.isel.daw.battleships.domain.users.RefreshToken
+import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
 import pt.isel.daw.battleships.testUtils.DatabaseTest
+import java.sql.Timestamp
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,19 +25,21 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
+
+        val tokenHash = "a".repeat(RefreshToken.TOKEN_HASH_LENGTH)
 
         val refreshToken = entityManager.persist(
             RefreshToken(
                 user = user,
-                tokenHash = "tokenHash",
-                expirationDate = Instant.now()
+                tokenHash = tokenHash,
+                expirationDate = Timestamp.from(Instant.now())
             )
         )
 
-        val token = refreshTokensRepository.findByUserAndTokenHash(user, "tokenHash")
+        val token = refreshTokensRepository.findByUserAndTokenHash(user, tokenHash)
 
         assertNotNull(token)
         assertEquals(refreshToken, token)
@@ -48,7 +51,7 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -63,7 +66,7 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -71,8 +74,8 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             entityManager.persist(
                 RefreshToken(
                     user = user,
-                    tokenHash = "tokenHash$it",
-                    expirationDate = Instant.now()
+                    tokenHash = "$it".repeat(RefreshToken.TOKEN_HASH_LENGTH),
+                    expirationDate = Timestamp.from(Instant.now())
                 )
             )
         }
@@ -88,7 +91,7 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -103,23 +106,25 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
+
+        val tokenHash = "a".repeat(RefreshToken.TOKEN_HASH_LENGTH)
 
         entityManager.persist(
             RefreshToken(
                 user = user,
-                tokenHash = "tokenHash",
-                expirationDate = Instant.now()
+                tokenHash = tokenHash,
+                expirationDate = Timestamp.from(Instant.now())
             )
         )
 
-        assertNotNull(refreshTokensRepository.findByUserAndTokenHash(user, "tokenHash"))
+        assertNotNull(refreshTokensRepository.findByUserAndTokenHash(user, tokenHash))
 
-        refreshTokensRepository.deleteByUserAndTokenHash(user, "tokenHash")
+        refreshTokensRepository.deleteByUserAndTokenHash(user, tokenHash)
 
-        assertNull(refreshTokensRepository.findByUserAndTokenHash(user, "tokenHash"))
+        assertNull(refreshTokensRepository.findByUserAndTokenHash(user, tokenHash))
     }
 
     @Test
@@ -128,19 +133,21 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
+
+        val tokenHash = "a".repeat(RefreshToken.TOKEN_HASH_LENGTH)
 
         entityManager.persist(
             RefreshToken(
                 user = user,
-                tokenHash = "tokenHash",
-                expirationDate = Instant.now()
+                tokenHash = "a".repeat(RefreshToken.TOKEN_HASH_LENGTH),
+                expirationDate = Timestamp.from(Instant.now())
             )
         )
 
-        val exists = refreshTokensRepository.existsByUserAndTokenHash(user, "tokenHash")
+        val exists = refreshTokensRepository.existsByUserAndTokenHash(user, tokenHash)
 
         assertTrue(exists)
     }
@@ -151,7 +158,7 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -166,7 +173,7 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 
@@ -174,8 +181,8 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             entityManager.persist(
                 RefreshToken(
                     user = user,
-                    tokenHash = "tokenHash$it",
-                    expirationDate = Instant.now()
+                    tokenHash = "$it".repeat(RefreshToken.TOKEN_HASH_LENGTH),
+                    expirationDate = Timestamp.from(Instant.now())
                 )
             )
         }
@@ -195,7 +202,7 @@ class RefreshTokensRepositoryTests : DatabaseTest() {
             User(
                 username = "bob",
                 email = "bob@bob.com",
-                passwordHash = "passwordHash"
+                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         )
 

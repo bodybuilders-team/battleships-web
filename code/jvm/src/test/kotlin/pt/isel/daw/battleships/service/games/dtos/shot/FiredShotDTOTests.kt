@@ -1,6 +1,6 @@
 package pt.isel.daw.battleships.service.games.dtos.shot
 
-import pt.isel.daw.battleships.domain.ShotTests.Companion.defaultShot
+import pt.isel.daw.battleships.domain.games.ShotTests.Companion.defaultShot
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTOTests.Companion.defaultCoordinateDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.ShotResultDTOTests.Companion.defaultShotResultDTO
