@@ -67,7 +67,7 @@ class UserServiceTests {
         Mockito.`when`(usersRepository.save(Mockito.any(User::class.java)))
             .thenAnswer {
                 val user = it.arguments[0] as User
-                user.id = userSequenceId
+
                 users[userSequenceId++] = user
 
                 user
@@ -79,8 +79,6 @@ class UserServiceTests {
 
                 users.values.find { u -> u.username == token.user.username }
                     ?: throw NotFoundException("User not found")
-
-                token.id = refreshTokenSequenceId
 
                 tokens[refreshTokenSequenceId++] = token
 

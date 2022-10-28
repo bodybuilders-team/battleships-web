@@ -119,10 +119,7 @@ class PlayersServiceImpl(
         }
 
         val shotsCoordinates = unfiredShotsDTO.shots.map { it.coordinate.toCoordinate() }
-        val shots = player.shoot(
-            opponent = opponent,
-            coordinates = shotsCoordinates
-        )
+        val shots = player.shoot(coordinates = shotsCoordinates)
 
         if (opponent.deployedShips.all(DeployedShip::isSunk)) {
             game.finishGame(winner = player)

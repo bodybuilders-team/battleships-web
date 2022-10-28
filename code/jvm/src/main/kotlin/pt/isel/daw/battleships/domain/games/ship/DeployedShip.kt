@@ -32,7 +32,7 @@ class DeployedShip : Ship {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
+    private var id: Int? = null
 
     @ManyToOne
     @JoinColumn(name = "player", nullable = false)

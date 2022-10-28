@@ -22,7 +22,7 @@ class SirenEntityTests {
                     href = URI("http://localhost"),
                     type = MediaType.APPLICATION_JSON,
                     title = "title"
-                ),
+                )
             ),
             actions = listOf(
                 Action(

@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.domain.games
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipDeploymentException
 import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.domain.games.game.Game
 import pt.isel.daw.battleships.domain.games.ship.DeployedShip
@@ -37,7 +38,7 @@ class Player {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
+    private var id: Int? = null
 
     @ManyToOne
     @JoinColumn(name = "game", nullable = false)
@@ -84,7 +85,7 @@ class Player {
         }
 
         if (!config.testShipTypes(undeployedShips)) {
-            throw InvalidFleetException("Invalid fleet for this game configuration.")
+            throw InvalidFleetException("Invalid fleet for this game configuration")
         }
 
         undeployedShips.forEach { undeployedShip ->
@@ -100,7 +101,7 @@ class Player {
 
             deployedShips.forEach { ship ->
                 if (ship.isOverlapping(otherShip = undeployedShip)) {
-                    throw InvalidShipTypeException("Ship is overlapping another ship")
+                    throw InvalidShipDeploymentException("Ship is overlapping another ship")
                 }
             }
 
@@ -147,16 +148,12 @@ class Player {
     /**
      * Shoots the opponent player.
      *
-     * @param opponent the opponent player
      * @param coordinates the coordinates of the shots
      *
      * @return the list of shots made
      * @throws InvalidFiredShotException if a shot is invalid
      */
-    fun shoot(
-        opponent: Player,
-        coordinates: List<Coordinate>
-    ): List<Shot> {
+    fun shoot(coordinates: List<Coordinate>): List<Shot> {
         if (!coordinates.all { it.col in game.config.colsRange && it.row in game.config.rowsRange }) {
             throw InvalidFiredShotException("Shot is out of bounds")
         }
@@ -180,8 +177,8 @@ class Player {
                 player = this,
                 coordinate = coordinate,
                 round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
-                result = opponent.deployedShips
-                    .find { ship -> coordinate in ship.coordinates.map { it } }
+                result = game.getOpponent(this).deployedShips
+                    .find { ship -> coordinate in ship.coordinates }
                     .let { ship ->
                         when {
                             ship == null -> Shot.ShotResult.MISS

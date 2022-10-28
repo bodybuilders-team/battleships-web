@@ -46,6 +46,18 @@ class HashingUtilsTests {
     }
 
     /**
+     * Private hmac function of [HashingUtils] obtained by reflection.
+     *
+     * @param data the string to be hashed
+     * @param key the key to be used in the hashing
+     *
+     * @return the hash of the string
+     */
+    @Suppress("SameParameterValue")
+    private fun hashingUtilsHmacPrivateFunction(data: String, key: SecretKey) =
+        hashingUtilsHmacPrivateKFunction.call(hashingUtils, data, key) as String
+
+    /**
      * Hmac function created for the purpose of testing the private hmac function by comparison of the value returned.
      *
      * @param string the string to be hashed
@@ -111,7 +123,7 @@ class HashingUtilsTests {
         )
         val hmac = testHmac(string, key)
 
-        val hmacResult = hashingUtilsHmacPrivateKFunction.call(hashingUtils, string, key) as String
+        val hmacResult = hashingUtilsHmacPrivateFunction(string, key)
 
         assertEquals(128, hmacResult.length)
         assertEquals(hmac, hmacResult)

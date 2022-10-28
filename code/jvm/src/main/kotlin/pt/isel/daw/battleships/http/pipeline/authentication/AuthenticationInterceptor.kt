@@ -1,9 +1,14 @@
 package pt.isel.daw.battleships.http.pipeline.authentication
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
+import pt.isel.daw.battleships.http.media.Problem
+import pt.isel.daw.battleships.http.pipeline.ExceptionHandler
 import pt.isel.daw.battleships.utils.JwtProvider
+import java.net.URI
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -37,13 +42,39 @@ class AuthenticationInterceptor(
 
         val authHeader = request.getHeader(AUTHORIZATION_HEADER)
         if (authHeader == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing Token")
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.contentType = Problem.PROBLEM_MEDIA_TYPE
+            response.writer.write(
+                ObjectMapper().writeValueAsString(
+                    object {
+                        val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "missing-token")
+                        val title = "Missing Token"
+                        val status = HttpStatus.UNAUTHORIZED.value()
+                    }
+                )
+            )
+
+            // throw AuthenticationException("Missing Token")
+
             return false
         }
 
         val token = jwtProvider.parseBearerToken(authHeader)
         if (token == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Token")
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.contentType = Problem.PROBLEM_MEDIA_TYPE
+            response.writer.write(
+                ObjectMapper().writeValueAsString(
+                    object {
+                        val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "not-bearer-token")
+                        val title = "Token is not a Bearer Token"
+                        val status = HttpStatus.UNAUTHORIZED.value()
+                    }
+                )
+            )
+
+            // throw AuthenticationException("Invalid Token")
+
             return false
         }
 

@@ -44,7 +44,7 @@ class SubEntityTests {
                     href = URI("http://localhost"),
                     type = MediaType.APPLICATION_JSON,
                     title = "title"
-                ),
+                )
             ),
             actions = listOf(
                 Action(

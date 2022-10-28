@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import pt.isel.daw.battleships.domain.exceptions.FiringShotsTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.FleetDeployTimeExpiredException
 import pt.isel.daw.battleships.domain.exceptions.InvalidCoordinateException
-import pt.isel.daw.battleships.domain.exceptions.InvalidDeployedShipException
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameConfigException
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameException
 import pt.isel.daw.battleships.domain.exceptions.InvalidPlayerException
-import pt.isel.daw.battleships.domain.exceptions.InvalidRefreshTokenException
+import pt.isel.daw.battleships.domain.exceptions.InvalidShipDeploymentException
 import pt.isel.daw.battleships.domain.exceptions.InvalidShipTypeException
 import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
-import pt.isel.daw.battleships.domain.exceptions.InvalidUserException
 import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.http.media.Problem
@@ -58,14 +56,12 @@ class ExceptionHandler {
             FiringShotsTimeExpiredException::class,
             WaitingForPlayersTimeExpiredException::class,
             InvalidCoordinateException::class,
-            InvalidUserException::class,
             InvalidPlayerException::class,
-            InvalidRefreshTokenException::class,
-            InvalidDeployedShipException::class,
             InvalidGameConfigException::class,
             InvalidGameException::class,
             InvalidShipTypeException::class,
-            InvalidShotException::class
+            InvalidShotException::class,
+            InvalidShipDeploymentException::class
         ]
     )
     fun handleBadRequest(
@@ -132,8 +128,27 @@ class ExceptionHandler {
             status = HttpStatus.FORBIDDEN.value()
         ).toResponse()
 
+    /**
+     * Handles all other uncaught exceptions.
+     *
+     * @param ex exception to handle
+     * @param request the HTTP request
+     * @return response entity with the error message
+     */
+    @ExceptionHandler(value = [Exception::class])
+    fun handleUncaughtExceptions(
+        request: HttpServletRequest,
+        ex: Exception
+    ): ResponseEntity<Any> =
+        Problem(
+            type = URI.create(PROBLEMS_DOCS_URI + "internal-server-error"),
+            title = "Internal Server Error",
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value()
+        ).toResponse()
+            .also { ex.printStackTrace() }
+
     companion object {
-        private const val PROBLEMS_DOCS_URI =
+        const val PROBLEMS_DOCS_URI =
             "https://github.com/isel-leic-daw/2022-daw-leic51d-g03/tree/main/docs/problems/"
 
         /**

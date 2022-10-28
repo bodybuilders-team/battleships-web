@@ -1,7 +1,6 @@
 package pt.isel.daw.battleships.domain.games.game
 
 import pt.isel.daw.battleships.domain.exceptions.InvalidGameStateException
-import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
 import pt.isel.daw.battleships.domain.games.Player
 import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.DEPLOYING_FLEETS
 import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.FINISHED

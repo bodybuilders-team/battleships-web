@@ -5,6 +5,8 @@ import pt.isel.daw.battleships.domain.games.CoordinateTests.Companion.defaultCoo
 import pt.isel.daw.battleships.domain.games.ship.ShipTypeTests.Companion.defaultShipType
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ShipTests {
 
@@ -55,5 +57,56 @@ class ShipTests {
             ),
             ship.coordinates
         )
+    }
+
+    @Test
+    fun `isOverlapping returns true if the ship is overlapping all coordinates with another ship`() {
+        val ship = object : Ship(
+            type = defaultShipType,
+            coordinate = defaultCoordinate,
+            orientation = Orientation.VERTICAL
+        ) {}
+
+        val ship2 = object : Ship(
+            type = defaultShipType,
+            coordinate = defaultCoordinate,
+            orientation = Orientation.VERTICAL
+        ) {}
+
+        assertTrue(ship.isOverlapping(ship2))
+    }
+
+    @Test
+    fun `isOverlapping returns true if the ship is overlapping only one coordinate with another ship `() {
+        val ship = object : Ship(
+            type = defaultShipType,
+            coordinate = defaultCoordinate,
+            orientation = Orientation.VERTICAL
+        ) {}
+
+        val ship2 = object : Ship(
+            type = defaultShipType,
+            coordinate = Coordinate('A', 5),
+            orientation = Orientation.VERTICAL
+        ) {}
+
+        assertTrue(ship.isOverlapping(ship2))
+    }
+
+    @Test
+    fun `isOverlapping returns false if the ship is not overlapping with another ship`() {
+        val ship = object : Ship(
+            type = defaultShipType,
+            coordinate = defaultCoordinate,
+            orientation = Orientation.VERTICAL
+        ) {}
+
+        val ship2 = object : Ship(
+            type = defaultShipType,
+            coordinate = Coordinate('A', 6),
+            orientation = Orientation.VERTICAL
+        ) {}
+
+        assertFalse(ship.isOverlapping(ship2))
     }
 }

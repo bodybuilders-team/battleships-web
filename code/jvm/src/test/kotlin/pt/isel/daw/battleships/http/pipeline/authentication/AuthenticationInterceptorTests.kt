@@ -1,14 +1,19 @@
 package pt.isel.daw.battleships.http.pipeline.authentication
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.method.HandlerMethod
+import pt.isel.daw.battleships.http.media.Problem
+import pt.isel.daw.battleships.http.pipeline.ExceptionHandler
 import pt.isel.daw.battleships.utils.JwtProvider
+import java.net.URI
 import javax.servlet.http.HttpServletResponse
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -96,12 +101,22 @@ class AuthenticationInterceptorTests {
         )
 
         assertEquals(HttpServletResponse.SC_UNAUTHORIZED, httpServletResponse.status)
-        assertEquals("Missing Token", httpServletResponse.errorMessage)
+        assertEquals(Problem.PROBLEM_MEDIA_TYPE, httpServletResponse.contentType)
+        assertEquals(
+            ObjectMapper().writeValueAsString(
+                object {
+                    val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "missing-token")
+                    val title = "Missing Token"
+                    val status = HttpStatus.UNAUTHORIZED.value()
+                }
+            ),
+            httpServletResponse.contentAsString
+        )
         assertFalse(proceed)
     }
 
     @Test
-    fun `preHandle returns false and sends an error response if the handler has Authenticated annotation but the bearer token is invalid`() {
+    fun `preHandle returns false and sends an error response if the handler has Authenticated annotation but the token is not a bearer token`() {
         val authenticationInterceptor = AuthenticationInterceptor(jwtProvider)
         val handlerMethod = handlerMethod<AuthenticatedTestController>()
         val httpServletRequest = MockHttpServletRequest().also {
@@ -119,18 +134,28 @@ class AuthenticationInterceptorTests {
         )
 
         assertEquals(HttpServletResponse.SC_UNAUTHORIZED, httpServletResponse.status)
-        assertEquals("Invalid Token", httpServletResponse.errorMessage)
+        assertEquals(Problem.PROBLEM_MEDIA_TYPE, httpServletResponse.contentType)
+        assertEquals(
+            ObjectMapper().writeValueAsString(
+                object {
+                    val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "not-bearer-token")
+                    val title = "Token is not a Bearer Token"
+                    val status = HttpStatus.UNAUTHORIZED.value()
+                }
+            ),
+            httpServletResponse.contentAsString
+        )
         assertFalse(proceed)
     }
 
     @Test
-    fun `preHandle returns true and stores a token attribute if the handler has Authenticated annotation and the bearer token is valid`() {
+    fun `preHandle returns true and stores a token attribute if the handler has Authenticated annotation and the token is a bearer token`() {
         val authenticationInterceptor = AuthenticationInterceptor(jwtProvider)
         val handlerMethod = handlerMethod<AuthenticatedTestController>()
         val httpServletRequest = MockHttpServletRequest().also {
             it.addHeader(
                 /* name = */ "Authorization",
-                /* value = */ "Bearer validToken"
+                /* value = */ "Bearer bearerToken"
             )
         }
         val httpServletResponse = MockHttpServletResponse()
@@ -141,7 +166,7 @@ class AuthenticationInterceptorTests {
             handler = handlerMethod
         )
 
-        assertEquals("validToken", httpServletRequest.getAttribute("token"))
+        assertEquals("bearerToken", httpServletRequest.getAttribute("token"))
         assertTrue(proceed)
     }
 }

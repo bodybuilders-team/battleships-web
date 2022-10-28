@@ -24,7 +24,7 @@ class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
+    private var id: Int? = null
 
     @Column(name = "username", nullable = false, unique = true)
     val username: String
