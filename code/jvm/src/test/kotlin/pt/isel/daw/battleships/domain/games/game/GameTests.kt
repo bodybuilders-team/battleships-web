@@ -25,7 +25,7 @@ class GameTests {
     fun `Game creation is successful`() {
         Game(
             name = "name",
-            creator = defaultUser,
+            creator = defaultUser(0),
             config = defaultGameConfig,
             state = defaultGameState
         )
@@ -36,7 +36,7 @@ class GameTests {
         assertFailsWith<InvalidGameException> {
             Game(
                 "",
-                defaultUser,
+                defaultUser(0),
                 defaultGameConfig,
                 defaultGameState
             )
@@ -48,7 +48,7 @@ class GameTests {
         assertFailsWith<InvalidGameException> {
             Game(
                 "n".repeat(41),
-                defaultUser,
+                defaultUser(0),
                 defaultGameConfig,
                 defaultGameState
             )
@@ -58,10 +58,10 @@ class GameTests {
     @Test
     fun `getPlayer returns the player with the given username if they exist in game`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         game.addPlayer(player = player)
 
-        val foundPlayer = game.getPlayer(defaultUser.username)
+        val foundPlayer = game.getPlayer(defaultUser(0).username)
 
         assertEquals(player, foundPlayer)
     }
@@ -71,17 +71,17 @@ class GameTests {
         val game = defaultGame
 
         assertFailsWith<UserNotInGameException> {
-            game.getPlayer(defaultUser.username)
+            game.getPlayer(defaultUser(0).username)
         }
     }
 
     @Test
     fun `hasPlayer returns true if the player with the given username exists in game`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         game.addPlayer(player = player)
 
-        val playerExists = game.hasPlayer(defaultUser.username)
+        val playerExists = game.hasPlayer(defaultUser(0).username)
 
         assertTrue(playerExists)
     }
@@ -90,7 +90,7 @@ class GameTests {
     fun `hasPlayer returns false if the player with the given username does not exist in game`() {
         val game = defaultGame
 
-        val playerExists = game.hasPlayer(defaultUser.username)
+        val playerExists = game.hasPlayer(defaultUser(0).username)
 
         assertFalse(playerExists)
     }
@@ -98,10 +98,10 @@ class GameTests {
     @Test
     fun `getPlayerOrNull returns the player with the given username if they exist in game`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         game.addPlayer(player = player)
 
-        val foundPlayer = game.getPlayerOrNull(defaultUser.username)
+        val foundPlayer = game.getPlayerOrNull(defaultUser(0).username)
 
         assertNotNull(foundPlayer)
         assertEquals(player, foundPlayer)
@@ -111,7 +111,7 @@ class GameTests {
     fun `getPlayerOrNull returns null if the player with the given username does not exist in game`() {
         val game = defaultGame
 
-        val foundPlayer = game.getPlayerOrNull(defaultUser.username)
+        val foundPlayer = game.getPlayerOrNull(defaultUser(0).username)
 
         assertNull(foundPlayer)
     }
@@ -119,7 +119,7 @@ class GameTests {
     @Test
     fun `getOpponent returns the opponent of the player with the given username  if there's an opponent`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         game.addPlayer(player = player)
         val opponent = Player(
             game = game,
@@ -140,7 +140,7 @@ class GameTests {
     @Test
     fun `getOpponent throws NotFoundException if there's no opponent`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         game.addPlayer(player = player)
 
         assertFailsWith<NotFoundException> {
@@ -151,17 +151,17 @@ class GameTests {
     @Test
     fun `addPlayer adds a player to the game`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
 
         game.addPlayer(player = player)
 
-        assertTrue(game.hasPlayer(defaultUser.username))
+        assertTrue(game.hasPlayer(defaultUser(0).username))
     }
 
     @Test
     fun `addPlayer throws IllegalStateException if the game already has 2 players`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         val player2 = Player(
             game = game,
             user = User(
@@ -192,7 +192,7 @@ class GameTests {
     @Test
     fun `areFleetsDeployed returns true if both players deployed their fleets`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         val player2 = Player(
             game = game,
             user = User(
@@ -215,7 +215,7 @@ class GameTests {
     @Test
     fun `areFleetsDeployed returns false if no player deployed their fleet`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         val player2 = Player(
             game = game,
             user = User(
@@ -236,7 +236,7 @@ class GameTests {
     @Test
     fun `areFleetsDeployed returns false if only one player deployed their fleet`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser)
+        val player = Player(game = game, user = defaultUser(0))
         val player2 = Player(
             game = game,
             user = User(
@@ -396,7 +396,7 @@ class GameTests {
     @Test
     fun `finishGame changes game phase to FINISHED`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -418,7 +418,7 @@ class GameTests {
     @Test
     fun `finishGame sets winner of the game`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -440,7 +440,7 @@ class GameTests {
     @Test
     fun `finishGame updates users points`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -488,7 +488,7 @@ class GameTests {
     @Test
     fun `updateIfPhaseExpired finishes game if the game phase expired and is IN_PROGRESS`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -513,7 +513,7 @@ class GameTests {
     @Test
     fun `updateIfPhaseExpired aborts game if the game phase expired and is not IN_PROGRESS`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val player = Player(game = game, user = user)
         game.addPlayer(player = player)
 
@@ -530,7 +530,7 @@ class GameTests {
         val defaultGame
             get() = Game(
                 name = "name",
-                creator = defaultUser,
+                creator = defaultUser(0),
                 config = defaultGameConfig,
                 state = defaultGameState
             )

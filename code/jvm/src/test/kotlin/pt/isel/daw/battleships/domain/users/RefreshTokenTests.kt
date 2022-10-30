@@ -15,7 +15,7 @@ class RefreshTokenTests {
 
     @Test
     fun `RefreshToken creation is successful`() {
-        val user = defaultUser
+        val user = defaultUser(0)
         val tokenHash = "a".repeat(RefreshToken.TOKEN_HASH_LENGTH)
         val expirationDate = Timestamp.from(Instant.now())
 
@@ -39,7 +39,7 @@ class RefreshTokenTests {
     fun `RefreshToken creation throws InvalidRefreshTokenException if the token hash length is invalid`() {
         assertFailsWith<InvalidRefreshTokenException> {
             RefreshToken(
-                user = defaultUser,
+                user = defaultUser(0),
                 tokenHash = "invalidTokenHash",
                 expirationDate = Timestamp.from(Instant.now())
             )
@@ -49,7 +49,7 @@ class RefreshTokenTests {
     companion object {
         val defaultRefreshToken
             get() = RefreshToken(
-                user = defaultUser,
+                user = defaultUser(0),
                 tokenHash = "a".repeat(RefreshToken.TOKEN_HASH_LENGTH),
                 expirationDate = Timestamp.from(Instant.now())
             )

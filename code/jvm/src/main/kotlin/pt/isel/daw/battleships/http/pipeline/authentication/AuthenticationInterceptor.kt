@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.http.pipeline.authentication
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
@@ -45,16 +46,14 @@ class AuthenticationInterceptor(
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.contentType = Problem.PROBLEM_MEDIA_TYPE
             response.writer.write(
-                ObjectMapper().writeValueAsString(
-                    object {
-                        val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "missing-token")
-                        val title = "Missing Token"
-                        val status = HttpStatus.UNAUTHORIZED.value()
-                    }
+                mapper.writeValueAsString(
+                    Problem(
+                        type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "authentication"),
+                        title = "Missing Token",
+                        status = HttpStatus.UNAUTHORIZED.value()
+                    )
                 )
             )
-
-            // throw AuthenticationException("Missing Token")
 
             return false
         }
@@ -64,16 +63,14 @@ class AuthenticationInterceptor(
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.contentType = Problem.PROBLEM_MEDIA_TYPE
             response.writer.write(
-                ObjectMapper().writeValueAsString(
-                    object {
-                        val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "not-bearer-token")
-                        val title = "Token is not a Bearer Token"
-                        val status = HttpStatus.UNAUTHORIZED.value()
-                    }
+                mapper.writeValueAsString(
+                    Problem(
+                        type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "authentication"),
+                        title = "Token is not a Bearer Token",
+                        status = HttpStatus.UNAUTHORIZED.value()
+                    )
                 )
             )
-
-            // throw AuthenticationException("Invalid Token")
 
             return false
         }
@@ -85,5 +82,7 @@ class AuthenticationInterceptor(
     companion object {
         private const val AUTHORIZATION_HEADER = "Authorization"
         private const val TOKEN_ATTRIBUTE_NAME = "token"
+
+        val mapper = ObjectMapper().also { it.setSerializationInclusion(JsonInclude.Include.NON_NULL) }
     }
 }

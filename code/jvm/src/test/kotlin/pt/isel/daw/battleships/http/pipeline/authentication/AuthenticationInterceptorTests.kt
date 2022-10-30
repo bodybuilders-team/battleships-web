@@ -1,6 +1,5 @@
 package pt.isel.daw.battleships.http.pipeline.authentication
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -103,12 +102,12 @@ class AuthenticationInterceptorTests {
         assertEquals(HttpServletResponse.SC_UNAUTHORIZED, httpServletResponse.status)
         assertEquals(Problem.PROBLEM_MEDIA_TYPE, httpServletResponse.contentType)
         assertEquals(
-            ObjectMapper().writeValueAsString(
-                object {
-                    val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "missing-token")
-                    val title = "Missing Token"
-                    val status = HttpStatus.UNAUTHORIZED.value()
-                }
+            AuthenticationInterceptor.mapper.writeValueAsString(
+                Problem(
+                    type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "authentication"),
+                    title = "Missing Token",
+                    status = HttpStatus.UNAUTHORIZED.value()
+                )
             ),
             httpServletResponse.contentAsString
         )
@@ -136,12 +135,12 @@ class AuthenticationInterceptorTests {
         assertEquals(HttpServletResponse.SC_UNAUTHORIZED, httpServletResponse.status)
         assertEquals(Problem.PROBLEM_MEDIA_TYPE, httpServletResponse.contentType)
         assertEquals(
-            ObjectMapper().writeValueAsString(
-                object {
-                    val type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "not-bearer-token")
-                    val title = "Token is not a Bearer Token"
-                    val status = HttpStatus.UNAUTHORIZED.value()
-                }
+            AuthenticationInterceptor.mapper.writeValueAsString(
+                Problem(
+                    type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "authentication"),
+                    title = "Token is not a Bearer Token",
+                    status = HttpStatus.UNAUTHORIZED.value()
+                )
             ),
             httpServletResponse.contentAsString
         )

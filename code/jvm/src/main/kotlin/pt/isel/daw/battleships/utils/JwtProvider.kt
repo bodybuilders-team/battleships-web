@@ -100,7 +100,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     fun createRefreshToken(jwtPayload: JwtPayload): RefreshTokenDetails {
         val issuedAt = Instant.now()
-        val expirationDate = issuedAt.plus(refreshTokenDurantion)
+        val expirationDate = issuedAt.plus(refreshTokenDuration)
 
         return RefreshTokenDetails(
             token = Jwts.builder()
@@ -176,6 +176,6 @@ class JwtProvider(serverConfig: ServerConfiguration) {
         const val TOKEN_ATTRIBUTE = "token"
 
         val accessTokenDuration: TemporalAmount = Duration.ofHours(1)
-        val refreshTokenDurantion: TemporalAmount = Duration.ofDays(1)
+        val refreshTokenDuration: TemporalAmount = Duration.ofDays(1)
     }
 }

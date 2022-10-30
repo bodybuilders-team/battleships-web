@@ -9,8 +9,8 @@ class UserDTOTests {
     @Test
     fun `UserDTO creation is successful`() {
         UserDTO(
-            username = "username",
-            email = "email",
+            username = "Player 1",
+            email = "haram@email.com",
             points = 0,
             numberOfGamesPlayed = 0
         )
@@ -18,7 +18,7 @@ class UserDTOTests {
 
     @Test
     fun `UserDTO from User conversion is successful`() {
-        val user = defaultUser
+        val user = defaultUser(0)
 
         val userDTO = UserDTO(user)
 
@@ -28,12 +28,11 @@ class UserDTOTests {
     }
 
     companion object {
-        val defaultUserDTO
-            get() = UserDTO(
-                username = "username",
-                email = "email",
-                points = 0,
-                numberOfGamesPlayed = 0
-            )
+        fun defaultUserDTO(number: Int) = UserDTO(
+            username = "User$number",
+            email = "user$number@email.com",
+            points = 0,
+            numberOfGamesPlayed = 0
+        )
     }
 }

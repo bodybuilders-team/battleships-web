@@ -91,7 +91,7 @@ class JwtProviderTests {
         val validatedPayload = jwtProvider.validateAccessToken(token)
 
         assertNotNull(validatedPayload)
-        assertEquals(payload.username, validatedPayload.username)
+        assertEquals(payload, validatedPayload)
     }
 
     @Test
@@ -112,7 +112,7 @@ class JwtProviderTests {
         val validatedPayload = jwtProvider.validateRefreshToken(token)
 
         assertNotNull(validatedPayload)
-        assertEquals(payload.username, validatedPayload.username)
+        assertEquals(payload, validatedPayload)
     }
 
     @Test

@@ -55,7 +55,7 @@ class PlayerTests {
     @Test
     fun `Player creation is successful`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
 
         val player = Player(
             game = game,
@@ -80,7 +80,7 @@ class PlayerTests {
         assertFailsWith<InvalidPlayerException> {
             Player(
                 game = defaultGame,
-                user = defaultUser,
+                user = defaultUser(0),
                 points = -1
             )
         }
@@ -102,7 +102,7 @@ class PlayerTests {
         val player = Player(
             game = Game(
                 name = "name",
-                creator = defaultUser,
+                creator = defaultUser(0),
                 config = GameConfig(
                     gridSize = 10,
                     maxTimePerRound = 60,
@@ -112,7 +112,7 @@ class PlayerTests {
                 ),
                 state = GameStateTests.defaultGameState
             ),
-            user = defaultUser,
+            user = defaultUser(0),
             points = 0
         )
 
@@ -201,7 +201,7 @@ class PlayerTests {
         val player = Player(
             game = Game(
                 name = "name",
-                creator = defaultUser,
+                creator = defaultUser(0),
                 config = GameConfig(
                     gridSize = 10,
                     maxTimePerRound = 60,
@@ -211,7 +211,7 @@ class PlayerTests {
                 ),
                 state = GameStateTests.defaultGameState
             ),
-            user = defaultUser,
+            user = defaultUser(0),
             points = 0
         )
 
@@ -251,7 +251,7 @@ class PlayerTests {
     @Test
     fun `shoot returns the shots made`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -283,7 +283,7 @@ class PlayerTests {
     @Test
     fun `shoot adds shots to the player if player had no shots before`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -308,7 +308,7 @@ class PlayerTests {
     @Test
     fun `shoot adds shots to the player if player had shots before`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -333,7 +333,7 @@ class PlayerTests {
     @Test
     fun `shoot sets made shot result to HIT if it hit a ship`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -356,7 +356,7 @@ class PlayerTests {
     @Test
     fun `shoot sets made shot result to MISS if it didn't hit any ship (missed)`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -378,7 +378,7 @@ class PlayerTests {
     @Test
     fun `shoot sets made shot result to SUNK if it sank a ship`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -414,7 +414,7 @@ class PlayerTests {
     @Test
     fun `shoot decrements a ship's lives by one if it is hit by a shot`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -440,7 +440,7 @@ class PlayerTests {
     @Test
     fun `shoot does not affect a ship's lives if it is missed by a shot`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -466,7 +466,7 @@ class PlayerTests {
     @Test
     fun `shoot adds ship points to player points if a shot sank a ship`() {
         val game = defaultGame
-        val user = defaultUser
+        val user = defaultUser(0)
         val user2 = User(
             username = "Player 2",
             email = "haram2@email.com",
@@ -534,7 +534,7 @@ class PlayerTests {
         val defaultPlayer
             get() = Player(
                 game = defaultGame,
-                user = defaultUser,
+                user = defaultUser(0),
                 points = 0
             )
     }

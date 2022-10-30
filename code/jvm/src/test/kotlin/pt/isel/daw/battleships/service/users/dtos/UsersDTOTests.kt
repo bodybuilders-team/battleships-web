@@ -8,7 +8,7 @@ class UsersDTOTests {
     @Test
     fun `UsersDTO creation is successful`() {
         UsersDTO(
-            users = listOf(defaultUserDTO),
+            users = listOf(defaultUserDTO(0)),
             totalCount = 1
         )
     }
@@ -16,7 +16,7 @@ class UsersDTOTests {
     companion object {
         val defaultUsersDTO
             get() = UsersDTO(
-                users = listOf(defaultUserDTO),
+                users = listOf(defaultUserDTO(0)),
                 totalCount = 1
             )
     }

@@ -9,8 +9,10 @@ import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
+import pt.isel.daw.battleships.service.exceptions.InvalidLoginException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
+import pt.isel.daw.battleships.service.exceptions.RefreshTokenExpiredException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
 import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
@@ -51,7 +53,7 @@ class UsersServiceImpl(
         }
 
         if (limit > MAX_USERS_LIMIT) {
-            throw InvalidPaginationParamsException("Limit must be less than $MAX_USERS_LIMIT")
+            throw InvalidPaginationParamsException("Limit must be less or equal than $MAX_USERS_LIMIT")
         }
 
         return UsersDTO(
@@ -81,16 +83,16 @@ class UsersServiceImpl(
             throw AlreadyExistsException("User with email ${registerUserInputDTO.email} already exists")
         }
 
-        val user = User(
-            username = registerUserInputDTO.username,
-            email = registerUserInputDTO.email,
-            passwordHash = hashingUtils.hashPassword(
+        val user = usersRepository.save(
+            User(
                 username = registerUserInputDTO.username,
-                password = registerUserInputDTO.password
+                email = registerUserInputDTO.email,
+                passwordHash = hashingUtils.hashPassword(
+                    username = registerUserInputDTO.username,
+                    password = registerUserInputDTO.password
+                )
             )
         )
-
-        usersRepository.save(user)
 
         val (accessToken, refreshToken) = createTokens(user = user)
 
@@ -112,7 +114,7 @@ class UsersServiceImpl(
                 password = loginUserInputDTO.password,
                 passwordHash = user.passwordHash
             )
-        ) throw NotFoundException("Invalid username or password")
+        ) throw InvalidLoginException("Invalid username or password")
 
         val (accessToken, refreshToken) = createTokens(user = user)
 
@@ -126,11 +128,14 @@ class UsersServiceImpl(
         val user = getUserFromRefreshToken(refreshToken = refreshToken)
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
-        if (!refreshTokensRepository.existsByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)) {
-            throw NotFoundException("Refresh token not found")
-        }
+        val refreshTokenEntity = refreshTokensRepository
+            .findByUserAndTokenHash(
+                user = user,
+                tokenHash = refreshTokenHash
+            )
+            ?: throw NotFoundException("Refresh token not found")
 
-        refreshTokensRepository.deleteByUserAndTokenHash(user = user, tokenHash = refreshTokenHash)
+        refreshTokensRepository.delete(refreshTokenEntity)
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenOutputDTO {
@@ -147,10 +152,10 @@ class UsersServiceImpl(
         refreshTokensRepository.delete(refreshTokenEntity)
 
         if (refreshTokenEntity.expirationDate.before(Timestamp.from(Instant.now()))) {
-            throw NotFoundException("Refresh token expired")
+            throw RefreshTokenExpiredException("Refresh token expired")
         }
 
-        val (accessToken, newRefreshToken) = createTokens(user = refreshTokenEntity.user)
+        val (accessToken, newRefreshToken) = createTokens(user = user)
 
         return RefreshTokenOutputDTO(
             accessToken = accessToken,
@@ -172,7 +177,6 @@ class UsersServiceImpl(
      * @param user the user to create the tokens for
      *
      * @return the access and refresh tokens
-     * @throws IllegalStateException if the user has no refresh tokens
      */
     private fun createTokens(user: User): Tokens {
         if (refreshTokensRepository.countByUser(user = user) >= config.maxRefreshTokens) {
@@ -207,17 +211,6 @@ class UsersServiceImpl(
     }
 
     /**
-     * Represents the tokens of a user.
-     *
-     * @property accessToken the access token
-     * @property refreshToken the refresh token
-     */
-    private data class Tokens(
-        val accessToken: String,
-        val refreshToken: String
-    )
-
-    /**
      * Gets the user from the refresh token.
      *
      * @param refreshToken the refresh token
@@ -233,6 +226,17 @@ class UsersServiceImpl(
         return usersRepository.findByUsername(username = tokenPayload.username)
             ?: throw NotFoundException("User not found")
     }
+
+    /**
+     * Represents the tokens of a user.
+     *
+     * @property accessToken the access token
+     * @property refreshToken the refresh token
+     */
+    private data class Tokens(
+        val accessToken: String,
+        val refreshToken: String
+    )
 
     companion object {
         const val MAX_USERS_LIMIT = 100

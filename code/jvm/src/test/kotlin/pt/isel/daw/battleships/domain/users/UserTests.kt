@@ -15,8 +15,8 @@ class UserTests {
         val passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
 
         val user = User(
-            username = "Player 1",
-            email = "haram@email.com",
+            username = "User1",
+            email = "user1@email.com",
             passwordHash = passwordHash
         )
 
@@ -25,8 +25,8 @@ class UserTests {
             .call(user) as Int?
 
         assertNull(userId)
-        assertEquals("Player 1", user.username)
-        assertEquals("haram@email.com", user.email)
+        assertEquals("User1", user.username)
+        assertEquals("user1@email.com", user.email)
         assertEquals(passwordHash, user.passwordHash)
         assertEquals(0, user.points)
         assertEquals(0, user.numberOfGamesPlayed)
@@ -37,7 +37,7 @@ class UserTests {
         assertFailsWith<InvalidUserException> {
             User(
                 username = "a".repeat(2),
-                email = "haram@email.com",
+                email = "user1@email.com",
                 passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         }
@@ -48,7 +48,7 @@ class UserTests {
         assertFailsWith<InvalidUserException> {
             User(
                 username = "a".repeat(41),
-                email = "haram@email.com",
+                email = "user1@email.com",
                 passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
         }
@@ -58,7 +58,7 @@ class UserTests {
     fun `User creation throws InvalidUserException if email is not a valid email address`() {
         assertFailsWith<InvalidUserException> {
             User(
-                username = "Player 1",
+                username = "User1",
                 email = "invalidMail",
                 passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
             )
@@ -69,8 +69,8 @@ class UserTests {
     fun `User creation throws InvalidUserException if password hash length is invalid`() {
         assertFailsWith<InvalidUserException> {
             User(
-                username = "Player 1",
-                email = "haram@email.com",
+                username = "User1",
+                email = "user1@email.com",
                 passwordHash = "a".repeat(20)
             )
         }
@@ -80,8 +80,8 @@ class UserTests {
     fun `User creation throws InvalidUserException if points is negative`() {
         assertFailsWith<InvalidUserException> {
             User(
-                username = "Player 1",
-                email = "haram@email.com",
+                username = "User1",
+                email = "user1@email.com",
                 passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
                 points = -1
             )
@@ -92,8 +92,8 @@ class UserTests {
     fun `User creation throws InvalidUserException if number of played games is negative`() {
         assertFailsWith<InvalidUserException> {
             User(
-                username = "Player 1",
-                email = "haram@email.com",
+                username = "User1",
+                email = "user1@email.com",
                 passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
                 points = 0,
                 numberOfGamesPlayed = -1
@@ -102,11 +102,10 @@ class UserTests {
     }
 
     companion object {
-        val defaultUser
-            get() = User(
-                username = "Player 1",
-                email = "haram@email.com",
-                passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
-            )
+        fun defaultUser(number: Int) = User(
+            username = "User$number",
+            email = "user$number@email.com",
+            passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH)
+        )
     }
 }

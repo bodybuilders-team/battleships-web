@@ -18,7 +18,7 @@ class GetUserOutputModelTests {
 
     @Test
     fun `GetUserOutputModel from UserDTO conversion is successful`() {
-        val userDTO = defaultUserDTO
+        val userDTO = defaultUserDTO(0)
 
         val getUserOutputModel = GetUserOutputModel(userDTO)
 

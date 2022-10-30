@@ -34,14 +34,14 @@ class AuthenticatedServiceTests {
 
     @Test
     fun `authenticateUser returns the authenticated user`() {
-        val user = defaultUser
+        val user = defaultUser(0)
 
-        Mockito.`when`(usersRepository.findByUsername(defaultUser.username))
+        Mockito.`when`(usersRepository.findByUsername(defaultUser(0).username))
             .thenReturn(user)
 
         val authenticatedUser = authenticatedService.authenticateUser(
             token = jwtProvider.createAccessToken(
-                jwtPayload = JwtProvider.JwtPayload(username = defaultUser.username)
+                jwtPayload = JwtProvider.JwtPayload(username = defaultUser(0).username)
             )
         )
 
@@ -62,7 +62,7 @@ class AuthenticatedServiceTests {
         assertFailsWith<NotFoundException> {
             authenticatedService.authenticateUser(
                 token = jwtProvider.createAccessToken(
-                    jwtPayload = JwtProvider.JwtPayload(username = defaultUser.username)
+                    jwtPayload = JwtProvider.JwtPayload(username = defaultUser(0).username)
                 )
             )
         }
