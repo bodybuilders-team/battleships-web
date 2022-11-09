@@ -4,18 +4,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.method.HandlerMethod
-import pt.isel.daw.battleships.http.media.Problem
-import pt.isel.daw.battleships.http.pipeline.ExceptionHandler
+import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.utils.JwtProvider
-import java.net.URI
-import javax.servlet.http.HttpServletResponse
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
@@ -93,25 +89,13 @@ class AuthenticationInterceptorTests {
         val httpServletRequest = MockHttpServletRequest()
         val httpServletResponse = MockHttpServletResponse()
 
-        val proceed = authenticationInterceptor.preHandle(
-            request = httpServletRequest,
-            response = httpServletResponse,
-            handler = handlerMethod
-        )
-
-        assertEquals(HttpServletResponse.SC_UNAUTHORIZED, httpServletResponse.status)
-        assertEquals(Problem.PROBLEM_MEDIA_TYPE, httpServletResponse.contentType)
-        assertEquals(
-            AuthenticationInterceptor.mapper.writeValueAsString(
-                Problem(
-                    type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "authentication"),
-                    title = "Missing Token",
-                    status = HttpStatus.UNAUTHORIZED.value()
-                )
-            ),
-            httpServletResponse.contentAsString
-        )
-        assertFalse(proceed)
+        assertFailsWith<AuthenticationException> {
+            authenticationInterceptor.preHandle(
+                request = httpServletRequest,
+                response = httpServletResponse,
+                handler = handlerMethod
+            )
+        }
     }
 
     @Test
@@ -126,25 +110,13 @@ class AuthenticationInterceptorTests {
         }
         val httpServletResponse = MockHttpServletResponse()
 
-        val proceed = authenticationInterceptor.preHandle(
-            request = httpServletRequest,
-            response = httpServletResponse,
-            handler = handlerMethod
-        )
-
-        assertEquals(HttpServletResponse.SC_UNAUTHORIZED, httpServletResponse.status)
-        assertEquals(Problem.PROBLEM_MEDIA_TYPE, httpServletResponse.contentType)
-        assertEquals(
-            AuthenticationInterceptor.mapper.writeValueAsString(
-                Problem(
-                    type = URI.create(ExceptionHandler.PROBLEMS_DOCS_URI + "authentication"),
-                    title = "Token is not a Bearer Token",
-                    status = HttpStatus.UNAUTHORIZED.value()
-                )
-            ),
-            httpServletResponse.contentAsString
-        )
-        assertFalse(proceed)
+        assertFailsWith<AuthenticationException> {
+            authenticationInterceptor.preHandle(
+                request = httpServletRequest,
+                response = httpServletResponse,
+                handler = handlerMethod
+            )
+        }
     }
 
     @Test
