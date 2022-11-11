@@ -23,6 +23,7 @@ import pt.isel.daw.battleships.http.media.siren.Action
 import pt.isel.daw.battleships.http.media.siren.Link
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
+import pt.isel.daw.battleships.http.media.siren.SubEntity
 import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.service.users.UsersOrder
 import pt.isel.daw.battleships.service.users.UsersService
@@ -101,23 +102,24 @@ class UsersController(private val usersService: UsersService) {
      */
     @GetMapping(Uris.USERS)
     fun getUsers(
-        @RequestParam(Params.OFFSET_PARAM) offset: Int,
-        @RequestParam(Params.LIMIT_PARAM) limit: Int,
+        @RequestParam(Params.OFFSET_PARAM) offset: Int? = null,
+        @RequestParam(Params.LIMIT_PARAM) limit: Int? = null,
         @RequestParam(Params.ORDER_BY_PARAM) orderBy: String? = null,
         @RequestParam(Params.SORT_DIRECTION_PARAM) sortDirectionStr: String? = null
     ): SirenEntity<GetUsersOutputModel> {
-        val ascending = when (sortDirectionStr) {
-            "ASC" -> true
-            "DESC" -> false
-            null -> true
-            else -> throw IllegalArgumentException("Invalid sort order, must be ASC or DESC")
+        val ascending = when (sortDirectionStr ?: Params.SORT_DIRECTION_ASCENDING) {
+            Params.SORT_DIRECTION_ASCENDING -> true
+            Params.SORT_DIRECTION_DESCENDING -> false
+            else -> throw IllegalArgumentException(
+                "Invalid sort order, must be ${Params.SORT_DIRECTION_ASCENDING} or ${Params.SORT_DIRECTION_DESCENDING}"
+            )
         }
 
         val sortBy = if (orderBy != null) UsersOrder.valueOf(orderBy) else UsersOrder.POINTS
 
         val users = usersService.getUsers(
-            offset = offset,
-            limit = limit,
+            offset = offset ?: Params.OFFSET_DEFAULT,
+            limit = limit ?: Params.LIMIT_DEFAULT,
             orderBy = sortBy,
             ascending = ascending
         )
@@ -131,11 +133,17 @@ class UsersController(private val usersService: UsersService) {
                     href = Uris.users()
                 )
             ),
-            entities = users.users.map {
-                EmbeddedLink(
-                    rel = listOf("item", "user-${it.username}"),
-                    href = Uris.userByUsername(username = it.username),
-                    title = it.username
+            entities = users.users.map { user ->
+                SubEntity.EmbeddedSubEntity(
+                    rel = listOf("item", "user-${user.username}"),
+                    `class` = listOf("user"),
+                    properties = GetUserOutputModel(user),
+                    links = listOf(
+                        Link(
+                            rel = listOf("self"),
+                            href = Uris.userByUsername(username = user.username)
+                        )
+                    )
                 )
             }
         )

@@ -2,6 +2,9 @@ package pt.isel.daw.battleships
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.filter.CommonsRequestLoggingFilter
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import pt.isel.daw.battleships.http.pipeline.authentication.AuthenticationInterceptor
@@ -18,6 +21,28 @@ class BattleshipsApplication(
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(/* interceptor = */ authInterceptor)
+    }
+}
+
+/**
+ * Configuration for the request logging filter.
+ */
+@Configuration
+class RequestLoggingFilterConfig {
+
+    /**
+     * Creates a request logging filter.
+     *
+     * @return the request logging filter
+     */
+    @Bean
+    fun logFilter() = CommonsRequestLoggingFilter().also {
+        it.setIncludeClientInfo(true)
+        it.setIncludeQueryString(true)
+        it.setIncludePayload(true)
+        it.setIncludeHeaders(true)
+        it.setMaxPayloadLength(10000)
+        it.setAfterMessagePrefix("REQUEST DATA : ")
     }
 }
 

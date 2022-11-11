@@ -59,3 +59,7 @@ tasks.withType<Test> {
         events("passed", "skipped", "failed")
     }
 }
+
+task<Exec>("composeUp") {
+    commandLine("docker-compose", "up", "--build", "--force-recreate")
+}

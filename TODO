@@ -5,4 +5,6 @@
 - Implementation:
     - Add more tests
     - Review validations
-    - Add logger
+    - Leave game mechanism
+    - Implement blacklist of tokens
+    - Implement private games

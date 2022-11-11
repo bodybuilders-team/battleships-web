@@ -25,6 +25,8 @@ data class Problem(
 
     /**
      * Converts this problem to a [ResponseEntity].
+     *
+     * @return a response entity with the problem as the body
      */
     fun toResponse() = ResponseEntity
         .status(status)
