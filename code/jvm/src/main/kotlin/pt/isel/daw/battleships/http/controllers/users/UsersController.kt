@@ -96,7 +96,7 @@ class UsersController(private val usersService: UsersService) {
      * @param offset the offset of the users to be returned
      * @param limit the limit of the users to be returned
      * @param orderBy the order by of the users to be returned
-     * @param sortDirectionStr if the users should be ordered by points in ascending order
+     * @param sortDirection if the users should be ordered by points in ascending order
      *
      * @return the response to the request with all the users
      */
@@ -105,9 +105,9 @@ class UsersController(private val usersService: UsersService) {
         @RequestParam(Params.OFFSET_PARAM) offset: Int? = null,
         @RequestParam(Params.LIMIT_PARAM) limit: Int? = null,
         @RequestParam(Params.ORDER_BY_PARAM) orderBy: String? = null,
-        @RequestParam(Params.SORT_DIRECTION_PARAM) sortDirectionStr: String? = null
+        @RequestParam(Params.SORT_DIRECTION_PARAM) sortDirection: String? = null
     ): SirenEntity<GetUsersOutputModel> {
-        val ascending = when (sortDirectionStr ?: Params.SORT_DIRECTION_ASCENDING) {
+        val ascending = when (sortDirection ?: Params.SORT_DIRECTION_ASCENDING) {
             Params.SORT_DIRECTION_ASCENDING -> true
             Params.SORT_DIRECTION_DESCENDING -> false
             else -> throw IllegalArgumentException(
