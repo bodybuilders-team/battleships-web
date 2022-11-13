@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.http.controllers.users.models.refreshToken
 import pt.isel.daw.battleships.service.users.dtos.refreshToken.RefreshTokenOutputDTO
 
 /**
- * Represents the Refresh Token Output Model.
+ * The Refresh Token Output Model.
  *
  * @property accessToken the access token
  * @property refreshToken the refresh token

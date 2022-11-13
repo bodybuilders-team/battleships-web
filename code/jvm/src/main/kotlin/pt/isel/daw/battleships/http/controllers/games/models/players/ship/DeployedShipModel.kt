@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
 import pt.isel.daw.battleships.service.games.dtos.ship.DeployedShipDTO
 
 /**
- * Represents a Deployed Ship Model.
+ * A Deployed Ship Model.
  *
  * @property type the type of the ship
  * @property coordinate the coordinate of the ship

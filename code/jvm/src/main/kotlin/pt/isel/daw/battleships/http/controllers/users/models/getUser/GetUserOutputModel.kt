@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.http.controllers.users.models.getUser
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 
 /**
- * Represents a Get User Output Model.
+ * A Get User Output Model.
  *
  * @property username the username of the user
  * @property email the email of the user

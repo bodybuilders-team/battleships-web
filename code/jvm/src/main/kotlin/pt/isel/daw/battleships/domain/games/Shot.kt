@@ -63,7 +63,7 @@ class Shot {
     }
 
     /**
-     * Represents the possible results of a shot.
+     * The possible results of a shot.
      *
      * @property HIT the shot hit a ship
      * @property MISS the shot missed and hit the water

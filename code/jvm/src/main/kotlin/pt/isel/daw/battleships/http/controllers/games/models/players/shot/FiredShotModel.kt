@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
 import pt.isel.daw.battleships.service.games.dtos.shot.FiredShotDTO
 
 /**
- * Represents a Fired Shot Model.
+ * A Fired Shot Model.
  *
  * @property coordinate the coordinate of the shot
  * @property round the round in which the shot was made

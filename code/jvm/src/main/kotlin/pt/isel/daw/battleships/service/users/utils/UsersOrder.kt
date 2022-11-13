@@ -1,11 +1,11 @@
-package pt.isel.daw.battleships.service.users
+package pt.isel.daw.battleships.service.users.utils
 
 import org.springframework.data.domain.Sort
-import pt.isel.daw.battleships.service.users.UsersOrder.NUMBER_GAMES_PLAYED
-import pt.isel.daw.battleships.service.users.UsersOrder.POINTS
+import pt.isel.daw.battleships.service.users.utils.UsersOrder.NUMBER_GAMES_PLAYED
+import pt.isel.daw.battleships.service.users.utils.UsersOrder.POINTS
 
 /**
- * Represents a Users Order.
+ * The order of the users in a pagination.
  *
  * @property orderBy the field to order by
  *

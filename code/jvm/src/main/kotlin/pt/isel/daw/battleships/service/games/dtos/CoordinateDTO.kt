@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos
 import pt.isel.daw.battleships.domain.games.Coordinate
 
 /**
- * Represents a Coordinate DTO.
+ * A Coordinate DTO.
  *
  * @property col the column of the coordinate
  * @property row the row of the coordinate

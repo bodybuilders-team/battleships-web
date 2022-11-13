@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity
 import java.net.URI
 
 /**
- * Represents a problem that occurred during the processing of a request.
+ * A problem that occurred during the processing of a request.
  *
  * @property type a URI that identifies the problem type
  * @property title a short, human-readable summary of the problem

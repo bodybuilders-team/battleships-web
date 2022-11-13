@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.players.getBoard
 
 /**
- * Represents a Get Board Output Model.
+ * A Get Board Output Model.
  *
  * @property board the board
  */

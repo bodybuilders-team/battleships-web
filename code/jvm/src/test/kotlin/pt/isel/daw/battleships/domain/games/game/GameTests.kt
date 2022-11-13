@@ -58,8 +58,7 @@ class GameTests {
     @Test
     fun `getPlayer returns the player with the given username if they exist in game`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser(0))
-        game.addPlayer(player = player)
+        val player = game.getPlayer(username = game.creator.username)
 
         val foundPlayer = game.getPlayer(defaultUser(0).username)
 
@@ -71,7 +70,7 @@ class GameTests {
         val game = defaultGame
 
         assertFailsWith<UserNotInGameException> {
-            game.getPlayer(defaultUser(0).username)
+            game.getPlayer(defaultUser(1).username)
         }
     }
 
@@ -79,7 +78,6 @@ class GameTests {
     fun `hasPlayer returns true if the player with the given username exists in game`() {
         val game = defaultGame
         val player = Player(game = game, user = defaultUser(0))
-        game.addPlayer(player = player)
 
         val playerExists = game.hasPlayer(defaultUser(0).username)
 
@@ -90,7 +88,7 @@ class GameTests {
     fun `hasPlayer returns false if the player with the given username does not exist in game`() {
         val game = defaultGame
 
-        val playerExists = game.hasPlayer(defaultUser(0).username)
+        val playerExists = game.hasPlayer(defaultUser(1).username)
 
         assertFalse(playerExists)
     }
@@ -98,8 +96,7 @@ class GameTests {
     @Test
     fun `getPlayerOrNull returns the player with the given username if they exist in game`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser(0))
-        game.addPlayer(player = player)
+        val player = game.getPlayer(username = game.creator.username)
 
         val foundPlayer = game.getPlayerOrNull(defaultUser(0).username)
 
@@ -111,16 +108,15 @@ class GameTests {
     fun `getPlayerOrNull returns null if the player with the given username does not exist in game`() {
         val game = defaultGame
 
-        val foundPlayer = game.getPlayerOrNull(defaultUser(0).username)
+        val foundPlayer = game.getPlayerOrNull(defaultUser(1).username)
 
         assertNull(foundPlayer)
     }
 
     @Test
-    fun `getOpponent returns the opponent of the player with the given username  if there's an opponent`() {
+    fun `getOpponent returns the opponent of the player with the given username if there's an opponent`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser(0))
-        game.addPlayer(player = player)
+        val player = game.getPlayer(username = game.creator.username)
         val opponent = Player(
             game = game,
             user = User(
@@ -140,8 +136,7 @@ class GameTests {
     @Test
     fun `getOpponent throws NotFoundException if there's no opponent`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser(0))
-        game.addPlayer(player = player)
+        val player = game.getPlayer(username = game.creator.username)
 
         assertFailsWith<NotFoundException> {
             game.getOpponent(player)
@@ -171,7 +166,6 @@ class GameTests {
                 points = 0
             )
         )
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         val player3 = Player(
@@ -192,7 +186,7 @@ class GameTests {
     @Test
     fun `areFleetsDeployed returns true if both players deployed their fleets`() {
         val game = defaultGame
-        val player = Player(game = game, user = defaultUser(0))
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(
             game = game,
             user = User(
@@ -202,7 +196,6 @@ class GameTests {
                 points = 0
             )
         )
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
         player.deployFleet(listOf(defaultUndeployedShip))
         player2.deployFleet(listOf(defaultUndeployedShip))
@@ -225,7 +218,6 @@ class GameTests {
                 points = 0
             )
         )
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         val areFleetsDeployed = game.areFleetsDeployed()
@@ -246,7 +238,6 @@ class GameTests {
                 points = 0
             )
         )
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
         player.deployFleet(listOf(defaultUndeployedShip))
 
@@ -405,7 +396,6 @@ class GameTests {
         )
         val player = Player(game = game, user = user)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         assertEquals(GameState.GamePhase.WAITING_FOR_PLAYERS, game.state.phase)
@@ -427,7 +417,6 @@ class GameTests {
         )
         val player = Player(game = game, user = user)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         assertNull(game.state.winner)
@@ -447,9 +436,8 @@ class GameTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         val userPoints = user.points
@@ -459,8 +447,8 @@ class GameTests {
 
         game.finishGame(winner = player)
 
-        assertEquals(userPoints + player.points, user.points)
-        assertEquals(user2Points + player2.points, user2.points)
+        assertEquals(userPoints + player.points, player.user.points)
+        assertEquals(user2Points + player2.points, player2.user.points)
     }
 
     @Test
@@ -495,9 +483,8 @@ class GameTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.phaseExpirationTime = Timestamp.from(Instant.now().minusSeconds(1))

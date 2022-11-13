@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.users.dtos
 import pt.isel.daw.battleships.domain.users.User
 
 /**
- * Represents a User DTO.
+ * A User DTO.
  *
  * @property username the username of the user
  * @property email the email of the user

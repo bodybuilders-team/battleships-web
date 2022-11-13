@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos.shot
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 
 /**
- * Represents an Unfired Shot DTO.
+ * An Unfired Shot DTO.
  *
  * @property coordinate the coordinate of the shot
  */

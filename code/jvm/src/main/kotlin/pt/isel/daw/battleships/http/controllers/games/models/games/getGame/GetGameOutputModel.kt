@@ -6,7 +6,7 @@ import pt.isel.daw.battleships.http.controllers.games.models.games.PlayerModel
 import pt.isel.daw.battleships.service.games.dtos.game.GameDTO
 
 /**
- * Represents a Get Game Output Model.
+ * A Get Game Output Model.
  *
  * @property id the id of the game
  * @property name the name of the session

@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.http.controllers.home.models.AuthorModel
 import pt.isel.daw.battleships.http.controllers.home.models.VCRepositoryModel
 
 /**
- * Represents a Get Home Output Model.
+ * A Get Home Output Model.
  *
  * @property title the title of the application
  * @property version the version of the application

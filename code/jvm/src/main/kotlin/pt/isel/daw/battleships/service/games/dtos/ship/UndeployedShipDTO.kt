@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos.ship
 import pt.isel.daw.battleships.service.games.dtos.CoordinateDTO
 
 /**
- * Represents an Undeployed Ship DTO.
+ * An Undeployed Ship DTO.
  *
  * @property type the type of the ship
  * @property coordinate the coordinate of the ship

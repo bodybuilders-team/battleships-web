@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
 /**
- * Represents an Undeployed Ship Model.
+ * An Undeployed Ship Model.
  *
  * @property type type of the ship
  * @property coordinate coordinate of the ship

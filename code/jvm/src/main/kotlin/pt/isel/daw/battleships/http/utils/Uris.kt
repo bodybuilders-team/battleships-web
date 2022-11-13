@@ -1,10 +1,10 @@
-package pt.isel.daw.battleships.http
+package pt.isel.daw.battleships.http.utils
 
 import org.springframework.web.util.UriTemplate
 import java.net.URI
 
 /**
- * Contains the URIs of the API.
+ * The URIs of the API.
  */
 object Uris {
 

@@ -11,6 +11,7 @@ import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.InvalidLoginException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
+import pt.isel.daw.battleships.service.exceptions.InvalidPasswordException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.exceptions.RefreshTokenExpiredException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
@@ -20,6 +21,7 @@ import pt.isel.daw.battleships.service.users.dtos.login.LoginUserOutputDTO
 import pt.isel.daw.battleships.service.users.dtos.refreshToken.RefreshTokenOutputDTO
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserOutputDTO
+import pt.isel.daw.battleships.service.users.utils.UsersOrder
 import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
 import pt.isel.daw.battleships.utils.JwtProvider
@@ -81,6 +83,10 @@ class UsersServiceImpl(
 
         if (usersRepository.existsByEmail(email = registerUserInputDTO.email)) {
             throw AlreadyExistsException("User with email ${registerUserInputDTO.email} already exists")
+        }
+
+        if (registerUserInputDTO.password.length < MIN_PASSWORD_LENGTH) {
+            throw InvalidPasswordException("Password must be at least $MIN_PASSWORD_LENGTH characters long")
         }
 
         val user = usersRepository.save(
@@ -175,7 +181,6 @@ class UsersServiceImpl(
      * Creates the access and refresh tokens for the given user.
      *
      * @param user the user to create the tokens for
-     *
      * @return the access and refresh tokens
      */
     private fun createTokens(user: User): Tokens {
@@ -228,7 +233,7 @@ class UsersServiceImpl(
     }
 
     /**
-     * Represents the tokens of a user.
+     * The tokens of a user.
      *
      * @property accessToken the access token
      * @property refreshToken the refresh token
@@ -239,6 +244,7 @@ class UsersServiceImpl(
     )
 
     companion object {
-        const val MAX_USERS_LIMIT = 100
+        private const val MAX_USERS_LIMIT = 100
+        private const val MIN_PASSWORD_LENGTH = 8
     }
 }

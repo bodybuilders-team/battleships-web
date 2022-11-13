@@ -8,6 +8,7 @@ import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.IN_PROGRESS
 import pt.isel.daw.battleships.domain.games.game.GameState.GamePhase.WAITING_FOR_PLAYERS
 import java.sql.Timestamp
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -48,7 +49,7 @@ class GameState {
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(
         phase: GamePhase = WAITING_FOR_PLAYERS,
-        phaseExpirationTime: Timestamp = Timestamp.from(Instant.now().plusSeconds(MATCHMAKING_MAX_TIME)),
+        phaseExpirationTime: Timestamp = Timestamp.from(Instant.now().plus(MATCHMAKING_MAX_TIME, ChronoUnit.DAYS)),
         round: Int? = null,
         turn: Player? = null,
         winner: Player? = null
@@ -87,7 +88,7 @@ class GameState {
         phaseExpirationTime.time < System.currentTimeMillis() && phase != FINISHED
 
     /**
-     * Represents the game phases.
+     * The game phases.
      *
      * @property WAITING_FOR_PLAYERS the game is waiting for players to join
      * @property DEPLOYING_FLEETS the game is waiting for players to place their ships
@@ -115,6 +116,6 @@ class GameState {
     }
 
     companion object {
-        private const val MATCHMAKING_MAX_TIME = 60L
+        private const val MATCHMAKING_MAX_TIME = 2L // days
     }
 }

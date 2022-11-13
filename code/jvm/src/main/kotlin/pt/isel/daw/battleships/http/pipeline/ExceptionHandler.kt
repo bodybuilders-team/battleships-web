@@ -28,6 +28,7 @@ import pt.isel.daw.battleships.service.exceptions.FleetAlreadyDeployedException
 import pt.isel.daw.battleships.service.exceptions.InvalidFleetException
 import pt.isel.daw.battleships.service.exceptions.InvalidLoginException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
+import pt.isel.daw.battleships.service.exceptions.InvalidPasswordException
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
 import pt.isel.daw.battleships.service.exceptions.InvalidTurnException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
@@ -51,6 +52,7 @@ class ExceptionHandler {
     @ExceptionHandler(
         value = [
             AlreadyExistsException::class,
+            InvalidPasswordException::class,
             AlreadyJoinedException::class,
             FleetAlreadyDeployedException::class,
             InvalidFleetException::class,

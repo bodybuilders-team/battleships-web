@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet.DeployFleetInputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.deployFleet.DeployFleetOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.fireShots.FireShotsInputModel
@@ -20,12 +19,15 @@ import pt.isel.daw.battleships.http.controllers.games.models.players.getShots.Ge
 import pt.isel.daw.battleships.http.controllers.games.models.players.ship.DeployedShipModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotModel
 import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotsModel
+import pt.isel.daw.battleships.http.controllers.games.models.players.shot.UnfiredShotModel
 import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
-import pt.isel.daw.battleships.http.media.siren.Link
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
+import pt.isel.daw.battleships.http.utils.Links
+import pt.isel.daw.battleships.http.utils.Rels
+import pt.isel.daw.battleships.http.utils.Uris
 import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.service.games.PlayersService
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
@@ -65,19 +67,13 @@ class PlayersController(
             .map(::DeployedShipModel)
 
         return SirenEntity(
-            `class` = listOf("my-fleet"),
+            `class` = listOf(Rels.GET_MY_FLEET),
             properties = GetFleetOutputModel(ships = ships),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.myFleet(gameId = gameId)
-                )
+                Links.self(Uris.myFleet(gameId = gameId))
             ),
             entities = listOf(
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }
@@ -107,13 +103,10 @@ class PlayersController(
             properties = DeployFleetOutputModel(successfullyDeployed = true),
             entities = listOf(
                 EmbeddedLink(
-                    rel = listOf("fleet"),
+                    rel = listOf(Rels.MY_FLEET),
                     href = Uris.myFleet(gameId = gameId)
                 ),
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }
@@ -138,10 +131,7 @@ class PlayersController(
         val rows = Array(boardSize) { CharArray(boardSize) { '·' } }
 
         val fleet = playersService.getFleet(token = token, gameId = gameId).ships
-        val shots = playersService.getOpponentShots(
-            token = token,
-            gameId = gameId
-        ).shots
+        val shots = playersService.getOpponentShots(token = token, gameId = gameId).shots
 
         fleet.forEach { ship ->
             val shipTypeIndex = types.indexOfFirst { it.shipName == ship.type }
@@ -166,29 +156,17 @@ class PlayersController(
             val shotX = shot.coordinate.col - 'A'
             val shotY = shot.coordinate.row - 1
 
-            rows[shotY][shotX] =
-                if (
-                    shot.result.result == "HIT" ||
-                    shot.result.result == "SUNK"
-                ) 'X' else 'M'
+            rows[shotY][shotX] = if (shot.result.result == "HIT" || shot.result.result == "SUNK") 'X' else 'M'
         }
 
-        val board = rows.map(::String)
-
         return SirenEntity(
-            `class` = listOf("my-board"),
-            properties = GetBoardOutputModel(board = board),
+            `class` = listOf(Rels.GET_MY_BOARD),
+            properties = GetBoardOutputModel(board = rows.map(::String)),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.myFleet(gameId = gameId)
-                )
+                Links.self(Uris.myFleet(gameId = gameId))
             ),
             entities = listOf(
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }
@@ -213,19 +191,13 @@ class PlayersController(
             .map(::DeployedShipModel)
 
         return SirenEntity(
-            `class` = listOf("opponent-fleet"),
+            `class` = listOf(Rels.GET_OPPONENT_FLEET),
             properties = GetFleetOutputModel(ships = ships),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.opponentFleet(gameId = gameId)
-                )
+                Links.self(Uris.opponentFleet(gameId = gameId))
             ),
             entities = listOf(
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }
@@ -249,19 +221,13 @@ class PlayersController(
             .map(::FiredShotModel)
 
         return SirenEntity(
-            `class` = listOf("my-shots"),
+            `class` = listOf(Rels.GET_MY_SHOTS),
             properties = FiredShotsModel(shots = shots),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.myShots(gameId = gameId)
-                )
+                Links.self(Uris.myShots(gameId = gameId))
             ),
             entities = listOf(
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }
@@ -286,25 +252,19 @@ class PlayersController(
             .fireShots(
                 token = token,
                 gameId = gameId,
-                unfiredShotsDTO = UnfiredShotsDTO(shots = shots.shots.map { it.toUnfiredShotDTO() })
+                unfiredShotsDTO = UnfiredShotsDTO(shots = shots.shots.map(UnfiredShotModel::toUnfiredShotDTO))
             )
             .shots
             .map { FiredShotModel(firedShotDTO = it) }
 
         return SirenEntity(
-            `class` = listOf("my-shots"),
+            `class` = listOf(Rels.FIRE_SHOTS),
             properties = FiredShotsModel(shots = shotsModels),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.myShots(gameId = gameId)
-                )
+                Links.self(Uris.myShots(gameId = gameId))
             ),
             entities = listOf(
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }
@@ -328,19 +288,13 @@ class PlayersController(
             .map(::FiredShotModel)
 
         return SirenEntity(
-            `class` = listOf("opponent-shots"),
+            `class` = listOf(Rels.GET_OPPONENT_SHOTS),
             properties = FiredShotsModel(shots = shots),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.opponentShots(gameId = gameId)
-                )
+                Links.self(Uris.opponentShots(gameId = gameId))
             ),
             entities = listOf(
-                EmbeddedLink(
-                    rel = listOf("game"),
-                    href = Uris.gameById(gameId = gameId)
-                )
+                Links.game(gameId = gameId)
             )
         )
     }

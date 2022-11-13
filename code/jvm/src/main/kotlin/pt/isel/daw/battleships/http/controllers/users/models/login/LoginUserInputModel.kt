@@ -8,7 +8,7 @@ import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
 import javax.validation.constraints.Size
 
 /**
- * Represents a Login User Input Model.
+ * A Login User Input Model.
  *
  * @property username the username of the user
  * @property password the password of the user

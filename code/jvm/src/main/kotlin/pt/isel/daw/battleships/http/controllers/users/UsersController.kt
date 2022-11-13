@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.daw.battleships.http.Params
-import pt.isel.daw.battleships.http.Uris
 import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.getUsers.GetUsersOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserInputModel
@@ -19,14 +17,17 @@ import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.Refres
 import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserOutputModel
 import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
-import pt.isel.daw.battleships.http.media.siren.Action
-import pt.isel.daw.battleships.http.media.siren.Link
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SubEntity
 import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
-import pt.isel.daw.battleships.service.users.UsersOrder
+import pt.isel.daw.battleships.http.utils.Actions
+import pt.isel.daw.battleships.http.utils.Links
+import pt.isel.daw.battleships.http.utils.Params
+import pt.isel.daw.battleships.http.utils.Rels
+import pt.isel.daw.battleships.http.utils.Uris
 import pt.isel.daw.battleships.service.users.UsersService
+import pt.isel.daw.battleships.service.users.utils.UsersOrder
 import javax.validation.Valid
 
 /**
@@ -45,48 +46,17 @@ class UsersController(private val usersService: UsersService) {
      */
     @GetMapping(Uris.USER_HOME)
     fun getUserHome() = SirenEntity<Unit>(
-        `class` = listOf("user-home"),
+        `class` = listOf(Rels.USER_HOME),
         actions = listOf(
-            Action(
-                name = "logout",
-                title = "Logout",
-                method = "POST",
-                href = Uris.usersLogout()
-            ),
-            Action(
-                name = "refresh-token",
-                title = "Refresh Token",
-                method = "POST",
-                href = Uris.usersRefreshToken()
-            ),
-            Action(
-                name = "matchmake",
-                title = "Matchmake",
-                method = "POST",
-                href = Uris.gamesMatchmake()
-            ),
-            Action(
-                name = "list-games",
-                title = "List Games",
-                method = "GET",
-                href = Uris.games()
-            ),
-            Action(
-                name = "create-game",
-                title = "Create Game",
-                method = "POST",
-                href = Uris.games()
-            )
+            Actions.logout,
+            Actions.refreshToken,
+            Actions.listGames,
+            Actions.createGame,
+            Actions.matchmake
         ),
         links = listOf(
-            Link(
-                rel = listOf("self"),
-                href = Uris.userHome()
-            ),
-            Link(
-                rel = listOf("home"),
-                href = Uris.home()
-            )
+            Links.self(Uris.userHome()),
+            Links.home
         )
     )
 
@@ -107,42 +77,33 @@ class UsersController(private val usersService: UsersService) {
         @RequestParam(Params.ORDER_BY_PARAM) orderBy: String? = null,
         @RequestParam(Params.SORT_DIRECTION_PARAM) sortDirection: String? = null
     ): SirenEntity<GetUsersOutputModel> {
-        val ascending = when (sortDirection ?: Params.SORT_DIRECTION_ASCENDING) {
-            Params.SORT_DIRECTION_ASCENDING -> true
-            Params.SORT_DIRECTION_DESCENDING -> false
-            else -> throw IllegalArgumentException(
-                "Invalid sort order, must be ${Params.SORT_DIRECTION_ASCENDING} or ${Params.SORT_DIRECTION_DESCENDING}"
-            )
-        }
-
-        val sortBy = if (orderBy != null) UsersOrder.valueOf(orderBy) else UsersOrder.POINTS
-
-        val users = usersService.getUsers(
+        val usersDTO = usersService.getUsers(
             offset = offset ?: Params.OFFSET_DEFAULT,
             limit = limit ?: Params.LIMIT_DEFAULT,
-            orderBy = sortBy,
-            ascending = ascending
+            orderBy = if (orderBy != null) UsersOrder.valueOf(orderBy) else UsersOrder.POINTS,
+            ascending = when (sortDirection ?: Params.SORT_DIR_ASCENDING) {
+                Params.SORT_DIR_ASCENDING -> true
+                Params.SORT_DIR_DESCENDING -> false
+                else -> throw IllegalArgumentException(
+                    "Invalid sort order, must be ${Params.SORT_DIR_ASCENDING} or ${Params.SORT_DIR_DESCENDING}"
+                )
+            }
         )
 
         return SirenEntity(
-            `class` = listOf("users"),
-            properties = GetUsersOutputModel(totalCount = users.totalCount),
+            `class` = listOf(Rels.LIST_USERS),
+            properties = GetUsersOutputModel(totalCount = usersDTO.totalCount),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.users()
-                )
+                Links.self(Uris.users()),
+                Links.home
             ),
-            entities = users.users.map { user ->
+            entities = usersDTO.users.map { user ->
                 SubEntity.EmbeddedSubEntity(
-                    rel = listOf("item", "user-${user.username}"),
-                    `class` = listOf("user"),
+                    rel = listOf(Rels.ITEM, "user-${user.username}"),
                     properties = GetUserOutputModel(user),
                     links = listOf(
-                        Link(
-                            rel = listOf("self"),
-                            href = Uris.userByUsername(username = user.username)
-                        )
+                        Links.self(Uris.userByUsername(username = user.username)),
+                        Links.home
                     )
                 )
             }
@@ -163,31 +124,21 @@ class UsersController(private val usersService: UsersService) {
         val registerDTO = usersService.register(registerUserInputDTO = userData.toRegisterUserInputDTO())
 
         return SirenEntity(
-            `class` = listOf("user"),
+            `class` = listOf(Rels.REGISTER),
             properties = RegisterUserOutputModel(registerUserOutputDTO = registerDTO),
             links = listOf(
-                Link(
-                    rel = listOf("home"),
-                    href = Uris.home()
-                ),
-                Link(
-                    rel = listOf("user-home"),
-                    href = Uris.userHome()
-                )
+                Links.home,
+                Links.userHome
             ),
             entities = listOf(
                 EmbeddedLink(
-                    rel = listOf("user"),
+                    rel = listOf(Rels.USER),
                     href = Uris.userByUsername(username = userData.username)
                 )
             ),
             actions = listOf(
-                Action(
-                    name = "refresh-token",
-                    title = "Refresh Token",
-                    method = "POST",
-                    href = Uris.usersRefreshToken()
-                )
+                Actions.refreshToken,
+                Actions.logout
             )
         )
     }
@@ -206,31 +157,21 @@ class UsersController(private val usersService: UsersService) {
         val loginDTO = usersService.login(loginUserInputDTO = userData.toLoginUserInputDTO())
 
         return SirenEntity(
-            `class` = listOf("user"),
+            `class` = listOf(Rels.LOGIN),
             properties = LoginUserOutputModel(loginUserOutputDTO = loginDTO),
             links = listOf(
-                Link(
-                    rel = listOf("home"),
-                    href = Uris.home()
-                ),
-                Link(
-                    rel = listOf("user-home"),
-                    href = Uris.userHome()
-                )
+                Links.home,
+                Links.userHome
             ),
             entities = listOf(
                 EmbeddedLink(
-                    rel = listOf("user"),
+                    rel = listOf(Rels.USER),
                     href = Uris.userByUsername(username = userData.username)
                 )
             ),
             actions = listOf(
-                Action(
-                    name = "refresh-token",
-                    title = "Refresh Token",
-                    method = "POST",
-                    href = Uris.usersRefreshToken()
-                )
+                Actions.refreshToken,
+                Actions.logout
             )
         )
     }
@@ -249,26 +190,13 @@ class UsersController(private val usersService: UsersService) {
         usersService.logout(refreshToken = logoutUserInputModel.refreshToken)
 
         return SirenEntity(
-            `class` = listOf("user"),
+            `class` = listOf(Rels.LOGOUT),
             links = listOf(
-                Link(
-                    rel = listOf("home"),
-                    href = Uris.home()
-                )
+                Links.home
             ),
             actions = listOf(
-                Action(
-                    name = "register",
-                    title = "Register",
-                    method = "POST",
-                    href = Uris.users()
-                ),
-                Action(
-                    name = "login",
-                    title = "Login",
-                    method = "POST",
-                    href = Uris.usersLogin()
-                )
+                Actions.login,
+                Actions.register
             )
         )
     }
@@ -287,13 +215,10 @@ class UsersController(private val usersService: UsersService) {
         val refreshDTO = usersService.refreshToken(refreshToken = refreshTokenInputModel.refreshToken)
 
         return SirenEntity(
-            `class` = listOf("user"),
+            `class` = listOf(Rels.REFRESH_TOKEN),
             properties = RefreshTokenOutputModel(refreshTokenOutputDTO = refreshDTO),
             links = listOf(
-                Link(
-                    rel = listOf("home"),
-                    href = Uris.home()
-                )
+                Links.home
             )
         )
     }
@@ -308,20 +233,14 @@ class UsersController(private val usersService: UsersService) {
     fun getUser(
         @PathVariable username: String
     ): SirenEntity<GetUserOutputModel> {
-        val user = usersService.getUser(username = username)
+        val userDTO = usersService.getUser(username = username)
 
         return SirenEntity(
-            `class` = listOf("user"),
-            properties = GetUserOutputModel(userDTO = user),
+            `class` = listOf(Rels.USER),
+            properties = GetUserOutputModel(userDTO = userDTO),
             links = listOf(
-                Link(
-                    rel = listOf("self"),
-                    href = Uris.userByUsername(username = username)
-                ),
-                Link(
-                    rel = listOf("home"),
-                    href = Uris.home()
-                )
+                Links.self(Uris.userByUsername(username = username)),
+                Links.home
             )
         )
     }

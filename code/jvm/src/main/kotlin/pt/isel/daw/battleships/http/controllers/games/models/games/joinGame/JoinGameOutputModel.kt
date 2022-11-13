@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.games.models.games.joinGame
 
 /**
- * Represents a Join Game Output Model.
+ * A Join Game Output Model.
  *
  * @property gameId the id of the joined game
  */

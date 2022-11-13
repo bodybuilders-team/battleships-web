@@ -46,7 +46,8 @@ interface PlayersService {
      * @throws FleetAlreadyDeployedException if the fleet is already deployed
      * @throws InvalidFleetException if the fleet is invalid
      * @throws InvalidShipTypeException if the ship type is invalid
-     * @throws FleetDeployTimeExpiredException if the fleet deploy time has expired@throws AuthenticationException if the token is invalid
+     * @throws FleetDeployTimeExpiredException if the fleet deploy time has expired
+     * @throws AuthenticationException if the token is invalid
      * @throws NotFoundException if the user is not found
      * @throws NotFoundException if the game does not exist
      * @throws UserNotInGameException if the player is not playing the game

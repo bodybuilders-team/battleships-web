@@ -7,7 +7,7 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.NotNull
 
 /**
- * Represents a Game Config Model.
+ * A Game Config Model.
  *
  * @property gridSize the size of the grid
  * @property maxTimeForLayoutPhase the maximum time allowed for the layout phase

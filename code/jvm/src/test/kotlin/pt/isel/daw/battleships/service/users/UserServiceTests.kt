@@ -26,6 +26,7 @@ import pt.isel.daw.battleships.service.users.dtos.UserDTOTests.Companion.default
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
 import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.service.users.utils.UsersOrder
 import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
 import pt.isel.daw.battleships.utils.JwtProvider

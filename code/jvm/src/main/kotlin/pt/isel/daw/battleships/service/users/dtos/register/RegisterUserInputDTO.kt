@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.users.dtos.register
 
 /**
- * Represents a Register User Input DTO.
+ * A Register User Input DTO.
  *
  * @property username name of the user
  * @property email email of the user

@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos
 import pt.isel.daw.battleships.domain.games.Player
 
 /**
- * Represents a Player DTO.
+ * A Player DTO.
  *
  * @property username the username of the player
  * @property points the points of the player

@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.domain.games.game.GameConfig
 import pt.isel.daw.battleships.service.games.dtos.ship.ShipTypeDTO
 
 /**
- * Represents a Game Config DTO.
+ * A Game Config DTO.
  *
  * @property gridSize the size of the grid
  * @property maxTimePerRound the maximum time per round

@@ -5,7 +5,7 @@ import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedFleetDTO
 import javax.validation.constraints.Size
 
 /**
- * Represents a Deploy Fleet Input Model.
+ * A Deploy Fleet Input Model.
  *
  * @property ships the list of ships to be deployed
  */

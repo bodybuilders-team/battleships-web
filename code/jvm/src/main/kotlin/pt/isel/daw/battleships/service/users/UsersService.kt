@@ -4,6 +4,7 @@ import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.InvalidLoginException
 import pt.isel.daw.battleships.service.exceptions.InvalidPaginationParamsException
+import pt.isel.daw.battleships.service.exceptions.InvalidPasswordException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.exceptions.RefreshTokenExpiredException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
@@ -13,6 +14,7 @@ import pt.isel.daw.battleships.service.users.dtos.login.LoginUserOutputDTO
 import pt.isel.daw.battleships.service.users.dtos.refreshToken.RefreshTokenOutputDTO
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
 import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserOutputDTO
+import pt.isel.daw.battleships.service.users.utils.UsersOrder
 
 /**
  * Service that handles the business logic of the users.
@@ -39,6 +41,7 @@ interface UsersService {
      *
      * @return the JWT token for the new user
      * @throws AlreadyExistsException if the user already exists
+     * @throws InvalidPasswordException if the password is invalid
      */
     fun register(registerUserInputDTO: RegisterUserInputDTO): RegisterUserOutputDTO
 

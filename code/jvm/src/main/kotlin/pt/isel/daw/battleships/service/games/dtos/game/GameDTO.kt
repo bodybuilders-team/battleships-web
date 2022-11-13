@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.domain.games.game.Game
 import pt.isel.daw.battleships.service.games.dtos.PlayerDTO
 
 /**
- * Represents a Game DTO.
+ * A Game DTO.
  *
  * @property id the id of the game
  * @property name the name of the game

@@ -70,9 +70,10 @@ class HashingUtils(private val serverConfig: ServerConfiguration) {
         Mac.getInstance(SECRET_KEY_ALGORITHM)
             .also { it.init(key) }
             .doFinal(this.toByteArray())
-            .fold("") { str, it -> str + "%02x".format(it) }
+            .fold("") { str, it -> str + HEX_FORMAT.format(it) }
 
     companion object {
         private const val SECRET_KEY_ALGORITHM = "HmacSHA512"
+        private const val HEX_FORMAT = "%02x"
     }
 }

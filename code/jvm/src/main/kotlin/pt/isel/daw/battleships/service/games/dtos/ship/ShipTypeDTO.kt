@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos.ship
 import pt.isel.daw.battleships.domain.games.ship.ShipType
 
 /**
- * Represents a Ship Type DTO.
+ * A Ship Type DTO.
  *
  * @property shipName the name of the ship
  * @property quantity the quantity of ships of this type

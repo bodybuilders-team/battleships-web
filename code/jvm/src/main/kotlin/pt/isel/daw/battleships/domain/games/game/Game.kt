@@ -52,7 +52,7 @@ class Game {
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "game")
-    val players: MutableList<Player> = mutableListOf()
+    val players: MutableList<Player> = mutableListOf() // TODO: maybe change to Pair? or something else?
 
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(
@@ -72,6 +72,8 @@ class Game {
         this.config = config
 
         this.state = state
+
+        this.players.add(Player(game = this, user = creator))
     }
 
     /**
@@ -112,9 +114,14 @@ class Game {
      * @return the opponent of the player that is playing the game
      * @throws NotFoundException if there is no opponent yet
      */
-    fun getOpponent(player: Player): Player = // TODO check if the player is playing the game
-        players.find { it.user.username != player.user.username }
-            ?: throw NotFoundException("There's no opponent yet")
+    fun getOpponent(player: Player): Player {
+        if (player !in players) {
+            throw UserNotInGameException("Player with username ${player.user.username} is not part of the game")
+        }
+
+        return players.find { it != player }
+            ?: throw NotFoundException("There is no opponent yet")
+    }
 
     /**
      * Adds a player to the game.

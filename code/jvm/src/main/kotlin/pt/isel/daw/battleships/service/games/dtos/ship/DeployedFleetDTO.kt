@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.games.dtos.ship
 
 /**
- * Represents a Deployed Fleet DTO.
+ * A Deployed Fleet DTO.
  *
  * @property ships the list of ship DTOs
  */

@@ -3,6 +3,6 @@ package pt.isel.daw.battleships.http.controllers.games.models.players.getOpponen
 import pt.isel.daw.battleships.http.controllers.games.models.players.shot.FiredShotsModel
 
 /**
- * Represents a Get Opponent Shots Output Model.
+ * A Get Opponent Shots Output Model.
  */
 typealias GetOpponentShotsOutputModel = FiredShotsModel

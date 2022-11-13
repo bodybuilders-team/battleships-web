@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos.shot
 import pt.isel.daw.battleships.domain.games.Shot
 
 /**
- * Represents a Shot Result DTO.
+ * A Shot Result DTO.
  *
  * @property result the result of the shot
  */

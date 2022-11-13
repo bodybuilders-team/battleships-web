@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.http.controllers.games.models.players.shot.Unfire
 import javax.validation.constraints.Size
 
 /**
- * Represents a Fire Shots Input Model.
+ * A Fire Shots Input Model.
  *
  * @property shots the list of shots to be created
  */

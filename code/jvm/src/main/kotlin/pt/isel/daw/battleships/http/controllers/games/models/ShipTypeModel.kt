@@ -6,7 +6,7 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 
 /**
- * Represents a Ship Type Model.
+ * A Ship Type Model.
  *
  * @property shipName the name of the ship type
  * @property size the size of the ship type

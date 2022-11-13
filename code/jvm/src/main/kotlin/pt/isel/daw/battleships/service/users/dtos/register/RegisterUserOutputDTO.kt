@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.users.dtos.register
 
 /**
- * Represents a Register User Output DTO.
+ * A Register User Output DTO.
  *
  * @property username name of the user
  * @property accessToken the access token

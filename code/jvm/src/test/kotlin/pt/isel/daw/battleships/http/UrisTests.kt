@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.http
 
 import org.springframework.web.util.UriTemplate
+import pt.isel.daw.battleships.http.utils.Uris
 import java.net.URI
 import kotlin.test.Test
 import kotlin.test.assertEquals

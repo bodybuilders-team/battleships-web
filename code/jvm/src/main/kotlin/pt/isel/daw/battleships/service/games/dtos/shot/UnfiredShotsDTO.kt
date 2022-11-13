@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.service.games.dtos.shot
 
 /**
- * Represents an Unfired Shots DTO.
+ * An Unfired Shots DTO.
  *
  * @property shots the list of shots
  */

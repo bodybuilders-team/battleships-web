@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.http.controllers.games.models.games.matchmake
 import pt.isel.daw.battleships.service.games.dtos.game.MatchmakeResponseDTO
 
 /**
- * Represents a Matchmake Output Model.
+ * A Matchmake Output Model.
  *
  * @property wasCreated whether the game was created or not
  */

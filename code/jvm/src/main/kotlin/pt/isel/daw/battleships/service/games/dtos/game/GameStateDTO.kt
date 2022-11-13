@@ -3,7 +3,7 @@ package pt.isel.daw.battleships.service.games.dtos.game
 import pt.isel.daw.battleships.domain.games.game.GameState
 
 /**
- * Represents a Game State DTO.
+ * A Game State DTO.
  *
  * @property phase the phase of the game
  * @property phaseEndTime the time when the current phase ends

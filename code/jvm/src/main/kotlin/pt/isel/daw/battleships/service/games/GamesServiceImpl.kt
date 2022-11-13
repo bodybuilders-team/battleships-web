@@ -21,9 +21,6 @@ import pt.isel.daw.battleships.service.games.dtos.game.MatchmakeResponseDTO
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
 import pt.isel.daw.battleships.service.utils.findFirstOrNull
 import pt.isel.daw.battleships.utils.JwtProvider
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
 
 /**
@@ -81,7 +78,7 @@ class GamesServiceImpl(
                 val newGame = createGame(
                     creator = user,
                     createGameRequestDTO = CreateGameRequestDTO(
-                        name = "Game",
+                        name = DEFAULT_GAME_NAME,
                         config = gameConfigDTO
                     )
                 )
@@ -134,17 +131,15 @@ class GamesServiceImpl(
      *
      * @return the new game
      */
-    private fun createGame(creator: User, createGameRequestDTO: CreateGameRequestDTO): Game {
-        val game = Game(
-            name = createGameRequestDTO.name,
-            creator = creator,
-            config = createGameRequestDTO.config.toGameConfig(),
-            state = GameState(phaseExpirationTime = Timestamp.from(Instant.now().plus(1L, ChronoUnit.DAYS)))
+    private fun createGame(creator: User, createGameRequestDTO: CreateGameRequestDTO): Game =
+        gamesRepository.save(
+            Game(
+                name = createGameRequestDTO.name,
+                creator = creator,
+                config = createGameRequestDTO.config.toGameConfig(),
+                state = GameState()
+            )
         )
-
-        game.addPlayer(player = Player(game = game, user = creator)) // TODO add player in Game constructor?
-        return gamesRepository.save(game)
-    }
 
     /**
      * Joins a game.
@@ -192,6 +187,7 @@ class GamesServiceImpl(
     }
 
     companion object {
-        const val MAX_GAMES_LIMIT = 100
+        private const val MAX_GAMES_LIMIT = 100
+        private const val DEFAULT_GAME_NAME = "unnamed Game"
     }
 }

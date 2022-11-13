@@ -1,9 +1,9 @@
 package pt.isel.daw.battleships.http
 
-import pt.isel.daw.battleships.http.Params.LIMIT_PARAM
-import pt.isel.daw.battleships.http.Params.OFFSET_PARAM
-import pt.isel.daw.battleships.http.Params.ORDER_BY_PARAM
-import pt.isel.daw.battleships.http.Params.SORT_DIRECTION_PARAM
+import pt.isel.daw.battleships.http.utils.Params.LIMIT_PARAM
+import pt.isel.daw.battleships.http.utils.Params.OFFSET_PARAM
+import pt.isel.daw.battleships.http.utils.Params.ORDER_BY_PARAM
+import pt.isel.daw.battleships.http.utils.Params.SORT_DIRECTION_PARAM
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,6 +26,6 @@ class ParamsTests {
 
     @Test
     fun `SORT_DIRECTION_PARAM is correct`() {
-        assertEquals("sortDirectionStr", SORT_DIRECTION_PARAM)
+        assertEquals("sortDirection", SORT_DIRECTION_PARAM)
     }
 }

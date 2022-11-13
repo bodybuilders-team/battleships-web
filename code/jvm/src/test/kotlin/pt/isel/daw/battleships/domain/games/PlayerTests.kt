@@ -258,9 +258,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -290,9 +289,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -315,9 +313,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -340,9 +337,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -363,9 +359,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -385,9 +380,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -421,9 +415,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -447,9 +440,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1
@@ -473,9 +465,8 @@ class PlayerTests {
             passwordHash = "a".repeat(User.PASSWORD_HASH_LENGTH),
             points = 0
         )
-        val player = Player(game = game, user = user)
+        val player = game.getPlayer(username = game.creator.username)
         val player2 = Player(game = game, user = user2)
-        game.addPlayer(player = player)
         game.addPlayer(player = player2)
 
         game.state.round = 1

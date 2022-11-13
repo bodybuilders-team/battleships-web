@@ -33,7 +33,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
     )
 
     /**
-     * Represents a JWT Payload.
+     * A JWT Payload.
      *
      * @property username the username of the user
      */
@@ -64,7 +64,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
     }
 
     /**
-     * Represents a Refresh Token.
+     * A Refresh Token.
      *
      * @property token the token
      * @property expirationDate the expiration date of the token

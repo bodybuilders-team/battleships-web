@@ -5,7 +5,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.Size
 
 /**
- * Represents a Register User Input Model.
+ * A Register User Input Model.
  *
  * @property username the username of the user to be created
  * @property email the email of the user to be created

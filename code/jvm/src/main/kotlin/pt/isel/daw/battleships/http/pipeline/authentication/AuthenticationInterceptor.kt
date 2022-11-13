@@ -1,7 +1,5 @@
 package pt.isel.daw.battleships.http.pipeline.authentication
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
@@ -38,10 +36,11 @@ class AuthenticationInterceptor(
                 )
         ) return true
 
-        val authHeader = request.getHeader(AUTHORIZATION_HEADER) ?: throw AuthenticationException("Missing Token")
+        val authHeader = request.getHeader(AUTHORIZATION_HEADER)
+            ?: throw AuthenticationException("Missing Token")
 
-        val token =
-            jwtProvider.parseBearerToken(authHeader) ?: throw AuthenticationException("Token is not a Bearer Token")
+        val token = jwtProvider.parseBearerToken(authHeader)
+            ?: throw AuthenticationException("Token is not a Bearer Token")
 
         request.setAttribute(TOKEN_ATTRIBUTE_NAME, token)
         return true
@@ -50,7 +49,5 @@ class AuthenticationInterceptor(
     companion object {
         private const val AUTHORIZATION_HEADER = "Authorization"
         private const val TOKEN_ATTRIBUTE_NAME = "token"
-
-        val mapper = ObjectMapper().also { it.setSerializationInclusion(JsonInclude.Include.NON_NULL) }
     }
 }

@@ -4,7 +4,7 @@ import pt.isel.daw.battleships.http.controllers.games.models.CoordinateModel
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotDTO
 
 /**
- * Represents an Unfired Shot Model.
+ * An Unfired Shot Model.
  *
  * @property coordinate the coordinate of the shot
  */

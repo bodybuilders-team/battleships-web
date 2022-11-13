@@ -6,7 +6,7 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.Pattern
 
 /**
- * Represents a Coordinate Model.
+ * A Coordinate Model.
  *
  * @property col the column of the coordinate
  * @property row the row of the coordinate

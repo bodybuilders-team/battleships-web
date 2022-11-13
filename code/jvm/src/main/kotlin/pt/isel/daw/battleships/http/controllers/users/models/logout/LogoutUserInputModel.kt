@@ -1,7 +1,7 @@
 package pt.isel.daw.battleships.http.controllers.users.models.logout
 
 /**
- * Represents a Logout User Input Model.
+ * A Logout User Input Model.
  *
  * @property refreshToken the refresh token of the user
  */

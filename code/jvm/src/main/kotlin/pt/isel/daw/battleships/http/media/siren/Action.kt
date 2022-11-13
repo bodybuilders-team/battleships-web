@@ -24,7 +24,7 @@ data class Action(
     val fields: List<Field>? = null
 ) {
     /**
-     * Represents a field that is part of an action.
+     * A field that is part of an action.
      *
      * @property name the name of the field
      * @property class the class of the field (optional)
