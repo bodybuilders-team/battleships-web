@@ -74,7 +74,7 @@ ALTER TABLE games
     ADD CONSTRAINT turn_fk
         FOREIGN KEY (turn) REFERENCES players (id),
     ADD CONSTRAINT winner_fk
-        FOREIGN KEY (winner) REFERENCES users (id);
+        FOREIGN KEY (winner) REFERENCES players (id);
 
 CREATE TABLE shots
 (
