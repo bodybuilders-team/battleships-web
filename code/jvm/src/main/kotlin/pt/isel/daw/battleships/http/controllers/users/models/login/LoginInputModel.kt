@@ -1,19 +1,19 @@
 package pt.isel.daw.battleships.http.controllers.users.models.login
 
-import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MAX_PASSWORD_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MAX_USERNAME_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MIN_PASSWORD_LENGTH
-import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel.Companion.MIN_USERNAME_LENGTH
-import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterInputModel.Companion.MAX_PASSWORD_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterInputModel.Companion.MAX_USERNAME_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterInputModel.Companion.MIN_PASSWORD_LENGTH
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterInputModel.Companion.MIN_USERNAME_LENGTH
+import pt.isel.daw.battleships.service.users.dtos.login.LoginInputDTO
 import javax.validation.constraints.Size
 
 /**
- * A Login User Input Model.
+ * A Login Input Model.
  *
  * @property username the username of the user
  * @property password the password of the user
  */
-data class LoginUserInputModel(
+data class LoginInputModel(
     @field:Size(
         min = MIN_USERNAME_LENGTH,
         max = MAX_USERNAME_LENGTH,
@@ -34,7 +34,7 @@ data class LoginUserInputModel(
      *
      * @return the service DTO
      */
-    fun toLoginUserInputDTO() = LoginUserInputDTO(
+    fun toLoginInputDTO() = LoginInputDTO(
         username = username,
         password = password
     )

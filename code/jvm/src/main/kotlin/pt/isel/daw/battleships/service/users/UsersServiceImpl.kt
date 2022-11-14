@@ -16,11 +16,11 @@ import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.exceptions.RefreshTokenExpiredException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
-import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
-import pt.isel.daw.battleships.service.users.dtos.login.LoginUserOutputDTO
+import pt.isel.daw.battleships.service.users.dtos.login.LoginInputDTO
+import pt.isel.daw.battleships.service.users.dtos.login.LoginOutputDTO
 import pt.isel.daw.battleships.service.users.dtos.refreshToken.RefreshTokenOutputDTO
-import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
-import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserOutputDTO
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterInputDTO
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterOutputDTO
 import pt.isel.daw.battleships.service.users.utils.UsersOrder
 import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
@@ -76,55 +76,55 @@ class UsersServiceImpl(
         )
     }
 
-    override fun register(registerUserInputDTO: RegisterUserInputDTO): RegisterUserOutputDTO {
-        if (usersRepository.existsByUsername(username = registerUserInputDTO.username)) {
-            throw AlreadyExistsException("User with username ${registerUserInputDTO.username} already exists")
+    override fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO {
+        if (usersRepository.existsByUsername(username = registerInputDTO.username)) {
+            throw AlreadyExistsException("User with username ${registerInputDTO.username} already exists")
         }
 
-        if (usersRepository.existsByEmail(email = registerUserInputDTO.email)) {
-            throw AlreadyExistsException("User with email ${registerUserInputDTO.email} already exists")
+        if (usersRepository.existsByEmail(email = registerInputDTO.email)) {
+            throw AlreadyExistsException("User with email ${registerInputDTO.email} already exists")
         }
 
-        if (registerUserInputDTO.password.length < MIN_PASSWORD_LENGTH) {
+        if (registerInputDTO.password.length < MIN_PASSWORD_LENGTH) {
             throw InvalidPasswordException("Password must be at least $MIN_PASSWORD_LENGTH characters long")
         }
 
         val user = usersRepository.save(
             User(
-                username = registerUserInputDTO.username,
-                email = registerUserInputDTO.email,
+                username = registerInputDTO.username,
+                email = registerInputDTO.email,
                 passwordHash = hashingUtils.hashPassword(
-                    username = registerUserInputDTO.username,
-                    password = registerUserInputDTO.password
+                    username = registerInputDTO.username,
+                    password = registerInputDTO.password
                 )
             )
         )
 
         val (accessToken, refreshToken) = createTokens(user = user)
 
-        return RegisterUserOutputDTO(
-            username = registerUserInputDTO.username,
+        return RegisterOutputDTO(
+            username = registerInputDTO.username,
             accessToken = accessToken,
             refreshToken = refreshToken
         )
     }
 
-    override fun login(loginUserInputDTO: LoginUserInputDTO): LoginUserOutputDTO {
+    override fun login(loginInputDTO: LoginInputDTO): LoginOutputDTO {
         val user = usersRepository
-            .findByUsername(username = loginUserInputDTO.username)
-            ?: throw NotFoundException("User with username ${loginUserInputDTO.username} not found")
+            .findByUsername(username = loginInputDTO.username)
+            ?: throw NotFoundException("User with username ${loginInputDTO.username} not found")
 
         if (
             !hashingUtils.checkPassword(
-                username = loginUserInputDTO.username,
-                password = loginUserInputDTO.password,
+                username = loginInputDTO.username,
+                password = loginInputDTO.password,
                 passwordHash = user.passwordHash
             )
         ) throw InvalidLoginException("Invalid username or password")
 
         val (accessToken, refreshToken) = createTokens(user = user)
 
-        return LoginUserOutputDTO(
+        return LoginOutputDTO(
             accessToken = accessToken,
             refreshToken = refreshToken
         )

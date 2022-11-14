@@ -2,11 +2,11 @@ package pt.isel.daw.battleships.service.users.dtos.register
 
 import kotlin.test.Test
 
-class RegisterUserOutputDTOTests {
+class RegisterOutputDTOTests {
 
     @Test
     fun `RegisterUserOutputDTO creation is successful`() {
-        RegisterUserOutputDTO(
+        RegisterOutputDTO(
             username = "username",
             accessToken = "accessToken",
             refreshToken = "refreshToken"
@@ -14,8 +14,8 @@ class RegisterUserOutputDTOTests {
     }
 
     companion object {
-        val defaultRegisterUserOutputDTO
-            get() = RegisterUserOutputDTO(
+        val defaultRegisterOutputDTO
+            get() = RegisterOutputDTO(
                 username = "username",
                 accessToken = "accessToken",
                 refreshToken = "refreshToken"

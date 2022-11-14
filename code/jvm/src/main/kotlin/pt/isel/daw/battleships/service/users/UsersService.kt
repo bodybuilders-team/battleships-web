@@ -9,11 +9,11 @@ import pt.isel.daw.battleships.service.exceptions.NotFoundException
 import pt.isel.daw.battleships.service.exceptions.RefreshTokenExpiredException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
-import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
-import pt.isel.daw.battleships.service.users.dtos.login.LoginUserOutputDTO
+import pt.isel.daw.battleships.service.users.dtos.login.LoginInputDTO
+import pt.isel.daw.battleships.service.users.dtos.login.LoginOutputDTO
 import pt.isel.daw.battleships.service.users.dtos.refreshToken.RefreshTokenOutputDTO
-import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
-import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserOutputDTO
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterInputDTO
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterOutputDTO
 import pt.isel.daw.battleships.service.users.utils.UsersOrder
 
 /**
@@ -37,24 +37,24 @@ interface UsersService {
     /**
      * Registers a new user.
      *
-     * @param registerUserInputDTO the DTO with the data to create the user
+     * @param registerInputDTO the DTO with the data to create the user
      *
      * @return the JWT token for the new user
      * @throws AlreadyExistsException if the user already exists
      * @throws InvalidPasswordException if the password is invalid
      */
-    fun register(registerUserInputDTO: RegisterUserInputDTO): RegisterUserOutputDTO
+    fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO
 
     /**
      * Logs a user in.
      *
-     * @param loginUserInputDTO the DTO with the data to log the user in
+     * @param loginInputDTO the DTO with the data to log the user in
      *
      * @return the JWT token for the user
      * @throws NotFoundException if the user does not exist
      * @throws InvalidLoginException if the password is incorrect
      */
-    fun login(loginUserInputDTO: LoginUserInputDTO): LoginUserOutputDTO
+    fun login(loginInputDTO: LoginInputDTO): LoginOutputDTO
 
     /**
      * Logs a user out.

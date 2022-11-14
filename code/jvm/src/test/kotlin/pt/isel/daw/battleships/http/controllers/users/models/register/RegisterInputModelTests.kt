@@ -3,11 +3,11 @@ package pt.isel.daw.battleships.http.controllers.users.models.register
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RegisterUserInputModelTests {
+class RegisterInputModelTests {
 
     @Test
     fun `RegisterUserInputModel creation is successful`() {
-        RegisterUserInputModel(
+        RegisterInputModel(
             username = "username",
             email = "email",
             password = "password"
@@ -16,9 +16,9 @@ class RegisterUserInputModelTests {
 
     @Test
     fun `RegisterUserInputModel to RegisterUserInputDTO conversion is successful`() {
-        val registerUserInputModel = defaultRegisterUserInputModel
+        val registerUserInputModel = defaultRegisterInputModel
 
-        val registerUserInputDTO = registerUserInputModel.toRegisterUserInputDTO()
+        val registerUserInputDTO = registerUserInputModel.toRegisterInputDTO()
 
         assertEquals(registerUserInputModel.username, registerUserInputDTO.username)
         assertEquals(registerUserInputModel.email, registerUserInputDTO.email)
@@ -26,8 +26,8 @@ class RegisterUserInputModelTests {
     }
 
     companion object {
-        val defaultRegisterUserInputModel
-            get() = RegisterUserInputModel(
+        val defaultRegisterInputModel
+            get() = RegisterInputModel(
                 username = "username",
                 email = "email",
                 password = "password"

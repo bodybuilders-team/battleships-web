@@ -1,12 +1,12 @@
 package pt.isel.daw.battleships.service.users.dtos.login
 
 /**
- * A Login User Output DTO.
+ * A Login Output DTO.
  *
  * @property accessToken the access token
  * @property refreshToken the refresh token
  */
-data class LoginUserOutputDTO(
+data class LoginOutputDTO(
     val accessToken: String,
     val refreshToken: String
 )

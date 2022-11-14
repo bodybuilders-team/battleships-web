@@ -216,10 +216,10 @@ The presentation layer is organized as follows:
 * [`/media`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/media) - contains the classes that represent
   the media types used in the application, such as `application/vnd.siren+json` and `application/problem+json`.
 
-The [`Uris`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/Uris.kt) object contains the URIs of the
+The [`Uris`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/utils/Uris.kt) object contains the URIs of the
 application used by the controllers.
 
-The [`Params`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/Params.kt) object contains the parameters
+The [`Params`](../code/jvm/src/main/kotlin/pt/isel/daw/battleships/http/utils/Params.kt) object contains the parameters
 
 ---
 

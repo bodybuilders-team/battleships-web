@@ -2,11 +2,11 @@ package pt.isel.daw.battleships.service.users.dtos.register
 
 import kotlin.test.Test
 
-class RegisterUserInputDTOTests {
+class RegisterInputDTOTests {
 
     @Test
     fun `RegisterUserInputDTO creation is successful`() {
-        RegisterUserInputDTO(
+        RegisterInputDTO(
             username = "username",
             email = "email",
             password = "password"
@@ -14,8 +14,8 @@ class RegisterUserInputDTOTests {
     }
 
     companion object {
-        val defaultRegisterUserInputDTO
-            get() = RegisterUserInputDTO(
+        val defaultRegisterInputDTO
+            get() = RegisterInputDTO(
                 username = "username",
                 email = "email",
                 password = "password"

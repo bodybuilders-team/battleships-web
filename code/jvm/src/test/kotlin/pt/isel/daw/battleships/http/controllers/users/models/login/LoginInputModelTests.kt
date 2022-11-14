@@ -3,11 +3,11 @@ package pt.isel.daw.battleships.http.controllers.users.models.login
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LoginUserInputModelTests {
+class LoginInputModelTests {
 
     @Test
     fun `LoginUserInputModel creation is successful`() {
-        LoginUserInputModel(
+        LoginInputModel(
             username = "username",
             password = "password"
         )
@@ -15,16 +15,16 @@ class LoginUserInputModelTests {
 
     @Test
     fun `LoginUserInputModel to LoginUserInputDTO conversion is successful`() {
-        val loginUserInputModel = defaultLoginUserInputModel
+        val loginUserInputModel = defaultLoginInputModel
 
-        val loginUserInputDTO = loginUserInputModel.toLoginUserInputDTO()
+        val loginUserInputDTO = loginUserInputModel.toLoginInputDTO()
 
         assertEquals(loginUserInputModel.username, loginUserInputDTO.username)
     }
 
     companion object {
-        val defaultLoginUserInputModel
-            get() = LoginUserInputModel(
+        val defaultLoginInputModel
+            get() = LoginInputModel(
                 username = "username",
                 password = "password"
             )

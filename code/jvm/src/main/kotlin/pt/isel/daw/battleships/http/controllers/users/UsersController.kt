@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.getUsers.GetUsersOutputModel
-import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserInputModel
-import pt.isel.daw.battleships.http.controllers.users.models.login.LoginUserOutputModel
+import pt.isel.daw.battleships.http.controllers.users.models.login.LoginInputModel
+import pt.isel.daw.battleships.http.controllers.users.models.login.LoginOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.logout.LogoutUserInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.RefreshTokenInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.refreshToken.RefreshTokenOutputModel
-import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserInputModel
-import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterUserOutputModel
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterInputModel
+import pt.isel.daw.battleships.http.controllers.users.models.register.RegisterOutputModel
 import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
@@ -119,13 +119,13 @@ class UsersController(private val usersService: UsersService) {
     @PostMapping(Uris.USERS)
     fun register(
         @Valid @RequestBody
-        userData: RegisterUserInputModel
-    ): SirenEntity<RegisterUserOutputModel> {
-        val registerDTO = usersService.register(registerUserInputDTO = userData.toRegisterUserInputDTO())
+        userData: RegisterInputModel
+    ): SirenEntity<RegisterOutputModel> {
+        val registerDTO = usersService.register(registerInputDTO = userData.toRegisterInputDTO())
 
         return SirenEntity(
             `class` = listOf(Rels.REGISTER),
-            properties = RegisterUserOutputModel(registerUserOutputDTO = registerDTO),
+            properties = RegisterOutputModel(registerOutputDTO = registerDTO),
             links = listOf(
                 Links.home,
                 Links.userHome
@@ -152,13 +152,13 @@ class UsersController(private val usersService: UsersService) {
     @PostMapping(Uris.USERS_LOGIN)
     fun login(
         @Valid @RequestBody
-        userData: LoginUserInputModel
-    ): SirenEntity<LoginUserOutputModel> {
-        val loginDTO = usersService.login(loginUserInputDTO = userData.toLoginUserInputDTO())
+        userData: LoginInputModel
+    ): SirenEntity<LoginOutputModel> {
+        val loginDTO = usersService.login(loginInputDTO = userData.toLoginInputDTO())
 
         return SirenEntity(
             `class` = listOf(Rels.LOGIN),
-            properties = LoginUserOutputModel(loginUserOutputDTO = loginDTO),
+            properties = LoginOutputModel(loginOutputDTO = loginDTO),
             links = listOf(
                 Links.home,
                 Links.userHome

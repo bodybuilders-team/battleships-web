@@ -1,12 +1,12 @@
 package pt.isel.daw.battleships.service.users.dtos.login
 
 /**
- * A Login User Input DTO.
+ * A Login Input DTO.
  *
  * @property username name of the user
  * @property password password of the user
  */
-data class LoginUserInputDTO(
+data class LoginInputDTO(
     val username: String,
     val password: String
 )

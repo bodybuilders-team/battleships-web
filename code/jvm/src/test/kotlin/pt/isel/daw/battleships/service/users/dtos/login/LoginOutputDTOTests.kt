@@ -2,19 +2,19 @@ package pt.isel.daw.battleships.service.users.dtos.login
 
 import kotlin.test.Test
 
-class LoginUserOutputDTOTests {
+class LoginOutputDTOTests {
 
     @Test
     fun `LoginUserOutputDTO creation is successful`() {
-        LoginUserOutputDTO(
+        LoginOutputDTO(
             accessToken = "accessToken",
             refreshToken = "refreshToken"
         )
     }
 
     companion object {
-        val defaultLoginUserOutputDTO
-            get() = LoginUserOutputDTO(
+        val defaultLoginOutputDTO
+            get() = LoginOutputDTO(
                 accessToken = "accessToken",
                 refreshToken = "refreshToken"
             )

@@ -1,17 +1,17 @@
 package pt.isel.daw.battleships.http.controllers.users.models.register
 
-import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterInputDTO
 import javax.validation.constraints.Email
 import javax.validation.constraints.Size
 
 /**
- * A Register User Input Model.
+ * A Register Input Model.
  *
  * @property username the username of the user to be created
  * @property email the email of the user to be created
  * @property password the password of the user to be created
  */
-data class RegisterUserInputModel(
+data class RegisterInputModel(
     @field:Size(
         min = MIN_USERNAME_LENGTH,
         max = MAX_USERNAME_LENGTH,
@@ -35,7 +35,7 @@ data class RegisterUserInputModel(
      *
      * @return the service DTO
      */
-    fun toRegisterUserInputDTO() = RegisterUserInputDTO(
+    fun toRegisterInputDTO() = RegisterInputDTO(
         username = username,
         email = email,
         password = password

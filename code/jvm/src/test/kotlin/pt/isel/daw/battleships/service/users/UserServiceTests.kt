@@ -24,8 +24,8 @@ import pt.isel.daw.battleships.service.exceptions.RefreshTokenExpiredException
 import pt.isel.daw.battleships.service.users.dtos.UserDTO
 import pt.isel.daw.battleships.service.users.dtos.UserDTOTests.Companion.defaultUserDTO
 import pt.isel.daw.battleships.service.users.dtos.UsersDTO
-import pt.isel.daw.battleships.service.users.dtos.login.LoginUserInputDTO
-import pt.isel.daw.battleships.service.users.dtos.register.RegisterUserInputDTO
+import pt.isel.daw.battleships.service.users.dtos.login.LoginInputDTO
+import pt.isel.daw.battleships.service.users.dtos.register.RegisterInputDTO
 import pt.isel.daw.battleships.service.users.utils.UsersOrder
 import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
@@ -246,7 +246,7 @@ class UserServiceTests {
             }
 
         userService.register(
-            RegisterUserInputDTO(
+            RegisterInputDTO(
                 username = username,
                 email = email,
                 password = password
@@ -299,7 +299,7 @@ class UserServiceTests {
         val expirationDateInstantIfBefore = Instant.now().plus(refreshTokenDuration)
 
         userService.register(
-            RegisterUserInputDTO(
+            RegisterInputDTO(
                 username = username,
                 email = email,
                 password = "password"
@@ -378,7 +378,7 @@ class UserServiceTests {
             }
 
         userService.register(
-            RegisterUserInputDTO(
+            RegisterInputDTO(
                 username = username,
                 email = email,
                 password = "password"
@@ -405,7 +405,7 @@ class UserServiceTests {
             }
 
         val registerUserOutputDTO = userService.register(
-            RegisterUserInputDTO(
+            RegisterInputDTO(
                 username = username,
                 email = email,
                 password = "password"
@@ -432,7 +432,7 @@ class UserServiceTests {
 
         assertFailsWith<AlreadyExistsException> {
             userService.register(
-                RegisterUserInputDTO(
+                RegisterInputDTO(
                     username = username,
                     email = email,
                     password = "password"
@@ -454,7 +454,7 @@ class UserServiceTests {
 
         assertFailsWith<AlreadyExistsException> {
             userService.register(
-                RegisterUserInputDTO(
+                RegisterInputDTO(
                     username = username,
                     email = email,
                     password = "password"
@@ -481,7 +481,7 @@ class UserServiceTests {
             )
 
         val loginUserOutputDTO = userService.login(
-            LoginUserInputDTO(
+            LoginInputDTO(
                 username = username,
                 password = password
             )
@@ -539,7 +539,7 @@ class UserServiceTests {
             }
 
         userService.login(
-            LoginUserInputDTO(
+            LoginInputDTO(
                 username = username,
                 password = password
             )
@@ -558,7 +558,7 @@ class UserServiceTests {
 
         assertFailsWith<NotFoundException> {
             userService.login(
-                LoginUserInputDTO(
+                LoginInputDTO(
                     username = username,
                     password = password
                 )
@@ -585,7 +585,7 @@ class UserServiceTests {
 
         assertFailsWith<InvalidLoginException> {
             userService.login(
-                LoginUserInputDTO(
+                LoginInputDTO(
                     username = username,
                     password = "wrongPassword"
                 )
