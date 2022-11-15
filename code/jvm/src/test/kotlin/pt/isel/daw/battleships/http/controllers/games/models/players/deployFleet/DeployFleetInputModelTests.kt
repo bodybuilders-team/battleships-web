@@ -7,11 +7,11 @@ class DeployFleetInputModelTests {
 
     @Test
     fun `DeployFleetInputModel creation is successful`() {
-        DeployFleetInputModel(ships = listOf(defaultUndeployedShipModel))
+        DeployFleetInputModel(fleet = listOf(defaultUndeployedShipModel))
     }
 
     companion object {
         val defaultDeployFleetInputModel
-            get() = DeployFleetInputModel(ships = listOf(defaultUndeployedShipModel))
+            get() = DeployFleetInputModel(fleet = listOf(defaultUndeployedShipModel))
     }
 }

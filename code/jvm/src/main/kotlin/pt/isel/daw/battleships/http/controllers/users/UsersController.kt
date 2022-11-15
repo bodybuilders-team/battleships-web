@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.controllers.users.models.getUser.GetUserOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.getUsers.GetUsersOutputModel
+import pt.isel.daw.battleships.http.controllers.users.models.getUsers.GetUsersUserModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginInputModel
 import pt.isel.daw.battleships.http.controllers.users.models.login.LoginOutputModel
 import pt.isel.daw.battleships.http.controllers.users.models.logout.LogoutUserInputModel
@@ -20,7 +21,6 @@ import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SubEntity
-import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
 import pt.isel.daw.battleships.http.utils.Actions
 import pt.isel.daw.battleships.http.utils.Links
 import pt.isel.daw.battleships.http.utils.Params
@@ -99,8 +99,8 @@ class UsersController(private val usersService: UsersService) {
             ),
             entities = usersDTO.users.map { user ->
                 SubEntity.EmbeddedSubEntity(
-                    rel = listOf(Rels.ITEM, "user-${user.username}"),
-                    properties = GetUserOutputModel(user),
+                    rel = listOf(Rels.ITEM, Rels.USER, "${Rels.USER}-${user.username}"),
+                    properties = GetUsersUserModel(user),
                     links = listOf(
                         Links.self(Uris.userByUsername(username = user.username)),
                         Links.home
@@ -129,16 +129,6 @@ class UsersController(private val usersService: UsersService) {
             links = listOf(
                 Links.home,
                 Links.userHome
-            ),
-            entities = listOf(
-                EmbeddedLink(
-                    rel = listOf(Rels.USER),
-                    href = Uris.userByUsername(username = userData.username)
-                )
-            ),
-            actions = listOf(
-                Actions.refreshToken,
-                Actions.logout
             )
         )
     }
@@ -162,16 +152,6 @@ class UsersController(private val usersService: UsersService) {
             links = listOf(
                 Links.home,
                 Links.userHome
-            ),
-            entities = listOf(
-                EmbeddedLink(
-                    rel = listOf(Rels.USER),
-                    href = Uris.userByUsername(username = userData.username)
-                )
-            ),
-            actions = listOf(
-                Actions.refreshToken,
-                Actions.logout
             )
         )
     }
@@ -193,10 +173,6 @@ class UsersController(private val usersService: UsersService) {
             `class` = listOf(Rels.LOGOUT),
             links = listOf(
                 Links.home
-            ),
-            actions = listOf(
-                Actions.login,
-                Actions.register
             )
         )
     }

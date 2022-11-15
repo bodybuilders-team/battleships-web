@@ -62,7 +62,7 @@ class GamesController(private val gamesService: GamesService) {
             ),
             entities = games.games.map { game ->
                 SubEntity.EmbeddedSubEntity(
-                    rel = listOf(Rels.ITEM, "game-${game.id}"),
+                    rel = listOf(Rels.ITEM, Rels.GAME, "${Rels.GAME}-${game.id}"),
                     properties = GetGameOutputModel(gameDTO = game),
                     links = listOf(
                         Links.self(Uris.gameById(gameId = game.id))
