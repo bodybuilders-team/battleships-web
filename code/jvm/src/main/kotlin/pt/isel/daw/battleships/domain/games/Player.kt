@@ -173,29 +173,31 @@ class Player {
         }
 
         val madeShots = coordinates.map { coordinate ->
+            val (result, sunkShip) = game.getOpponent(this).deployedShips
+                .find { ship -> coordinate in ship.coordinates }
+                .let { ship ->
+                    when {
+                        ship == null -> Shot.ShotResult.MISS to null
+                        ship.lives == 1 -> {
+                            ship.lives = 0
+                            points += ship.type.points
+
+                            Shot.ShotResult.SUNK to ship
+                        }
+
+                        else -> {
+                            ship.lives--
+                            Shot.ShotResult.HIT to null
+                        }
+                    }
+                }
+
             Shot(
                 player = this,
                 coordinate = coordinate,
                 round = game.state.round ?: throw IllegalStateException("Game round cannot be null"),
-                result = game.getOpponent(this).deployedShips
-                    .find { ship -> coordinate in ship.coordinates }
-                    .let { ship ->
-                        when {
-                            ship == null -> Shot.ShotResult.MISS
-                            ship.lives == 1 -> {
-                                ship.lives = 0
-                                points += ship.type.points
-
-                                Shot.ShotResult.SUNK
-                            }
-
-                            else -> {
-                                ship.lives--
-
-                                Shot.ShotResult.HIT
-                            }
-                        }
-                    }
+                result = result,
+                sunkShip = sunkShip
             )
         }
 

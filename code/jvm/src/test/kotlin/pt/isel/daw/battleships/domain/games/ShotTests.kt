@@ -21,7 +21,8 @@ class ShotTests {
             round = 1,
             player = player,
             coordinate = coordinate,
-            result = Shot.ShotResult.HIT
+            result = Shot.ShotResult.HIT,
+            sunkShip = null
         )
 
         val shotId = Shot::class.declaredMemberProperties
@@ -42,7 +43,8 @@ class ShotTests {
                 round = 0,
                 player = defaultPlayer,
                 coordinate = defaultCoordinate,
-                result = Shot.ShotResult.HIT
+                result = Shot.ShotResult.HIT,
+                sunkShip = null
             )
         }
     }
@@ -53,7 +55,8 @@ class ShotTests {
                 round = 1,
                 player = defaultPlayer,
                 coordinate = defaultCoordinate,
-                result = Shot.ShotResult.HIT
+                result = Shot.ShotResult.HIT,
+                sunkShip = null
             )
     }
 }

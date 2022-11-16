@@ -14,7 +14,8 @@ class FiredShotModelTests {
         FiredShotModel(
             coordinate = defaultCoordinateModel,
             round = 1,
-            result = defaultShotResultModel
+            result = defaultShotResultModel,
+            sunkShip = null
         )
     }
 
@@ -34,7 +35,8 @@ class FiredShotModelTests {
             get() = FiredShotModel(
                 coordinate = defaultCoordinateModel,
                 round = 1,
-                result = defaultShotResultModel
+                result = defaultShotResultModel,
+                sunkShip = null
             )
     }
 }

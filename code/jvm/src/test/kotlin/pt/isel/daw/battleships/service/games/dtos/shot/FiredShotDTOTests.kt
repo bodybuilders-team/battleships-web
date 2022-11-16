@@ -14,7 +14,8 @@ class FiredShotDTOTests {
         FiredShotDTO(
             coordinate = defaultCoordinateDTO,
             round = 1,
-            result = defaultShotResultDTO
+            result = defaultShotResultDTO,
+            sunkShip = null
         )
     }
 
@@ -34,7 +35,8 @@ class FiredShotDTOTests {
             get() = FiredShotDTO(
                 coordinate = defaultCoordinateDTO,
                 round = 1,
-                result = defaultShotResultDTO
+                result = defaultShotResultDTO,
+                sunkShip = null
             )
     }
 }

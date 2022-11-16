@@ -4,6 +4,7 @@ import pt.isel.daw.battleships.domain.exceptions.InvalidShotException
 import pt.isel.daw.battleships.domain.games.Shot.ShotResult.HIT
 import pt.isel.daw.battleships.domain.games.Shot.ShotResult.MISS
 import pt.isel.daw.battleships.domain.games.Shot.ShotResult.SUNK
+import pt.isel.daw.battleships.domain.games.ship.DeployedShip
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -24,6 +25,7 @@ import javax.persistence.Table
  * @property player the player that made the shot
  * @property coordinate the coordinate of the shot
  * @property result the result of the shot
+ * @property sunkShip the ship that was sunk by the shot, or null if the shot didn't sink any ship
  */
 @Entity
 @Table(name = "shots")
@@ -47,12 +49,16 @@ class Shot {
     @Enumerated(EnumType.STRING)
     val result: ShotResult
 
+    @Transient
+    val sunkShip: DeployedShip?
+
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(
         round: Int,
         player: Player,
         coordinate: Coordinate,
-        result: ShotResult
+        result: ShotResult,
+        sunkShip: DeployedShip?
     ) {
         if (round < 1) throw InvalidShotException("Round must be greater than 0")
 
@@ -60,6 +66,7 @@ class Shot {
         this.player = player
         this.coordinate = coordinate
         this.result = result
+        this.sunkShip = sunkShip
     }
 
     /**
