@@ -172,7 +172,7 @@ class Player {
             throw InvalidFiredShotException("Shots must be to coordinates that have not been shot yet.")
         }
 
-        val madeShots = coordinates.map { coordinate ->
+        val firedShots = coordinates.map { coordinate ->
             val (result, sunkShip) = game.getOpponent(this).deployedShips
                 .find { ship -> coordinate in ship.coordinates }
                 .let { ship ->
@@ -201,7 +201,7 @@ class Player {
             )
         }
 
-        this.shots.addAll(madeShots)
-        return madeShots
+        this.shots.addAll(firedShots)
+        return firedShots
     }
 }
