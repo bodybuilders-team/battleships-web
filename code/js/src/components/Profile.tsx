@@ -1,13 +1,16 @@
 import * as React from "react";
+import {useSession} from "../utils/Session";
 
 /**
  * Profile component.
  */
 function Profile() {
+    const session = useSession();
+
     return (
         <div>
             <h1>Profile</h1>
-            { /*TODO: Add content here - user profile*/}
+            Username: {session.username}
         </div>
     );
 }

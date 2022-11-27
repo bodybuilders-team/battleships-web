@@ -12,14 +12,40 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded';
+import {useNavigate} from 'react-router-dom';
+import {useLoggedIn, useSession} from "../utils/Session";
 
-const pages = ['Home', 'Login', 'Gameplay', 'Ranking'];
-const settings = ['Profile', 'Settings'];
+const pages = [
+    {name: 'Home', href: '/'},
+    {name: 'Login', href: '/login', auth: false},
+    {name: 'Gameplay', href: '/gameplay', auth: true},
+    {name: 'Ranking', href: '/ranking', auth: true},
+];
+
 
 /**
  * NavBar component.
  */
 function NavBar() {
+    const navigate = useNavigate();
+    const loggedIn = useLoggedIn()
+    const session = useSession()
+
+    const settings = [
+        {
+            name: 'Profile', callback: () => {
+                navigate('/profile')
+            }, auth: true
+        }, {
+            name: 'Settings', callback: () => {
+            }
+        }, {
+            name: 'Logout', callback: () => {
+                session.clearSession()
+            },
+            auth: true
+        }]
+
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -91,8 +117,12 @@ function NavBar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                (page.auth && loggedIn || !page.auth && !loggedIn || page.auth === undefined) &&
+                                <MenuItem key={page.name} onClick={() => {
+                                    handleCloseNavMenu()
+                                    navigate(page.href)
+                                }}>
+                                    <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -118,12 +148,16 @@ function NavBar() {
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {pages.map((page) => (
+                            (page.auth && loggedIn || !page.auth && !loggedIn || page.auth === undefined) &&
                             <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
+                                key={page.name}
+                                onClick={() => {
+                                    handleCloseNavMenu()
+                                    navigate(page.href)
+                                }}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
-                                {page}
+                                {page.name}
                             </Button>
                         ))}
                     </Box>
@@ -151,8 +185,12 @@ function NavBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                (setting.auth && loggedIn || !setting.auth && !loggedIn || setting.auth === undefined) &&
+                                <MenuItem key={setting.name} onClick={() => {
+                                    handleCloseUserMenu()
+                                    setting.callback()
+                                }}>
+                                    <Typography textAlign="center">{setting.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>

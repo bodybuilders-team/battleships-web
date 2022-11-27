@@ -112,7 +112,7 @@ class UsersServiceImpl(
     override fun login(loginInputDTO: LoginInputDTO): LoginOutputDTO {
         val user = usersRepository
             .findByUsername(username = loginInputDTO.username)
-            ?: throw NotFoundException("User with username ${loginInputDTO.username} not found")
+            ?: throw InvalidLoginException("Invalid username or password")
 
         if (
             !hashingUtils.checkPassword(
