@@ -1,3 +1,12 @@
+/**
+ * A link A navigational transition.
+ *
+ * @property rel the relation of the link
+ * @property class the class of the link (optional)
+ * @property href the URI of the link
+ * @property title the title of the link (optional)
+ * @property type the media type of the link (optional)
+ */
 export interface Link {
     rel: string[],
     class?: string[],
@@ -6,6 +15,15 @@ export interface Link {
     type?: string
 }
 
+/**
+ * A link A navigational transition.
+ *
+ * @property rel the relation of the link
+ * @property class the class of the link (optional)
+ * @property href the URI of the link
+ * @property title the title of the link (optional)
+ * @property type the media type of the link (optional)
+ */
 export class Link {
     constructor(link: Link) {
         this.rel = link.rel;

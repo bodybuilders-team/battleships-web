@@ -9,9 +9,9 @@ import {createContext, useContext, useEffect, useState} from 'react';
  * @property refreshToken the refresh token of the user
  */
 interface Session {
-    username: string | null,
-    accessToken: string | null,
-    refreshToken: string | null,
+    username: string,
+    accessToken: string,
+    refreshToken: string,
 }
 
 /**
@@ -27,7 +27,7 @@ interface SessionManager {
     session: Session | null,
     setSession: (session: Session) => void
     clearSession: () => void
-};
+}
 
 const SessionManagerContext = createContext<SessionManager>({
     loggedIn: false,
@@ -47,13 +47,12 @@ const sessionStorageKey = 'session';
  */
 export function Auth({children}: { children: React.ReactNode }) {
     const [loggedIn, setLoggedIn] = useState(false);
-
     const [session, setSession] = useState<Session | null>(null);
 
     useEffect(() => {
-        const sessionJson = localStorage.getItem(sessionStorageKey)
+        const sessionJson = localStorage.getItem(sessionStorageKey);
         if (!sessionJson)
-            return
+            return;
 
         const session = JSON.parse(sessionJson);
 

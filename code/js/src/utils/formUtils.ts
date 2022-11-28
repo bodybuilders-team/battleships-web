@@ -8,9 +8,9 @@ import {useState} from 'react';
  * @property onSubmit the function to call when the form is submitted
  */
 interface FormConfig {
-    initialValues: any,
-    validate: (values: any) => any,
-    onSubmit: (values: any) => void
+    initialValues: any;
+    validate: (values: any) => any;
+    onSubmit: (values: any) => void;
 }
 
 /**
@@ -22,10 +22,10 @@ interface FormConfig {
  * @property errors the errors of the form fields
  */
 type Form = {
-    handleSubmit: (event: any) => void,
-    handleChange: (event: any) => void,
-    values: any,
-    errors: any
+    handleSubmit: (event: any) => void;
+    handleChange: (event: any) => void;
+    values: any;
+    errors: any;
 }
 
 /**

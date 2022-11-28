@@ -11,13 +11,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from '../utils/formUtils';
-import * as battleshipsService from '../services/battleshipsService';
-import to from "../utils/await-to";
+import {useForm} from '../../utils/formUtils';
+import * as usersService from '../../services/users/UsersService';
+import to from "../../utils/await-to";
 import {Alert} from "@mui/material";
-import {useSessionManager} from "../utils/Session";
-import {validatePassword, validateUsername} from '../utils/validations';
-import {Problem} from "../services/battleshipsService";
+import {useSessionManager} from "../../utils/Session";
+import {validatePassword, validateUsername} from '../../utils/validations';
+import {Problem} from "../../services/utils/Problem";
 
 const theme = createTheme();
 
@@ -39,7 +39,7 @@ function Login() {
         },
         onSubmit: async (values) => {
             const {username, password} = values;
-            const [err, res] = await to(battleshipsService.login(username, password))
+            const [err, res] = await to(usersService.login("http://localhost:8080/users/login", username, password))
 
             if (err) {
                 if (err instanceof Problem) {
@@ -51,6 +51,9 @@ function Login() {
 
                 return;
             }
+
+            if (res?.properties === undefined)
+                throw new Error("Properties are undefined");
 
             sessionManager.setSession({
                 username,

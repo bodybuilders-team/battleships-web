@@ -1,3 +1,5 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     mode: "development",
     resolve: {
@@ -25,5 +27,11 @@ module.exports = {
                 use: ['file-loader?name=[name].[ext]']
             }
         ]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({ // TODO: Perguntar ao professor
+            favicon: "./public/favicon.ico",
+            template: "./public/index.html"
+        })
+    ]
 };

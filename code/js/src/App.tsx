@@ -1,14 +1,15 @@
 import * as React from 'react';
 import './App.css';
-import NavBar from "./components/NavBar";
+import NavBar from "./Components/Utils/NavBar";
 import {Route, Routes} from 'react-router-dom';
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Ranking from "./components/Ranking";
-import Profile from "./components/Profile";
-import Gameplay from "./components/Gameplay";
-import Register from './components/Register';
+import Home from "./Components/Home/Home";
+import Login from "./Components/Authentication/Login";
+import Ranking from "./Components/Ranking/Ranking";
+import Profile from "./Components/Profile/Profile";
+import Gameplay from "./Components/Gameplay/Gameplay";
+import Register from './Components/Authentication/Register';
 import {Auth} from "./utils/Session";
+import Footer from "./Components/Utils/Footer";
 
 /**
  * App component.
@@ -30,14 +31,7 @@ function App() {
                     </Routes>
                 </div>
 
-                <footer>
-                    <p>
-                        Made with ❤️ by group 3 of DAW@ISEL in 2022/2023<br/>
-                        48089 André Páscoa<br/>
-                        48280 André Jesus<br/>
-                        48287 Nyckollas Brandão
-                    </p>
-                </footer>
+                <Footer/>
             </div>
         </Auth>
     );

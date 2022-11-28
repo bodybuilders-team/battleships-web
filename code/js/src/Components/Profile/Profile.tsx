@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {useSession} from "../utils/Session";
+import {useSession} from "../../utils/Session";
 
 /**
  * Profile component.

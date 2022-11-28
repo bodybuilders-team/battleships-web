@@ -13,10 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded';
 import {useNavigate} from 'react-router-dom';
-import {useLoggedIn, useSessionManager} from "../utils/Session";
+import {useLoggedIn, useSessionManager} from "../../utils/Session";
 
 const pages = [
-    {name: 'Home', href: '/'},
     {name: 'Login', href: '/login', auth: false},
     {name: 'Gameplay', href: '/gameplay', auth: true},
     {name: 'Ranking', href: '/ranking', auth: true},
