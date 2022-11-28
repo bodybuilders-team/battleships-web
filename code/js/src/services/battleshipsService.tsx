@@ -1,33 +1,44 @@
-// TODO: To be implemented
-
 const apiUrl = 'http://localhost:8080';
 
+/**
+ * Registers a new user.
+ *
+ * @param email the email of the user
+ * @param username the username of the user
+ * @param password the password of the user
+ *
+ * @returns the response of the request to the API
+ */
 export async function register(email, username, password) {
-    const response = await fetch(`${apiUrl}/users`, {
+    const res = await fetch(`${apiUrl}/users`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, username, password})
-    })
+    });
 
-    if (!response.ok)
-        throw await response.json();
+    if (!res.ok)
+        throw await res.json();
 
-    return await response.json()
+    return await res.json();
 }
 
+/**
+ * Logs in a user.
+ *
+ * @param username the username of the user
+ * @param password the password of the user
+ *
+ * @returns the response of the request to the API
+ */
 export async function login(username, password) {
-    const response = await fetch(`${apiUrl}/users/login`, {
+    const res = await fetch(`${apiUrl}/users/login`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username, password})
-    })
+    });
 
-    if (!response.ok)
-        throw await response.json();
+    if (!res.ok)
+        throw await res.json();
 
-    return await response.json()
+    return await res.json();
 }

@@ -1,67 +1,107 @@
-import * as React from 'react'
-import {createContext, useContext, useEffect, useState} from 'react'
+import * as React from 'react';
+import {createContext, useContext, useEffect, useState} from 'react';
 
+/**
+ * Holds the session data.
+ *
+ * @property username the username of the user
+ * @property accessToken the access token of the user
+ * @property refreshToken the refresh token of the user
+ */
 type Session = {
-    loggedIn: boolean,
     username: string,
     accessToken: string,
     refreshToken: string,
-    setSession: (username: string, accessToken: string, refreshToken: string) => void
-    clearSession: () => void
 }
-const SessionContext = createContext<Session>(null)
 
+/**
+ * The manager for the session.
+ *
+ * @property loggedIn whether the user is logged in or not
+ * @property session the session data
+ * @property setSession sets the session data
+ * @property clearSession clears the session data
+ */
+type SessionManager = {
+    loggedIn: boolean,
+    session: Session,
+    setSession: (session: Session) => void
+    clearSession: () => void
+};
+
+const SessionManagerContext = createContext<SessionManager>(null);
+
+const sessionStorageKey = 'session';
+
+/**
+ * Provides the session data to the children.
+ *
+ * @param children the children to render
+ */
 export function Auth({children}: { children: React.ReactNode }) {
-    // Since we use change the session data all at the same time, maybe we should use a single state object?
-    const [loggedIn, setLoggedIn] = useState(false)
-    const [username, setUsername] = useState(null)
-    const [accessToken, setAccessToken] = useState(null)
-    const [refreshToken, setRefreshToken] = useState(null)
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const [session, setSession] = useState<Session>({
+        username: null,
+        accessToken: null,
+        refreshToken: null
+    });
 
     useEffect(() => {
-        const session = JSON.parse(localStorage.getItem('session'))
+        const session = JSON.parse(localStorage.getItem(sessionStorageKey));
 
         if (session) {
-            setLoggedIn(true)
-            setUsername(session.username)
-            setAccessToken(session.accessToken)
-            setRefreshToken(session.refreshToken)
+            setLoggedIn(true);
+            setSession(session);
         }
-    }, [])
-
-    function setSession(username: string, accessToken: string, refreshToken: string) {
-        setLoggedIn(true)
-        setUsername(username)
-        setAccessToken(accessToken)
-        setRefreshToken(refreshToken)
-
-        localStorage.setItem('session', JSON.stringify({
-            username,
-            accessToken,
-            refreshToken
-        }))
-    }
-
-    function clearSession() {
-        localStorage.setItem('session', null)
-
-        setLoggedIn(false)
-        setUsername(null)
-        setAccessToken(null)
-        setRefreshToken(null)
-    }
+    }, []);
 
     return (
-        <SessionContext.Provider value={{loggedIn, username, accessToken, refreshToken, setSession, clearSession}}>
+        <SessionManagerContext.Provider
+            value={{
+                loggedIn,
+                session,
+                setSession: (session: Session) => {
+                    setLoggedIn(true);
+                    setSession(session);
+
+                    localStorage.setItem(sessionStorageKey, JSON.stringify(session));
+                },
+                clearSession: () => {
+                    localStorage.setItem(sessionStorageKey, null);
+
+                    setLoggedIn(false);
+                    setSession(null);
+                }
+            }}>
             {children}
-        </SessionContext.Provider>
-    )
+        </SessionManagerContext.Provider>
+    );
 }
 
-export function useSession() {
-    return useContext(SessionContext)
+/**
+ * Returns the session data.
+ *
+ * @return the session data
+ */
+export function useSession(): Session {
+    return useContext(SessionManagerContext).session;
 }
 
-export function useLoggedIn() {
-    return useSession().loggedIn
+/**
+ * Returns the session manager.
+ *
+ * @return the session manager
+ */
+export function useSessionManager(): SessionManager {
+    return useContext(SessionManagerContext);
+}
+
+/**
+ * Checks whether the user is logged in or not.
+ *
+ * @return true if the user is logged in, false otherwise
+ */
+export function useLoggedIn(): boolean {
+    return useSessionManager().loggedIn;
 }

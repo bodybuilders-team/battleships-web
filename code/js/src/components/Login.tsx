@@ -12,53 +12,46 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from '../utils/formUtils';
-
 import * as battleshipsService from '../services/battleshipsService';
 import to from "../utils/await-to";
 import {Alert} from "@mui/material";
-import {useSession} from "../utils/Session";
+import {useSessionManager} from "../utils/Session";
+import {validatePassword, validateUsername} from '../utils/validations';
 
 const theme = createTheme();
 
+/**
+ * Login component.
+ */
 function Login() {
-    const navigate = useNavigate()
-    const session = useSession()
-
+    const navigate = useNavigate();
+    const sessionManager = useSessionManager();
     const [formError, setFormError] = React.useState(null);
 
-    function validate(values) {
-        const errors = {
-            username: null,
-            password: null,
-        };
-
-        errors.username = values.username ? null : "Username is required";
-        errors.password = values.password ? null : "Password is required";
-
-        return errors;
-    }
-
-
     const {handleSubmit, handleChange, errors} = useForm({
-        initialValues: {username: null, password: null},
-        validate,
+        initialValues: {username: '', password: ''},
+        validate: (values) => {
+            return {
+                username: validateUsername(values.username),
+                password: validatePassword(values.password)
+            };
+        },
         onSubmit: async (values) => {
             const {username, password} = values;
-
             const [err, res] = await to(battleshipsService.login(username, password))
 
             if (err) {
                 setFormError(err.title);
-                return
+                return;
             }
 
-            session.setSession(
+            sessionManager.setSession({
                 username,
-                res.properties.accessToken,
-                res.properties.refreshToken
-            )
+                accessToken: res.properties.accessToken,
+                refreshToken: res.properties.refreshToken
+            });
 
-            navigate('/')
+            navigate('/');
         }
     });
 

@@ -16,49 +16,43 @@ import {validateEmail, validatePassword, validateUsername} from '../utils/valida
 import to from '../utils/await-to';
 import * as battleshipsService from '../services/battleshipsService';
 import {Alert} from "@mui/material";
-import {useSession} from "../utils/Session";
+import {useSessionManager} from "../utils/Session";
 
 const theme = createTheme();
 
+/**
+ * Register component.
+ */
 function Register() {
-    const navigate = useNavigate()
-    const session = useSession()
+    const navigate = useNavigate();
+    const sessionManager = useSessionManager();
     const [formError, setFormError] = React.useState(null);
 
-    function validate(values) {
-        const errors = {
-            email: null,
-            username: null,
-            password: null,
-        };
-
-        errors.email = validateEmail(values.email);
-        errors.username = validateUsername(values.username);
-        errors.password = validatePassword(values.password);
-
-        return errors;
-    }
-
     const {handleSubmit, handleChange, errors} = useForm({
-        initialValues: {email: null, username: null, password: null},
-        validate,
+        initialValues: {email: '', username: '', password: ''},
+        validate: (values) => {
+            return {
+                email: validateEmail(values.email),
+                username: validateUsername(values.username),
+                password: validatePassword(values.password)
+            };
+        },
         onSubmit: async (values) => {
             const {email, username, password} = values;
-
-            const [err, res] = await to(battleshipsService.register(email, username, password))
+            const [err, res] = await to(battleshipsService.register(email, username, password));
 
             if (err) {
                 setFormError(err.title);
-                return
+                return;
             }
 
-            session.setSession(
+            sessionManager.setSession({
                 username,
-                res.properties.accessToken,
-                res.properties.refreshToken
-            )
+                accessToken: res.properties.accessToken,
+                refreshToken: res.properties.refreshToken
+            });
 
-            navigate('/')
+            navigate('/');
         }
     });
 

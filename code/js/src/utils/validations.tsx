@@ -1,31 +1,55 @@
+const emailRegex = new RegExp("^[A-Za-z0-9+_.-]+@(.+)\$");
 
-export function validateEmail(email) {
-	if (!email)
-		return "Email is required"
+const minUsernameLength = 3;
+const maxUsernameLength = 40;
 
-	if (!email.includes("@"))
-		return "Email is invalid"
+const minPasswordLength = 8;
+const maxPasswordLength = 127;
 
-	return null;
+/**
+ * Validates if the given string is a valid email address.
+ *
+ * @param email the email address to validate
+ * @returns an error message if the email is invalid, otherwise null
+ */
+export function validateEmail(email: string): string {
+    if (!email || email.trim().length === 0)
+        return "Email is required";
+
+    if (!emailRegex.test(email))
+        return "Invalid email";
+
+    return null;
 }
 
+/**
+ * Validates if the given string is a valid username.
+ *
+ * @param username the username to validate
+ * @returns an error message if the username is invalid, otherwise null
+ */
+export function validateUsername(username: string): string {
+    if (!username || username.trim().length === 0)
+        return "Username is required";
 
-export function validateUsername(username) {
-	if (!username)
-		return "Username is required"
+    if (username.length < minUsernameLength || username.length > maxUsernameLength)
+        return `Username must be between ${minUsernameLength} and ${maxUsernameLength} characters`;
 
-	if (username.length < 3)
-		return "Username must be at least 3 characters"
-
-	return null;
+    return null;
 }
 
+/**
+ * Validates if the given string is a valid password.
+ *
+ * @param password the password to validate
+ * @returns an error message if the password is invalid, otherwise null
+ */
 export function validatePassword(password) {
-	if (!password)
-		return "Password is required"
+    if (!password || password.trim().length === 0)
+        return "Password is required";
 
-	if (password.length < 8)
-		return "Password must be at least 8 characters"
+    if (password.length < minPasswordLength || password.length > maxPasswordLength)
+        return `Password must be between ${minPasswordLength} and ${maxPasswordLength} characters`;
 
-	return null;
+    return null;
 }
