@@ -15,6 +15,7 @@ import {useForm} from '../utils/formUtils';
 import {validateEmail, validatePassword, validateUsername} from '../utils/validations';
 import to from '../utils/await-to';
 import * as battleshipsService from '../services/battleshipsService';
+import {Problem} from '../services/battleshipsService';
 import {Alert} from "@mui/material";
 import {useSessionManager} from "../utils/Session";
 
@@ -26,7 +27,7 @@ const theme = createTheme();
 function Register() {
     const navigate = useNavigate();
     const sessionManager = useSessionManager();
-    const [formError, setFormError] = React.useState(null);
+    const [formError, setFormError] = React.useState<string | null>(null);
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {email: '', username: '', password: ''},
@@ -42,7 +43,13 @@ function Register() {
             const [err, res] = await to(battleshipsService.register(email, username, password));
 
             if (err) {
-                setFormError(err.title);
+                if (err instanceof Problem) {
+                    setFormError(err.title);
+                    return
+                }
+
+                setFormError(err.message)
+
                 return;
             }
 

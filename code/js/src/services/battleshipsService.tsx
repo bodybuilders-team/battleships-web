@@ -1,4 +1,8 @@
+import {Problem} from "./utils/Problem";
+
 const apiUrl = 'http://localhost:8080';
+
+function fetchSiren()
 
 /**
  * Registers a new user.
@@ -9,7 +13,7 @@ const apiUrl = 'http://localhost:8080';
  *
  * @returns the response of the request to the API
  */
-export async function register(email, username, password) {
+export async function register(email: string, username: string, password: string) {
     const res = await fetch(`${apiUrl}/users`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -17,7 +21,7 @@ export async function register(email, username, password) {
     });
 
     if (!res.ok)
-        throw await res.json();
+        throw new Problem(await res.json());
 
     return await res.json();
 }
@@ -30,7 +34,7 @@ export async function register(email, username, password) {
  *
  * @returns the response of the request to the API
  */
-export async function login(username, password) {
+export async function login(username: string, password: string) {
     const res = await fetch(`${apiUrl}/users/login`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -38,7 +42,7 @@ export async function login(username, password) {
     });
 
     if (!res.ok)
-        throw await res.json();
+        throw new Problem(await res.json());
 
     return await res.json();
 }

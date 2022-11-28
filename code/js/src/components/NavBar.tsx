@@ -41,6 +41,7 @@ function NavBar() {
             name: 'Logout',
             callback: () => {
                 sessionManager.clearSession()
+                navigate('/')
             },
             auth: true
         }
