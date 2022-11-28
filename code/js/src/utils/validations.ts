@@ -12,7 +12,7 @@ const maxPasswordLength = 127;
  * @param email the email address to validate
  * @returns an error message if the email is invalid, otherwise null
  */
-export function validateEmail(email: string): string {
+export function validateEmail(email: string): string | null {
     if (!email || email.trim().length === 0)
         return "Email is required";
 
@@ -28,7 +28,7 @@ export function validateEmail(email: string): string {
  * @param username the username to validate
  * @returns an error message if the username is invalid, otherwise null
  */
-export function validateUsername(username: string): string {
+export function validateUsername(username: string): string | null {
     if (!username || username.trim().length === 0)
         return "Username is required";
 
@@ -44,7 +44,7 @@ export function validateUsername(username: string): string {
  * @param password the password to validate
  * @returns an error message if the password is invalid, otherwise null
  */
-export function validatePassword(password) {
+export function validatePassword(password: string) {
     if (!password || password.trim().length === 0)
         return "Password is required";
 
