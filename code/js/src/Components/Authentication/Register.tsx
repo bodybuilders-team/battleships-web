@@ -11,13 +11,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from '../../utils/formUtils';
-import {validateEmail, validatePassword, validateUsername} from '../../utils/validations';
-import to from '../../utils/await-to';
-import * as usersService from '../../services/users/UsersService';
+import {useForm} from '../../Utils/formUtils';
+import {validateEmail, validatePassword, validateUsername} from '../../Utils/validations';
+import to from '../../Utils/await-to';
+import * as usersService from '../../Services/users/UsersService';
 import {Alert} from "@mui/material";
-import {useSessionManager} from "../../utils/Session";
-import {Problem} from "../../services/utils/Problem";
+import {useSessionManager} from "../../Utils/Session";
+import {Problem} from "../../Services/utils/Problem";
 
 const theme = createTheme();
 

@@ -9,17 +9,14 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from '../../utils/formUtils';
-import * as usersService from '../../services/users/UsersService';
-import to from "../../utils/await-to";
+import {useForm} from '../../Utils/formUtils';
+import * as usersService from '../../Services/users/UsersService';
+import to from "../../Utils/await-to";
 import {Alert} from "@mui/material";
-import {useSessionManager} from "../../utils/Session";
-import {validatePassword, validateUsername} from '../../utils/validations';
-import {Problem} from "../../services/utils/Problem";
-
-const theme = createTheme();
+import {useSessionManager} from "../../Utils/Session";
+import {validatePassword, validateUsername} from '../../Utils/validations';
+import {Problem} from "../../Services/utils/Problem";
 
 /**
  * Login component.
@@ -66,67 +63,65 @@ function Login() {
     });
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
-                        <TextField
-                            {...errors.username && {error: true, helperText: errors.username}}
-                            margin="normal"
-                            required
-                            fullWidth
-                            label="Username"
-                            name="username"
-                            onChange={handleChange}
-                            autoComplete="username"
-                        />
-                        <TextField
-                            {...errors.password && {error: true, helperText: errors.password}}
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            onChange={handleChange}
-                            autoComplete="current-password"
-                        />
-                        {formError && <Alert severity="error">{formError}</Alert>}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item>
-                                <Link onClick={() => {
-                                    navigate('/register')
-                                }} component='button' variant="body2">
-                                    Don't have an account? Sign Up
-                                </Link>
-                            </Grid>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+                    <TextField
+                        {...errors.username && {error: true, helperText: errors.username}}
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="Username"
+                        name="username"
+                        onChange={handleChange}
+                        autoComplete="username"
+                    />
+                    <TextField
+                        {...errors.password && {error: true, helperText: errors.password}}
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        onChange={handleChange}
+                        autoComplete="current-password"
+                    />
+                    {formError && <Alert severity="error">{formError}</Alert>}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{mt: 3, mb: 2}}
+                    >
+                        Sign In
+                    </Button>
+                    <Grid container>
+                        <Grid item>
+                            <Link onClick={() => {
+                                navigate('/register')
+                            }} component='button' variant="body2">
+                                Don't have an account? Sign Up
+                            </Link>
                         </Grid>
-                    </Box>
+                    </Grid>
                 </Box>
-            </Container>
-        </ThemeProvider>
+            </Box>
+        </Container>
     );
 }
 
