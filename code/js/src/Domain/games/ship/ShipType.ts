@@ -18,3 +18,11 @@ export class ShipType {
         this.points = points;
     }
 }
+
+export const defaultShipTypes: ShipType[] = [
+    new ShipType(5, "Carrier", 50),
+    new ShipType(4, "Battleship", 40),
+    new ShipType(3, "Cruiser", 30),
+    new ShipType(3, "Submarine", 30),
+    new ShipType(2, "Destroyer", 20)
+];

@@ -9,7 +9,11 @@ import Typography from "@mui/material/Typography";
 /**
  * GameplayMenu component.
  */
-function GameplayMenu({onQuickPlay}: { onQuickPlay: () => void }) {
+function GameplayMenu({
+                          onQuickPlay,
+                          onCreateGame,
+                          onSearchGame
+                      }: { onQuickPlay: () => void, onCreateGame: () => void, onSearchGame: () => void }) {
     return (
         <Box
             sx={{
@@ -42,6 +46,7 @@ function GameplayMenu({onQuickPlay}: { onQuickPlay: () => void }) {
                     startIcon={<AddIcon/>}
                     color="primary"
                     onClick={() => {
+                        onCreateGame();
                     }}
                 >
                     New Game
@@ -54,6 +59,7 @@ function GameplayMenu({onQuickPlay}: { onQuickPlay: () => void }) {
                     startIcon={<SearchIcon/>}
                     color="primary"
                     onClick={() => {
+                        onSearchGame();
                     }}
                 >
                     Search Game

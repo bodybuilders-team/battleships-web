@@ -36,13 +36,16 @@ function BoardSetup({boardSize, ships}: { boardSize: number, ships: ShipType[] }
                                     sx={{
                                         alignItems: 'center',
                                         display: 'flex',
-                                        flexDirection: 'column'
+                                        flexDirection: 'row'
                                     }}
                                 >
                                     {
                                         unplacedShips.map(ship => (
-                                            <ShipView type={ship} orientation={Orientation.HORIZONTAL}
-                                                      key={ship.shipName}/>
+                                            <ShipView
+                                                type={ship}
+                                                orientation={Orientation.VERTICAL}
+                                                key={ship.shipName}
+                                            />
                                         ))
                                     }
                                 </Box>

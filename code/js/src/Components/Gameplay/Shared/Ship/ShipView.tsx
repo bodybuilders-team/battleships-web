@@ -11,18 +11,19 @@ import {Orientation} from "../../../../Domain/games/ship/Orientation";
  * @param orientation the orientation of the ship
  */
 function ShipView({type, orientation}: { type: ShipType, orientation: Orientation }) {
+    const shipImage = `ship_${type.shipName.toLowerCase()}_${orientation === Orientation.VERTICAL ? "v" : "h"}.png`;
+    const shipImageSrc = require(`../../../../Assets/${shipImage}`).default;
+
     return (
         <Box
             sx={{
                 width: (tileSize * (orientation === Orientation.HORIZONTAL ? type.size : 1)),
                 height: (tileSize * (orientation === Orientation.VERTICAL ? type.size : 1)),
-                backgroundColor: 'darkgray',
                 margin: 'auto',
-                border: '1px solid black',
                 marginTop: '10px',
             }}
         >
-            {/*TODO: Add image*/}
+            <img src={shipImageSrc} alt={"ship"}/>
         </Box>
     );
 }

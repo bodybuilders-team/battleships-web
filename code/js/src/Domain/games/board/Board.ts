@@ -22,6 +22,9 @@ export class Board {
     }
 }
 
+export const defaultBoardSize = 10;
+export const minBoardSize = 7;
+export const maxBoardSize = 18;
 
 /**
  * Generates a matrix only with water cells.
