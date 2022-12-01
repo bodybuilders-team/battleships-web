@@ -43,8 +43,7 @@ class HashingUtils(private val serverConfig: ServerConfiguration) {
      * @param token the token to be hashed
      * @return the hash of the token
      */
-    fun hashToken(token: String): String =
-        (token).hmac(tokenKey)
+    fun hashToken(token: String): String = (token).hmac(tokenKey)
 
     /**
      * Generates a hash for the given [password] and compares it to the given [passwordHash].

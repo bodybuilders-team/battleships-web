@@ -18,7 +18,7 @@ import {useLoggedIn, useSessionManager} from "../Utils/Session";
 const pages = [
     {name: 'Login', href: '/login', auth: false},
     {name: 'Register', href: '/register', auth: false},
-    {name: 'Gameplay', href: '/gameplay', auth: true},
+    {name: 'Play', href: '/gameplay-menu', auth: true},
     {name: 'Ranking', href: '/ranking'},
     {name: 'About', href: '/about'},
 ];

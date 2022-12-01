@@ -58,12 +58,11 @@ class DeployedShip : Ship {
         type: ShipType,
         coordinate: Coordinate,
         orientation: Orientation,
-        lives: Int
+        lives: Int,
     ) {
 
-        if (lives !in 0..type.size) {
+        if (lives !in 0..type.size)
             throw InvalidDeployedShipException("Ship lives must be between 0 and ${type.size}")
-        }
 
         this.player = player
         this.type = type

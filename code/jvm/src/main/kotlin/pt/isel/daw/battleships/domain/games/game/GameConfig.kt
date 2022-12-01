@@ -50,33 +50,28 @@ class GameConfig {
         maxTimePerRound: Int,
         maxTimeForLayoutPhase: Int,
         shotsPerRound: Int,
-        shipTypes: List<ShipType>
+        shipTypes: List<ShipType>,
     ) {
-        if (gridSize !in MIN_GRID_SIZE..MAX_GRID_SIZE) {
+        if (gridSize !in MIN_GRID_SIZE..MAX_GRID_SIZE)
             throw InvalidGameConfigException("Grid size must be between $MIN_GRID_SIZE and $MAX_GRID_SIZE")
-        }
 
-        if (maxTimePerRound !in MIN_MAX_TIME_PER_ROUND..MAX_MAX_TIME_PER_ROUND) {
+        if (maxTimePerRound !in MIN_MAX_TIME_PER_ROUND..MAX_MAX_TIME_PER_ROUND)
             throw InvalidGameConfigException(
                 "Max time per round must be between $MIN_MAX_TIME_PER_ROUND and $MAX_MAX_TIME_PER_ROUND"
             )
-        }
 
-        if (maxTimeForLayoutPhase !in MIN_MAX_TIME_FOR_LAYOUT_PHASE..MAX_MAX_TIME_FOR_LAYOUT_PHASE) {
+        if (maxTimeForLayoutPhase !in MIN_MAX_TIME_FOR_LAYOUT_PHASE..MAX_MAX_TIME_FOR_LAYOUT_PHASE)
             throw InvalidGameConfigException(
                 "Max time for layout phase must be between $MIN_MAX_TIME_FOR_LAYOUT_PHASE and $MAX_MAX_TIME_FOR_LAYOUT_PHASE"
             )
-        }
 
-        if (shotsPerRound !in MIN_SHOTS_PER_ROUND..MAX_SHOTS_PER_ROUND) {
+        if (shotsPerRound !in MIN_SHOTS_PER_ROUND..MAX_SHOTS_PER_ROUND)
             throw InvalidGameConfigException(
                 "Shots per round must be between $MIN_SHOTS_PER_ROUND and $MAX_SHOTS_PER_ROUND"
             )
-        }
 
-        if (shipTypes.isEmpty()) {
+        if (shipTypes.isEmpty())
             throw InvalidGameConfigException("Ship types must not be empty")
-        }
 
         this.gridSize = gridSize
         this.maxTimePerRound = maxTimePerRound
@@ -97,7 +92,7 @@ class GameConfig {
      */
     fun testShipTypes(ships: List<UndeployedShip>): Boolean =
         shipTypes.sumOf { shipType -> shipType.quantity } == ships.size &&
-            shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
+                shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -111,10 +106,10 @@ class GameConfig {
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
         if (shipTypes.any { shipType ->
-            other.shipTypes.none { otherShipType ->
-                shipType == otherShipType
+                other.shipTypes.none { otherShipType ->
+                    shipType == otherShipType
+                }
             }
-        }
         ) return false
 
         return true

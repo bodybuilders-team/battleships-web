@@ -5,18 +5,27 @@ import Button from "@mui/material/Button";
 import {defaultShipTypes, ShipType} from "../../../Domain/games/ship/ShipType";
 import TextField from "@mui/material/TextField";
 import {Add, Remove} from "@mui/icons-material";
-import {Slider} from "@mui/material";
+import {Alert, Slider} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import ShipView from "../Shared/Ship/ShipView";
 import {Orientation} from "../../../Domain/games/ship/Orientation";
 import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/games/board/Board";
+import * as gamesService from '../../../Services/games/GamesService';
+import to from "../../../Utils/await-to";
+import {useSession} from "../../../Utils/Session";
+import {handleError} from "../../../Services/utils/fetchSiren";
+import {useNavigate} from "react-router-dom";
+import {EmbeddedLink} from "../../../Services/utils/siren/SubEntity";
 
 
 /**
  * GameConfiguration component.
  */
 function GameConfiguration() {
+
+    const session = useSession();
+    const navigate = useNavigate();
 
     const [gameName, setGameName] = React.useState("");
     const [boardSize, setBoardSize] = React.useState(defaultBoardSize);
@@ -26,6 +35,46 @@ function GameConfiguration() {
     const [ships, setShips] = React.useState<Map<ShipType, number>>(
         new Map<ShipType, number>(defaultShipTypes.map(ship => [ship, 1]))
     );
+    const [error, setError] = React.useState<string | null>(null);
+
+    function handleCreateGame() {
+        async function createGame() {
+            const [err, res] = await to(
+                gamesService.createGame(
+                    session!.accessToken,
+                    "http://localhost:8080/games",
+                    {
+                        gridSize: boardSize,
+                        maxTimePerRound: timePerTurn,
+                        shotsPerRound: shotsPerTurn,
+                        maxTimeForLayoutPhase: timeForBoardConfiguration,
+                        shipTypes: Array.from(ships.entries()).map(([shipType, count]) => ({
+                            shipName: shipType.shipName,
+                            size: shipType.size,
+                            quantity: count,
+                            points: shipType.points
+                        }))
+                    }
+                )
+            );
+
+            if (err) {
+                handleError(err, setError);
+                return;
+            }
+
+            if (res?.entities === undefined)
+                throw new Error("Entities are undefined");
+
+            const game = res.entities.find(entity => entity.rel.includes("game")) as EmbeddedLink;
+            if (game === undefined)
+                throw new Error("Game entity not found");
+
+            navigate(`/gameplay`, {state: {gameLink: game.href}});
+        }
+
+        createGame();
+    }
 
     return (
         <Box
@@ -37,6 +86,7 @@ function GameConfiguration() {
             }}
         >
             <Typography sx={{mb: 3}} variant="h4">Game Configuration</Typography>
+            {error && <Alert severity="error">{error}</Alert>}
             <Box sx={{
                 mt: 1,
                 alignItems: 'center',
@@ -175,6 +225,7 @@ function GameConfiguration() {
                         startIcon={<Add/>}
                         color="primary"
                         onClick={() => {
+                            handleCreateGame();
                         }}
                     >
                         Create Game

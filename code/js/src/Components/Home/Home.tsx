@@ -50,7 +50,7 @@ function Home() {
                         startIcon={session ? <PlayArrowIcon/> : <Login/>}
                         color="primary"
                         onClick={() => {
-                            navigate(session ? '/gameplay' : '/login');
+                            navigate(session ? '/gameplay-menu' : '/login');
                         }}
                     >
                         {session ? "Play" : "Log in"}

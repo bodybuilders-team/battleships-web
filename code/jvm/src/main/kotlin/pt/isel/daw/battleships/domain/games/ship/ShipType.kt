@@ -50,31 +50,27 @@ class ShipType {
         shipName: String,
         quantity: Int,
         size: Int,
-        points: Int
+        points: Int,
     ) {
-        if (shipName.length !in MIN_SHIP_NAME_LENGTH..MAX_SHIP_NAME_LENGTH) {
+        if (shipName.length !in MIN_SHIP_NAME_LENGTH..MAX_SHIP_NAME_LENGTH)
             throw InvalidShipTypeException(
                 "Ship type name must be between $MIN_SHIP_NAME_LENGTH and $MAX_SHIP_NAME_LENGTH characters long"
             )
-        }
 
-        if (quantity !in MIN_SHIP_QUANTITY..MAX_SHIP_QUANTITY) {
+        if (quantity !in MIN_SHIP_QUANTITY..MAX_SHIP_QUANTITY)
             throw InvalidShipTypeException(
                 "Ship type quantity must be between $MIN_SHIP_QUANTITY and $MAX_SHIP_QUANTITY"
             )
-        }
 
-        if (size !in MIN_SHIP_SIZE..MAX_SHIP_SIZE) {
+        if (size !in MIN_SHIP_SIZE..MAX_SHIP_SIZE)
             throw InvalidShipTypeException(
                 "Ship type size must be between $MIN_SHIP_SIZE and $MAX_SHIP_SIZE"
             )
-        }
 
-        if (points !in MIN_SHIP_POINTS..MAX_SHIP_POINTS) {
+        if (points !in MIN_SHIP_POINTS..MAX_SHIP_POINTS)
             throw InvalidShipTypeException(
                 "Ship type points must be between $MIN_SHIP_POINTS and $MAX_SHIP_POINTS"
             )
-        }
 
         this.shipName = shipName
         this.quantity = quantity

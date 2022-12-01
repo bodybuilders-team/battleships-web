@@ -1,8 +1,12 @@
 - Database:
 - Project structure:
+    - Improve frontend structure
 - Documentation:
-    - Review and improve report
+    - Review and improve report:
+       - Add backend documentation
+       - Add frontend documentation
 - Implementation:
+    - Implement frontend
     - Add more tests
     - Review validations
     - Leave game mechanism

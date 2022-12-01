@@ -17,7 +17,7 @@ import to from '../../Utils/await-to';
 import * as usersService from '../../Services/users/UsersService';
 import {Alert} from "@mui/material";
 import {useSessionManager} from "../../Utils/Session";
-import {Problem} from "../../Services/utils/Problem";
+import {handleError} from "../../Services/utils/fetchSiren";
 
 const theme = createTheme();
 
@@ -43,13 +43,7 @@ function Register() {
             const [err, res] = await to(usersService.register("http://localhost:8080/users", email, username, password));
 
             if (err) {
-                if (err instanceof Problem) {
-                    setFormError(err.title);
-                    return
-                }
-
-                setFormError(err.message)
-
+                handleError(err, setFormError);
                 return;
             }
 

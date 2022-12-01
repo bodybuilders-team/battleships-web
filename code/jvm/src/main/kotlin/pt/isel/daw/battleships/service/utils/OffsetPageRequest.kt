@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort
 data class OffsetPageRequest(
     private val offset: Long,
     private val limit: Int,
-    private val sort: Sort? = null
+    private val sort: Sort? = null,
 ) : Pageable {
 
     init {
@@ -34,12 +34,13 @@ data class OffsetPageRequest(
     )
 
     override fun previousOrFirst(): Pageable =
-        if (hasPrevious()) {
+        if (hasPrevious())
             OffsetPageRequest(
                 offset = if (offset >= limit) offset - limit else 0,
                 limit = limit
             )
-        } else this
+        else
+            this
 
     override fun first(): Pageable = OffsetPageRequest(
         offset = 0,

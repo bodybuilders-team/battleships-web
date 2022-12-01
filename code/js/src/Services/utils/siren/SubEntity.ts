@@ -59,7 +59,7 @@ export interface EmbeddedSubEntity<T> {
     class?: string[]
     rel: string[]
     properties?: T
-    entities?: EmbeddedSubEntity<unknown>[] | EmbeddedLink[]
+    entities?: SubEntity<any>[]
     actions?: Action[]
     links?: Link[]
 }

@@ -10,7 +10,7 @@ import {SirenEntity} from "../../../../utils/siren/SirenEntity"
  * @property state the state of the game
  * @property players the players of the game
  */
-interface GetGameOutputModel {
+export interface GetGameOutputModel {
     id: string;
     name: string;
     creator: string;

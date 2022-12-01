@@ -35,7 +35,7 @@ import pt.isel.daw.battleships.utils.JwtProvider
 class PlayersServiceImpl(
     private val gamesRepository: GamesRepository,
     usersRepository: UsersRepository,
-    jwtProvider: JwtProvider
+    jwtProvider: JwtProvider,
 ) : PlayersService, AuthenticatedService(usersRepository, jwtProvider) {
 
     override fun getFleet(token: String, gameId: Int): DeployedFleetDTO {
@@ -51,9 +51,8 @@ class PlayersServiceImpl(
         val game = getGameById(gameId = gameId)
         val player = game.getPlayer(username = user.username)
 
-        if (game.state.phase != GameState.GamePhase.DEPLOYING_FLEETS) {
+        if (game.state.phase != GameState.GamePhase.DEPLOYING_FLEETS)
             throw InvalidPhaseException("Game is not in the deploying fleet phase")
-        }
 
         if (game.state.phaseExpired()) {
             game.abortGame()
@@ -111,7 +110,7 @@ class PlayersServiceImpl(
 
         when {
             game.state.phase == GameState.GamePhase.FINISHED &&
-                game.state.turn != game.state.winner && game.state.turn == player ->
+                    game.state.turn != game.state.winner && game.state.turn == player ->
                 throw FiringShotsTimeExpiredException("The firing shots time has expired. Game is finished.")
 
             game.state.phase != GameState.GamePhase.IN_PROGRESS -> throw InvalidPhaseException("Game is not in progress.")
@@ -121,9 +120,9 @@ class PlayersServiceImpl(
         val shotsCoordinates = unfiredShotsDTO.shots.map { it.coordinate.toCoordinate() }
         val shots = player.shoot(coordinates = shotsCoordinates)
 
-        if (opponent.deployedShips.all(DeployedShip::isSunk)) {
+        if (opponent.deployedShips.all(DeployedShip::isSunk))
             game.finishGame(winner = player)
-        } else {
+        else {
             game.updatePhase()
 
             game.state.turn = opponent

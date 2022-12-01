@@ -1,0 +1,38 @@
+{
+  "gridSize": 10,
+  "maxTimeForLayoutPhase": 100,
+  "shotsPerRound": 1,
+  "maxTimePerRound": 100,
+  "shipTypes": [
+    {
+      "shipName": "Carrier",
+      "size": 5,
+      "quantity": 1,
+      "points": 50
+    },
+    {
+      "shipName": "Battleship",
+      "size": 4,
+      "quantity": 1,
+      "points": 40
+    },
+    {
+      "shipName": "Cruiser",
+      "size": 3,
+      "quantity": 1,
+      "points": 30
+    },
+    {
+      "shipName": "Submarine",
+      "size": 3,
+      "quantity": 1,
+      "points": 30
+    },
+    {
+      "shipName": "Destroyer",
+      "size": 2,
+      "quantity": 1,
+      "points": 30
+    }
+  ]
+}

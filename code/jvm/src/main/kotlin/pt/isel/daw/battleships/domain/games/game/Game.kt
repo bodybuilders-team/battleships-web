@@ -59,11 +59,10 @@ class Game {
         name: String,
         creator: User,
         config: GameConfig,
-        state: GameState
+        state: GameState,
     ) {
-        if (name.length !in MIN_NAME_LENGTH..MAX_NAME_LENGTH) {
+        if (name.length !in MIN_NAME_LENGTH..MAX_NAME_LENGTH)
             throw InvalidGameException("Name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long.")
-        }
 
         this.name = name
         this.creator = creator
@@ -115,9 +114,8 @@ class Game {
      * @throws NotFoundException if there is no opponent yet
      */
     fun getOpponent(player: Player): Player {
-        if (player !in players) {
+        if (player !in players)
             throw UserNotInGameException("Player with username ${player.user.username} is not part of the game")
-        }
 
         return players.find { it != player }
             ?: throw NotFoundException("There is no opponent yet")
@@ -130,9 +128,8 @@ class Game {
      * @throws IllegalStateException if the game is already full
      */
     fun addPlayer(player: Player) {
-        if (players.size >= MAX_GAME_PLAYERS) {
+        if (players.size >= MAX_GAME_PLAYERS)
             throw IllegalStateException("Game already has two players")
-        }
 
         player.user.numberOfGamesPlayed++
         players.add(player)
@@ -151,11 +148,10 @@ class Game {
      */
     fun updatePhase() {
         state.phase =
-            if (state.phase == GameState.GamePhase.IN_PROGRESS) {
+            if (state.phase == GameState.GamePhase.IN_PROGRESS)
                 state.phase
-            } else {
+            else
                 state.phase.next()
-            }
 
         state.phaseExpirationTime = Timestamp.from(
             Instant.now().plusSeconds(
@@ -201,9 +197,8 @@ class Game {
             val winner = getOpponent(currentPlayer)
 
             finishGame(winner)
-        } else {
+        } else
             abortGame()
-        }
     }
 
     companion object {

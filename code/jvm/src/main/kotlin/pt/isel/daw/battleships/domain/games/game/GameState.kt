@@ -52,25 +52,22 @@ class GameState {
         phaseExpirationTime: Timestamp = Timestamp.from(Instant.now().plus(MATCHMAKING_MAX_TIME, ChronoUnit.DAYS)),
         round: Int? = null,
         turn: Player? = null,
-        winner: Player? = null
+        winner: Player? = null,
     ) {
-        if (round != null && round < 0) throw InvalidGameStateException("Round must be positive")
+        if (round != null && round < 0)
+            throw InvalidGameStateException("Round must be positive")
 
-        if (turn != null && phase != IN_PROGRESS) {
+        if (turn != null && phase != IN_PROGRESS)
             throw InvalidGameStateException("Turn can only be set when the game is in progress")
-        }
 
-        if (turn == null && phase == IN_PROGRESS) {
+        if (turn == null && phase == IN_PROGRESS)
             throw InvalidGameStateException("Turn must be set when the game is in progress")
-        }
 
-        if (winner != null && phase != FINISHED) {
+        if (winner != null && phase != FINISHED)
             throw InvalidGameStateException("Winner can only be set when the game is finished")
-        }
 
-        if (winner == null && phase == FINISHED) {
+        if (winner == null && phase == FINISHED)
             throw InvalidGameStateException("Winner must be set when the game is finished")
-        }
 
         this.phase = phase
         this.phaseExpirationTime = phaseExpirationTime

@@ -1,5 +1,6 @@
 import {SirenEntity, sirenMediaType} from "./siren/SirenEntity";
 import {Problem, problemMediaType} from "./Problem";
+import * as React from "react";
 
 /**
  * Fetches a Siren entity from the given URL.
@@ -40,6 +41,22 @@ export async function fetchSiren<T>(
     const json = await res.json();
 
     return new SirenEntity<T>(json);
+}
+
+/**
+ * Handles an API error response.
+ *
+ * @param err the error
+ * @param setError the error setter
+ */
+export function handleError(
+    err: Error | Problem,
+    setError: React.Dispatch<React.SetStateAction<string | null>>
+) {
+    if (err instanceof Problem)
+        setError(err.title);
+    else
+        setError(err.message);
 }
 
 /**

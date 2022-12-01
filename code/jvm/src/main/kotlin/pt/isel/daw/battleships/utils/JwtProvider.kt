@@ -71,7 +71,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     data class RefreshTokenDetails(
         val token: String,
-        val expirationDate: Timestamp
+        val expirationDate: Timestamp,
     )
 
     /**
@@ -164,11 +164,11 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      * @return the parsed bearer token or null if the token is not a bearer token
      */
     fun parseBearerToken(token: String): String? =
-        if (!token.startsWith(prefix = BEARER_TOKEN_PREFIX)) {
+        if (!token.startsWith(prefix = BEARER_TOKEN_PREFIX))
             null
-        } else {
+        else
             token.substringAfter(delimiter = BEARER_TOKEN_PREFIX)
-        }
+
 
     companion object {
         private const val BEARER_TOKEN_PREFIX = "Bearer "

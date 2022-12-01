@@ -63,9 +63,10 @@ class Player {
     constructor(
         game: Game,
         user: User,
-        points: Int = 0
+        points: Int = 0,
     ) {
-        if (points < 0) throw InvalidPlayerException("The points must be greater than or equal to 0.")
+        if (points < 0)
+            throw InvalidPlayerException("The points must be greater than or equal to 0.")
 
         this.game = game
         this.user = user
@@ -78,15 +79,11 @@ class Player {
      * @param undeployedShips the ships to deploy
      */
     fun deployFleet(undeployedShips: List<UndeployedShip>) {
-        val config = game.config
-
-        if (deployedShips.isNotEmpty()) {
+        if (deployedShips.isNotEmpty())
             throw FleetAlreadyDeployedException("Player has already deployed a fleet")
-        }
 
-        if (!config.testShipTypes(undeployedShips)) {
+        if (!game.config.testShipTypes(undeployedShips))
             throw InvalidFleetException("Invalid fleet for this game configuration")
-        }
 
         undeployedShips.forEach { undeployedShip ->
             if (
@@ -95,14 +92,12 @@ class Player {
                     undeployedShip.orientation,
                     undeployedShip.type.size
                 )
-            ) {
+            )
                 throw InvalidShipTypeException("Ship is out of bounds")
-            }
 
             deployedShips.forEach { ship ->
-                if (ship.isOverlapping(otherShip = undeployedShip)) {
+                if (ship.isOverlapping(otherShip = undeployedShip))
                     throw InvalidShipDeploymentException("Ship is overlapping another ship")
-                }
             }
 
             deployedShips.add(
@@ -129,20 +124,20 @@ class Player {
     private fun isValidShipCoordinate(
         coordinate: Coordinate,
         orientation: Orientation,
-        size: Int
+        size: Int,
     ): Boolean {
         val colsRange = game.config.colsRange
         val rowsRange = game.config.rowsRange
 
         return (
-            orientation == Orientation.HORIZONTAL &&
-                (coordinate.col + size - 1) in colsRange &&
-                coordinate.row in rowsRange
-            ) || (
-            orientation == Orientation.VERTICAL &&
-                (coordinate.row + size - 1) in rowsRange &&
-                coordinate.col in colsRange
-            )
+                orientation == Orientation.HORIZONTAL &&
+                        (coordinate.col + size - 1) in colsRange &&
+                        coordinate.row in rowsRange
+                ) || (
+                orientation == Orientation.VERTICAL &&
+                        (coordinate.row + size - 1) in rowsRange &&
+                        coordinate.col in colsRange
+                )
     }
 
     /**
@@ -154,23 +149,18 @@ class Player {
      * @throws InvalidFiredShotException if a shot is invalid
      */
     fun shoot(coordinates: List<Coordinate>): List<Shot> {
-        if (!coordinates.all { it.col in game.config.colsRange && it.row in game.config.rowsRange }) {
+        if (!coordinates.all { it.col in game.config.colsRange && it.row in game.config.rowsRange })
             throw InvalidFiredShotException("Shot is out of bounds")
-        }
 
-        if (coordinates.distinctBy { it }.size != coordinates.size) {
+        if (coordinates.distinctBy { it }.size != coordinates.size)
             throw InvalidFiredShotException("Shots must have distinct coordinates.")
-        }
 
         if (
             coordinates.any { coordinate ->
-                coordinate in shots.map { existingShots ->
-                    existingShots.coordinate
-                }
+                coordinate in shots.map { existingShots -> existingShots.coordinate }
             }
-        ) {
+        )
             throw InvalidFiredShotException("Shots must be to coordinates that have not been shot yet.")
-        }
 
         val firedShots = coordinates.map { coordinate ->
             val (result, sunkShip) = game.getOpponent(this).deployedShips

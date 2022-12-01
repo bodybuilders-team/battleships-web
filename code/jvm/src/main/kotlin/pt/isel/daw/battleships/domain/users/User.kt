@@ -47,29 +47,24 @@ class User {
         email: String,
         passwordHash: String,
         points: Int = 0,
-        numberOfGamesPlayed: Int = 0
+        numberOfGamesPlayed: Int = 0,
     ) {
-        if (username.length !in MIN_USERNAME_LENGTH..MAX_USERNAME_LENGTH) {
+        if (username.length !in MIN_USERNAME_LENGTH..MAX_USERNAME_LENGTH)
             throw InvalidUserException(
                 "Username must be between $MIN_USERNAME_LENGTH and $MAX_USERNAME_LENGTH characters long."
             )
-        }
 
-        if (!email.matches(EMAIL_REGEX.toRegex())) {
+        if (!email.matches(EMAIL_REGEX.toRegex()))
             throw InvalidUserException("Email must be a valid email address.")
-        }
 
-        if (passwordHash.length != PASSWORD_HASH_LENGTH) {
+        if (passwordHash.length != PASSWORD_HASH_LENGTH)
             throw InvalidUserException("Password hash must have a length of $PASSWORD_HASH_LENGTH.")
-        }
 
-        if (points < 0) {
+        if (points < 0)
             throw InvalidUserException("Points must be a positive integer.")
-        }
 
-        if (numberOfGamesPlayed < 0) {
+        if (numberOfGamesPlayed < 0)
             throw InvalidUserException("Number of games played must be a positive integer.")
-        }
 
         this.username = username
         this.email = email

@@ -5,15 +5,22 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Matchmake from "../Matchmake/Matchmake";
+import GameConfiguration from "../GameConfiguration/GameConfiguration";
 
 /**
  * GameplayMenu component.
  */
-function GameplayMenu({
-                          onQuickPlay,
-                          onCreateGame,
-                          onSearchGame
-                      }: { onQuickPlay: () => void, onCreateGame: () => void, onSearchGame: () => void }) {
+function GameplayMenu() {
+
+    const [matchmaking, setMatchmaking] = React.useState(false);
+    const [creating, setCreating] = React.useState(false);
+
+    if (matchmaking)
+        return <Matchmake/>;
+    else if (creating)
+        return <GameConfiguration/>;
+
     return (
         <Box
             sx={{
@@ -33,7 +40,7 @@ function GameplayMenu({
                     startIcon={<PlayArrowIcon/>}
                     color="primary"
                     onClick={() => {
-                        onQuickPlay();
+                        setMatchmaking(true);
                     }}
                 >
                     Quick Play
@@ -46,7 +53,7 @@ function GameplayMenu({
                     startIcon={<AddIcon/>}
                     color="primary"
                     onClick={() => {
-                        onCreateGame();
+                        setCreating(true);
                     }}
                 >
                     New Game
@@ -59,7 +66,6 @@ function GameplayMenu({
                     startIcon={<SearchIcon/>}
                     color="primary"
                     onClick={() => {
-                        onSearchGame();
                     }}
                 >
                     Search Game

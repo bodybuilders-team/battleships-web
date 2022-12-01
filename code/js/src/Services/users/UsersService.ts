@@ -1,7 +1,19 @@
 import {RegisterOutput} from "./models/register/RegisterOutput";
 import {LoginOutput} from "./models/login/LoginOutput";
 import {LogoutOutput} from "./models/logout/LogoutOutput";
-import {post} from "../utils/fetchSiren";
+import {get, post} from "../utils/fetchSiren";
+import {GetUsersOutput} from "./models/getUsers/GetUsersOutput";
+
+/**
+ * Gets all the users.
+ *
+ * @param listUsersLink the link to the list users endpoint
+ *
+ * @return the API result of the get users request
+ */
+export async function getUsers(listUsersLink: string): Promise<GetUsersOutput> {
+    return await get(listUsersLink);
+}
 
 /**
  * Registers the user with the given email, username and password.

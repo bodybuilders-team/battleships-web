@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -16,7 +15,7 @@ import to from "../../Utils/await-to";
 import {Alert} from "@mui/material";
 import {useSessionManager} from "../../Utils/Session";
 import {validatePassword, validateUsername} from '../../Utils/validations';
-import {Problem} from "../../Services/utils/Problem";
+import {handleError} from "../../Services/utils/fetchSiren";
 
 /**
  * Login component.
@@ -39,13 +38,7 @@ function Login() {
             const [err, res] = await to(usersService.login("http://localhost:8080/users/login", username, password))
 
             if (err) {
-                if (err instanceof Problem) {
-                    setFormError(err.title);
-                    return
-                }
-
-                setFormError(err.message)
-
+                handleError(err, setFormError);
                 return;
             }
 
@@ -64,7 +57,6 @@ function Login() {
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline/>
             <Box
                 sx={{
                     marginTop: 8,

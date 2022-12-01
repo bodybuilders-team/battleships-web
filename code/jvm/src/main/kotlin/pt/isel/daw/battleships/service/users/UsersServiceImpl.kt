@@ -46,27 +46,24 @@ class UsersServiceImpl(
     private val refreshTokensRepository: RefreshTokensRepository,
     private val hashingUtils: HashingUtils,
     private val jwtProvider: JwtProvider,
-    private val config: ServerConfiguration
+    private val config: ServerConfiguration,
 ) : UsersService {
 
     override fun getUsers(offset: Int, limit: Int, orderBy: UsersOrder, ascending: Boolean): UsersDTO {
-        if (offset < 0 || limit < 0) {
+        if (offset < 0 || limit < 0)
             throw InvalidPaginationParamsException("Offset and limit must be positive")
-        }
 
-        if (limit > MAX_USERS_LIMIT) {
+        if (limit > MAX_USERS_LIMIT)
             throw InvalidPaginationParamsException("Limit must be less or equal than $MAX_USERS_LIMIT")
-        }
 
         return UsersDTO(
             users = usersRepository
                 .let {
-                    val pageable =
-                        OffsetPageRequest(
-                            offset = offset.toLong(),
-                            limit = limit,
-                            sort = orderBy.toSort(ascending)
-                        )
+                    val pageable = OffsetPageRequest(
+                        offset = offset.toLong(),
+                        limit = limit,
+                        sort = orderBy.toSort(ascending)
+                    )
 
                     usersRepository.findAll(/* pageable = */ pageable)
                 }
@@ -77,17 +74,14 @@ class UsersServiceImpl(
     }
 
     override fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO {
-        if (usersRepository.existsByUsername(username = registerInputDTO.username)) {
+        if (usersRepository.existsByUsername(username = registerInputDTO.username))
             throw AlreadyExistsException("User with username ${registerInputDTO.username} already exists")
-        }
 
-        if (usersRepository.existsByEmail(email = registerInputDTO.email)) {
+        if (usersRepository.existsByEmail(email = registerInputDTO.email))
             throw AlreadyExistsException("User with email ${registerInputDTO.email} already exists")
-        }
 
-        if (registerInputDTO.password.length < MIN_PASSWORD_LENGTH) {
+        if (registerInputDTO.password.length < MIN_PASSWORD_LENGTH)
             throw InvalidPasswordException("Password must be at least $MIN_PASSWORD_LENGTH characters long")
-        }
 
         val user = usersRepository.save(
             User(
@@ -157,9 +151,8 @@ class UsersServiceImpl(
 
         refreshTokensRepository.delete(refreshTokenEntity)
 
-        if (refreshTokenEntity.expirationDate.before(Timestamp.from(Instant.now()))) {
+        if (refreshTokenEntity.expirationDate.before(Timestamp.from(Instant.now())))
             throw RefreshTokenExpiredException("Refresh token expired")
-        }
 
         val (accessToken, newRefreshToken) = createTokens(user = user)
 
@@ -240,7 +233,7 @@ class UsersServiceImpl(
      */
     private data class Tokens(
         val accessToken: String,
-        val refreshToken: String
+        val refreshToken: String,
     )
 
     companion object {

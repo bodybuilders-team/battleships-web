@@ -29,7 +29,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin({ // TODO: Perguntar ao professor
+        new HtmlWebpackPlugin({
             favicon: "./public/favicon.ico",
             template: "./public/index.html"
         })
