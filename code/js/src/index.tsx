@@ -287,12 +287,12 @@ const theme = createTheme({
 });
 
 root.render(
-    <React.StrictMode>
-        <Router>
-            <ThemeProvider theme={theme}>
-                <CssBaseline/>
-                <App/>
-            </ThemeProvider>
-        </Router>
-    </React.StrictMode>
+    //<React.StrictMode>
+    <Router>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <App/>
+        </ThemeProvider>
+    </Router>
+    //</React.StrictMode>
 );

@@ -23,7 +23,7 @@ function ShipView({type, orientation}: { type: ShipType, orientation: Orientatio
                 marginTop: '10px',
             }}
         >
-            <img src={shipImageSrc} alt={"ship"}/>
+            <img src={shipImageSrc} alt={"Ship"}/>
         </Box>
     );
 }

@@ -1,8 +1,6 @@
 import * as React from "react";
 import BoardView from "../Shared/Board/BoardView";
 import {ConfigurableBoard} from "../../../Domain/games/board/ConfigurableBoard";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import {Card, CardActions, CardContent, Divider} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -11,6 +9,8 @@ import ShipView from "../Shared/Ship/ShipView";
 import {ShipType} from "../../../Domain/games/ship/ShipType";
 import {Orientation} from "../../../Domain/games/ship/Orientation";
 import {generateEmptyMatrix, generateRandomMatrix} from "../../../Domain/games/board/Board";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 
 
 /**
@@ -23,6 +23,7 @@ function BoardSetup({boardSize, ships}: { boardSize: number, ships: ShipType[] }
 
     const [board, setBoard] = React.useState<ConfigurableBoard>(new ConfigurableBoard(boardSize, generateEmptyMatrix(boardSize)));
     const [unplacedShips, setUnplacedShips] = React.useState<ShipType[]>(ships);
+    const [error, setError] = React.useState<string | null>(null);
 
     return (
         <Box component="main">
@@ -76,8 +77,7 @@ function BoardSetup({boardSize, ships}: { boardSize: number, ships: ShipType[] }
                 </Grid>
             </Container>
         </Box>
-    )
-        ;
+    );
 }
 
 export default BoardSetup;

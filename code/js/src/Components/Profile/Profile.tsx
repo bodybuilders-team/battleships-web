@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import ProfileDetails from "./ProfileDetails";
+import {InsertPhotoRounded} from "@mui/icons-material";
 
 // TODO: To change later
 const user = {
@@ -64,10 +65,7 @@ function Profile() {
                                     >
                                         {session.username}
                                     </Typography>
-                                    <Typography
-                                        color="textSecondary"
-                                        variant="body2"
-                                    >
+                                    <Typography color="textSecondary" variant="body2">
                                         {`${user.city} ${user.country}`}
                                     </Typography>
                                 </Box>
@@ -78,8 +76,9 @@ function Profile() {
                                     color="primary"
                                     fullWidth
                                     variant="text"
+                                    startIcon={<InsertPhotoRounded/>}
                                 >
-                                    Upload picture
+                                    Upload Picture
                                 </Button>
                             </CardActions>
                         </Card>

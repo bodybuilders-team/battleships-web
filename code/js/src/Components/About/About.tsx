@@ -1,14 +1,17 @@
 import * as React from "react";
+import PageContent from "../Utils/PageContent";
 
 /**
  * About component.
  */
 function About() {
+
+    const [error, setError] = React.useState<string | null>(null);
+
     return (
-        <div>
-            <h1>About</h1>
+        <PageContent title={"About"} error={error}>
             { /*TODO: Add content here - about and other info about the app*/}
-        </div>
+        </PageContent>
     );
 }
 

@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import {defaultShipTypes, ShipType} from "../../../Domain/games/ship/ShipType";
 import TextField from "@mui/material/TextField";
 import {Add, Remove} from "@mui/icons-material";
-import {Alert, Slider} from "@mui/material";
+import {Slider} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import ShipView from "../Shared/Ship/ShipView";
@@ -17,6 +17,7 @@ import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import {EmbeddedLink} from "../../../Services/utils/siren/SubEntity";
+import PageContent from "../../Utils/PageContent";
 
 
 /**
@@ -77,16 +78,7 @@ function GameConfiguration() {
     }
 
     return (
-        <Box
-            sx={{
-                marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}
-        >
-            <Typography sx={{mb: 3}} variant="h4">Game Configuration</Typography>
-            {error && <Alert severity="error">{error}</Alert>}
+        <PageContent title={"Game Configuration"} error={error}>
             <Box sx={{
                 mt: 1,
                 alignItems: 'center',
@@ -232,7 +224,7 @@ function GameConfiguration() {
                     </Button>
                 </Box>
             </Box>
-        </Box>
+        </PageContent>
     );
 }
 

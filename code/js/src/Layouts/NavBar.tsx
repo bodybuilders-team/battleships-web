@@ -13,7 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded';
 import {useNavigate} from 'react-router-dom';
-import {useLoggedIn, useSessionManager} from "../Utils/Session";
+import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
+import * as usersService from "../Services/users/UsersService";
+import to from "../Utils/await-to";
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -30,17 +32,21 @@ function NavBar() {
     const navigate = useNavigate();
     const loggedIn = useLoggedIn();
     const sessionManager = useSessionManager();
+    const session = useSession();
 
     const settings = [
         {
             name: 'Profile',
-            callback: () => {
-                navigate('/profile')
-            },
+            callback: () => navigate('/profile'),
             auth: true
-        }, {
+        },
+        {
             name: 'Logout',
-            callback: () => {
+            callback: async () => {
+                await to(
+                    usersService.logout("http://localhost:8080/users/logout", session!.refreshToken)
+                );
+
                 sessionManager.clearSession()
                 navigate('/')
             },
@@ -58,13 +64,8 @@ function NavBar() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+    const handleCloseNavMenu = () => setAnchorElNav(null);
+    const handleCloseUserMenu = () => setAnchorElUser(null);
 
     return (
         <AppBar position="static">

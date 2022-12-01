@@ -6,7 +6,7 @@ import Home from "./Components/Home/Home";
 import Login from "./Components/Authentication/Login";
 import Ranking from "./Components/Ranking/Ranking";
 import Profile from "./Components/Profile/Profile";
-import Gameplay from "./Components/Gameplay/Gameplay";
+import Gameplay from "./Components/Gameplay/Gameplay/Gameplay";
 import Register from './Components/Authentication/Register';
 import {Auth} from "./Utils/Session";
 import Footer from "./Layouts/Footer";
