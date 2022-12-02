@@ -18,29 +18,25 @@ function BoardView(board: Board) {
                 height: (board.size + 1) * tileSize,
                 margin: 'auto',
             }}>
-            <Grid container columns={board.size}>
+            <Grid container columns={board.size + 1}>
                 {Array.from(Array((board.size + 1) * (board.size + 1)).keys()).map((tileIndex) => (
                     <Grid item key={tileIndex} xs={1} sm={1} md={1}>
                         {
-                            tileIndex < board.size
-                                ? <Box // TODO: FIX THIS
-                                    sx={{
-                                        width: tileSize,
-                                        height: tileSize,
-                                        marginLeft: tileSize,
-                                    }}
-                                >
-                                    {String.fromCharCode(65 + tileIndex)}
-                                </Box>
+                            tileIndex == 0
+                                ? <Box sx={{width: tileSize, height: tileSize}}/>
                                 : (
-                                    tileIndex % (board.size) === 0
-                                        ? <Box
-                                            sx={{
-                                                width: tileSize,
-                                                height: tileSize,
-                                            }}
-                                        > {tileIndex / board.size}</Box>
-                                        : <Tile/>)
+                                    tileIndex <= board.size
+                                        ? <Box sx={{width: tileSize, height: tileSize}}>
+                                            {String.fromCharCode(64 + tileIndex)}
+                                        </Box>
+                                        : (
+                                            tileIndex % (board.size + 1) === 0
+                                                ? <Box sx={{width: tileSize, height: tileSize}}>
+                                                    {tileIndex / (board.size + 1)}
+                                                </Box>
+                                                : <Tile/>
+                                        )
+                                )
                         }
                     </Grid>
                 ))}

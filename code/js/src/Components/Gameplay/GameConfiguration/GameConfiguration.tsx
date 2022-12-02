@@ -28,12 +28,12 @@ function GameConfiguration() {
     const session = useSession();
     const navigate = useNavigate();
 
-    const [gameName, setGameName] = React.useState("");
-    const [boardSize, setBoardSize] = React.useState(defaultBoardSize);
-    const [shotsPerTurn, setShotsPerTurn] = React.useState(1);
-    const [timePerTurn, setTimePerTurn] = React.useState(60);
-    const [timeForBoardConfiguration, setTimeForBoardConfiguration] = React.useState(60);
-    const [ships, setShips] = React.useState<Map<ShipType, number>>(
+    const [gameName, setGameName] = React.useState("Game");
+    const [gridSize, setGridSize] = React.useState(defaultBoardSize);
+    const [shotsPerRound, setShotsPerRound] = React.useState(1);
+    const [maxTimePerRound, setMaxTimePerRound] = React.useState(100);
+    const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = React.useState(100);
+    const [shipTypes, setShipTypes] = React.useState<Map<ShipType, number>>(
         new Map<ShipType, number>(defaultShipTypes.map(ship => [ship, 1]))
     );
     const [error, setError] = React.useState<string | null>(null);
@@ -45,16 +45,19 @@ function GameConfiguration() {
                     session!.accessToken,
                     "http://localhost:8080/games",
                     {
-                        gridSize: boardSize,
-                        maxTimePerRound: timePerTurn,
-                        shotsPerRound: shotsPerTurn,
-                        maxTimeForLayoutPhase: timeForBoardConfiguration,
-                        shipTypes: Array.from(ships.entries()).map(([shipType, count]) => ({
-                            shipName: shipType.shipName,
-                            size: shipType.size,
-                            quantity: count,
-                            points: shipType.points
-                        }))
+                        name: gameName,
+                        config: {
+                            gridSize,
+                            maxTimePerRound,
+                            shotsPerRound,
+                            maxTimeForLayoutPhase,
+                            shipTypes: Array.from(shipTypes.entries()).map(([shipType, count]) => ({
+                                shipName: shipType.shipName,
+                                size: shipType.size,
+                                quantity: count,
+                                points: shipType.points
+                            }))
+                        }
                     }
                 )
             );
@@ -96,7 +99,7 @@ function GameConfiguration() {
 
                 <Box>
                     <Typography id="board-size-slider" gutterBottom>
-                        Grid Size {boardSize}x{boardSize}
+                        Grid Size {gridSize}x{gridSize}
                     </Typography>
                     <Slider
                         defaultValue={defaultBoardSize}
@@ -107,14 +110,14 @@ function GameConfiguration() {
                         min={minBoardSize}
                         max={maxBoardSize}
                         onChange={(event, value) => {
-                            setBoardSize(value as number);
+                            setGridSize(value as number);
                         }}
                     />
                 </Box>
 
                 <Box>
                     <Typography id="shots-per-turn-slider" gutterBottom>
-                        Shots per turn {shotsPerTurn}
+                        Shots per turn {shotsPerRound}
                     </Typography>
                     <Slider
                         defaultValue={1}
@@ -125,14 +128,14 @@ function GameConfiguration() {
                         min={1}
                         max={5}
                         onChange={(event, value) => {
-                            setShotsPerTurn(value as number);
+                            setShotsPerRound(value as number);
                         }}
                     />
                 </Box>
 
                 <Box>
                     <Typography id="time-per-turn-slider" gutterBottom>
-                        Time per turn {timePerTurn} seconds
+                        Time per turn {maxTimePerRound} seconds
                     </Typography>
                     <Slider
                         defaultValue={60}
@@ -143,7 +146,7 @@ function GameConfiguration() {
                         min={30}
                         max={120}
                         onChange={(event, value) => {
-                            setTimePerTurn(value as number);
+                            setMaxTimePerRound(value as number);
                         }}
                     />
                 </Box>
@@ -153,7 +156,7 @@ function GameConfiguration() {
                         Time for board configuration
                     </Typography>
                     <Typography id="time-for-board-configuration-slider" gutterBottom>
-                        {timeForBoardConfiguration} seconds
+                        {maxTimeForLayoutPhase} seconds
                     </Typography>
                     <Slider
                         defaultValue={60}
@@ -164,7 +167,7 @@ function GameConfiguration() {
                         min={30}
                         max={120}
                         onChange={(event, value) => {
-                            setTimeForBoardConfiguration(value as number);
+                            setMaxTimeForLayoutPhase(value as number);
                         }}
                     />
                 </Box>
@@ -175,7 +178,7 @@ function GameConfiguration() {
                     </Typography>
                     <Grid container spacing={2} justifyContent={"center"}>
                         {
-                            Array.from(ships.entries())
+                            Array.from(shipTypes.entries())
                                 .map(([ship, quantity]) => {
                                     return (
                                         <Grid item key={ship.shipName}>
@@ -187,7 +190,7 @@ function GameConfiguration() {
                                                 color="primary"
                                                 onClick={() => {
                                                     if (quantity < 5)
-                                                        setShips(new Map(ships.set(ship, quantity + 1)));
+                                                        setShipTypes(new Map(shipTypes.set(ship, quantity + 1)));
                                                 }}
                                             >
                                                 <Add/>
@@ -198,7 +201,7 @@ function GameConfiguration() {
                                                 color="primary"
                                                 onClick={() => {
                                                     if (quantity > 0)
-                                                        setShips(new Map(ships.set(ship, quantity - 1)));
+                                                        setShipTypes(new Map(shipTypes.set(ship, quantity - 1)));
                                                 }}
                                             >
                                                 <Remove/>

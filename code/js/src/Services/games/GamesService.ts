@@ -5,6 +5,7 @@ import {MatchmakeOutput} from "./models/games/matchmake/MatchmakeOutput";
 import {GetGameOutput} from "./models/games/getGame/GetGameOutput";
 import {GetGameStateOutput} from "./models/games/getGameState/GetGameStateOutput";
 import {JoinGameOutput} from "./models/games/joinGame/JoinGameOutput";
+import {CreateGameInput} from "./models/games/createGame/CreateGameInput";
 
 /**
  * Gets all the games.
@@ -22,16 +23,16 @@ export async function getGames(listGamesLink: string): Promise<GetGamesOutput> {
  *
  * @param token the token of the user
  * @param createGameLink the link to the create game endpoint
- * @param gameConfig the game configuration
+ * @param createGameInput the game configuration
  *
  * @return the API result of the create game request
  */
 export async function createGame(
     token: string,
     createGameLink: string,
-    gameConfig: GameConfigModel
+    createGameInput: CreateGameInput
 ): Promise<CreateGameOutput> {
-    return await postWithAuth(createGameLink, token, JSON.stringify(gameConfig));
+    return await postWithAuth(createGameLink, token, JSON.stringify(createGameInput));
 }
 
 /**

@@ -8,7 +8,7 @@ import {ErrorAlert} from "./ErrorAlert";
  *
  * @param props object containing the title of the page and the error message
  */
-function PageContent(props: { title?: string, error: string | null, children: React.ReactNode }) {
+function PageContent(props: { title?: string, error?: string | null, children: React.ReactNode }) {
     return (
         <Container component="main" maxWidth="xs">
             <h1>{props.title}</h1>
@@ -20,7 +20,7 @@ function PageContent(props: { title?: string, error: string | null, children: Re
                     alignItems: 'center',
                 }}
             >
-                <ErrorAlert error={props.error}/>
+                <ErrorAlert error={props.error ?? null}/>
                 {props.children}
             </Box>
         </Container>

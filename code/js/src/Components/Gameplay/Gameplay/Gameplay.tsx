@@ -87,54 +87,53 @@ function Gameplay() {
     });
 
     if (game?.state.phase === "DEPLOYING_FLEETS")
-        return <BoardSetup boardSize={game.config.gridSize} ships={game.config.shipTypes}/>;
+        return (
+            <BoardSetup boardSize={game.config.gridSize} ships={game.config.shipTypes}/>
+        );
     else if (game?.state.phase === "IN_PROGRESS")
         return (
-            <Grid container spacing={3}>
-                <Grid item lg={4} md={6} xs={12}>
-                    <Card>
-                        <CardContent>
-                            <Box
-                                sx={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    flexDirection: 'row'
-                                }}
-                            >
-                                <BoardView size={game.config.gridSize} grid={myBoard!.grid}/>
-                            </Box>
-                        </CardContent>
-                        <Divider/>
-                        <CardActions>
-                            <Button color="primary" fullWidth onClick={() => {
-                            }}>
-                                Shoot
-                            </Button>
-                            <Button color="primary" fullWidth onClick={() => {
-                            }}>
-                                Reset Shots
-                            </Button>
-                        </CardActions>
-                    </Card>
+            <PageContent error={error}>
+                <Grid container spacing={3}>
+                    <Grid item lg={4} md={6} xs={12}>
+                        <Card>
+                            <CardContent>
+                                <Box
+                                    sx={{
+                                        alignItems: 'center',
+                                        display: 'flex',
+                                        flexDirection: 'row'
+                                    }}
+                                >
+                                    <BoardView size={game.config.gridSize} grid={myBoard!.grid}/>
+                                </Box>
+                            </CardContent>
+                            <Divider/>
+                            <CardActions>
+                                <Button color="primary" fullWidth onClick={() => {
+                                }}>
+                                    Shoot
+                                </Button>
+                                <Button color="primary" fullWidth onClick={() => {
+                                }}>
+                                    Reset Shots
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                    <Grid item lg={8} md={6} xs={12}>
+                        <BoardView size={game.config.gridSize} grid={opponentBoard!.grid}/>
+                    </Grid>
                 </Grid>
-                <Grid item lg={8} md={6} xs={12}>
-                    <BoardView size={game.config.gridSize} grid={opponentBoard!.grid}/>
-                </Grid>
-            </Grid>
+            </PageContent>
         );
     else if (game?.state.phase === "FINISHED")
         return <div>Game finished</div>; // TODO: Implement game finished page
-
-    return (
-        <PageContent error={error}>
-            {
-                !game
-                    ? <LoadingSpinner text={"Loading game..."}/>
-                    : <></>
-
-            }
-        </PageContent>
-    );
+    else
+        return (
+            <PageContent error={error}>
+                <LoadingSpinner text={"Loading game..."}/>
+            </PageContent>
+        );
 }
 
 export default Gameplay;

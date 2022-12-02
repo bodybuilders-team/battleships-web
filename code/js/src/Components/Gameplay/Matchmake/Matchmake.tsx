@@ -45,7 +45,7 @@ function Matchmake() {
                 const gameLink = res.entities?.filter(e => e.rel.includes("game"))[0] as EmbeddedLink
 
                 if (!res.properties.wasCreated) {
-                    console.log("Matchmake by joining existing game");
+                    console.log("Matchmade by joining existing game");
                     setMatchmade(true);
                     navigate("/gameplay", {state: {gameLink: gameLink.href}});
                     return;
