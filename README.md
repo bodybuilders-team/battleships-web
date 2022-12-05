@@ -2,9 +2,15 @@
 
 > Battleship game.
 
-The project documentation is available [here](docs/README.md).
+The project development is divided into 2 phases:
 
-The HTTP API specification is available [here](docs/battleships-api-spec.yaml).
+* **Phase 1**: Development of the Web API for the Battleships game - **backend**
+  * The backend documentation is available [here](code/jvm/README.md)
+* **Phase 2**: Development of the Web UI for the Battleships game - **frontend**
+  * The fronted documentation is available [here](code/js/README.md)
+
+The HTTP API documentation required for a frontend client application to use this API is
+available [here](docs/battleships-api-doc.md).
 
 ---
 

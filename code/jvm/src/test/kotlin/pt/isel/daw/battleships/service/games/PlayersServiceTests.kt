@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @SpringBootTest
 class PlayersServiceTests {
-    // TODO: Implement tests
 
     @Test
     fun `A`() {
