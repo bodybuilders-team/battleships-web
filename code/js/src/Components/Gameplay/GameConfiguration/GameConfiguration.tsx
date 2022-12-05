@@ -11,13 +11,14 @@ import Grid from "@mui/material/Grid";
 import ShipView from "../Shared/Ship/ShipView";
 import {Orientation} from "../../../Domain/games/ship/Orientation";
 import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/games/board/Board";
-import * as gamesService from '../../../Services/games/GamesService';
 import to from "../../../Utils/await-to";
 import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import {EmbeddedLink} from "../../../Services/utils/siren/SubEntity";
 import PageContent from "../../Utils/PageContent";
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
+import {useNavigationState} from "../../../Utils/NavigationStateProvider";
 
 
 /**
@@ -37,13 +38,13 @@ function GameConfiguration() {
         new Map<ShipType, number>(defaultShipTypes.map(ship => [ship, 1]))
     );
     const [error, setError] = React.useState<string | null>(null);
+    const [battleshipsService, setBattleShipsService] = useBattleshipsService()
+    const navigationState = useNavigationState()
 
     function handleCreateGame() {
         async function createGame() {
             const [err, res] = await to(
-                gamesService.createGame(
-                    session!.accessToken,
-                    "http://localhost:8080/games",
+                battleshipsService.gamesService.createGame(
                     {
                         name: gameName,
                         config: {
@@ -74,7 +75,8 @@ function GameConfiguration() {
             if (game === undefined)
                 throw new Error("Game entity not found");
 
-            navigate(`/gameplay`, {state: {gameLink: game.href}});
+            navigationState.setLinks(battleshipsService.links)
+            navigate(`/gameplay`);
         }
 
         createGame();
@@ -195,7 +197,8 @@ function GameConfiguration() {
                                             >
                                                 <Add/>
                                             </IconButton>
-                                            <Typography id="ship-quantity-selector" gutterBottom>{quantity}</Typography>
+                                            <Typography id="ship-quantity-selector"
+                                                        gutterBottom>{quantity}</Typography>
                                             <IconButton
                                                 aria-label="remove"
                                                 color="primary"

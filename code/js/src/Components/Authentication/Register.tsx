@@ -11,11 +11,14 @@ import {useNavigate} from 'react-router-dom';
 import {useForm} from '../../Utils/formUtils';
 import {validateEmail, validatePassword, validateUsername} from '../../Utils/validateFields';
 import to from '../../Utils/await-to';
-import * as usersService from '../../Services/users/UsersService';
 import {useSessionManager} from "../../Utils/Session";
 import {handleError} from "../../Services/utils/fetchSiren";
 import {ErrorAlert} from "../Utils/ErrorAlert";
 import PageContent from "../Utils/PageContent";
+import {useNavigationState} from "../../Utils/NavigationStateProvider";
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
+import {Rels} from "../../Services/utils/Rels";
+import {throwError} from "../../Services/utils/errorUtils";
 
 
 /**
@@ -25,6 +28,9 @@ function Register() {
     const navigate = useNavigate();
     const sessionManager = useSessionManager();
     const [formError, setFormError] = React.useState<string | null>(null);
+    const navigationState = useNavigationState()
+
+    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {email: '', username: '', password: ''},
@@ -37,7 +43,7 @@ function Register() {
         },
         onSubmit: async (values) => {
             const {email, username, password} = values;
-            const [err, res] = await to(usersService.register("http://localhost:8080/users", email, username, password));
+            const [err, res] = await to(battleshipsService.usersService.register(email, username, password));
 
             if (err) {
                 handleError(err, setFormError);
@@ -50,9 +56,12 @@ function Register() {
             sessionManager.setSession({
                 username,
                 accessToken: res.properties.accessToken,
-                refreshToken: res.properties.refreshToken
+                refreshToken: res.properties.refreshToken,
+                userHomeLink: battleshipsService.links.get(Rels.USER_HOME)
+                    ?? throwError("User home link is undefined")
             });
 
+            navigationState.setLinks(battleshipsService.links)
             navigate('/');
         }
     });

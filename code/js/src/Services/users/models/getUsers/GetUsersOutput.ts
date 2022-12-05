@@ -5,7 +5,7 @@ import {SirenEntity} from "../../../utils/siren/SirenEntity";
  *
  * @property totalCount the total number of users
  */
-interface GetUsersOutputModel {
+export interface GetUsersOutputModel {
     totalCount: number;
 }
 

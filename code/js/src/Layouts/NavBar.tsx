@@ -14,8 +14,10 @@ import MenuItem from '@mui/material/MenuItem';
 import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded';
 import {useNavigate} from 'react-router-dom';
 import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
-import * as usersService from "../Services/users/UsersService";
 import to from "../Utils/await-to";
+import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
+import {Rels} from "../Services/utils/Rels";
+import { useNavigationState } from '../Utils/NavigationStateProvider';
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -33,6 +35,8 @@ function NavBar() {
     const loggedIn = useLoggedIn();
     const sessionManager = useSessionManager();
     const session = useSession();
+    const [battleShipsService, setBattleShipsService] = useBattleshipsService()
+    const navigationState = useNavigationState()
 
     const settings = [
         {
@@ -43,11 +47,23 @@ function NavBar() {
         {
             name: 'Logout',
             callback: async () => {
+                sessionManager.clearSession()
+                if (!session) {
+                    navigate('/')
+                    return
+                }
+
+                if (!battleShipsService.links.get(Rels.LOGOUT)) {
+                    await battleShipsService.getHome()
+                    await battleShipsService.usersService.getUserHome()
+                }
+
                 await to(
-                    usersService.logout("http://localhost:8080/users/logout", session!.refreshToken)
+                    battleShipsService.usersService.logout(session.refreshToken)
                 );
 
-                sessionManager.clearSession()
+                navigationState.setLinks(new Map())
+
                 navigate('/')
             },
             auth: true
@@ -76,7 +92,6 @@ function NavBar() {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
                         sx={{
                             mr: 2,
                             display: {xs: 'none', md: 'flex'},
@@ -85,7 +100,9 @@ function NavBar() {
                             letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
+                            cursor: 'pointer'
                         }}
+                        onClick={() => navigate('/')}
                     >
                         Battleships
                     </Typography>
@@ -135,7 +152,6 @@ function NavBar() {
                         variant="h5"
                         noWrap
                         component="a"
-                        href=""
                         sx={{
                             mr: 2,
                             display: {xs: 'flex', md: 'none'},
@@ -145,7 +161,9 @@ function NavBar() {
                             letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
+                            cursor: 'pointer'
                         }}
+                        onClick={() => navigate('/')}
                     >
                         Battleships
                     </Typography>
@@ -206,7 +224,8 @@ function NavBar() {
                 </Toolbar>
             </Container>
         </AppBar>
-    );
+    )
+        ;
 }
 
 export default NavBar;

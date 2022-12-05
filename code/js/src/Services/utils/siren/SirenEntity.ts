@@ -1,6 +1,7 @@
 import {Link} from "./Link";
 import {Action} from "./Action";
-import {SubEntity} from "./SubEntity";
+import {EmbeddedLink, EmbeddedSubEntity, IEmbeddedLink, SubEntity} from "./SubEntity";
+import {throwError} from "../errorUtils";
 
 /**
  * Siren is a specification for representing hypermedia entities in JSON.
@@ -14,7 +15,7 @@ import {SubEntity} from "./SubEntity";
  * @property links the links to other entities (optional)
  * @property title the title of the entity (optional)
  */
-export interface SirenEntity<T> {
+export interface ISirenEntity<T> {
     class?: string[]
     properties?: T
     entities?: SubEntity<unknown>[]
@@ -35,14 +36,50 @@ export interface SirenEntity<T> {
  * @property links the links to other entities (optional)
  * @property title the title of the entity (optional)
  */
-export class SirenEntity<T> {
-    constructor(entity: SirenEntity<T>) {
+export class SirenEntity<T> implements ISirenEntity<T> {
+    class?: string[]
+    properties?: T
+    entities?: SubEntity<unknown>[]
+    actions?: Action[]
+    links?: Link[]
+    title?: string
+
+    constructor(entity: ISirenEntity<T>) {
         this.class = entity.class;
         this.properties = entity.properties;
         this.entities = entity.entities;
         this.actions = entity.actions;
         this.links = entity.links;
         this.title = entity.title
+    }
+
+    getActionLinks(): Map<string, string> {
+        const map = new Map<string, string>();
+
+        this.actions?.forEach(action => {
+            map.set(action.name, action.href);
+        })
+
+        return map;
+    }
+
+    getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
+        return this.entities?.filter(entity => !Object.keys(entity).includes("href"))
+                .map(entity => new EmbeddedSubEntity(entity as EmbeddedSubEntity<T>))
+            ?? [];
+    }
+
+    getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
+        const embeddedLinks = this.entities?.filter(entity => Object.keys(entity).includes("href"))
+            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? [];
+
+        return embeddedLinks
+            .filter(link => rels.every((rel) => link.rel.includes(rel)));
+    }
+
+    getLink(...rels: string[]): string {
+        return this.links?.find(link => rels.every((rel) => link.rel.includes(rel)))?.href
+            ?? throwError("Link not found");
     }
 }
 

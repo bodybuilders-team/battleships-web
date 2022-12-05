@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest(classes = [TestConfig::class])
 @AutoConfigureTestEntityManager
-@Transactional
+@Transactional(rollbackFor = [Exception::class])
 abstract class DatabaseTest {
     @Autowired
     lateinit var entityManager: TestEntityManager

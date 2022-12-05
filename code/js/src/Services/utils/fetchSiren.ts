@@ -1,6 +1,7 @@
 import {SirenEntity, sirenMediaType} from "./siren/SirenEntity";
 import {Problem, problemMediaType} from "./Problem";
 import * as React from "react";
+import {API_ENDPOINT} from "../BattleshipsService";
 
 /**
  * Fetches a Siren entity from the given URL.
@@ -67,7 +68,7 @@ export function handleError(
  * @return the result of the request
  */
 export function get<T>(input: RequestInfo | URL): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(input);
+    return fetchSiren<T>(API_ENDPOINT + input);
 }
 
 /**
@@ -79,7 +80,7 @@ export function get<T>(input: RequestInfo | URL): Promise<SirenEntity<T>> {
  * @return the result of the request
  */
 export function getWithAuth<T>(input: RequestInfo | URL, token: string): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(input, token);
+    return fetchSiren<T>(API_ENDPOINT + input, token);
 }
 
 /**
@@ -91,7 +92,7 @@ export function getWithAuth<T>(input: RequestInfo | URL, token: string): Promise
  * @return the result of the request
  */
 export function post<T>(input: RequestInfo | URL, body: BodyInit | null): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(input, null, 'POST', body);
+    return fetchSiren<T>(API_ENDPOINT + input, null, 'POST', body);
 }
 
 /**
@@ -108,5 +109,5 @@ export function postWithAuth<T>(
     token: string,
     body?: BodyInit | null
 ): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(link, token, 'POST', body);
+    return fetchSiren<T>(API_ENDPOINT + link, token, 'POST', body);
 }

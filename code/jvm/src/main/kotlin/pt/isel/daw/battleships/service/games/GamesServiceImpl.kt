@@ -1,6 +1,7 @@
 package pt.isel.daw.battleships.service.games
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.domain.games.Player
 import pt.isel.daw.battleships.domain.games.game.Game
 import pt.isel.daw.battleships.domain.games.game.GameState
@@ -21,7 +22,6 @@ import pt.isel.daw.battleships.service.games.dtos.game.MatchmakeResponseDTO
 import pt.isel.daw.battleships.service.utils.OffsetPageRequest
 import pt.isel.daw.battleships.service.utils.findFirstOrNull
 import pt.isel.daw.battleships.utils.JwtProvider
-import javax.transaction.Transactional
 
 /**
  * Service that handles the business logic of the games.
@@ -31,7 +31,7 @@ import javax.transaction.Transactional
  * @param jwtProvider the JWT provider
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = [Exception::class])
 class GamesServiceImpl(
     private val gamesRepository: GamesRepository,
     usersRepository: UsersRepository,
@@ -161,6 +161,24 @@ class GamesServiceImpl(
 
         game.addPlayer(player = Player(game = game, user = user))
         game.updatePhase()
+    }
+
+    override fun leaveGame(token: String, gameId: Int) {
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId)
+        val player = game.getPlayer(username = user.username)
+
+
+        when (game.state.phase) {
+            GameState.GamePhase.FINISHED ->
+                throw InvalidPhaseException("Game has already finished")
+
+            GameState.GamePhase.WAITING_FOR_PLAYERS,
+            GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame()
+
+            else -> game.finishGame(winner = game.getOpponent(player))
+        }
+
     }
 
     /**

@@ -1,5 +1,6 @@
 package pt.isel.daw.battleships.service.games
 
+import pt.isel.daw.battleships.domain.exceptions.UserNotInGameException
 import pt.isel.daw.battleships.domain.exceptions.WaitingForPlayersTimeExpiredException
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
@@ -91,4 +92,16 @@ interface GamesService {
      * @throws NotFoundException if the user is not found or the game is not found
      */
     fun joinGame(token: String, gameId: Int): GameDTO
+
+    /**
+     * Aborts a game.
+     *
+     * @param token the token of the user that is aborting the game
+     * @param gameId the id of the game
+     *
+     * @throws AuthenticationException if the token is invalid
+     * @throws NotFoundException if the user is not found or the game is not found
+     * @throws UserNotInGameException if the user is not in the game
+     */
+    fun leaveGame(token: String, gameId: Int)
 }

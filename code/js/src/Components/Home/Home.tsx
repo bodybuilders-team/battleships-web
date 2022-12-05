@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useEffect} from "react";
 import Box from "@mui/material/Box";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {useNavigate} from "react-router-dom";
@@ -8,6 +9,8 @@ import {Login} from "@mui/icons-material";
 import Logo from "../../Assets/logo.png";
 import PageContent from "../Utils/PageContent";
 import {MenuButton} from "../Utils/MenuButton";
+import {useNavigationState} from "../../Utils/NavigationStateProvider";
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
 
 /**
  * Home page component.
@@ -17,6 +20,7 @@ function Home() {
     const loggedIn = useLoggedIn();
     const session = useSession();
     const [error, setError] = React.useState<string | null>(null);
+
 
     return (
         <PageContent title={"Battleships"} error={error}>

@@ -172,7 +172,8 @@ class GamesController(private val gamesService: GamesService) {
                 Actions.getMyShots(gameId = gameId),
                 Actions.fireShots(gameId = gameId),
                 Actions.getOpponentShots(gameId = gameId),
-                Actions.getMyBoard(gameId = gameId)
+                Actions.getMyBoard(gameId = gameId),
+                Actions.leaveGame(gameId = gameId)
             )
         )
     }
@@ -220,6 +221,26 @@ class GamesController(private val gamesService: GamesService) {
         return SirenEntity(
             `class` = listOf(Rels.JOIN_GAME),
             properties = JoinGameOutputModel(gameId = game.id),
+            entities = listOf(
+                Links.game(gameId = gameId),
+                EmbeddedLink(
+                    rel = listOf(Rels.GAME_STATE),
+                    href = Uris.gameState(gameId = gameId)
+                )
+            )
+        )
+    }
+
+    @PostMapping(Uris.GAMES_LEAVE)
+    @Authenticated
+    fun leaveGame(
+        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @PathVariable gameId: Int
+    ): SirenEntity<Unit> {
+        gamesService.leaveGame(token = token, gameId = gameId)
+
+        return SirenEntity(
+            `class` = listOf(Rels.LEAVE_GAME),
             entities = listOf(
                 Links.game(gameId = gameId),
                 EmbeddedLink(

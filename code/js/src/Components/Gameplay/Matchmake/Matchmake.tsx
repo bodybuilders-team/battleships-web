@@ -3,12 +3,12 @@ import {useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import LoadingSpinner from "../../Utils/LoadingSpinner";
 import to from "../../../Utils/await-to";
-import * as gamesService from '../../../Services/games/GamesService';
 import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
-import {EmbeddedLink} from "../../../Services/utils/siren/SubEntity";
 import PageContent from "../../Utils/PageContent";
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
+import {useNavigationState} from "../../../Utils/NavigationStateProvider";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
 
@@ -21,16 +21,37 @@ function Matchmake() {
     const session = useSession();
     const [matchmade, setMatchmade] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
+    const [battleshipsService, setBattleshipService] = useBattleshipsService()
+    const navigationState = useNavigationState();
 
     useEffect(() => {
-        if (!matchmade) {
-            const fetchMatchmake = async () => {
+        const fetchMatchmake = async () => {
+            const [err, res] = await to(
+                battleshipsService.gamesService.matchmake(
+                    defaultGameConfig
+                )
+            );
+
+            if (err) {
+                console.log(err)
+                handleError(err, setError);
+                return;
+            }
+
+            if (res?.properties === undefined)
+                throw new Error("Entities are undefined");
+
+            if (!res.properties.wasCreated) {
+                setMatchmade(true);
+                navigationState.setLinks(battleshipsService.links)
+                navigate("/gameplay");
+                return;
+            }
+
+            //TODO: Use the component unmount to cancel the matchmake
+            while (!matchmade) {
                 const [err, res] = await to(
-                    gamesService.matchmake(
-                        session!.accessToken, // TODO: handle undefined session
-                        "http://localhost:8080/games/matchmake",
-                        defaultGameConfig
-                    )
+                    battleshipsService.gamesService.getGameState()
                 );
 
                 if (err) {
@@ -41,51 +62,24 @@ function Matchmake() {
                 if (res?.properties === undefined)
                     throw new Error("Entities are undefined");
 
-                const gameStateLink = res.entities?.filter(e => e.rel.includes("game-state"))[0] as EmbeddedLink
-                const gameLink = res.entities?.filter(e => e.rel.includes("game"))[0] as EmbeddedLink
-
-                if (!res.properties.wasCreated) {
-                    console.log("Matchmade by joining existing game");
+                if (res.properties.phase === "WAITING_FOR_PLAYERS")
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                else {
                     setMatchmade(true);
-                    navigate("/gameplay", {state: {gameLink: gameLink.href}});
-                    return;
-                }
-
-                while (!matchmade) {
-                    const [err, res] = await to(
-                        gamesService.getGameState(
-                            session!.accessToken, // TODO: handle undefined session
-                            "http://localhost:8080" + gameStateLink.href
-                        )
-                    );
-
-                    if (err) {
-                        handleError(err, setError);
-                        return;
-                    }
-
-                    if (res?.properties === undefined)
-                        throw new Error("Entities are undefined");
-
-                    if (res.properties.phase === "WAITING_FOR_PLAYERS")
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                    else {
-                        console.log("Matchmade!");
-                        setMatchmade(true);
-                        navigate("/gameplay", {state: {gameLink: gameLink.href}});
-                    }
+                    navigationState.setLinks(battleshipsService.links)
+                    navigate("/gameplay");
                 }
             }
-
-            fetchMatchmake()
         }
+
+        fetchMatchmake()
     }, []);
 
     return (
         <PageContent title={"Matchmake"} error={error}>
             {
                 matchmade
-                    ? <Typography variant="h6">Matchamade!</Typography>
+                    ? <Typography variant="h6">Matchmade!</Typography>
                     : <LoadingSpinner text={"Matchmaking..."}/>
             }
         </PageContent>

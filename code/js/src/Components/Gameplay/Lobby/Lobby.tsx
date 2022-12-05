@@ -2,10 +2,11 @@ import * as React from "react";
 import {useEffect} from "react";
 import {EmbeddedSubEntity} from "../../../Services/utils/siren/SubEntity";
 import to from "../../../Utils/await-to";
-import * as gamesService from '../../../Services/games/GamesService';
 import {handleError} from "../../../Services/utils/fetchSiren";
 import PageContent from "../../Utils/PageContent";
 import {GetGameOutputModel} from "../../../Services/games/models/games/getGame/GetGameOutput";
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
+import {Rels} from "../../../Services/utils/Rels";
 
 /**
  * Lobby component.
@@ -14,28 +15,27 @@ function Lobby() {
 
     const [lobby, setLobby] = React.useState<GetGameOutputModel[]>([]);
     const [error, setError] = React.useState<string | null>(null);
+    const [battleshipService, setBattleshipService] = useBattleshipsService()
 
     useEffect(() => {
-        if (!lobby || lobby.length === 0) {
-            const fetchGames = async () => {
-                const [err, res] = await to(gamesService.getGames("http://localhost:8080/users"));
+        const fetchGames = async () => {
+            const [err, res] = await to(battleshipService.gamesService.getGames());
 
-                if (err) {
-                    handleError(err, setError);
-                    return;
-                }
-
-                if (res?.entities === undefined)
-                    throw new Error("Entities are undefined");
-
-                const games = res.entities.map(entity =>
-                    (entity as EmbeddedSubEntity<GetGameOutputModel>).properties as GetGameOutputModel
-                );
-                setLobby(games);
+            if (err) {
+                handleError(err, setError);
+                return;
             }
 
-            fetchGames();
+            if (res?.entities === undefined)
+                throw new Error("Entities are undefined");
+
+            const games = res.entities.map(entity =>
+                (entity as EmbeddedSubEntity<GetGameOutputModel>).properties as GetGameOutputModel
+            );
+            setLobby(games);
         }
+
+        fetchGames();
     });
 
     return (

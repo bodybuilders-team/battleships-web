@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import ProfileDetails from "./ProfileDetails";
 import {InsertPhotoRounded} from "@mui/icons-material";
+import {throwError} from "../../Services/utils/errorUtils";
 
 // TODO: To change later
 const user = {
@@ -23,17 +24,7 @@ const user = {
  * Profile component.
  */
 function Profile() {
-    const navigate = useNavigate();
-    const session = useSession();
-
-    useEffect(() => {
-        if (!session)
-            navigate('/login');
-
-    }, [session]);
-
-    if (!session)
-        return <></>;
+    const session = useSession() ?? throwError("Session is null");
 
     return (
         <Box component="main">

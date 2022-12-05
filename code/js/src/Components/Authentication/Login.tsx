@@ -9,13 +9,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from '../../Utils/formUtils';
-import * as usersService from '../../Services/users/UsersService';
 import to from "../../Utils/await-to";
 import {useSessionManager} from "../../Utils/Session";
 import {validatePassword, validateUsername} from '../../Utils/validateFields';
 import {handleError} from "../../Services/utils/fetchSiren";
 import {ErrorAlert} from "../Utils/ErrorAlert";
 import PageContent from "../Utils/PageContent";
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
+import {useNavigationState} from "../../Utils/NavigationStateProvider";
+import {Rels} from "../../Services/utils/Rels";
+import {throwError} from "../../Services/utils/errorUtils";
 
 /**
  * Login component.
@@ -24,6 +27,9 @@ function Login() {
     const navigate = useNavigate();
     const sessionManager = useSessionManager();
     const [formError, setFormError] = React.useState<string | null>(null);
+    const navigationState = useNavigationState()
+
+    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {username: '', password: ''},
@@ -35,7 +41,7 @@ function Login() {
         },
         onSubmit: async (values) => {
             const {username, password} = values;
-            const [err, res] = await to(usersService.login("http://localhost:8080/users/login", username, password))
+            const [err, res] = await to(battleshipsService.usersService.login(username, password))
 
             if (err) {
                 handleError(err, setFormError);
@@ -48,9 +54,12 @@ function Login() {
             sessionManager.setSession({
                 username,
                 accessToken: res.properties.accessToken,
-                refreshToken: res.properties.refreshToken
+                refreshToken: res.properties.refreshToken,
+                userHomeLink: battleshipsService.links.get(Rels.USER_HOME)
+                    ?? throwError("User home link is undefined")
             });
 
+            navigationState.setLinks(battleshipsService.links)
             navigate('/');
         }
     });

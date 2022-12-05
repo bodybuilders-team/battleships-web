@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {createContext, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useState} from 'react';
 
 /**
  * Holds the session data.
@@ -7,30 +7,29 @@ import {createContext, useContext, useEffect, useState} from 'react';
  * @property username the username of the user
  * @property accessToken the access token of the user
  * @property refreshToken the refresh token of the user
+ * @property userHomeLink the user home link
  */
-interface Session {
-    username: string,
-    accessToken: string,
-    refreshToken: string,
+export interface Session {
+    readonly username: string,
+    readonly accessToken: string,
+    readonly refreshToken: string,
+    readonly userHomeLink: string
 }
 
 /**
  * The manager for the session.
  *
- * @property loggedIn whether the user is logged in or not
  * @property session the session data
  * @property setSession sets the session data
  * @property clearSession clears the session data
  */
-interface SessionManager {
-    loggedIn: boolean,
-    session: Session | null,
-    setSession: (session: Session) => void
-    clearSession: () => void
+export interface SessionManager {
+    readonly session: Session | null,
+    readonly  setSession: (session: Session) => void
+    readonly  clearSession: () => void
 }
 
 const SessionManagerContext = createContext<SessionManager>({
-    loggedIn: false,
     session: null,
     setSession: () => {
     },
@@ -46,27 +45,19 @@ const sessionStorageKey = 'session';
  * @param children the children to render
  */
 export function Auth({children}: { children: React.ReactNode }) {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [session, setSession] = useState<Session | null>(null);
-
-    useEffect(() => {
+    const [session, setSession] = useState<Session | null>(() => {
         const sessionJson = localStorage.getItem(sessionStorageKey);
         if (!sessionJson)
             return;
 
-        const session = JSON.parse(sessionJson);
-
-        setLoggedIn(true);
-        setSession(session);
-    }, []);
+        return JSON.parse(sessionJson);
+    });
 
     return (
         <SessionManagerContext.Provider
             value={{
-                loggedIn,
                 session,
                 setSession: (session: Session) => {
-                    setLoggedIn(true);
                     setSession(session);
 
                     localStorage.setItem(sessionStorageKey, JSON.stringify(session));
@@ -74,7 +65,6 @@ export function Auth({children}: { children: React.ReactNode }) {
                 clearSession: () => {
                     localStorage.removeItem('session');
 
-                    setLoggedIn(false);
                     setSession(null);
                 }
             }}>
@@ -107,5 +97,5 @@ export function useSessionManager(): SessionManager {
  * @return true if the user is logged in, false otherwise
  */
 export function useLoggedIn(): boolean {
-    return useSessionManager().loggedIn;
+    return useSessionManager().session != null;
 }

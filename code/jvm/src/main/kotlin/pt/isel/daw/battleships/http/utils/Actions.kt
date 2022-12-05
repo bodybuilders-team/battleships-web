@@ -121,4 +121,11 @@ object Actions {
         method = GET_METHOD,
         href = Uris.myBoard(gameId)
     )
+
+    fun leaveGame(gameId: Int) = Action(
+        name = Rels.LEAVE_GAME,
+        title = "Leave Game",
+        method = POST_METHOD,
+        href = Uris.leaveGame(gameId)
+    )
 }

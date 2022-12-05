@@ -4,9 +4,10 @@ import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow}
 import {User} from "../../Domain/users/User";
 import {EmbeddedSubEntity} from "../../Services/utils/siren/SubEntity";
 import to from "../../Utils/await-to";
-import * as usersService from '../../Services/users/UsersService';
 import {handleError} from "../../Services/utils/fetchSiren";
 import PageContent from "../Utils/PageContent";
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
+import {Rels} from "../../Services/utils/Rels";
 
 /**
  * Ranking component.
@@ -15,27 +16,26 @@ function Ranking() {
 
     const [ranking, setRanking] = React.useState<User[]>([]);
     const [error, setError] = React.useState<string | null>(null);
+    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
 
     useEffect(() => {
-        if (!ranking || ranking.length === 0) {
-            const fetchRanking = async () => {
-                const [err, res] = await to(usersService.getUsers("http://localhost:8080/users"));
+        const fetchRanking = async () => {
+            const [err, res] = await to(battleshipsService.usersService.getUsers());
 
-                if (err) {
-                    handleError(err, setError);
-                    return;
-                }
-
-                if (res?.entities === undefined)
-                    throw new Error("Entities are undefined");
-
-                const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User);
-                setRanking(users);
+            if (err) {
+                handleError(err, setError);
+                return;
             }
 
-            fetchRanking();
+            if (res?.entities === undefined)
+                throw new Error("Entities are undefined");
+
+            const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User);
+            setRanking(users);
         }
-    });
+
+        fetchRanking();
+    }, []);
 
     return (
         <PageContent title="Ranking" error={error}>

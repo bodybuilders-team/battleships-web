@@ -31,7 +31,7 @@ import pt.isel.daw.battleships.utils.JwtProvider
  * @param jwtProvider the JWT provider
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = [Exception::class])
 class PlayersServiceImpl(
     private val gamesRepository: GamesRepository,
     usersRepository: UsersRepository,
@@ -110,7 +110,7 @@ class PlayersServiceImpl(
 
         when {
             game.state.phase == GameState.GamePhase.FINISHED &&
-                    game.state.turn != game.state.winner && game.state.turn == player ->
+                game.state.turn != game.state.winner && game.state.turn == player ->
                 throw FiringShotsTimeExpiredException("The firing shots time has expired. Game is finished.")
 
             game.state.phase != GameState.GamePhase.IN_PROGRESS -> throw InvalidPhaseException("Game is not in progress.")

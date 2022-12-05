@@ -40,7 +40,7 @@ import java.time.Instant
  * @property config the server configuration
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = [Exception::class])
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
     private val refreshTokensRepository: RefreshTokensRepository,

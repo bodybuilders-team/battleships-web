@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useEffect} from "react";
-import {useLocation} from "react-router-dom";
-import * as gamesService from "../../../Services/games/GamesService";
+import {useLocation, useNavigate} from "react-router-dom";
 import to from "../../../Utils/await-to";
 import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
@@ -15,6 +14,8 @@ import {Card, CardActions, CardContent, Divider} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
+import {Rels} from "../../../Services/utils/Rels";
 
 /**
  * Fetches a URL.
@@ -53,38 +54,39 @@ import Button from "@mui/material/Button";
 function Gameplay() {
     const session = useSession();
     const location = useLocation();
-    const gameLink = location.state.gameLink;
     const [game, setGame] = React.useState<GetGameOutputModel | null>(null);
     const [myBoard, setMyBoard] = React.useState<Board | null>(null);
     const [opponentBoard, setOpponentBoard] = React.useState<Board | null>(null);
     const [error, setError] = React.useState<string | null>(null);
+    const [battleshipService, setBattleshipService] = useBattleshipsService()
+    const navigate = useNavigate()
 
     useEffect(() => {
-        if (!game) {
-            const fetchGame = async () => {
-                const [err, res] = await to(
-                    gamesService.getGame(
-                        session!.accessToken,
-                        "http://localhost:8080" + gameLink
-                    )
-                );
-
-                if (err) {
-                    handleError(err, setError);
-                    return;
-                }
-
-                if (res?.properties === undefined)
-                    throw new Error("Properties are undefined");
-
-                const game = res.properties as GetGameOutputModel;
-                console.log(game);
-                setGame(game);
+        const fetchGame = async () => {
+            if (!battleshipService.links.get(Rels.GAME)) {
+                navigate("/")
+                return
             }
 
-            fetchGame();
+            const [err, res] = await to(
+                battleshipService.gamesService.getGame()
+            );
+
+            if (err) {
+                handleError(err, setError);
+                return;
+            }
+
+            if (res?.properties === undefined)
+                throw new Error("Properties are undefined");
+
+            const game = res.properties as GetGameOutputModel;
+            console.log(game);
+            setGame(game);
         }
-    });
+
+        fetchGame();
+    }, []);
 
     if (game?.state.phase === "DEPLOYING_FLEETS")
         return (
