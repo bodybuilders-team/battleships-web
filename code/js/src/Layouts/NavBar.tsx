@@ -17,7 +17,7 @@ import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
 import to from "../Utils/await-to";
 import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
 import {Rels} from "../Services/utils/Rels";
-import { useNavigationState } from '../Utils/NavigationStateProvider';
+import {useNavigationState} from '../Utils/NavigationStateProvider';
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -49,22 +49,21 @@ function NavBar() {
             callback: async () => {
                 sessionManager.clearSession()
                 if (!session) {
-                    navigate('/')
-                    return
+                    navigate('/');
+                    return;
                 }
 
                 if (!battleShipsService.links.get(Rels.LOGOUT)) {
-                    await battleShipsService.getHome()
-                    await battleShipsService.usersService.getUserHome()
+                    await battleShipsService.getHome();
+                    await battleShipsService.usersService.getUserHome();
                 }
 
                 await to(
                     battleShipsService.usersService.logout(session.refreshToken)
                 );
 
-                navigationState.setLinks(new Map())
-
-                navigate('/')
+                navigationState.setLinks(new Map());
+                navigate('/');
             },
             auth: true
         }

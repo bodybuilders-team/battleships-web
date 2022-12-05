@@ -7,6 +7,14 @@ import {SirenEntity} from "../utils/siren/SirenEntity";
 
 
 export namespace UsersService {
+
+    /**
+     * Gets the user home.
+     *
+     * @param userHomeLink the link to the user home endpoint
+     *
+     * @return the API result of the get user home request
+     */
     export async function getUserHome(userHomeLink: string): Promise<SirenEntity<void>> {
         return await get(userHomeLink);
     }

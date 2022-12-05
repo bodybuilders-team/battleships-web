@@ -1,15 +1,12 @@
 import * as React from "react";
-import {useEffect} from "react";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Matchmake from "../Matchmake/Matchmake";
-import GameConfiguration from "../GameConfiguration/GameConfiguration";
+import CreateGame from "../CreateGame/CreateGame";
 import PageContent from "../../Utils/PageContent";
 import Lobby from "../Lobby/Lobby";
 import {MenuButton} from "../../Utils/MenuButton";
-import {useSession} from "../../../Utils/Session";
-import {useNavigate} from "react-router-dom";
 
 /**
  * GameplayMenu component.
@@ -24,7 +21,7 @@ function GameplayMenu() {
     if (matchmaking)
         return <Matchmake/>;
     else if (creating)
-        return <GameConfiguration/>;
+        return <CreateGame/>;
     else if (lobby)
         return <Lobby/>;
 

@@ -66,9 +66,7 @@ class GamesServiceImpl(
 
         while (true) {
             val game = gamesRepository
-                .findAllAvailableGamesWithConfig(
-                    config = gameConfigDTO.toGameConfig()
-                )
+                .findAllAvailableGamesWithConfig(config = gameConfigDTO.toGameConfig())
                 .filter { game -> game.players.none { it.user == user } }
                 .findFirstOrNull()
 
@@ -170,12 +168,8 @@ class GamesServiceImpl(
 
 
         when (game.state.phase) {
-            GameState.GamePhase.FINISHED ->
-                throw InvalidPhaseException("Game has already finished")
-
-            GameState.GamePhase.WAITING_FOR_PLAYERS,
-            GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame()
-
+            GameState.GamePhase.FINISHED -> throw InvalidPhaseException("Game has already finished")
+            GameState.GamePhase.WAITING_FOR_PLAYERS, GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame()
             else -> game.finishGame(winner = game.getOpponent(player))
         }
 

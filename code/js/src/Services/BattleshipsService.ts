@@ -1,10 +1,11 @@
 import {get} from "./utils/fetchSiren";
 import {GetHomeOutput} from "./home.models/getHome/GetHomeOutput";
 
-export const API_ENDPOINT = "http://localhost:8080"
+export const API_ENDPOINT = "http://localhost:8080";
 
 
 export namespace BattleshipsService {
+
     /**
      * Gets the home information.
      *
@@ -14,4 +15,3 @@ export namespace BattleshipsService {
         return await get("/");
     }
 }
-

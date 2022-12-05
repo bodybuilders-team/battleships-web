@@ -12,7 +12,6 @@ import ShipView from "../Shared/Ship/ShipView";
 import {Orientation} from "../../../Domain/games/ship/Orientation";
 import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/games/board/Board";
 import to from "../../../Utils/await-to";
-import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import {EmbeddedLink} from "../../../Services/utils/siren/SubEntity";
@@ -22,11 +21,10 @@ import {useNavigationState} from "../../../Utils/NavigationStateProvider";
 
 
 /**
- * GameConfiguration component.
+ * CreateGame component.
  */
-function GameConfiguration() {
+function CreateGame() {
 
-    const session = useSession();
     const navigate = useNavigate();
 
     const [gameName, setGameName] = React.useState("Game");
@@ -234,4 +232,4 @@ function GameConfiguration() {
     );
 }
 
-export default GameConfiguration;
+export default CreateGame;

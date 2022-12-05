@@ -49,10 +49,13 @@ class GamesController(private val gamesService: GamesService) {
      */
     @GetMapping(Uris.GAMES)
     fun getGames(
-        @RequestParam(Params.OFFSET_PARAM) offset: Int,
-        @RequestParam(Params.LIMIT_PARAM) limit: Int
+        @RequestParam(Params.OFFSET_PARAM) offset: Int? = null,
+        @RequestParam(Params.LIMIT_PARAM) limit: Int? = null,
     ): SirenEntity<GetGamesOutputModel> {
-        val games = gamesService.getGames(offset = offset, limit = limit)
+        val games = gamesService.getGames(
+            offset = offset ?: Params.OFFSET_DEFAULT,
+            limit = limit ?: Params.LIMIT_DEFAULT
+        )
 
         return SirenEntity(
             `class` = listOf(Rels.LIST_GAMES),
@@ -88,7 +91,7 @@ class GamesController(private val gamesService: GamesService) {
     fun createGame(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @Valid @RequestBody
-        gameData: CreateGameInputModel
+        gameData: CreateGameInputModel,
     ): SirenEntity<Unit> {
         val gameId = gamesService.createGame(
             token = token,
@@ -120,7 +123,7 @@ class GamesController(private val gamesService: GamesService) {
     fun matchmake(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @Valid @RequestBody
-        gameConfig: GameConfigModel
+        gameConfig: GameConfigModel,
     ): SirenEntity<MatchmakeOutputModel> {
         val matchmakeDTO = gamesService.matchmake(
             token = token,
@@ -149,7 +152,7 @@ class GamesController(private val gamesService: GamesService) {
      */
     @GetMapping(Uris.GAMES_GET_BY_ID)
     fun getGame(
-        @PathVariable gameId: Int
+        @PathVariable gameId: Int,
     ): SirenEntity<GetGameOutputModel> {
         val game = gamesService.getGame(gameId = gameId)
 
@@ -186,7 +189,7 @@ class GamesController(private val gamesService: GamesService) {
      */
     @GetMapping(Uris.GAMES_GAME_STATE)
     fun getGameState(
-        @PathVariable gameId: Int
+        @PathVariable gameId: Int,
     ): SirenEntity<GetGameStateOutputModel> {
         val gameState = gamesService.getGameState(gameId = gameId)
 
@@ -214,7 +217,7 @@ class GamesController(private val gamesService: GamesService) {
     @Authenticated
     fun joinGame(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
-        @PathVariable gameId: Int
+        @PathVariable gameId: Int,
     ): SirenEntity<JoinGameOutputModel> {
         val game = gamesService.joinGame(token = token, gameId = gameId)
 

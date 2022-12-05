@@ -1,14 +1,16 @@
-- Database:
-- Project structure:
-    - Improve frontend structure
-- Documentation:
-    - Review and improve report:
-       - Add backend documentation
-       - Add frontend documentation
-- Implementation:
-    - Implement frontend
-    - Add more tests
-    - Review validations
-    - Leave game mechanism
-    - Implement blacklist of tokens
-    - Implement private games
+Project structure:
+- Improve frontend structure
+
+Documentation:
+- Review and improve report:
+- Add backend documentation
+- Add frontend documentation
+
+Implementation:
+- Implement frontend
+- Leave game mechanism
+- Implement blacklist of tokens
+
+Random or Never Ending Tasks:
+- Add more tests
+- Implement private games

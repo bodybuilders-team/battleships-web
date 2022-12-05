@@ -10,11 +10,16 @@ import {GetHomeOutput} from "./home.models/getHome/GetHomeOutput";
 
 /**
  * Service to navigate through the battleships API.
+ *
+ * @property usersService the service that handles the users
+ * @property gamesService the service that handles the games
+ * @property playersService the service that handles the players
  */
 export default class NavigationBattleshipsService {
-    readonly playersService: NavigationPlayersService;
+
     readonly usersService: NavigationUsersService;
     readonly gamesService: NavigationGamesService;
+    readonly playersService: NavigationPlayersService;
 
     private readonly _links: Map<string, string>
     public get links(): Map<string, string> {
@@ -31,14 +36,15 @@ export default class NavigationBattleshipsService {
     /**
      * Gets the home information.
      *
-     * @return a promise with the {GetHomeOutput} result of the get home request
+     * @return the API result of the get home request
      */
     async getHome(): Promise<GetHomeOutput> {
         const res = await BattleshipsService.getHome();
 
-        res.getActionLinks().forEach((value, key) => {
-            this._links.set(key, value);
-        })
+        res.getActionLinks()
+            .forEach((value, key) => {
+                this._links.set(key, value);
+            });
 
         return res;
     }
@@ -46,15 +52,15 @@ export default class NavigationBattleshipsService {
 
 /**
  * Creates a new instance of the NavigationBattleshipsService
- * based on the current state of the navigation and the session manager
+ * based on the current state of the navigation and the session manager.
  *
  * @returns NavigationBattleshipsService
  */
 export function useBattleshipsService() {
-    const navigationState = useNavigationState()
-    const sessionManager = useSessionManager()
+    const navigationState = useNavigationState();
+    const sessionManager = useSessionManager();
 
     return React.useState<NavigationBattleshipsService>(() => {
         return new NavigationBattleshipsService(navigationState.links, sessionManager);
-    })
+    });
 }

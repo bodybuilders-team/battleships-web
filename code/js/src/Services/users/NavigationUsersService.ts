@@ -8,7 +8,7 @@ import NavigationBattleshipsService from "../NavigationBattleshipsService";
 import {Session, SessionManager} from "../../Utils/Session";
 
 /**
- * Service to navigate through the users endpoints.
+ * The service that handles the users, and keeps track of the links to the endpoints.
  */
 export default class NavigationUsersService {
     private get links(): Map<string, string> {
@@ -30,19 +30,20 @@ export default class NavigationUsersService {
     async getUserHome(): Promise<SirenEntity<void>> {
         if (!this.links.get(Rels.USER_HOME)) {
             this.links.set(Rels.USER_HOME, this.session.userHomeLink);
-            await this.battleshipsService.getHome(); //Needed in case the user refreshed
+            await this.battleshipsService.getHome(); // Needed in case the user refreshed
         }
 
         const res = await UsersService.getUserHome(
-            this.links.get(Rels.USER_HOME) ??
-            throwError("User home link not found")
-        );
+                this.links.get(Rels.USER_HOME)
+                ?? throwError("User home link not found")
+            )
+        ;
 
         res.getActionLinks().forEach((value, key) => {
             this.links.set(key, value);
-        })
+        });
 
-        return res
+        return res;
     }
 
     /**
@@ -77,11 +78,10 @@ export default class NavigationUsersService {
      */
     async register(email: string, username: string, password: string) {
         if (!this.links.get(Rels.REGISTER))
-            await this.battleshipsService.getHome()
+            await this.battleshipsService.getHome();
 
         const res = await UsersService.register(
-            this.links.get(Rels.REGISTER) ??
-            throwError("Register link not found"),
+            this.links.get(Rels.REGISTER) ?? throwError("Register link not found"),
             email,
             username,
             password
@@ -101,11 +101,10 @@ export default class NavigationUsersService {
      */
     async login(username: string, password: string) {
         if (!this.links.get(Rels.LOGIN))
-            await this.battleshipsService.getHome()
+            await this.battleshipsService.getHome();
 
         const res = await UsersService.login(
-            this.links.get(Rels.LOGIN) ??
-            throwError("Login link not found"),
+            this.links.get(Rels.LOGIN) ?? throwError("Login link not found"),
             username,
             password
         );
@@ -123,12 +122,10 @@ export default class NavigationUsersService {
      */
     async logout(refreshToken: string) {
         if (!this.links.get(Rels.LOGOUT))
-            await this.battleshipsService.getHome()
+            await this.battleshipsService.getHome();
 
         await UsersService.logout(
-            this.links.get(Rels.LOGOUT)
-            ?? throwError("Logout link not found"),
+            this.links.get(Rels.LOGOUT) ?? throwError("Logout link not found"),
             refreshToken);
     }
-
 }

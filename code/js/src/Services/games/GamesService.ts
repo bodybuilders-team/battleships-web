@@ -92,7 +92,6 @@ export namespace GamesService {
     }
 
     /**
-     * TODO
      * Leaves a game.
      *
      * @param token the token of the user that is leaving the game

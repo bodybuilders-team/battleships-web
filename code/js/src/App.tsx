@@ -9,7 +9,6 @@ import Ranking from "./Components/Ranking/Ranking";
 import Gameplay from "./Components/Gameplay/Gameplay/Gameplay";
 import Register from './Components/Authentication/Register';
 import Footer from "./Layouts/Footer";
-import About from "./Components/About/About";
 import GameplayMenu from "./Components/Gameplay/GameplayMenu/GameplayMenu";
 import {useNavigationState} from "./Utils/NavigationStateProvider";
 import {useBattleshipsService} from "./Services/NavigationBattleshipsService";
@@ -37,12 +36,26 @@ function App() {
 
 
     /**
-     * Protection route component, redirects to home page if not logged in.
+     * Protection route component, redirects to login page if not logged in.
+     *
      * @param children the children to render
      */
     function ProtectedRoute({children}: { children: React.ReactElement }) {
         if (!loggedIn)
-            return <Navigate to="/" replace/>;
+            return <Navigate to="/login" replace/>;
+
+        return children;
+    }
+
+    /**
+     * Public route component, redirects to profile page if logged in.
+     * Used for login and register pages.
+     *
+     * @param children the children to render
+     */
+    function PublicRoute({children}: { children: React.ReactElement }) {
+        if (loggedIn)
+            return <Navigate to="/profile" replace/>;
 
         return children;
     }
@@ -54,30 +67,17 @@ function App() {
             <div className="App-content">
                 <Routes>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/register" element={<Register/>}/>
-                    <Route path="/ranking" element={<Ranking/>}/>
-                    <Route path="/profile" element={
-                        <ProtectedRoute>
-                            <Profile/>
-                        </ProtectedRoute>
 
-                    }/>
-                    <Route path="/gameplay-menu" element={
-                        <ProtectedRoute>
-                            <GameplayMenu/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/gameplay" element={
-                        <ProtectedRoute>
-                            <Gameplay/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/about" element={
-                        <ProtectedRoute>
-                            <About/>
-                        </ProtectedRoute>
-                    }/>
+                    <Route path="/login" element={<PublicRoute><Login/></PublicRoute>}/>
+                    <Route path="/register" element={<PublicRoute><Register/></PublicRoute>}/>
+
+                    <Route path="/ranking" element={<Ranking/>}/>
+
+                    <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
+                    <Route path="/gameplay-menu" element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>
+                    <Route path="/gameplay" element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
+
+                    <Route path="/about"/>
                 </Routes>
             </div>
 

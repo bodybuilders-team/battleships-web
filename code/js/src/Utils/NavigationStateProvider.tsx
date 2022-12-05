@@ -4,12 +4,11 @@ import {useState} from "react";
 /**
  * NavigationState interface.
  *
- * @interface NavigationState
- * @property {Map<string, string>} links - Map of links.
+ * @property links map of links
+ * @property setLinks setter for links
  */
 interface NavigationState {
     links: Map<string, string>;
-
     setLinks: (links: Map<string, string>) => void;
 }
 
@@ -36,6 +35,8 @@ export function NavigationStateProvider({children}: { children: React.ReactNode 
 
 /**
  * Returns the navigation state.
+ *
+ * @returns the navigation state
  */
 export function useNavigationState() {
     return React.useContext(NavigationStateContext);

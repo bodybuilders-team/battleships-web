@@ -33,8 +33,8 @@ export class NavigationPlayersService {
     async getMyFleet(): Promise<GetMyFleetOutput> {
         return await PlayersService.getMyFleet(
             this.session.accessToken,
-            this.links.get(Rels.GET_MY_FLEET)
-            ?? throwError("Get my fleet link not found"));
+            this.links.get(Rels.GET_MY_FLEET) ?? throwError("Get my fleet link not found")
+        );
     }
 
     /**
@@ -47,9 +47,9 @@ export class NavigationPlayersService {
     async deployFleet(fleet: DeployFleetInput): Promise<DeployFleetOutput> {
         return await PlayersService.deployFleet(
             this.session.accessToken,
-            this.links.get(Rels.DEPLOY_FLEET)
-            ?? throwError("Deploy fleet link not found"),
-            fleet);
+            this.links.get(Rels.DEPLOY_FLEET) ?? throwError("Deploy fleet link not found"),
+            fleet
+        );
     }
 
     /**
@@ -60,8 +60,8 @@ export class NavigationPlayersService {
     async getOpponentFleet(): Promise<GetOpponentFleetOutput> {
         return await PlayersService.getOpponentFleet(
             this.session.accessToken,
-            this.links.get(Rels.GET_OPPONENT_FLEET)
-            ?? throwError("Get opponent fleet link not found"));
+            this.links.get(Rels.GET_OPPONENT_FLEET) ?? throwError("Get opponent fleet link not found")
+        );
     }
 
     /**
@@ -72,8 +72,8 @@ export class NavigationPlayersService {
     async getMyShots(): Promise<GetMyShotsOutput> {
         return await PlayersService.getMyShots(
             this.session.accessToken,
-            this.links.get(Rels.GET_MY_SHOTS)
-            ?? throwError("Get my shots link not found"));
+            this.links.get(Rels.GET_MY_SHOTS) ?? throwError("Get my shots link not found")
+        );
     }
 
     /**
@@ -86,9 +86,9 @@ export class NavigationPlayersService {
     async fireShots(shots: FireShotsInput): Promise<FireShotsOutput> {
         return await PlayersService.fireShots(
             this.session.accessToken,
-            this.links.get(Rels.FIRE_SHOTS)
-            ?? throwError("Fire shots link not found"),
-            shots);
+            this.links.get(Rels.FIRE_SHOTS) ?? throwError("Fire shots link not found"),
+            shots
+        );
     }
 
     /**
@@ -99,7 +99,7 @@ export class NavigationPlayersService {
     async getOpponentShots(): Promise<GetOpponentShotsOutput> {
         return await PlayersService.getOpponentShots(
             this.session.accessToken,
-            this.links.get(Rels.GET_OPPONENT_SHOTS)
-            ?? throwError("Get opponent shots link not found"));
+            this.links.get(Rels.GET_OPPONENT_SHOTS) ?? throwError("Get opponent shots link not found")
+        );
     }
 }
