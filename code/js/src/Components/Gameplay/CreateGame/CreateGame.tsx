@@ -14,10 +14,10 @@ import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/game
 import to from "../../../Utils/await-to";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
-import {EmbeddedLink} from "../../../Services/utils/siren/SubEntity";
+import {EmbeddedLink} from "../../../Services/media/siren/SubEntity";
 import PageContent from "../../Utils/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useNavigationState} from "../../../Utils/NavigationStateProvider";
+import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
 
 
 /**
@@ -34,8 +34,8 @@ function CreateGame() {
     const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = React.useState(100);
     const [shipTypes, setShipTypes] = React.useState<Map<ShipType, number>>(defaultShipTypes);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipsService, setBattleShipsService] = useBattleshipsService()
-    const navigationState = useNavigationState()
+    const [battleshipsService, setBattleShipsService] = useBattleshipsService();
+    const navigationState = useNavigationState();
 
     function handleCreateGame() {
         async function createGame() {
@@ -70,6 +70,26 @@ function CreateGame() {
             const game = res.entities.find(entity => entity.rel.includes("game")) as EmbeddedLink;
             if (game === undefined)
                 throw new Error("Game entity not found");
+
+            // Wait for the opponent to join the game
+            while (true) {
+                const [err, res] = await to(
+                    battleshipsService.gamesService.getGameState()
+                );
+
+                if (err) {
+                    handleError(err, setError);
+                    return;
+                }
+
+                if (res?.properties === undefined)
+                    throw new Error("Properties are undefined");
+
+                if (res.properties.phase === "WAITING_FOR_PLAYERS")
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                else
+                    break;
+            }
 
             navigationState.setLinks(battleshipsService.links)
             navigate(`/gameplay`);

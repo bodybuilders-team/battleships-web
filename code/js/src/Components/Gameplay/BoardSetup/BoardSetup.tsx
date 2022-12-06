@@ -17,6 +17,12 @@ import {ErrorAlert} from "../../Utils/ErrorAlert";
 import {useConfigurableBoard} from "../../../Hooks/useBoard";
 import {tileSize} from "../Shared/Board/Tile";
 
+interface BoardSetupProps {
+    boardSize: number
+    ships: Map<ShipType, number>
+    onBoardReady: (board: Board) => void
+}
+
 /**
  * BoardSetup component.
  *
@@ -24,11 +30,8 @@ import {tileSize} from "../Shared/Board/Tile";
  * @param ships the list of ships to be placed
  * @param onBoardReady the callback to be called when the board is ready
  */
-function BoardSetup({
-                        boardSize,
-                        ships,
-                        onBoardReady
-                    }: { boardSize: number, ships: Map<ShipType, number>, onBoardReady: (board: Board) => void },) {
+function BoardSetup({boardSize, ships, onBoardReady}: BoardSetupProps) {
+
     const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize))
     const [unplacedShips, setUnplacedShips] = React.useState<ReadonlyMap<ShipType, number>>(ships);
     const [selectedShipType, setSelectedShipType] = React.useState<ShipType | null>(null);
@@ -51,33 +54,28 @@ function BoardSetup({
                                 >
                                     {
                                         Array.from(unplacedShips.entries()).map(([ship, count]) =>
-                                            count > 0 ?
-                                                <Box
-                                                    sx={{
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        justifyContent: 'space-between',
-                                                    }}>
-                                                    <Box sx={{
-                                                        display: 'flex',
-                                                        marginTop: '10px',
-                                                        border: selectedShipType === ship ? '2px solid green' : 'none'
-                                                    }}>
-                                                        <ShipView
-                                                            type={ship}
-                                                            orientation={Orientation.VERTICAL}
-                                                            key={ship.shipName}
-                                                            onClick={() => {
-                                                                setSelectedShipType(ship);
-                                                            }}
-                                                        />
-                                                    </Box>
-                                                    <Box sx={{
-                                                        marginTop: '10px',
-                                                    }}>
-                                                        {count}
-                                                    </Box>
-                                                </Box> : <></>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    justifyContent: 'space-between',
+                                                }}>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    marginTop: '10px',
+                                                    border: selectedShipType === ship ? '2px solid red' : 'none'
+                                                }}>
+                                                    <ShipView
+                                                        type={ship}
+                                                        orientation={Orientation.VERTICAL}
+                                                        key={ship.shipName}
+                                                        onClick={() => {
+                                                            setSelectedShipType(ship);
+                                                        }}
+                                                    />
+                                                </Box>
+                                                <Box sx={{marginTop: '10px',}}>{count}</Box>
+                                            </Box>
                                         )
                                     }
                                 </Box>
@@ -86,16 +84,17 @@ function BoardSetup({
                             <CardActions>
                                 <Button color="primary" fullWidth onClick={() => {
                                     setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)));
-                                    setUnplacedShips(new Map());
+                                    const newUnplacedShips = new Map<ShipType, number>();
+                                    ships.forEach((count, ship) => newUnplacedShips.set(ship, 0));
+                                    setUnplacedShips(newUnplacedShips);
                                 }}>
                                     Random Board
                                 </Button>
                                 <Button color="primary" fullWidth onClick={() => {
-                                    if (unplacedShips.size === 0) {
+                                    if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
                                         onBoardReady(board);
-                                    } else {
+                                    else
                                         alert("You must place all the ships!");
-                                    }
                                 }}>
                                     Confirm Board
                                 </Button>
@@ -108,11 +107,12 @@ function BoardSetup({
                         <BoardView board={board} onTileClicked={
                             (row: number, col: number) => {
                                 if (selectedShipType == null)
-                                    return
+                                    return;
 
                                 if (!isValidShipCoordinate(new Coordinate(row, col),
-                                    Orientation.VERTICAL, selectedShipType.size, board.size))
-                                    return
+                                    Orientation.VERTICAL, selectedShipType.size, board.size)
+                                )
+                                    return;
 
                                 const ship = new Ship(selectedShipType, new Coordinate(row, col), Orientation.VERTICAL);
                                 if (board.canPlaceShip(ship)) {
@@ -139,8 +139,11 @@ function BoardSetup({
                                         orientation={ship.orientation}
                                         key={ship.type.shipName + index}
                                         onClick={() => {
-                                            if (!isValidShipCoordinate(ship.coordinate, Orientation.opposite(ship.orientation), ship.type.size, board.size))
-                                                return
+                                            if (!isValidShipCoordinate(
+                                                ship.coordinate, Orientation.opposite(ship.orientation),
+                                                ship.type.size, board.size)
+                                            )
+                                                return;
 
                                             //Change orientation of this ship
                                             const newShip = new Ship(ship.type,

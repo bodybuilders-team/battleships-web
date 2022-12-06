@@ -1,5 +1,5 @@
 import {get} from "./utils/fetchSiren";
-import {GetHomeOutput} from "./home.models/getHome/GetHomeOutput";
+import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
 
 export const API_ENDPOINT = "http://localhost:8080";
 

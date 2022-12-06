@@ -4,7 +4,7 @@ import PageContent from "../Utils/PageContent";
 /**
  * About component.
  */
-function About() {
+export default function About() {
 
     const [error, setError] = React.useState<string | null>(null);
 
@@ -14,5 +14,3 @@ function About() {
         </PageContent>
     );
 }
-
-export default About;

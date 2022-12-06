@@ -1,11 +1,11 @@
 import {BattleshipsService} from "./BattleshipsService";
-import {NavigationGamesService} from "./games/NavigationGamesService";
-import NavigationUsersService from "./users/NavigationUsersService";
-import {NavigationPlayersService} from "./games/NavigationPlayersService";
-import {useNavigationState} from "../Utils/NavigationStateProvider";
+import {NavigationGamesService} from "./services/games/NavigationGamesService";
+import NavigationUsersService from "./services/users/NavigationUsersService";
+import {NavigationPlayersService} from "./services/games/NavigationPlayersService";
+import {useNavigationState} from "../Utils/navigation/NavigationStateProvider";
 import * as React from "react";
 import {SessionManager, useSessionManager} from "../Utils/Session";
-import {GetHomeOutput} from "./home.models/getHome/GetHomeOutput";
+import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
 
 
 /**

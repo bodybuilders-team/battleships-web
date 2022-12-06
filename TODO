@@ -1,16 +1,22 @@
 Project structure:
-- Improve frontend structure
+- Improve frontend structure: maybe separate Components and Pages?
+- Clean up frontend code
 
 Documentation:
 - Review and improve report:
 - Add backend documentation
 - Add frontend documentation
 
-Implementation:
-- Implement frontend
-- Leave game mechanism
+Backend:
 - Implement blacklist of tokens
+- Profile pics and other user data
+
+Frontend:
+- Finish gameplay
+- About
+- Profile (maybe game history)
 
 Random or Never Ending Tasks:
 - Add more tests
 - Implement private games
+- React strict mode

@@ -1,5 +1,5 @@
-import {SirenEntity, sirenMediaType} from "./siren/SirenEntity";
-import {Problem, problemMediaType} from "./Problem";
+import {SirenEntity, sirenMediaType} from "../media/siren/SirenEntity";
+import {Problem, problemMediaType} from "../media/Problem";
 import * as React from "react";
 import {API_ENDPOINT} from "../BattleshipsService";
 

@@ -2,12 +2,11 @@ import * as React from "react";
 import {useEffect} from "react";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {User} from "../../Domain/users/User";
-import {EmbeddedSubEntity} from "../../Services/utils/siren/SubEntity";
+import {EmbeddedSubEntity} from "../../Services/media/siren/SubEntity";
 import to from "../../Utils/await-to";
 import {handleError} from "../../Services/utils/fetchSiren";
 import PageContent from "../Utils/PageContent";
 import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
-import {Rels} from "../../Services/utils/Rels";
 
 /**
  * Ranking component.

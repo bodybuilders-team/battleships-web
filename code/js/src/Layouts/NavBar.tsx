@@ -16,8 +16,8 @@ import {useNavigate} from 'react-router-dom';
 import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
 import to from "../Utils/await-to";
 import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
-import {Rels} from "../Services/utils/Rels";
-import {useNavigationState} from '../Utils/NavigationStateProvider';
+import {Rels} from "../Utils/navigation/Rels";
+import {useNavigationState} from '../Utils/navigation/NavigationStateProvider';
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},

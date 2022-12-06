@@ -6,7 +6,7 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import {Auth} from "./Utils/Session";
-import {NavigationStateProvider} from "./Utils/NavigationStateProvider";
+import {NavigationStateProvider} from "./Utils/navigation/NavigationStateProvider";
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 const theme = createTheme({

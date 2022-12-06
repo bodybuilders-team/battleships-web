@@ -5,7 +5,7 @@ import to from "../../../Utils/await-to";
 import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import BoardSetup from "../BoardSetup/BoardSetup";
-import {GetGameOutputModel} from "../../../Services/games/models/games/getGame/GetGameOutput";
+import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
 import LoadingSpinner from "../../Utils/LoadingSpinner";
 import PageContent from "../../Utils/PageContent";
 import BoardView from "../Shared/Board/BoardView";
@@ -15,10 +15,10 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {Rels} from "../../../Services/utils/Rels";
+import {Rels} from "../../../Utils/navigation/Rels";
 import {shipTypesModelToMap} from "../../../Domain/games/ship/ShipType";
 import {Orientation} from "../../../Domain/games/ship/Orientation";
-import {useNavigationState} from "../../../Utils/NavigationStateProvider";
+import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
 
 
 /**
