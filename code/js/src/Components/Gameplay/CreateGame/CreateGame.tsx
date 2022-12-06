@@ -32,9 +32,7 @@ function CreateGame() {
     const [shotsPerRound, setShotsPerRound] = React.useState(1);
     const [maxTimePerRound, setMaxTimePerRound] = React.useState(100);
     const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = React.useState(100);
-    const [shipTypes, setShipTypes] = React.useState<Map<ShipType, number>>(
-        new Map<ShipType, number>(defaultShipTypes.map(ship => [ship, 1]))
-    );
+    const [shipTypes, setShipTypes] = React.useState<Map<ShipType, number>>(defaultShipTypes);
     const [error, setError] = React.useState<string | null>(null);
     const [battleshipsService, setBattleShipsService] = useBattleshipsService()
     const navigationState = useNavigationState()

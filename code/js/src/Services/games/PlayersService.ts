@@ -5,6 +5,7 @@ import {GetOpponentFleetOutput} from "./models/players/getOpponentFleet/GetOppon
 import {GetMyShotsOutput} from "./models/players/getMyShots/GetMyShotsOutput";
 import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput";
 import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput";
+import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput";
 
 export namespace PlayersService {
 

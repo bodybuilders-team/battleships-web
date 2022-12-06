@@ -25,6 +25,7 @@ function Matchmake() {
     const navigationState = useNavigationState();
 
     useEffect(() => {
+        let cancelled = false
         const fetchMatchmake = async () => {
             const [err, res] = await to(
                 battleshipsService.gamesService.matchmake(
@@ -49,7 +50,7 @@ function Matchmake() {
             }
 
             //TODO: Use the component unmount to cancel the matchmake
-            while (!matchmade) {
+            while (!matchmade && !cancelled) {
                 const [err, res] = await to(
                     battleshipsService.gamesService.getGameState()
                 );
@@ -73,6 +74,10 @@ function Matchmake() {
         }
 
         fetchMatchmake()
+
+        return () => {
+            cancelled = true
+        }
     }, []);
 
     return (

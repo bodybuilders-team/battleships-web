@@ -17,7 +17,7 @@ export interface Ship {
 
 export class Ship {
 
-    coordinates(): Coordinate[] {
+    get coordinates(): Coordinate[] {
         return getCoordinates(this.type, this.coordinate, this.orientation);
     }
 
@@ -68,13 +68,18 @@ export function isValidShipCoordinate(
     size: number,
     boardSize: number
 ): boolean {
+    const col = coordinate.col;
+    const row = coordinate.row;
+    const maxShipCol = (coordinate.col + size - 1)
+    const maxShipRow = (coordinate.row + size - 1)
+
     return (
         orientation === Orientation.HORIZONTAL &&
-        ((coordinate.col + size - 1) > 1 && (coordinate.col + size - 1) < boardSize) &&
-        coordinate.row > 1 && coordinate.row < boardSize
+        maxShipCol >= 1 && maxShipCol <= boardSize &&
+        row >= 1 && row <= boardSize
     ) || (
         orientation === Orientation.VERTICAL &&
-        ((coordinate.row + size - 1) > 1 && (coordinate.row + size - 1) < boardSize) &&
-        coordinate.col > 1 && coordinate.col < boardSize
+        maxShipRow >= 1 && maxShipRow <= boardSize &&
+        col >= 1 && col <= boardSize
     );
 }

@@ -9,3 +9,4 @@ import * as React from "react";
 export function ErrorAlert(props: { error: string | null }) {
     return <>{props.error && <Alert severity="error">{props.error}</Alert>}</>;
 }
+

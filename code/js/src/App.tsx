@@ -2,18 +2,13 @@ import * as React from 'react';
 import {useEffect} from 'react';
 import './App.css';
 import NavBar from "./Layouts/NavBar";
-import {Navigate, Route, Routes} from 'react-router-dom';
-import Home from "./Components/Home/Home";
-import Login from "./Components/Authentication/Login";
-import Ranking from "./Components/Ranking/Ranking";
-import Gameplay from "./Components/Gameplay/Gameplay/Gameplay";
-import Register from './Components/Authentication/Register';
+import {Navigate} from 'react-router-dom';
 import Footer from "./Layouts/Footer";
-import GameplayMenu from "./Components/Gameplay/GameplayMenu/GameplayMenu";
 import {useNavigationState} from "./Utils/NavigationStateProvider";
 import {useBattleshipsService} from "./Services/NavigationBattleshipsService";
 import {useLoggedIn} from "./Utils/Session";
-import Profile from "./Components/Profile/Profile";
+import BoardSetup from "./Components/Gameplay/BoardSetup/BoardSetup";
+import {defaultShipTypes, shipTypesModelToMap} from "./Domain/games/ship/ShipType";
 
 /**
  * App component.
@@ -64,24 +59,29 @@ function App() {
         <div className="App">
             <NavBar/>
 
-            <div className="App-content">
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
+            {/*<div className="App-content">*/}
+            {/*    <Routes>*/}
+            {/*        <Route path="/" element={<Home/>}/>*/}
 
-                    <Route path="/login" element={<PublicRoute><Login/></PublicRoute>}/>
-                    <Route path="/register" element={<PublicRoute><Register/></PublicRoute>}/>
+            {/*        <Route path="/login" element={<PublicRoute><Login/></PublicRoute>}/>*/}
+            {/*        <Route path="/register" element={<PublicRoute><Register/></PublicRoute>}/>*/}
 
-                    <Route path="/ranking" element={<Ranking/>}/>
+            {/*        <Route path="/ranking" element={<Ranking/>}/>*/}
 
-                    <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
-                    <Route path="/gameplay-menu" element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>
-                    <Route path="/gameplay" element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
+            {/*        <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>*/}
+            {/*        <Route path="/gameplay-menu" element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>*/}
+            {/*        <Route path="/gameplay" element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>*/}
 
-                    <Route path="/about"/>
-                </Routes>
-            </div>
+            {/*        <Route path="/about"/>*/}
+            {/*    </Routes>*/}
+            {/*</div>*/}
+            // TODO: Check how to do previews.
+            <BoardSetup boardSize={10} ships={
+                defaultShipTypes
+            } onBoardReady={(board)=>{
+                console.log(board)
+            }}/>
 
-            <Footer/>
         </div>
     );
 }

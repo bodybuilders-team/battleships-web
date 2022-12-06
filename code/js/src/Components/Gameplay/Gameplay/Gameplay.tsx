@@ -16,6 +16,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {Rels} from "../../../Services/utils/Rels";
+import {shipTypesModelToMap} from "../../../Domain/games/ship/ShipType";
+import {Orientation} from "../../../Domain/games/ship/Orientation";
+import {useNavigationState} from "../../../Utils/NavigationStateProvider";
+
 
 /**
  * Fetches a URL.
@@ -58,18 +62,19 @@ function Gameplay() {
     const [myBoard, setMyBoard] = React.useState<Board | null>(null);
     const [opponentBoard, setOpponentBoard] = React.useState<Board | null>(null);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipService, setBattleshipService] = useBattleshipsService()
+    const [battleshipsService, setBattleshipService] = useBattleshipsService()
     const navigate = useNavigate()
+    const navigationState = useNavigationState();
 
     useEffect(() => {
         const fetchGame = async () => {
-            if (!battleshipService.links.get(Rels.GAME)) {
+            if (!battleshipsService.links.get(Rels.GAME)) {
                 navigate("/")
                 return
             }
 
             const [err, res] = await to(
-                battleshipService.gamesService.getGame()
+                battleshipsService.gamesService.getGame()
             );
 
             if (err) {
@@ -81,17 +86,74 @@ function Gameplay() {
                 throw new Error("Properties are undefined");
 
             const game = res.properties as GetGameOutputModel;
-            console.log(game);
+
             setGame(game);
         }
 
         fetchGame();
     }, []);
 
+    async function onBoardSetupFinished(board: Board) {
+        const [err, res] = await to(battleshipsService.playersService.deployFleet({
+            fleet: board.fleet.map(ship => {
+                    return {
+                        type: ship.type.shipName,
+                        orientation: Orientation.toString(ship.orientation),
+                        coordinate: {
+                            col: ship.coordinate.col,
+                            row: ship.coordinate.row
+                        }
+                    }
+                }
+            )
+        }))
+
+        if (err) {
+            handleError(err, setError);
+            return;
+        }
+
+        //wait for opponent
+        await waitForOpponentToDeployFleet();
+    }
+
+    async function waitForOpponentToDeployFleet() {
+        const [err, res] = await to(battleshipsService.gamesService.getGameState())
+
+        if (err) {
+            handleError(err, setError);
+            return;
+        }
+        let waiting = true
+
+        // TODO: cancel this wait
+        while (!waiting) {
+            const [err, res] = await to(
+                battleshipsService.gamesService.getGameState()
+            );
+
+            if (err) {
+                handleError(err, setError);
+                return;
+            }
+
+            if (res?.properties === undefined)
+                throw new Error("Entities are undefined");
+
+            if (res.properties.phase === "DEPLOYING_FLEETS")
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            else {
+                waiting = false
+            }
+        }
+
+    }
+
     if (game?.state.phase === "DEPLOYING_FLEETS")
         return (
-            <BoardSetup boardSize={game.config.gridSize} ships={game.config.shipTypes}/>
-        );
+            <BoardSetup boardSize={game.config.gridSize} ships={shipTypesModelToMap(game.config.shipTypes)}
+                        onBoardReady={onBoardSetupFinished}/>
+        )
     else if (game?.state.phase === "IN_PROGRESS")
         return (
             <PageContent error={error}>
@@ -106,7 +168,7 @@ function Gameplay() {
                                         flexDirection: 'row'
                                     }}
                                 >
-                                    <BoardView size={game.config.gridSize} grid={myBoard!.grid}/>
+                                    <BoardView board={myBoard!}/>
                                 </Box>
                             </CardContent>
                             <Divider/>
@@ -123,7 +185,7 @@ function Gameplay() {
                         </Card>
                     </Grid>
                     <Grid item lg={8} md={6} xs={12}>
-                        <BoardView size={game.config.gridSize} grid={opponentBoard!.grid}/>
+                        <BoardView board={opponentBoard!}/>
                     </Grid>
                 </Grid>
             </PageContent>

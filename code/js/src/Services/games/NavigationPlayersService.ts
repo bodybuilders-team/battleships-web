@@ -9,6 +9,7 @@ import {GetMyShotsOutput} from "./models/players/getMyShots/GetMyShotsOutput";
 import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput";
 import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput";
 import NavigationBattleshipsService from "../NavigationBattleshipsService";
+import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput";
 
 /**
  * Service to navigate through the players endpoints.

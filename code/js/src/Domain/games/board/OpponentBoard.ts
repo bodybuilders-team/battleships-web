@@ -9,9 +9,6 @@ import {Cell} from "../Cell";
  *
  * @property fleet the fleet of the board
  */
-export interface OpponentBoard extends Board {
-}
-
 export class OpponentBoard extends Board {
     constructor(boardSize: number, grid: Cell[]) {
         super(boardSize, grid);

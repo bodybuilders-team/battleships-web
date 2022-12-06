@@ -1,5 +1,5 @@
-import {Board} from "./Board";
-import {Cell, ShipCell} from "../Cell";
+import {Board, toIndex} from "./Board";
+import {Cell, ShipCell, WaterCell} from "../Cell";
 import {Ship} from "../ship/Ship";
 
 /**
@@ -10,17 +10,35 @@ import {Ship} from "../ship/Ship";
  *
  * @property fleet the fleet of ships
  */
-export interface ConfigurableBoard extends Board {
-    fleet: Ship[];
-}
-
 export class ConfigurableBoard extends Board {
     constructor(boardSize: number, grid: Cell[]) {
         super(boardSize, grid);
-        this.fleet = grid
-            .filter(cell => cell instanceof ShipCell)
-            .map(cell => (cell as ShipCell).ship)
-            .filter((ship, index, self) => self.indexOf(ship) === index); // distinct
+    }
+
+
+    canPlaceShip(ship: Ship): boolean {
+        return ship.coordinates.every(coordinate => {
+            const cell = this.getCell(coordinate);
+            return cell instanceof WaterCell;
+        });
+    }
+
+    placeShip(ship: Ship): ConfigurableBoard {
+        const newGrid = this.grid.slice();
+        ship.coordinates.forEach(coordinate => {
+            const index = toIndex(coordinate, this.size);
+            newGrid[index] = new ShipCell(coordinate, ship);
+        });
+        return new ConfigurableBoard(this.size, newGrid);
+    }
+
+    removeShip(ship: Ship): ConfigurableBoard {
+        const newGrid = this.grid.slice();
+        ship.coordinates.forEach(coordinate => {
+            const index = toIndex(coordinate, this.size);
+            newGrid[index] = new WaterCell(coordinate);
+        });
+        return new ConfigurableBoard(this.size, newGrid);
     }
 }
 
