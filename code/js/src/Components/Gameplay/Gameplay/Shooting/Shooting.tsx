@@ -9,7 +9,7 @@ import {tileSize} from "../../Shared/Board/Tile";
 import ShipView from "../../Shared/Ship/ShipView";
 import {Coordinate} from "../../../../Domain/games/Coordinate";
 import {ShipCell, UnknownShipCell} from "../../../../Domain/games/Cell";
-import {CountdownTimer} from "../../../Shared/CountdownTimer/CountdownTimer";
+import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
 import Typography from "@mui/material/Typography";
 import {Game} from "../../../../Domain/games/game/Game";
 import TileHitView from "../../Shared/Board/TileHitView";
@@ -17,6 +17,8 @@ import useShooting from "./useShooting";
 import LeaveGameAlert from "../../Shared/LeaveGameAlert";
 import LeaveGameButton from "../../Shared/LeaveGameButton";
 import Container from "@mui/material/Container";
+import {CancelRounded, RefreshRounded} from "@mui/icons-material";
+import RoundView from "./RoundView";
 
 /**
  * Properties for the Shooting component.
@@ -56,11 +58,18 @@ export default function Shooting({game, myFleet}: ShootingProps) {
                 display: "flex",
                 flexDirection: "column",
             }}>
-                <Box sx={{display: "flex", mt: "5px", justifyContent: "center"}}>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    mt: "5px",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                }}>
                     <CountdownTimer
                         finalTime={shootingState.gameState.phaseEndTime}
                         onTimeUp={() => setCanFireShots(false)}
                     />
+                    <RoundView round={shootingState.gameState.round!}/>
                 </Box>
 
                 <LeaveGameAlert
@@ -183,19 +192,36 @@ export default function Shooting({game, myFleet}: ShootingProps) {
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'row',
-                            justifyContent: 'center'
+                            justifyContent: 'space-around',
+                            width: '100%',
                         }}>
-                            <Button color="primary" disabled={!canFireShots} onClick={() => {
-                                setCanFireShots(false);
-                                const shots = selectedCells;
-                                setSelectedCells([]);
-                                fire(shots);
-                            }}>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                sx={{mt: 3, mb: 2, width: '40%'}}
+                                disabled={!canFireShots || selectedCells.length == 0}
+                                startIcon={<CancelRounded/>}
+                                color="primary"
+                                onClick={() => {
+                                    setCanFireShots(false);
+                                    const shots = selectedCells;
+                                    setSelectedCells([]);
+                                    fire(shots);
+                                }}
+                            >
                                 Shoot
                             </Button>
-                            <Button color="primary" disabled={!canFireShots} onClick={() => {
-                                setSelectedCells([])
-                            }}>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                sx={{mt: 3, mb: 2, width: '40%'}}
+                                disabled={!canFireShots || selectedCells.length == 0}
+                                startIcon={<RefreshRounded/>}
+                                color="primary"
+                                onClick={() => {
+                                    setSelectedCells([]);
+                                }}
+                            >
                                 Reset Shots
                             </Button>
                         </Box>

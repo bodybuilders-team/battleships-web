@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {useNavigationState} from "../../../Utils/navigation/NavigationState";
-import {useInterval} from "../../Shared/useInterval";
+import {useInterval} from "../Shared/useInterval";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
 const POLLING_DELAY = 1000;

@@ -12,9 +12,6 @@ Backend:
 
 Frontend:
 - EndGamePopup
-- Leave game mechanism (button and popup are already implemented, just need to implement the logic)
-- Round
-- Fix opponent board (sunk ship images and wrong ship coordinates)
 - Profile (maybe game history)
 
 Random or Never Ending Tasks:

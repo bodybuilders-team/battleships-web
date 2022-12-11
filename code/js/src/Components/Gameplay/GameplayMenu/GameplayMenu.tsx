@@ -23,7 +23,7 @@ export default function GameplayMenu() {
                 onClick={() => navigate("/create-game")}
             />
             <MenuButton
-                title={"Lobby"}
+                title={"Search Game"}
                 icon={<SearchRounded/>}
                 onClick={() => navigate("/lobby")}
             />

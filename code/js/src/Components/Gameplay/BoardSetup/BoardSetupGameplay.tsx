@@ -8,7 +8,7 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 import PageContent from "../../Shared/PageContent";
-import {useInterval} from "../../Shared/useInterval";
+import {useInterval} from "../Shared/useInterval";
 import {GameConfig} from "../../../Domain/games/game/GameConfig";
 import {GameState} from "../../../Domain/games/game/GameState";
 

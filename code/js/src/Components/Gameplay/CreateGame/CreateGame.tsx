@@ -18,7 +18,7 @@ import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {useNavigationState} from "../../../Utils/navigation/NavigationState";
-import {useInterval} from "../../Shared/useInterval";
+import {useInterval} from "../Shared/useInterval";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 
 const POLLING_DELAY = 1000;

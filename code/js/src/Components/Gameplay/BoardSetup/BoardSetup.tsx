@@ -16,9 +16,10 @@ import {isValidShipCoordinate, Ship} from "../../../Domain/games/ship/Ship";
 import ErrorAlert from "../../Shared/ErrorAlert";
 import useConfigurableBoard from "./useConfigurableBoard";
 import {tileSize} from "../Shared/Board/Tile";
-import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
+import {CountdownTimer} from "../Shared/CountdownTimer/CountdownTimer";
 import LeaveGameAlert from "../Shared/LeaveGameAlert";
 import LeaveGameButton from "../Shared/LeaveGameButton";
+import {CheckRounded, CycloneRounded} from "@mui/icons-material";
 
 /**
  * Board setup props
@@ -100,21 +101,42 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                             </Box>
                         </CardContent>
                         <Divider/>
-                        <CardActions>
-                            <Button color="primary" fullWidth onClick={() => {
-                                setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)));
-                                const newUnplacedShips = new Map<ShipType, number>();
-                                ships.forEach((count, ship) => newUnplacedShips.set(ship, 0));
-                                setUnplacedShips(newUnplacedShips);
-                            }}>
+                        <CardActions sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <Button
+                                fullWidth
+                                size="large"
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
+                                startIcon={<CycloneRounded/>}
+                                color="primary"
+                                onClick={() => {
+                                    setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)));
+                                    const newUnplacedShips = new Map<ShipType, number>();
+                                    ships.forEach((count, ship) => newUnplacedShips.set(ship, 0));
+                                    setUnplacedShips(newUnplacedShips);
+                                }}
+                            >
                                 Random Board
                             </Button>
-                            <Button color="primary" fullWidth onClick={() => {
-                                if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
-                                    onBoardReady(board);
-                                else
-                                    alert("You must place all the ships!");
-                            }}>
+                            <Button
+                                fullWidth
+                                size="large"
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
+                                startIcon={<CheckRounded/>}
+                                color="primary"
+                                onClick={() => {
+                                    if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
+                                        onBoardReady(board);
+                                    else
+                                        alert("You must place all the ships!");
+                                }}
+                            >
                                 Confirm Board
                             </Button>
                         </CardActions>
