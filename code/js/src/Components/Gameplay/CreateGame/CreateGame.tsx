@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState} from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -14,30 +15,37 @@ import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/game
 import to from "../../../Utils/await-to";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
-import {EmbeddedLink} from "../../../Services/media/siren/SubEntity";
-import PageContent from "../../Utils/PageContent";
+import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
-import {delay} from "../../../Utils/timeUtils";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
+import {useInterval} from "../../Shared/useInterval";
+import LoadingSpinner from "../../Shared/LoadingSpinner";
 
+const POLLING_DELAY = 1000;
 
 /**
  * CreateGame component.
  */
-function CreateGame() {
-
+export default function CreateGame() {
     const navigate = useNavigate();
-
-    const [gameName, setGameName] = React.useState("Game");
-    const [gridSize, setGridSize] = React.useState(defaultBoardSize);
-    const [shotsPerRound, setShotsPerRound] = React.useState(1);
-    const [maxTimePerRound, setMaxTimePerRound] = React.useState(100);
-    const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = React.useState(100);
-    const [shipTypes, setShipTypes] = React.useState<Map<ShipType, number>>(defaultShipTypes);
-    const [error, setError] = React.useState<string | null>(null);
-    const battleshipsService = useBattleshipsService();
     const navigationState = useNavigationState();
 
+    const battleshipsService = useBattleshipsService();
+
+    const [gameName, setGameName] = useState("Game");
+    const [gridSize, setGridSize] = useState(defaultBoardSize);
+    const [shotsPerRound, setShotsPerRound] = useState(1);
+    const [maxTimePerRound, setMaxTimePerRound] = useState(100);
+    const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = useState(100);
+    const [shipTypes, setShipTypes] = useState<Map<ShipType, number>>(defaultShipTypes);
+
+    const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
+    const [gameId, setGameId] = useState<number | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    /**
+     * Handles the creation of a game.
+     */
     function handleCreateGame() {
         async function createGame() {
             const [err, res] = await to(
@@ -65,190 +73,192 @@ function CreateGame() {
                 return;
             }
 
-            if (res?.entities === undefined)
-                throw new Error("Entities are undefined");
-
-            const game = res.entities.find(entity => entity.rel.includes("game")) as EmbeddedLink;
-            if (game === undefined)
-                throw new Error("Game entity not found");
-
-            // Wait for the opponent to join the game
-            while (true) {
-                const [err, res] = await to(
-                    battleshipsService.gamesService.getGameState()
-                );
-
-                if (err) {
-                    handleError(err, setError);
-                    return;
-                }
-
-                if (res?.properties === undefined)
-                    throw new Error("Properties are undefined");
-
-                if (res.properties.phase === "WAITING_FOR_PLAYERS")
-                    await delay(1000);
-                else
-                    break;
-            }
-
             navigationState.setLinks(battleshipsService.links)
-            navigate(`/game/${res.properties!.gameId}`);
+            setGameId(res.properties!.gameId);
+            setWaitingForOpponent(true);
         }
 
         createGame();
     }
 
-    return (
-        <PageContent title={"Game Configuration"} error={error}>
-            <Box sx={{
-                mt: 1,
-                alignItems: 'center',
-                width: 400,
-            }}>
-                <TextField
-                    margin="normal"
-                    fullWidth
-                    label="Game Name"
-                    name="gameName"
-                    onChange={(event) => {
-                        setGameName(event.target.value);
-                    }}
-                />
+    useInterval(async () => {
+        if (!isWaitingForOpponent)
+            return true;
 
-                <Box>
-                    <Typography id="board-size-slider" gutterBottom>
-                        Grid Size {gridSize}x{gridSize}
-                    </Typography>
-                    <Slider
-                        defaultValue={defaultBoardSize}
-                        aria-labelledby="board-size-slider"
-                        valueLabelDisplay="auto"
-                        step={1}
-                        marks
-                        min={minBoardSize}
-                        max={maxBoardSize}
-                        onChange={(event, value) => {
-                            setGridSize(value as number);
-                        }}
-                    />
-                </Box>
+        const [err, res] = await to(
+            battleshipsService.gamesService.getGameState()
+        );
 
-                <Box>
-                    <Typography id="shots-per-turn-slider" gutterBottom>
-                        Shots per turn {shotsPerRound}
-                    </Typography>
-                    <Slider
-                        defaultValue={1}
-                        aria-labelledby="shots-per-turn-slider"
-                        valueLabelDisplay="auto"
-                        step={1}
-                        marks
-                        min={1}
-                        max={5}
-                        onChange={(event, value) => {
-                            setShotsPerRound(value as number);
-                        }}
-                    />
-                </Box>
+        if (err) {
+            handleError(err, setError);
+            return true;
+        }
 
-                <Box>
-                    <Typography id="time-per-turn-slider" gutterBottom>
-                        Time per turn {maxTimePerRound} seconds
-                    </Typography>
-                    <Slider
-                        defaultValue={60}
-                        aria-labelledby="time-per-turn-slider"
-                        valueLabelDisplay="auto"
-                        step={10}
-                        marks
-                        min={30}
-                        max={120}
-                        onChange={(event, value) => {
-                            setMaxTimePerRound(value as number);
-                        }}
-                    />
-                </Box>
+        if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
+            setWaitingForOpponent(false);
+            navigationState.setLinks(battleshipsService.links);
+            navigate(`/game/${gameId}`);
+            return true;
+        }
 
-                <Box>
-                    <Typography id="time-for-board-configuration-slider" gutterBottom>
-                        Time for board configuration
-                    </Typography>
-                    <Typography id="time-for-board-configuration-slider" gutterBottom>
-                        {maxTimeForLayoutPhase} seconds
-                    </Typography>
-                    <Slider
-                        defaultValue={60}
-                        aria-labelledby="time-for-board-configuration-slider"
-                        valueLabelDisplay="auto"
-                        step={10}
-                        marks
-                        min={30}
-                        max={120}
-                        onChange={(event, value) => {
-                            setMaxTimeForLayoutPhase(value as number);
-                        }}
-                    />
-                </Box>
+        return false;
+    }, POLLING_DELAY, [isWaitingForOpponent]);
 
-                <Box>
-                    <Typography id="ships-selector" gutterBottom>
-                        Ships
-                    </Typography>
-                    <Grid container spacing={2} justifyContent={"center"}>
-                        {
-                            Array.from(shipTypes.entries())
-                                .map(([ship, quantity]) => {
-                                    return (
-                                        <Grid item key={ship.shipName}>
-                                            <Box sx={{height: 200}}>
-                                                <ShipView type={ship} orientation={Orientation.VERTICAL}/>
-                                            </Box>
-                                            <IconButton
-                                                aria-label="add"
-                                                color="primary"
-                                                onClick={() => {
-                                                    if (quantity < 5)
-                                                        setShipTypes(new Map(shipTypes.set(ship, quantity + 1)));
-                                                }}
-                                            >
-                                                <Add/>
-                                            </IconButton>
-                                            <Typography id="ship-quantity-selector"
-                                                        gutterBottom>{quantity}</Typography>
-                                            <IconButton
-                                                aria-label="remove"
-                                                color="primary"
-                                                onClick={() => {
-                                                    if (quantity > 0)
-                                                        setShipTypes(new Map(shipTypes.set(ship, quantity - 1)));
-                                                }}
-                                            >
-                                                <Remove/>
-                                            </IconButton>
-                                        </Grid>
-                                    );
-                                })
-                        }
-                    </Grid>
-
-                    <Button
+    if (isWaitingForOpponent)
+        return (
+            <PageContent error={error}>
+                <LoadingSpinner text={"Waiting for opponent..."}/>
+            </PageContent>
+        );
+    else
+        return (
+            <PageContent title={"Game Configuration"} error={error}>
+                <Box sx={{
+                    mt: 1,
+                    alignItems: 'center',
+                    width: 400,
+                }}>
+                    <TextField
+                        margin="normal"
                         fullWidth
-                        size="large"
-                        variant="contained"
-                        sx={{mt: 3, mb: 2}}
-                        startIcon={<Add/>}
-                        color="primary"
-                        onClick={() => {
-                            handleCreateGame();
+                        label="Game Name"
+                        name="gameName"
+                        onChange={(event) => {
+                            setGameName(event.target.value);
                         }}
-                    >
-                        Create Game
-                    </Button>
-                </Box>
-            </Box>
-        </PageContent>
-    );
-}
+                    />
 
-export default CreateGame;
+                    <Box>
+                        <Typography id="board-size-slider" gutterBottom>
+                            Grid Size {gridSize}x{gridSize}
+                        </Typography>
+                        <Slider
+                            defaultValue={defaultBoardSize}
+                            aria-labelledby="board-size-slider"
+                            valueLabelDisplay="auto"
+                            step={1}
+                            marks
+                            min={minBoardSize}
+                            max={maxBoardSize}
+                            onChange={(event, value) => {
+                                setGridSize(value as number);
+                            }}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography id="shots-per-turn-slider" gutterBottom>
+                            Shots per turn {shotsPerRound}
+                        </Typography>
+                        <Slider
+                            defaultValue={1}
+                            aria-labelledby="shots-per-turn-slider"
+                            valueLabelDisplay="auto"
+                            step={1}
+                            marks
+                            min={1}
+                            max={5}
+                            onChange={(event, value) => {
+                                setShotsPerRound(value as number);
+                            }}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography id="time-per-turn-slider" gutterBottom>
+                            Time per turn {maxTimePerRound} seconds
+                        </Typography>
+                        <Slider
+                            defaultValue={60}
+                            aria-labelledby="time-per-turn-slider"
+                            valueLabelDisplay="auto"
+                            step={10}
+                            marks
+                            min={30}
+                            max={120}
+                            onChange={(event, value) => {
+                                setMaxTimePerRound(value as number);
+                            }}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography id="time-for-board-configuration-slider" gutterBottom>
+                            Time for board configuration
+                        </Typography>
+                        <Typography id="time-for-board-configuration-slider" gutterBottom>
+                            {maxTimeForLayoutPhase} seconds
+                        </Typography>
+                        <Slider
+                            defaultValue={60}
+                            aria-labelledby="time-for-board-configuration-slider"
+                            valueLabelDisplay="auto"
+                            step={10}
+                            marks
+                            min={30}
+                            max={120}
+                            onChange={(event, value) => {
+                                setMaxTimeForLayoutPhase(value as number);
+                            }}
+                        />
+                    </Box>
+
+                    <Box>
+                        <Typography id="ships-selector" gutterBottom>
+                            Ships
+                        </Typography>
+                        <Grid container spacing={2} justifyContent={"center"}>
+                            {
+                                Array.from(shipTypes.entries())
+                                    .map(([ship, quantity]) => {
+                                        return (
+                                            <Grid item key={ship.shipName}>
+                                                <Box sx={{height: 200}}>
+                                                    <ShipView type={ship} orientation={Orientation.VERTICAL}/>
+                                                </Box>
+                                                <IconButton
+                                                    aria-label="add"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        if (quantity < 5)
+                                                            setShipTypes(new Map(shipTypes.set(ship, quantity + 1)));
+                                                    }}
+                                                >
+                                                    <Add/>
+                                                </IconButton>
+                                                <Typography id="ship-quantity-selector"
+                                                            gutterBottom>{quantity}</Typography>
+                                                <IconButton
+                                                    aria-label="remove"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        if (quantity > 0)
+                                                            setShipTypes(new Map(shipTypes.set(ship, quantity - 1)));
+                                                    }}
+                                                >
+                                                    <Remove/>
+                                                </IconButton>
+                                            </Grid>
+                                        );
+                                    })
+                            }
+                        </Grid>
+
+                        <Button
+                            fullWidth
+                            size="large"
+                            variant="contained"
+                            sx={{mt: 3, mb: 2}}
+                            startIcon={<Add/>}
+                            color="primary"
+                            onClick={() => {
+                                handleCreateGame();
+                            }}
+                        >
+                            Create Game
+                        </Button>
+                    </Box>
+                </Box>
+            </PageContent>
+        );
+}

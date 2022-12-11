@@ -34,10 +34,8 @@ export default class NavigationUsersService {
         }
 
         const res = await UsersService.getUserHome(
-                this.links.get(Rels.USER_HOME)
-                ?? throwError("User home link not found")
-            )
-        ;
+            this.links.get(Rels.USER_HOME) ?? throwError("User home link not found")
+        );
 
         res.getActionLinks().forEach((value, key) => {
             this.links.set(key, value);
@@ -55,15 +53,14 @@ export default class NavigationUsersService {
         if (!this.links.get(Rels.LIST_USERS))
             await this.battleshipsService.getHome();
 
-        const res = await UsersService.getUsers(this.links.get(Rels.LIST_USERS)
-            ?? throwError("List users link not found"));
+        const res = await UsersService.getUsers(
+            this.links.get(Rels.LIST_USERS) ?? throwError("List users link not found")
+        );
 
         res.getEmbeddedSubEntities<GetUsersUserModel>().forEach(entity => {
             const username = entity?.properties?.username ?? throwError("Username not found");
-
-            console.log(entity)
             this.links.set(`${Rels.USER}-${username}`, entity.getLink(Rels.SELF));
-        })
+        });
 
         return res;
     }
@@ -126,6 +123,7 @@ export default class NavigationUsersService {
 
         await UsersService.logout(
             this.links.get(Rels.LOGOUT) ?? throwError("Logout link not found"),
-            refreshToken);
+            refreshToken
+        );
     }
 }

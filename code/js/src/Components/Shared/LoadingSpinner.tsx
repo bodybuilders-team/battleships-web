@@ -4,12 +4,19 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 /**
+ * Properties for the LoadingSpinner component.
+ *
+ * @property text the text to be shown below the spinner
+ */
+interface LoadingSpinnerProps {
+    text: string;
+}
+
+/**
  * A loading spinner that rotates infinitely.
  * Useful for indicating that a process is running.
- *
- * @param text the text to be shown below the spinner
  */
-function LoadingSpinner({text}: { text: string }) {
+export default function LoadingSpinner({text}: LoadingSpinnerProps) {
     return (
         <Box sx={{
             display: 'flex',
@@ -21,5 +28,3 @@ function LoadingSpinner({text}: { text: string }) {
         </Box>
     );
 }
-
-export default LoadingSpinner;

@@ -23,4 +23,3 @@ interface GetHomeOutputModel {
  * The Get Home Output.
  */
 export type GetHomeOutput = SirenEntity<GetHomeOutputModel>
-

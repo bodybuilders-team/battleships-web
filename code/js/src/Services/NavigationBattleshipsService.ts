@@ -2,8 +2,8 @@ import {BattleshipsService} from "./BattleshipsService";
 import {NavigationGamesService} from "./services/games/NavigationGamesService";
 import NavigationUsersService from "./services/users/NavigationUsersService";
 import {NavigationPlayersService} from "./services/games/NavigationPlayersService";
-import {useNavigationState} from "../Utils/navigation/NavigationStateProvider";
-import * as React from "react";
+import {useNavigationState} from "../Utils/navigation/NavigationState";
+import {useMemo} from "react";
 import {SessionManager, useSessionManager} from "../Utils/Session";
 import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
 
@@ -60,7 +60,7 @@ export function useBattleshipsService() {
     const navigationState = useNavigationState();
     const sessionManager = useSessionManager();
 
-    return React.useMemo(() => {
+    return useMemo(() => {
         return new NavigationBattleshipsService(navigationState.links, sessionManager);
     }, []);
 }

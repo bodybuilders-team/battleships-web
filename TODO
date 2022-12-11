@@ -3,20 +3,22 @@ Project structure:
 - Clean up frontend code
 
 Documentation:
-- Review and improve report:
-- Add backend documentation
-- Add frontend documentation
+- Review and improve backend documentation
+- Review and improve frontend documentation
+- Improve README.md
 
 Backend:
 - Implement blacklist of tokens
-- Profile pics and other user data
 
 Frontend:
-- Finish gameplay
-- About
+- Fix timer (00:00)
+- EndGamePopup
+- Round
+- Fix ship images
+- Fix opponent board (sunk ship images and wrong ship coordinates)
 - Profile (maybe game history)
 
 Random or Never Ending Tasks:
 - Add more tests
 - Implement private games
-- React strict mode
+- Profile pics and other user data

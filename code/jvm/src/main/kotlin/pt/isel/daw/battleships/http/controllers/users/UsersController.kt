@@ -81,7 +81,7 @@ class UsersController(private val usersService: UsersService) {
             offset = offset ?: Params.OFFSET_DEFAULT,
             limit = limit ?: Params.LIMIT_DEFAULT,
             orderBy = if (orderBy != null) UsersOrder.valueOf(orderBy) else UsersOrder.POINTS,
-            ascending = when (sortDirection ?: Params.SORT_DIR_ASCENDING) {
+            ascending = when (sortDirection ?: Params.SORT_DIR_DESCENDING) {
                 Params.SORT_DIR_ASCENDING -> true
                 Params.SORT_DIR_DESCENDING -> false
                 else -> throw IllegalArgumentException(

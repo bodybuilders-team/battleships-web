@@ -157,5 +157,4 @@ export class NavigationGamesService {
             this.links.get(Rels.LEAVE_GAME) ?? throwError("Leave game link not found")
         );
     }
-
 }

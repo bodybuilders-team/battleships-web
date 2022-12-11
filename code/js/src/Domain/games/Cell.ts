@@ -1,12 +1,12 @@
+import {Coordinate} from "./Coordinate";
+import {Ship} from "./ship/Ship";
+
 /**
  * A cell in the board.
  *
  * @property coordinate the coordinate of the cell
  * @property wasHit if the cell was hit
  */
-import {Coordinate} from "./Coordinate";
-import {Ship} from "./ship/Ship";
-
 export class Cell {
     readonly coordinate: Coordinate;
     readonly wasHit: boolean;

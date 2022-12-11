@@ -2,12 +2,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import BottomNavigation from '@mui/material/BottomNavigation';
 
 /**
  * Footer component.
  */
-function Footer() {
+export default function Footer() {
     return (
         <Box
             component="footer"
@@ -37,5 +36,3 @@ function Footer() {
         </Box>
     );
 }
-
-export default Footer;

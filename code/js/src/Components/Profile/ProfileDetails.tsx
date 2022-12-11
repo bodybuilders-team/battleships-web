@@ -1,11 +1,12 @@
 import * as React from "react";
+import {useState} from "react";
 import {Box, Button, Card, CardContent, CardHeader, Divider, Grid, TextField} from '@mui/material';
 
 /**
  * ProfileDetais component.
  */
-function ProfileDetais() {
-    const [values, setValues] = React.useState({ // TODO: To change later
+export default function ProfileDetais() {
+    const [values] = useState({ // TODO: To change later
         firstName: 'Elon',
         lastName: 'Musk',
         email: 'elon@musk.com',
@@ -79,5 +80,3 @@ function ProfileDetais() {
         </form>
     );
 }
-
-export default ProfileDetais;

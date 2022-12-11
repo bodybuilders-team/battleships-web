@@ -15,7 +15,12 @@ export class ConfigurableBoard extends Board {
         super(boardSize, grid);
     }
 
-
+    /**
+     * Checks if it is possible to place a ship in its coordinates.
+     *
+     * @param ship ship to check
+     * @return true if it is possible to place the ship in its coordinates, false otherwise
+     */
     canPlaceShip(ship: Ship): boolean {
         return ship.coordinates.every(coordinate => {
             const cell = this.getCell(coordinate);
@@ -23,22 +28,38 @@ export class ConfigurableBoard extends Board {
         });
     }
 
+    /**
+     * Places a ship in the board.
+     *
+     * @param ship the ship to place
+     *
+     * @return the new board with the ship placed
+     */
     placeShip(ship: Ship): ConfigurableBoard {
         const newGrid = this.grid.slice();
+
         ship.coordinates.forEach(coordinate => {
             const index = toIndex(coordinate, this.size);
             newGrid[index] = new ShipCell(coordinate, false, ship);
         });
+
         return new ConfigurableBoard(this.size, newGrid);
     }
 
+    /**
+     * Removes a ship from the board.
+     *
+     * @param ship the ship to place
+     * @return the new board with the ship placed
+     */
     removeShip(ship: Ship): ConfigurableBoard {
         const newGrid = this.grid.slice();
+
         ship.coordinates.forEach(coordinate => {
             const index = toIndex(coordinate, this.size);
             newGrid[index] = new WaterCell(coordinate, false);
         });
+
         return new ConfigurableBoard(this.size, newGrid);
     }
 }
-

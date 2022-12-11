@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -10,32 +11,23 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {PlayArrow} from "@mui/icons-material";
 import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
 
-interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
-}
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-    const {expand, ...other} = props;
-    return <IconButton {...other} />;
-})(({theme, expand}) => ({
-    transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-        duration: theme.transitions.duration.shortest
-    })
-}));
+/**
+ * Properties for the GameCard component.
+ *
+ * @property game the game to display
+ * @property onJoinGameRequest the callback to call when the user wants to join the game
+ */
+interface GameCardProps {
+    game: GetGameOutputModel;
+    onJoinGameRequest: () => void;
+}
 
 /**
  * Game card component.
- *
- * @param game the game to display
- * @param onJoinGameRequest the callback to call when the user wants to join the game
  */
-export default function GameCard({
-                                     game,
-                                     onJoinGameRequest
-                                 }: { game: GetGameOutputModel, onJoinGameRequest: () => void }) {
-    const [expanded, setExpanded] = React.useState(false);
+export default function GameCard({game, onJoinGameRequest}: GameCardProps) {
+    const [expanded, setExpanded] = useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -78,3 +70,23 @@ export default function GameCard({
         </Card>
     );
 }
+
+/**
+ * Properties for the ExpandMore component.
+ *
+ * @property expand expanded state
+ */
+interface ExpandMoreProps extends IconButtonProps {
+    expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+    const {expand, ...other} = props;
+    return <IconButton {...other} />;
+})(({theme, expand}) => ({
+    transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+        duration: theme.transitions.duration.shortest
+    })
+}));

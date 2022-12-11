@@ -10,11 +10,23 @@ export enum Orientation {
 }
 
 export namespace Orientation {
+    /**
+     * Returns the opposite orientation.
+     *
+     * @return the opposite orientation
+     */
     export function opposite(orientation: Orientation): Orientation {
-        return orientation === Orientation.VERTICAL ?
-            Orientation.HORIZONTAL : Orientation.VERTICAL
+        return orientation === Orientation.VERTICAL
+            ? Orientation.HORIZONTAL
+            : Orientation.VERTICAL;
     }
 
+    /**
+     * Parses the orientation from a string.
+     *
+     * @param orientation the orientation as a string
+     * @return the orientation
+     */
     export function parse(orientation: string): Orientation {
         if (orientation === "VERTICAL")
             return Orientation.VERTICAL;

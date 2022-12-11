@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
@@ -7,31 +8,32 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from '../../../Utils/formUtils';
-import {validateEmail, validatePassword, validateUsername} from '../validateFields';
+import {useForm} from '../Shared/useForm';
+import {validateEmail, validatePassword, validateUsername} from '../Shared/validateFields';
 import to from '../../../Utils/await-to';
 import {useSessionManager} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
-import {ErrorAlert} from "../../Utils/ErrorAlert";
-import PageContent from "../../Utils/PageContent";
-import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
+import ErrorAlert from "../../Shared/ErrorAlert";
+import PageContent from "../../Shared/PageContent";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {throwError} from "../../../Services/utils/errorUtils";
-import {PasswordTextField} from "../PasswordTextField";
-import {UsernameTextField} from "../UsernameTextField";
-import {EmailTextField} from "../EmailTextField";
+import {PasswordTextField} from "../Shared/PasswordTextField";
+import {UsernameTextField} from "../Shared/UsernameTextField";
+import {EmailTextField} from "../Shared/EmailTextField";
 
 /**
  * Register component.
  */
-function Register() {
+export default function Register() {
     const navigate = useNavigate();
-    const sessionManager = useSessionManager();
-    const [formError, setFormError] = React.useState<string | null>(null);
-    const navigationState = useNavigationState()
+    const navigationState = useNavigationState();
 
-    const battleshipsService = useBattleshipsService()
+    const battleshipsService = useBattleshipsService();
+    const sessionManager = useSessionManager();
+
+    const [formError, setFormError] = useState<string | null>(null);
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {email: '', username: '', password: ''},
@@ -67,7 +69,6 @@ function Register() {
         }
     });
 
-
     return (
         <PageContent>
             <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}><LockOutlinedIcon/></Avatar>
@@ -98,5 +99,3 @@ function Register() {
         </PageContent>
     );
 }
-
-export default Register;

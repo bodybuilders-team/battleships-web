@@ -5,23 +5,25 @@ import Tile, {tileSize} from "./Tile";
 import {Board} from "../../../../Domain/games/board/Board";
 import {Coordinate} from "../../../../Domain/games/Coordinate";
 
+/**
+ * Properties for the BoardView component.
+ *
+ * @property board the board to display
+ * @property enabled whether the board is enabled or not
+ * @property onTileClicked the callback to be called when a tile is clicked
+ * @property children the children to be displayed on top of the board
+ */
 interface BoardViewProps {
     board: Board;
     enabled: boolean;
     onTileClicked?: (coordinate: Coordinate) => void;
-    children?: React.ReactNode
+    children?: React.ReactNode;
 }
 
 /**
  * BoardView component.
- *
- * @param board the board to display
- * @param enabled whether the board is enabled or not
- * @param onTileClicked the callback to be called when a tile is clicked
- * @param children the children to be displayed on top of the board
  */
-function BoardView({board, enabled, onTileClicked, children}: BoardViewProps) {
-
+export default function BoardView({board, enabled, onTileClicked, children}: BoardViewProps) {
     return (
         <Box
             sx={{
@@ -61,10 +63,7 @@ function BoardView({board, enabled, onTileClicked, children}: BoardViewProps) {
                     }
                 )}
             </Grid>
-
             {children}
         </Box>
     );
 }
-
-export default BoardView;

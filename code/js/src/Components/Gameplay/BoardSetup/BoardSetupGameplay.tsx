@@ -1,35 +1,48 @@
 import BoardSetup from "./BoardSetup";
 import * as React from "react";
-import {useEffect} from "react";
-import {GameConfig, GameState} from "../Gameplay/Gameplay";
+import {useEffect, useState} from "react";
 import {Board} from "../../../Domain/games/board/Board";
 import to from "../../../Utils/await-to";
 import {Orientation} from "../../../Domain/games/ship/Orientation";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import LoadingSpinner from "../../Utils/LoadingSpinner";
-import PageContent from "../../Utils/PageContent";
-import {useInterval} from "../../../Hooks/useInterval";
+import LoadingSpinner from "../../Shared/LoadingSpinner";
+import PageContent from "../../Shared/PageContent";
+import {useInterval} from "../../Shared/useInterval";
+import {GameConfig} from "../../../Domain/games/game/GameConfig";
+import {GameState} from "../../../Domain/games/game/GameState";
 
-interface BoardSetupHandlerProps {
+/**
+ * Properties for BoardSetupGameplay component.
+ *
+ * @property gameConfig the game config
+ * @property onBoardSetupPhaseFinished callback when the board setup phase is finished
+ */
+interface BoardSetupGameplayProps {
     gameConfig: GameConfig;
     onBoardSetupPhaseFinished: (gameState: GameState) => void;
 }
 
-const POLLING_DELAY = 1000;
+const pollingDelay = 1000;
 
-
-function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinished}: BoardSetupHandlerProps) {
+/**
+ * BoardSetupGameplay component.
+ */
+export default function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinished}: BoardSetupGameplayProps) {
     const battleshipsService = useBattleshipsService();
-    const [isWaitingForOpponent, setWaitingForOpponent] = React.useState<boolean>(false);
-    const [error, setError] = React.useState<string | null>(null);
+    const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const [fetchingGameState, setFetchingGameState] = React.useState<boolean>(true);
-    const [finalTime, setFinalTime] = React.useState<number | null>(null);
+    const [fetchingGameState, setFetchingGameState] = useState<boolean>(true);
+    const [finalTime, setFinalTime] = useState<number | null>(null);
 
-
+    /**
+     * Callback when the board setup phase is finished.
+     *
+     * @param board the board
+     */
     async function onBoardSetupFinished(board: Board) {
-        const [err, res] = await to(battleshipsService.playersService.deployFleet({
+        const [err] = await to(battleshipsService.playersService.deployFleet({
             fleet: board.fleet.map(ship => {
                     return {
                         type: ship.type.shipName,
@@ -38,7 +51,7 @@ function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinished}: BoardSetupH
                     }
                 }
             )
-        }))
+        }));
 
         if (err) {
             handleError(err, setError);
@@ -62,13 +75,13 @@ function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinished}: BoardSetupH
         }
 
         if (res.properties!.phase !== "DEPLOYING_FLEETS") {
-            onBoardSetupPhaseFinished(new GameState(res.properties!));
             setWaitingForOpponent(false);
-            return true
+            onBoardSetupPhaseFinished(new GameState(res.properties!));
+            return true;
         }
 
-        return false
-    }, POLLING_DELAY, [isWaitingForOpponent]);
+        return false;
+    }, pollingDelay, [isWaitingForOpponent]);
 
     useEffect(() => {
         if (!fetchingGameState)
@@ -89,22 +102,27 @@ function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinished}: BoardSetupH
         }
 
         fetchGameState();
-    }, [fetchingGameState])
+    }, [fetchingGameState]);
 
 
     if (isWaitingForOpponent)
-        return <PageContent error={error}>
-            <LoadingSpinner text={"Waiting for opponent to deploy his fleet..."}/>
-        </PageContent>
+        return (
+            <PageContent error={error}>
+                <LoadingSpinner text={"Waiting for opponent to deploy his fleet..."}/>
+            </PageContent>
+        );
     else if (fetchingGameState)
-        return <PageContent error={error}>
-            <LoadingSpinner text={"Loading game state..."}/>
-        </PageContent>
+        return (
+            <PageContent error={error}>
+                <LoadingSpinner text={"Loading game state..."}/>
+            </PageContent>
+        );
     else
         return (
-            <BoardSetup finalTime={finalTime!} boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
-                        onBoardReady={onBoardSetupFinished}/>
-        )
+            <BoardSetup
+                finalTime={finalTime!}
+                boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
+                onBoardReady={onBoardSetupFinished}
+            />
+        );
 }
-
-export default BoardSetupGameplay

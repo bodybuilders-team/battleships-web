@@ -1,28 +1,32 @@
 import * as React from "react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {EmbeddedSubEntity} from "../../../Services/media/siren/SubEntity";
 import to from "../../../Utils/await-to";
 import {handleError} from "../../../Services/utils/fetchSiren";
-import PageContent from "../../Utils/PageContent";
+import PageContent from "../../Shared/PageContent";
 import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import LoadingSpinner from "../../Utils/LoadingSpinner";
+import LoadingSpinner from "../../Shared/LoadingSpinner";
 import GameCard from "./GameCard";
 import {useNavigate} from "react-router-dom";
-import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {Rels} from "../../../Utils/navigation/Rels";
+import {useSession} from "../../../Utils/Session";
+import Typography from "@mui/material/Typography";
 
 /**
  * Lobby component.
  */
-function Lobby() {
-
+export default function Lobby() {
     const navigate = useNavigate();
     const navigationState = useNavigationState();
-    const [games, setGames] = React.useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null);
-    const [gamesLoaded, setGamesLoaded] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const battleshipsService = useBattleshipsService()
+
+    const battleshipsService = useBattleshipsService();
+    const session = useSession();
+
+    const [error, setError] = useState<string | null>(null);
+    const [games, setGames] = useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null);
+    const [gamesLoaded, setGamesLoaded] = useState(false);
 
     useEffect(() => {
         if (gamesLoaded)
@@ -38,7 +42,10 @@ function Lobby() {
 
             const filteredGames = res
                 .getEmbeddedSubEntities<GetGameOutputModel>()
-                .filter(game => game.properties?.state.phase === "WAITING_FOR_PLAYERS");
+                .filter(game =>
+                    game.properties?.state.phase === "WAITING_FOR_PLAYERS" &&
+                    game.properties?.creator !== session?.username
+                );
 
             setGames(filteredGames);
 
@@ -68,15 +75,17 @@ function Lobby() {
         <PageContent title="Lobby" error={error}>
             {
                 gamesLoaded
-                    ? games?.map(game =>
-                        <GameCard key={game.properties?.id} game={game.properties!} onJoinGameRequest={() => {
-                            handleJoinGame(game.getAction(Rels.JOIN_GAME));
-                        }}/>
-                    )
+                    ? games?.length === 0
+                        ? <Typography variant="h5" component="div" sx={{flexGrow: 1}}>
+                            No games available
+                        </Typography>
+                        : games?.map(game =>
+                            <GameCard key={game.properties?.id} game={game.properties!} onJoinGameRequest={() => {
+                                handleJoinGame(game.getAction(Rels.JOIN_GAME));
+                            }}/>
+                        )
                     : <LoadingSpinner text={"Loading games..."}/>
             }
         </PageContent>
     );
 }
-
-export default Lobby;

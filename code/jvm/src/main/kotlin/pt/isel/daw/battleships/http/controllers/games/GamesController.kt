@@ -101,6 +101,7 @@ class GamesController(private val gamesService: GamesService) {
 
         return SirenEntity(
             `class` = listOf(Rels.CREATE_GAME),
+            properties = CreateGameOutputModel(gameId = gameId),
             entities = listOf(
                 Links.game(gameId = gameId),
                 EmbeddedLink(
@@ -239,7 +240,7 @@ class GamesController(private val gamesService: GamesService) {
     @Authenticated
     fun leaveGame(
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
-        @PathVariable gameId: Int
+        @PathVariable gameId: Int,
     ): SirenEntity<Unit> {
         gamesService.leaveGame(token = token, gameId = gameId)
 

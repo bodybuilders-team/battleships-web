@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,7 +18,7 @@ import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
 import to from "../Utils/await-to";
 import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
 import {Rels} from "../Utils/navigation/Rels";
-import {useNavigationState} from '../Utils/navigation/NavigationStateProvider';
+import {useNavigationState} from '../Utils/navigation/NavigationState';
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -30,13 +31,13 @@ const pages = [
 /**
  * NavBar component.
  */
-function NavBar() {
+export default function NavBar() {
     const navigate = useNavigate();
     const loggedIn = useLoggedIn();
     const sessionManager = useSessionManager();
     const session = useSession();
-    const battleshipsService = useBattleshipsService()
-    const navigationState = useNavigationState()
+    const battleshipsService = useBattleshipsService();
+    const navigationState = useNavigationState();
 
     const settings = [
         {
@@ -69,8 +70,8 @@ function NavBar() {
         }
     ];
 
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -219,12 +220,8 @@ function NavBar() {
                             </Box>
                             : <></>
                     }
-
                 </Toolbar>
             </Container>
         </AppBar>
-    )
-        ;
+    );
 }
-
-export default NavBar;

@@ -22,7 +22,7 @@ object Uris {
     const val GAMES_GET_BY_ID = "/games/{gameId}"
     const val GAMES_GAME_STATE = "/games/{gameId}/state"
     const val GAMES_JOIN = "/games/{gameId}/join"
-    const val GAMES_LEAVE = "/games/{gameId}/leave" //TODO: Maybe change to DELETE /games/{gameId} ?
+    const val GAMES_LEAVE = "/games/{gameId}/leave"
 
     const val PLAYERS_MY_FLEET = "/games/{gameId}/players/self/fleet"
     const val PLAYERS_OPPONENT_FLEET = "/games/{gameId}/players/opponent/fleet"

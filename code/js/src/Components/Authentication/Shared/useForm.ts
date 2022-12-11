@@ -21,7 +21,7 @@ interface FormConfig {
  * @property values the values of the form fields
  * @property errors the errors of the form fields
  */
-type Form = {
+interface Form {
     handleSubmit: (event: any) => void;
     handleChange: (event: any) => void;
     values: any;
@@ -39,11 +39,21 @@ export function useForm(formConfig: FormConfig): Form {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
 
+    /**
+     * Handles the change of a form field.
+     *
+     * @param event the event
+     */
     function handleChange(event: any) {
         const {name, value} = event.target;
         setValues({...values, [name]: value});
     }
 
+    /**
+     * Handles the submission of the form.
+     *
+     * @param event the event
+     */
     function handleSubmit(event: any) {
         event.preventDefault();
         const errors = validate(values);

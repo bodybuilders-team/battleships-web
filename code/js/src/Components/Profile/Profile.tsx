@@ -1,6 +1,4 @@
 import * as React from "react";
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
 import {useSession} from "../../Utils/Session";
 import {Card, CardActions, CardContent, Divider} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -11,7 +9,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import ProfileDetails from "./ProfileDetails";
 import {InsertPhotoRounded} from "@mui/icons-material";
-import {throwError} from "../../Services/utils/errorUtils";
 
 // TODO: To change later
 const user = {
@@ -23,8 +20,8 @@ const user = {
 /**
  * Profile component.
  */
-function Profile() {
-    const session = useSession() ?? throwError("Session is null");
+export default function Profile() {
+    const session = useSession();
 
     return (
         <Box component="main">
@@ -34,13 +31,11 @@ function Profile() {
                     <Grid item lg={4} md={6} xs={12}>
                         <Card>
                             <CardContent>
-                                <Box
-                                    sx={{
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                        flexDirection: 'column'
-                                    }}
-                                >
+                                <Box sx={{
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}>
                                     <Avatar
                                         src={user.avatar}
                                         sx={{
@@ -54,7 +49,7 @@ function Profile() {
                                         gutterBottom
                                         variant="h5"
                                     >
-                                        {session.username}
+                                        {session!.username}
                                     </Typography>
                                     <Typography color="textSecondary" variant="body2">
                                         {`${user.city} ${user.country}`}
@@ -82,5 +77,3 @@ function Profile() {
         </Box>
     );
 }
-
-export default Profile;

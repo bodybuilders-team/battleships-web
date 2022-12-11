@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
@@ -7,30 +8,31 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from '../../../Utils/formUtils';
+import {useForm} from '../Shared/useForm';
 import to from "../../../Utils/await-to";
 import {useSessionManager} from "../../../Utils/Session";
-import {validatePassword, validateUsername} from '../validateFields';
+import {validatePassword, validateUsername} from '../Shared/validateFields';
 import {handleError} from "../../../Services/utils/fetchSiren";
-import {ErrorAlert} from "../../Utils/ErrorAlert";
-import PageContent from "../../Utils/PageContent";
+import ErrorAlert from "../../Shared/ErrorAlert";
+import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {throwError} from "../../../Services/utils/errorUtils";
-import {UsernameTextField} from "../UsernameTextField";
-import {PasswordTextField} from "../PasswordTextField";
+import {UsernameTextField} from "../Shared/UsernameTextField";
+import {PasswordTextField} from "../Shared/PasswordTextField";
 
 /**
  * Login component.
  */
 export default function Login() {
     const navigate = useNavigate();
-    const sessionManager = useSessionManager();
-    const [formError, setFormError] = React.useState<string | null>(null);
     const navigationState = useNavigationState();
 
     const battleshipsService = useBattleshipsService();
+    const sessionManager = useSessionManager();
+
+    const [formError, setFormError] = useState<string | null>(null);
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {username: '', password: ''},

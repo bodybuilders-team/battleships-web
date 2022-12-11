@@ -8,6 +8,8 @@ import {Coordinate} from "../Coordinate";
  * @property type the type of the ship
  * @property coordinate the coordinate of the ship
  * @property orientation the orientation of the ship
+ *
+ * @property coordinates list of coordinates occupied by the ship
  */
 export class Ship {
     type: ShipType;
@@ -40,12 +42,14 @@ export function getCoordinates(
     orientation: Orientation
 ): Coordinate[] {
     const coordinates: Coordinate[] = [];
+
     for (let i = 0; i < shipType.size; i++) {
         if (orientation === Orientation.HORIZONTAL)
             coordinates.push(new Coordinate(coordinate.col + i, coordinate.row));
         else if (orientation === Orientation.VERTICAL)
             coordinates.push(new Coordinate(coordinate.col, coordinate.row + i));
     }
+
     return coordinates;
 }
 

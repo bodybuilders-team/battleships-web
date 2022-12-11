@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState} from "react";
 import BoardView from "../Shared/Board/BoardView";
 import {ConfigurableBoard} from "../../../Domain/games/board/ConfigurableBoard";
 import Grid from "@mui/material/Grid";
@@ -12,42 +13,40 @@ import {Board, generateEmptyMatrix, generateRandomMatrix} from "../../../Domain/
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import {isValidShipCoordinate, Ship} from "../../../Domain/games/ship/Ship";
-import {ErrorAlert} from "../../Utils/ErrorAlert";
-import {useConfigurableBoard} from "../../../Hooks/useBoard";
+import ErrorAlert from "../../Shared/ErrorAlert";
+import useConfigurableBoard from "./useConfigurableBoard";
 import {tileSize} from "../Shared/Board/Tile";
-import {CountdownTimer} from "../../Utils/CountdownTimer";
+import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
 
 /**
  * Board setup props
  *
- * @param finalTime - The time in seconds that the player has to finish the board setup.
+ * @param finalTime the time in seconds that the player has to finish the board setup
  * @param boardSize the size of the board
  * @param ships the list of ships to be placed
  * @param onBoardReady the callback to be called when the board is ready
  */
 interface BoardSetupProps {
-    finalTime: number
-    boardSize: number
-    ships: ReadonlyMap<ShipType, number>
-    onBoardReady: (board: Board) => void
+    finalTime: number;
+    boardSize: number;
+    ships: ReadonlyMap<ShipType, number>;
+    onBoardReady: (board: Board) => void;
 }
-
 
 /**
  * BoardSetup component.
  */
 function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps) {
-    const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize))
-    const [unplacedShips, setUnplacedShips] = React.useState<ReadonlyMap<ShipType, number>>(ships);
-    const [selectedShipType, setSelectedShipType] = React.useState<ShipType | null>(null);
-    const [error, setError] = React.useState<string | null>(null);
+    const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize));
+    const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships);
+    const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     return (
-
         <Container maxWidth="lg">
             <Typography variant="h4">Board Setup</Typography>
             <Box sx={{mb: "5px"}}>
-                <CountdownTimer finalTime={finalTime} onTimeUp={()=>{
+                <CountdownTimer finalTime={finalTime} onTimeUp={() => {
                     setError("Time is up!")
                 }}/>
             </Box>
@@ -56,21 +55,18 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                 <Grid item lg={4} md={6} xs={12}>
                     <Card>
                         <CardContent>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between'
-                                }}
-                            >
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
+                            }}>
                                 {
                                     Array.from(unplacedShips.entries()).map(([ship, count]) =>
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'space-between',
-                                            }}>
+                                        <Box sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'space-between',
+                                        }}>
                                             <Box sx={{
                                                 display: 'flex',
                                                 marginTop: '10px',
@@ -85,7 +81,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                                                     }}
                                                 />
                                             </Box>
-                                            <Box sx={{marginTop: '10px',}}>{count}</Box>
+                                            <Box sx={{marginTop: '10px'}}>{count}</Box>
                                         </Box>
                                     )
                                 }
@@ -114,7 +110,6 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                     <ErrorAlert error={error}/>
                 </Grid>
                 <Grid item lg={8} md={6} xs={12}>
-
                     <BoardView board={board} enabled={true} onTileClicked={
                         (coordinate) => {
                             if (selectedShipType == null)
@@ -130,7 +125,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                                 placeShip(ship);
 
                                 const newUnplacedShips = new Map(unplacedShips);
-                                newUnplacedShips.set(selectedShipType, unplacedShips.get(selectedShipType)! - 1)
+                                newUnplacedShips.set(selectedShipType, unplacedShips.get(selectedShipType)! - 1);
 
                                 setUnplacedShips(newUnplacedShips);
                                 setSelectedShipType(null);
@@ -155,18 +150,15 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                                         )
                                             return;
 
-                                        //Change orientation of this ship
+                                        // Change orientation of this ship
                                         const newShip = new Ship(ship.type,
                                             ship.coordinate,
-                                            Orientation.opposite(ship.orientation));
+                                            Orientation.opposite(ship.orientation)
+                                        );
 
-                                        if (board
-                                            .removeShip(ship)
-                                            .canPlaceShip(newShip)) {
+                                        if (board.removeShip(ship).canPlaceShip(newShip))
                                             setBoard(board.removeShip(ship).placeShip(newShip));
-                                        }
-                                    }
-                                    }
+                                    }}
                                 />
                             </Box>
                         })}

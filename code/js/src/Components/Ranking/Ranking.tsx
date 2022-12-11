@@ -1,24 +1,23 @@
 import * as React from "react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {User} from "../../Domain/users/User";
 import {EmbeddedSubEntity} from "../../Services/media/siren/SubEntity";
 import to from "../../Utils/await-to";
 import {handleError} from "../../Services/utils/fetchSiren";
-import PageContent from "../Utils/PageContent";
+import PageContent from "../Shared/PageContent";
 import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
 
 /**
  * Ranking component.
  */
-function Ranking() {
-
-    const [ranking, setRanking] = React.useState<User[]>([]);
-    const [error, setError] = React.useState<string | null>(null);
-    const battleshipsService = useBattleshipsService()
+export default function Ranking() {
+    const battleshipsService = useBattleshipsService();
+    const [error, setError] = useState<string | null>(null);
+    const [ranking, setRanking] = useState<User[]>([]);
 
     useEffect(() => {
-        const fetchRanking = async () => {
+        async function fetchRanking() {
             const [err, res] = await to(battleshipsService.usersService.getUsers());
 
             if (err) {
@@ -63,5 +62,3 @@ function Ranking() {
         </PageContent>
     );
 }
-
-export default Ranking;
