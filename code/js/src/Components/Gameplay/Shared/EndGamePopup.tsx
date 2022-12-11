@@ -23,7 +23,7 @@ interface EndGamePopupProps {
  * @property RESIGNATION the game ended because a player resigned
  * @property TIMEOUT the game ended because a player took too long
  */
-enum EndGameCause {
+export enum EndGameCause {
     DESTRUCTION,
     RESIGNATION,
     TIMEOUT
@@ -35,7 +35,7 @@ enum EndGameCause {
  * @property YOU you won
  * @property OPPONENT the opponent won
  */
-enum WinningPlayer {
+export enum WinningPlayer {
     YOU,
     OPPONENT,
     NONE

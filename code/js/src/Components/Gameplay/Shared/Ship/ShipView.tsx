@@ -29,27 +29,12 @@ export default function ShipView({type, orientation, onClick}: ShipViewProps) {
             sx={{
                 width: (tileSize * (orientation === Orientation.HORIZONTAL ? type.size : 1)),
                 height: (tileSize * (orientation === Orientation.VERTICAL ? type.size : 1)),
+                backgroundImage: `url(${shipImageSrc})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center"
             }}
             onClick={onClick}
-        >
-            <img
-                src={shipImageSrc}
-                alt={type.shipName}
-                style={(() => {
-                    const obj: React.CSSProperties = {
-                        pointerEvents: "none",
-                        display: "block",
-                        margin: "auto"
-                    };
-
-                    if (orientation === Orientation.VERTICAL)
-                        obj.maxHeight = "100%";
-                    else
-                        obj.maxWidth = "100%";
-
-                    return obj;
-                })()}
-            />
-        </Box>
+        />
     );
 }

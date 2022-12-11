@@ -17,6 +17,8 @@ import ErrorAlert from "../../Shared/ErrorAlert";
 import useConfigurableBoard from "./useConfigurableBoard";
 import {tileSize} from "../Shared/Board/Tile";
 import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
+import LeaveGameAlert from "../Shared/LeaveGameAlert";
+import LeaveGameButton from "../Shared/LeaveGameButton";
 
 /**
  * Board setup props
@@ -40,6 +42,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
     const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize));
     const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships);
     const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null);
+    const [leavingGame, setLeavingGame] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     return (
@@ -50,6 +53,15 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                     setError("Time is up!")
                 }}/>
             </Box>
+
+            <LeaveGameAlert
+                open={leavingGame}
+                onLeave={() => {
+                    setLeavingGame(false);
+                    // TODO: leave game
+                }}
+                onStay={() => setLeavingGame(false)}
+            />
 
             <Grid container spacing={3}>
                 <Grid item lg={4} md={6} xs={12}>
@@ -62,7 +74,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                             }}>
                                 {
                                     Array.from(unplacedShips.entries()).map(([ship, count]) =>
-                                        <Box sx={{
+                                        <Box key={ship.shipName} sx={{
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'space-between',
@@ -134,7 +146,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                         }
                     }>
                         {board.fleet.map((ship, index) => {
-                            return <Box sx={{
+                            return <Box key={ship.type.shipName} sx={{
                                 position: 'absolute',
                                 top: (ship.coordinate.row) * tileSize,
                                 left: (ship.coordinate.col) * tileSize,
@@ -163,9 +175,9 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                             </Box>
                         })}
                     </BoardView>
-
                 </Grid>
             </Grid>
+            <LeaveGameButton onClick={() => setLeavingGame(true)}/>
         </Container>
     );
 }

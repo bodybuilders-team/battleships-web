@@ -29,6 +29,12 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
     const [error, setError] = useState<string | null>(null);
     const [myFleet, setMyFleet] = useState<Ship[]>();
 
+    /**
+     * Parses the fleet from the deployed ship models.
+     *
+     * @param deployedShipModels the deployed ship models
+     * @return the fleet
+     */
     function parseFleet(deployedShipModels: DeployedShipModel[]): Ship[] {
         return deployedShipModels.map((ship: UndeployedShipModel) => {
             const shipType = Array.from(game.config.shipTypes.keys()).find(
@@ -43,6 +49,9 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
         });
     }
 
+    /**
+     * Fetches the fleet.
+     */
     async function fetchMyFleet() {
         const [err, res] = await to(battleshipsService.playersService.getMyFleet());
 

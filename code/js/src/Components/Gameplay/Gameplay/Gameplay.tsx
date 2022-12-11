@@ -12,6 +12,7 @@ import ShootingGameplay from "./Shooting/ShootingGameplay";
 import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import BoardSetupGameplay from "../BoardSetup/BoardSetupGameplay";
 import {Game} from "../../../Domain/games/game/Game";
+import EndGamePopup, {EndGameCause, WinningPlayer} from "../Shared/EndGamePopup";
 
 /**
  * Gameplay component.
@@ -63,7 +64,7 @@ export default function Gameplay() {
     else if (game?.state.phase === "IN_PROGRESS")
         return <ShootingGameplay game={game}/>;
     else if (game?.state.phase === "FINISHED")
-        return <div>Game finished</div>;
+        return <EndGamePopup winningPlayer={WinningPlayer.YOU} cause={EndGameCause.DESTRUCTION}/> // TODO: Fix this
     else
         return (
             <PageContent error={error}>

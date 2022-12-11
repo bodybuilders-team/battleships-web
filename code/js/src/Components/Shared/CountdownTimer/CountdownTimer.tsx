@@ -31,7 +31,7 @@ export function CountdownTimer({finalTime, onTimeUp, criticalLastSeconds = 10}: 
                 component="div"
                 sx={{color: currentTime <= criticalLastSeconds * 1000 ? "red" : undefined}}
             >
-                {minutes}:{seconds}
+                {minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}
             </Typography>
         </Box>
     );

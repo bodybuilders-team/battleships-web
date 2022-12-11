@@ -11,10 +11,9 @@ Backend:
 - Implement blacklist of tokens
 
 Frontend:
-- Fix timer (00:00)
 - EndGamePopup
+- Leave game mechanism (button and popup are already implemented, just need to implement the logic)
 - Round
-- Fix ship images
 - Fix opponent board (sunk ship images and wrong ship coordinates)
 - Profile (maybe game history)
 
