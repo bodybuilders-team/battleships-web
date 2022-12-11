@@ -9,6 +9,7 @@ class MatchmakeOutputModelTests {
     @Test
     fun `MatchmakeOutputModel creation is successful`() {
         MatchmakeOutputModel(
+            gameId = 1,
             wasCreated = true
         )
     }
@@ -25,6 +26,7 @@ class MatchmakeOutputModelTests {
     companion object {
         val defaultMatchmakeOutputModel
             get() = MatchmakeOutputModel(
+                gameId=1,
                 wasCreated = true
             )
     }

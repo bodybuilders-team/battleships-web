@@ -15,7 +15,7 @@ export namespace Orientation {
             Orientation.HORIZONTAL : Orientation.VERTICAL
     }
 
-    export function toOrientation(orientation: string): Orientation {
+    export function parse(orientation: string): Orientation {
         if (orientation === "VERTICAL")
             return Orientation.VERTICAL;
         else if (orientation === "HORIZONTAL")

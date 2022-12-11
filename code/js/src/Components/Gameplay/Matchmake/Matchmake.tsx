@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import PageContent from "../../Utils/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
+import {delay} from "../../../Utils/timeUtils";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
 
@@ -19,7 +20,7 @@ function Matchmake() {
     const navigate = useNavigate();
     const [matchmade, setMatchmade] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipsService, setBattleshipService] = useBattleshipsService()
+    const battleshipsService = useBattleshipsService()
     const navigationState = useNavigationState();
 
     useEffect(() => {
@@ -37,10 +38,12 @@ function Matchmake() {
             if (res?.properties === undefined)
                 throw new Error("Properties are undefined");
 
+            const gameId = res.properties.gameId;
+
             if (!res.properties.wasCreated) {
                 setMatchmade(true);
                 navigationState.setLinks(battleshipsService.links)
-                navigate("/gameplay");
+                navigate(`/game/${gameId}`);
                 return;
             }
 
@@ -58,11 +61,11 @@ function Matchmake() {
                     throw new Error("Entities are undefined");
 
                 if (res.properties.phase === "WAITING_FOR_PLAYERS")
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await delay(1000)
                 else {
                     setMatchmade(true);
                     navigationState.setLinks(battleshipsService.links)
-                    navigate("/gameplay");
+                    navigate(`/game/${gameId}`);
                 }
             }
         }

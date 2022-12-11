@@ -3,7 +3,6 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 /**
  * The Get Game Output Model.
  *
- * @property id the id of the game
  * @property name the name of the game
  * @property creator the creator of the game
  * @property config the configuration of the game

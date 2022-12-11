@@ -18,6 +18,7 @@ import {EmbeddedLink} from "../../../Services/media/siren/SubEntity";
 import PageContent from "../../Utils/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
+import {delay} from "../../../Utils/timeUtils";
 
 
 /**
@@ -34,7 +35,7 @@ function CreateGame() {
     const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = React.useState(100);
     const [shipTypes, setShipTypes] = React.useState<Map<ShipType, number>>(defaultShipTypes);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipsService, setBattleShipsService] = useBattleshipsService();
+    const battleshipsService = useBattleshipsService();
     const navigationState = useNavigationState();
 
     function handleCreateGame() {
@@ -86,13 +87,13 @@ function CreateGame() {
                     throw new Error("Properties are undefined");
 
                 if (res.properties.phase === "WAITING_FOR_PLAYERS")
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await delay(1000);
                 else
                     break;
             }
 
             navigationState.setLinks(battleshipsService.links)
-            navigate(`/gameplay`);
+            navigate(`/game/${res.properties!.gameId}`);
         }
 
         createGame();

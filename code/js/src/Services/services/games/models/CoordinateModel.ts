@@ -1,3 +1,4 @@
+
 /**
  * The Coordinate Model.
  *
@@ -5,6 +6,6 @@
  * @property row the row of the coordinate
  */
 interface CoordinateModel {
-    col: number;
+    col: string;
     row: number;
 }

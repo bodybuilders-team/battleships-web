@@ -5,14 +5,20 @@ import NavBar from "./Layouts/NavBar";
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {useNavigationState} from "./Utils/navigation/NavigationStateProvider";
 import {useBattleshipsService} from "./Services/NavigationBattleshipsService";
-import {useLoggedIn} from "./Utils/Session";
-import Home from './Components/Home/Home';
+import {useLoggedIn, useSessionManager} from "./Utils/Session";
+import Gameplay, {Game, GameConfig} from "./Components/Gameplay/Gameplay/Gameplay";
+import Home from "./Components/Home/Home";
 import Login from "./Components/Authentication/Login/Login";
 import Register from "./Components/Authentication/Register/Register";
 import Ranking from "./Components/Ranking/Ranking";
 import Profile from "./Components/Profile/Profile";
 import GameplayMenu from "./Components/Gameplay/GameplayMenu/GameplayMenu";
-import Gameplay from "./Components/Gameplay/Gameplay/Gameplay";
+import Shooting, {TileHitView} from "./Components/Gameplay/Gameplay/Shooting";
+import BoardSetup from './Components/Gameplay/BoardSetup/BoardSetup';
+import {defaultShipTypes, ShipType} from "./Domain/games/ship/ShipType";
+import {Coordinate} from "./Domain/games/Coordinate";
+import {Ship} from "./Domain/games/ship/Ship";
+import {Orientation} from "./Domain/games/ship/Orientation";
 
 /**
  * App component.
@@ -21,7 +27,7 @@ function App() {
     const navigationState = useNavigationState()
 
     const loggedIn = useLoggedIn()
-    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
+    const battleshipsService = useBattleshipsService()
 
     useEffect(() => {
         async function getHome() {
@@ -74,18 +80,70 @@ function App() {
 
                     <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
                     <Route path="/gameplay-menu" element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>
-                    <Route path="/gameplay" element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
+                    <Route path="/game/:id" element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
 
                     <Route path="/about"/>
                 </Routes>
             </div>
-            {/*// TODO: Check how to do previews.
-            <BoardSetup boardSize={10} ships={
-                defaultShipTypes
-            } onBoardReady={(board)=>{
-                console.log(board)
-            }}/>*/}
 
+            {/*// TODO: Check how to do previews.*/}
+            {/*<BoardSetup boardSize={10} ships={*/}
+            {/*    defaultShipTypes*/}
+            {/*} onBoardReady={(board)=>{*/}
+            {/*    console.log(board)*/}
+            {/*}} finalTime={new Date().getTime()+100000}/>*/}
+
+            {/*{*/}
+            {/*    (() => {*/}
+            {/*        const session = useSessionManager()*/}
+            {/*        session.setSession({*/}
+            {/*            username: "test",*/}
+            {/*            accessToken: "",*/}
+            {/*            refreshToken: "",*/}
+            {/*            userHomeLink: ""*/}
+            {/*        })*/}
+            {/*        return null*/}
+            {/*    })()*/}
+            {/*}*/}
+            {/*<Shooting finalTime={new Date().getTime()+100000} game={new Game({*/}
+            {/*    config: {*/}
+            {/*        gridSize: 10,*/}
+            {/*        maxTimeForLayoutPhase: 0,*/}
+            {/*        maxTimePerRound: 0,*/}
+            {/*        shipTypes: GameConfig.mapToShipTypesModel(defaultShipTypes),*/}
+            {/*        shotsPerRound: 3*/}
+            {/*    }, creator: "", id: "", name: "", players: [{*/}
+            {/*        username: "test",*/}
+            {/*        points: 0*/}
+            {/*    }, {*/}
+            {/*        username: "opponent",*/}
+            {/*        points: 0*/}
+            {/*    }*/}
+            {/*    ], state: {*/}
+            {/*        phase: "IN_PROGRESS",*/}
+            {/*        phaseEndTime: 0,*/}
+            {/*        round: 0,*/}
+            {/*        winner: "",*/}
+            {/*        turn: "test",*/}
+            {/*    }*/}
+
+            {/*})} myFleet={[*/}
+            {/*    new Ship(*/}
+            {/*        new ShipType(5, "Carrier", 0),*/}
+            {/*        new Coordinate(1, 1),*/}
+            {/*        Orientation.VERTICAL),*/}
+            {/*    new Ship(*/}
+            {/*        new ShipType(4, "Battleship", 0),*/}
+            {/*        new Coordinate(3, 7),*/}
+            {/*        Orientation.VERTICAL),*/}
+            {/*    new Ship(*/}
+            {/*        new ShipType(3, "Cruiser", 0),*/}
+            {/*        new Coordinate(6, 3),*/}
+            {/*        Orientation.HORIZONTAL),*/}
+
+            {/*]}/>*/}
+
+            {/*<TileHitView hitShip={true}/>*/}
         </div>
     );
 }

@@ -155,6 +155,7 @@ class Player {
         if (coordinates.distinctBy { it }.size != coordinates.size)
             throw InvalidFiredShotException("Shots must have distinct coordinates.")
 
+        //TODO InvalidFiredShot not being sent over api
         if (
             coordinates.any { coordinate ->
                 coordinate in shots.map { existingShots -> existingShots.coordinate }

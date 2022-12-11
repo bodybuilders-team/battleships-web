@@ -11,6 +11,6 @@ interface GameStateModel {
     phase: "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED";
     phaseEndTime: number;
     round: number | null;
-    turn: number | null;
-    winner: string;
+    turn: string | null;
+    winner: string | null;
 }

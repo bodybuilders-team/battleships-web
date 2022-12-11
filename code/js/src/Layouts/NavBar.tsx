@@ -35,7 +35,7 @@ function NavBar() {
     const loggedIn = useLoggedIn();
     const sessionManager = useSessionManager();
     const session = useSession();
-    const [battleShipsService, setBattleShipsService] = useBattleshipsService()
+    const battleshipsService = useBattleshipsService()
     const navigationState = useNavigationState()
 
     const settings = [
@@ -53,13 +53,13 @@ function NavBar() {
                     return;
                 }
 
-                if (!battleShipsService.links.get(Rels.LOGOUT)) {
-                    await battleShipsService.getHome();
-                    await battleShipsService.usersService.getUserHome();
+                if (!battleshipsService.links.get(Rels.LOGOUT)) {
+                    await battleshipsService.getHome();
+                    await battleshipsService.usersService.getUserHome();
                 }
 
                 await to(
-                    battleShipsService.usersService.logout(session.refreshToken)
+                    battleshipsService.usersService.logout(session.refreshToken)
                 );
 
                 navigationState.setLinks(new Map());

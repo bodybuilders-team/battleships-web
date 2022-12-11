@@ -85,7 +85,7 @@ CREATE TABLE shots
     row    INT        NOT NULL,
     result VARCHAR(4) NOT NULL,
 
-    UNIQUE (player, round),
+    UNIQUE (player, col, row),
 
     CONSTRAINT round_is_valid CHECK ( round >= 1),
     CONSTRAINT col_is_valid CHECK ( col >= 'A' AND col <= 'R' ),

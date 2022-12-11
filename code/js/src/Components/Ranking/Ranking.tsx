@@ -15,7 +15,7 @@ function Ranking() {
 
     const [ranking, setRanking] = React.useState<User[]>([]);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
+    const battleshipsService = useBattleshipsService()
 
     useEffect(() => {
         const fetchRanking = async () => {

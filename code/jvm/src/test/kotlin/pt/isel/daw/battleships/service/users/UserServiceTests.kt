@@ -549,24 +549,6 @@ class UserServiceTests {
     }
 
     @Test
-    fun `login throws a NotFoundException if a user with the username doesn't exist`() {
-        val username = defaultUser(0).username
-        val password = "password"
-
-        Mockito.`when`(usersRepository.findByUsername(username))
-            .thenReturn(null)
-
-        assertFailsWith<NotFoundException> {
-            userService.login(
-                LoginInputDTO(
-                    username = username,
-                    password = password
-                )
-            )
-        }
-    }
-
-    @Test
     fun `login throws an InvalidLoginException if the password is incorrect`() {
         val username = defaultUser(0).username
         val email = defaultUser(0).email

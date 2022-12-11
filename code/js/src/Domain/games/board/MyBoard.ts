@@ -1,5 +1,8 @@
-import {Board} from "./Board";
-import {Cell} from "../Cell";
+import {Board, generateEmptyMatrix, toIndex} from "./Board";
+import {Cell, ShipCell, WaterCell} from "../Cell";
+import {Ship} from "../ship/Ship";
+import {Coordinate} from "../Coordinate";
+import "../../../Utils/arrayExtensions"
 
 /**
  * A board of the player.
@@ -10,7 +13,37 @@ import {Cell} from "../Cell";
  * @property fleet the fleet of the board
  */
 export class MyBoard extends Board {
-    constructor(boardSize: number, grid: Cell[]) {
+    constructor(boardSize: number, grid: ReadonlyArray<Cell>) {
         super(boardSize, grid);
+    }
+
+    static fromFleet(boardSize: number, fleet: ReadonlyArray<Ship>): MyBoard {
+        const grid = generateEmptyMatrix(boardSize);
+        fleet.forEach(ship =>
+            ship.coordinates.forEach(coordinate =>
+                grid[toIndex(coordinate, boardSize)] = new ShipCell(coordinate, false, ship))
+        )
+
+        return new MyBoard(boardSize, grid);
+    }
+
+    shoot(firedCoordinates: Coordinate[]) {
+        return new MyBoard(
+            this.size,
+            this.grid.replaceIf((cell) => firedCoordinates.find(coordinate => coordinate.equals(cell.coordinate)) !== undefined,
+                (cell) => {
+                    if (cell.wasHit)
+                        throw Error(`Cell at ${cell.coordinate} was already hit`)
+
+                    if (cell instanceof ShipCell) {
+                        return new ShipCell(cell.coordinate, true, cell.ship)
+                    } else if (cell instanceof WaterCell) {
+                        return new WaterCell(cell.coordinate, true)
+                    }
+
+                    throw Error("UnknownShipCell should not be present in MyBoard")
+                }
+            )
+        )
     }
 }

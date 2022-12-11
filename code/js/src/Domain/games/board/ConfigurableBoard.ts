@@ -27,7 +27,7 @@ export class ConfigurableBoard extends Board {
         const newGrid = this.grid.slice();
         ship.coordinates.forEach(coordinate => {
             const index = toIndex(coordinate, this.size);
-            newGrid[index] = new ShipCell(coordinate, ship);
+            newGrid[index] = new ShipCell(coordinate, false, ship);
         });
         return new ConfigurableBoard(this.size, newGrid);
     }
@@ -36,7 +36,7 @@ export class ConfigurableBoard extends Board {
         const newGrid = this.grid.slice();
         ship.coordinates.forEach(coordinate => {
             const index = toIndex(coordinate, this.size);
-            newGrid[index] = new WaterCell(coordinate);
+            newGrid[index] = new WaterCell(coordinate, false);
         });
         return new ConfigurableBoard(this.size, newGrid);
     }

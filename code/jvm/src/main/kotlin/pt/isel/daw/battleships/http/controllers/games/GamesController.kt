@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.daw.battleships.http.controllers.games.models.games.GameConfigModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.createGame.CreateGameInputModel
+import pt.isel.daw.battleships.http.controllers.games.models.games.createGame.CreateGameOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.getGame.GetGameOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.getGameState.GetGameStateOutputModel
 import pt.isel.daw.battleships.http.controllers.games.models.games.getGames.GetGamesOutputModel
@@ -92,7 +93,7 @@ class GamesController(private val gamesService: GamesService) {
         @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
         @Valid @RequestBody
         gameData: CreateGameInputModel,
-    ): SirenEntity<Unit> {
+    ): SirenEntity<CreateGameOutputModel> {
         val gameId = gamesService.createGame(
             token = token,
             createGameRequestDTO = gameData.toCreateGameRequestDTO()

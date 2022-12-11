@@ -5,13 +5,11 @@
  * @property shipName the name of the ship
  * @property points the points that the ship is worth
  */
-export interface ShipType {
+export class ShipType {
     size: number;
     shipName: string;
     points: number;
-}
 
-export class ShipType {
     constructor(size: number, shipName: string, points: number) {
         this.size = size;
         this.shipName = shipName;
@@ -26,9 +24,3 @@ export const defaultShipTypes: Map<ShipType, number> = new Map<ShipType, number>
     [new ShipType(3, "Submarine", 30), 2],
     [new ShipType(2, "Destroyer", 20), 1]
 ]);
-
-export function shipTypesModelToMap(shipTypes: ShipTypeModel[]) {
-    const map = new Map<ShipType, number>();
-    shipTypes.forEach(shipType => map.set(shipType, shipType.quantity));
-    return map;
-}

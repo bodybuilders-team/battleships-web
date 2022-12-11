@@ -31,7 +31,7 @@ function Register() {
     const [formError, setFormError] = React.useState<string | null>(null);
     const navigationState = useNavigationState()
 
-    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
+    const battleshipsService = useBattleshipsService()
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {email: '', username: '', password: ''},

@@ -12,12 +12,12 @@ import {MenuButton} from "../../Utils/MenuButton";
  * GameplayMenu component.
  */
 function GameplayMenu() {
-
     const [matchmaking, setMatchmaking] = React.useState(false);
     const [creating, setCreating] = React.useState(false);
     const [lobby, setLobby] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
+    //TODO Add routing for each component
     if (matchmaking)
         return <Matchmake/>;
     else if (creating)

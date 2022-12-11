@@ -3,10 +3,12 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Tile, {tileSize} from "./Tile";
 import {Board} from "../../../../Domain/games/board/Board";
+import {Coordinate} from "../../../../Domain/games/Coordinate";
 
 interface BoardViewProps {
     board: Board;
-    onTileClicked?: (col: number, row: number) => void;
+    enabled: boolean;
+    onTileClicked?: (coordinate: Coordinate) => void;
     children?: React.ReactNode
 }
 
@@ -14,17 +16,20 @@ interface BoardViewProps {
  * BoardView component.
  *
  * @param board the board to display
+ * @param enabled whether the board is enabled or not
  * @param onTileClicked the callback to be called when a tile is clicked
  * @param children the children to be displayed on top of the board
  */
-function BoardView({board, onTileClicked, children}: BoardViewProps) {
+function BoardView({board, enabled, onTileClicked, children}: BoardViewProps) {
+
     return (
         <Box
             sx={{
                 width: (board.size + 1) * tileSize,
                 height: (board.size + 1) * tileSize,
                 margin: 'auto',
-                position: "relative"
+                position: "relative",
+                opacity: enabled ? 1 : 0.5
             }}>
             <Grid container columns={board.size + 1}>
                 {Array.from(Array((board.size + 1) * (board.size + 1)).keys()).map((tileIndex) => {
@@ -47,7 +52,7 @@ function BoardView({board, onTileClicked, children}: BoardViewProps) {
                                                     </Box>
                                                     : <Tile onClick={() => {
                                                         if (onTileClicked)
-                                                            onTileClicked(col, row);
+                                                            onTileClicked(new Coordinate(col, row));
                                                     }}/>
                                             )
                                     )

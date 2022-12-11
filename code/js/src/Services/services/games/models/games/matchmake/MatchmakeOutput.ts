@@ -6,6 +6,7 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity";
  * @property wasCreated true if the game was created, false if it was joined
  */
 interface MatchmakeOutputModel {
+    gameId: number;
     wasCreated: boolean;
 }
 

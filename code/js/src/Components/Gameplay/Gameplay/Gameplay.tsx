@@ -1,75 +1,142 @@
 import * as React from "react";
 import {useEffect} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import to from "../../../Utils/await-to";
-import {useSession} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
-import BoardSetup from "../BoardSetup/BoardSetup";
 import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
 import LoadingSpinner from "../../Utils/LoadingSpinner";
 import PageContent from "../../Utils/PageContent";
-import BoardView from "../Shared/Board/BoardView";
-import {Board} from "../../../Domain/games/board/Board";
-import {Card, CardActions, CardContent, Divider} from "@mui/material";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {Rels} from "../../../Utils/navigation/Rels";
-import {shipTypesModelToMap} from "../../../Domain/games/ship/ShipType";
-import {Orientation} from "../../../Domain/games/ship/Orientation";
+import {ShipType} from "../../../Domain/games/ship/ShipType";
+import ShootingGameplay from "./ShootingGameplay";
 import {useNavigationState} from "../../../Utils/navigation/NavigationStateProvider";
+import BoardSetupGameplay from "../BoardSetup/BoardSetupGameplay";
 
 
-/**
- * Fetches a URL.
- *
- * @param url the URL to fetch
- * @return the response body
- */
+export class GameConfig {
+    readonly gridSize: number;
+    readonly shotsPerRound: number;
+    readonly maxTimePerRound: number;
+    readonly maxTimeForLayoutPhase: number;
+    readonly shipTypes: ReadonlyMap<ShipType, number>;
 
-/*function useFetch(url: string): string | undefined {
-    const [data, setData] = useState(undefined);
-    useEffect(() => {
-        let cancelled = false;
+    constructor(gameConfigModel: GameConfigModel) {
+        this.gridSize = gameConfigModel.gridSize;
+        this.shotsPerRound = gameConfigModel.shotsPerRound;
+        this.maxTimePerRound = gameConfigModel.maxTimePerRound;
+        this.maxTimeForLayoutPhase = gameConfigModel.maxTimeForLayoutPhase;
+        this.shipTypes = GameConfig.shipTypesModelToMap(gameConfigModel.shipTypes);
+    }
 
-        async function doFetch() {
-            const res = await fetch(url);
-            const body = await res.json();
-
-            if (!cancelled)
-                setData(body);
+    toGameConfigModel(): GameConfigModel {
+        return {
+            gridSize: this.gridSize,
+            shotsPerRound: this.shotsPerRound,
+            maxTimePerRound: this.maxTimePerRound,
+            maxTimeForLayoutPhase: this.maxTimeForLayoutPhase,
+            shipTypes: GameConfig.mapToShipTypesModel(this.shipTypes)
         }
+    }
 
-        setData(undefined);
-        doFetch();
-        return () => {
-            cancelled = true
-        };
-    }, [url]);
+    static shipTypesModelToMap(shipTypes: ShipTypeModel[]) {
+        const map = new Map<ShipType, number>();
+        shipTypes.forEach(shipType => map.set(shipType, shipType.quantity));
+        return map;
+    }
 
-    return data;
-}*/
+    static mapToShipTypesModel(shipTypes: ReadonlyMap<ShipType, number>) {
+        const shipTypesModel: ShipTypeModel[] = [];
+        shipTypes.forEach((quantity, shipType) => {
+            shipTypesModel.push({...shipType, quantity});
+        });
+        return shipTypesModel;
+    }
+}
 
+export class GameState {
+    readonly phase: "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED";
+    readonly phaseEndTime: number;
+    readonly round: number | null;
+    readonly turn: string | null;
+    readonly winner: string | null;
+
+    constructor(gameStateModel: GameStateModel) {
+        this.phase = gameStateModel.phase;
+        this.phaseEndTime = gameStateModel.phaseEndTime;
+        this.round = gameStateModel.round;
+        this.turn = gameStateModel.turn;
+        this.winner = gameStateModel.winner;
+    }
+}
+
+export class Player {
+    readonly username: string;
+    readonly points: number;
+
+    constructor(playerModel: PlayerModel) {
+        this.username = playerModel.username;
+        this.points = playerModel.points;
+    }
+
+    toPlayerModel(): PlayerModel {
+        return {
+            username: this.username,
+            points: this.points
+        }
+    }
+}
+
+export class Game {
+    readonly id: string
+    readonly name: string;
+    readonly creator: string;
+    readonly config: GameConfig;
+    readonly state: GameState;
+    readonly players: ReadonlyArray<Player>
+
+    constructor(gameModel: GetGameOutputModel) {
+        this.id = gameModel.id;
+        this.name = gameModel.name;
+        this.creator = gameModel.creator;
+        this.config = new GameConfig(gameModel.config);
+        this.state = new GameState(gameModel.state);
+        this.players = gameModel.players.map(player => new Player(player));
+    }
+
+    static toGameModel(game: Game): GetGameOutputModel {
+        return {
+            id: game.id,
+            name: game.name,
+            creator: game.creator,
+            config: game.config.toGameConfigModel(),
+            state: {
+                phase: game.state.phase,
+                phaseEndTime: game.state.phaseEndTime,
+                round: game.state.round,
+                turn: game.state.turn,
+                winner: game.state.winner
+            },
+            players: game.players.map(player => player.toPlayerModel())
+        }
+    }
+}
 
 /**
- * Gameplay component.
+ * Play component.
  */
 function Gameplay() {
-    const session = useSession();
-    const location = useLocation();
-    const [game, setGame] = React.useState<GetGameOutputModel | null>(null);
-    const [myBoard, setMyBoard] = React.useState<Board | null>(null);
-    const [opponentBoard, setOpponentBoard] = React.useState<Board | null>(null);
+    const navigate = useNavigate();
+
+    const [game, setGame] = React.useState<Game | null>(null);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipsService, setBattleshipService] = useBattleshipsService()
-    const navigate = useNavigate()
-    const navigationState = useNavigationState();
+    const battleshipsService = useBattleshipsService()
+    const navigationState = useNavigationState()
 
     useEffect(() => {
         const fetchGame = async () => {
             if (!battleshipsService.links.get(Rels.GAME)) {
-                navigate("/")
+                navigate("/");
                 return
             }
 
@@ -85,113 +152,24 @@ function Gameplay() {
             if (res?.properties === undefined)
                 throw new Error("Properties are undefined");
 
-            const game = res.properties as GetGameOutputModel;
-
-            setGame(game);
+            navigationState.setLinks(battleshipsService.links);
+            const newGame = new Game(res.properties as GetGameOutputModel);
+            console.log(newGame)
+            setGame(newGame);
         }
-
         fetchGame();
     }, []);
 
-    async function onBoardSetupFinished(board: Board) {
-        const [err, res] = await to(battleshipsService.playersService.deployFleet({
-            fleet: board.fleet.map(ship => {
-                    return {
-                        type: ship.type.shipName,
-                        orientation: Orientation.toString(ship.orientation),
-                        coordinate: {
-                            col: ship.coordinate.col,
-                            row: ship.coordinate.row
-                        }
-                    }
-                }
-            )
-        }))
-
-        if (err) {
-            handleError(err, setError);
-            return;
-        }
-
-        //wait for opponent
-        await waitForOpponentToDeployFleet();
-    }
-
-    async function waitForOpponentToDeployFleet() {
-        const [err, res] = await to(battleshipsService.gamesService.getGameState())
-
-        if (err) {
-            handleError(err, setError);
-            return;
-        }
-        let waiting = true
-
-        // TODO: cancel this wait
-        while (!waiting) {
-            const [err, res] = await to(
-                battleshipsService.gamesService.getGameState()
-            );
-
-            if (err) {
-                handleError(err, setError);
-                return;
-            }
-
-            if (res?.properties === undefined)
-                throw new Error("Entities are undefined");
-
-            if (res.properties.phase === "DEPLOYING_FLEETS")
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            else {
-                waiting = false
-            }
-        }
-
-    }
-
     if (game?.state.phase === "DEPLOYING_FLEETS")
         return (
-            <BoardSetup boardSize={game.config.gridSize} ships={shipTypesModelToMap(game.config.shipTypes)}
-                        onBoardReady={onBoardSetupFinished}/>
+            <BoardSetupGameplay gameConfig={game.config} onBoardSetupPhaseFinished={(newGameState) => {
+                setGame({...game, state: newGameState})
+            }}/>
         )
     else if (game?.state.phase === "IN_PROGRESS")
-        return (
-            <PageContent error={error}>
-                <Grid container spacing={3}>
-                    <Grid item lg={4} md={6} xs={12}>
-                        <Card>
-                            <CardContent>
-                                <Box
-                                    sx={{
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                        flexDirection: 'row'
-                                    }}
-                                >
-                                    <BoardView board={myBoard!}/>
-                                </Box>
-                            </CardContent>
-                            <Divider/>
-                            <CardActions>
-                                <Button color="primary" fullWidth onClick={() => {
-                                }}>
-                                    Shoot
-                                </Button>
-                                <Button color="primary" fullWidth onClick={() => {
-                                }}>
-                                    Reset Shots
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item lg={8} md={6} xs={12}>
-                        <BoardView board={opponentBoard!}/>
-                    </Grid>
-                </Grid>
-            </PageContent>
-        );
+        return <ShootingGameplay game={game}/>
     else if (game?.state.phase === "FINISHED")
-        return <div>Game finished</div>; // TODO: Implement game finished page
+        return <div>Game finished</div>;
     else
         return (
             <PageContent error={error}>

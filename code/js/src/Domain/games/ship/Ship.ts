@@ -9,13 +9,10 @@ import {Coordinate} from "../Coordinate";
  * @property coordinate the coordinate of the ship
  * @property orientation the orientation of the ship
  */
-export interface Ship {
+export class Ship {
     type: ShipType;
     coordinate: Coordinate;
     orientation: Orientation;
-}
-
-export class Ship {
 
     get coordinates(): Coordinate[] {
         return getCoordinates(this.type, this.coordinate, this.orientation);

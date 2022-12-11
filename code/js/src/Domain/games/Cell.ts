@@ -7,15 +7,13 @@
 import {Coordinate} from "./Coordinate";
 import {Ship} from "./ship/Ship";
 
-export interface Cell {
-    coordinate: Coordinate;
-    wasHit: boolean;
-}
-
 export class Cell {
-    constructor(coordinate: Coordinate) {
+    readonly coordinate: Coordinate;
+    readonly wasHit: boolean;
+
+    constructor(coordinate: Coordinate, wasHit: boolean) {
         this.coordinate = coordinate;
-        this.wasHit = false;
+        this.wasHit = wasHit;
     }
 }
 
@@ -26,8 +24,8 @@ export interface WaterCell extends Cell {
 }
 
 export class WaterCell extends Cell {
-    constructor(coordinate: Coordinate) {
-        super(coordinate);
+    constructor(coordinate: Coordinate, wasHit: boolean) {
+        super(coordinate, wasHit);
     }
 }
 
@@ -41,8 +39,8 @@ export interface ShipCell extends Cell {
 }
 
 export class ShipCell extends Cell {
-    constructor(coordinate: Coordinate, ship: Ship) {
-        super(coordinate);
+    constructor(coordinate: Coordinate, wasHit: boolean, ship: Ship) {
+        super(coordinate, wasHit);
         this.ship = ship;
     }
 }
@@ -55,7 +53,7 @@ export interface UnknownShipCell extends Cell {
 }
 
 export class UnknownShipCell extends Cell {
-    constructor(coordinate: Coordinate) {
-        super(coordinate);
+    constructor(coordinate: Coordinate, wasHit: boolean) {
+        super(coordinate, wasHit);
     }
 }

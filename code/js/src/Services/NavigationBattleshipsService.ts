@@ -60,7 +60,7 @@ export function useBattleshipsService() {
     const navigationState = useNavigationState();
     const sessionManager = useSessionManager();
 
-    return React.useState<NavigationBattleshipsService>(() => {
+    return React.useMemo(() => {
         return new NavigationBattleshipsService(navigationState.links, sessionManager);
-    });
+    }, []);
 }

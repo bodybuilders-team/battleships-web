@@ -12,160 +12,169 @@ import {Board, generateEmptyMatrix, generateRandomMatrix} from "../../../Domain/
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import {isValidShipCoordinate, Ship} from "../../../Domain/games/ship/Ship";
-import {Coordinate} from "../../../Domain/games/Coordinate";
 import {ErrorAlert} from "../../Utils/ErrorAlert";
 import {useConfigurableBoard} from "../../../Hooks/useBoard";
 import {tileSize} from "../Shared/Board/Tile";
-
-interface BoardSetupProps {
-    boardSize: number
-    ships: Map<ShipType, number>
-    onBoardReady: (board: Board) => void
-}
+import {CountdownTimer} from "../../Utils/CountdownTimer";
 
 /**
- * BoardSetup component.
+ * Board setup props
  *
+ * @param finalTime - The time in seconds that the player has to finish the board setup.
  * @param boardSize the size of the board
  * @param ships the list of ships to be placed
  * @param onBoardReady the callback to be called when the board is ready
  */
-function BoardSetup({boardSize, ships, onBoardReady}: BoardSetupProps) {
+interface BoardSetupProps {
+    finalTime: number
+    boardSize: number
+    ships: ReadonlyMap<ShipType, number>
+    onBoardReady: (board: Board) => void
+}
 
+
+/**
+ * BoardSetup component.
+ */
+function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps) {
     const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize))
     const [unplacedShips, setUnplacedShips] = React.useState<ReadonlyMap<ShipType, number>>(ships);
     const [selectedShipType, setSelectedShipType] = React.useState<ShipType | null>(null);
     const [error, setError] = React.useState<string | null>(null);
 
     return (
-        <Box component="main">
-            <Container maxWidth="lg">
-                <Typography sx={{mb: 3}} variant="h4">Board Setup</Typography>
-                <Grid container spacing={3}>
-                    <Grid item lg={4} md={6} xs={12}>
-                        <Card>
-                            <CardContent>
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between'
-                                    }}
-                                >
-                                    {
-                                        Array.from(unplacedShips.entries()).map(([ship, count]) =>
-                                            <Box
-                                                sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    justifyContent: 'space-between',
-                                                }}>
-                                                <Box sx={{
-                                                    display: 'flex',
-                                                    marginTop: '10px',
-                                                    border: selectedShipType === ship ? '2px solid red' : 'none'
-                                                }}>
-                                                    <ShipView
-                                                        type={ship}
-                                                        orientation={Orientation.VERTICAL}
-                                                        key={ship.shipName}
-                                                        onClick={() => {
-                                                            setSelectedShipType(ship);
-                                                        }}
-                                                    />
-                                                </Box>
-                                                <Box sx={{marginTop: '10px',}}>{count}</Box>
+
+        <Container maxWidth="lg">
+            <Typography variant="h4">Board Setup</Typography>
+            <Box sx={{mb: "5px"}}>
+                <CountdownTimer finalTime={finalTime} onTimeUp={()=>{
+                    setError("Time is up!")
+                }}/>
+            </Box>
+
+            <Grid container spacing={3}>
+                <Grid item lg={4} md={6} xs={12}>
+                    <Card>
+                        <CardContent>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}
+                            >
+                                {
+                                    Array.from(unplacedShips.entries()).map(([ship, count]) =>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                justifyContent: 'space-between',
+                                            }}>
+                                            <Box sx={{
+                                                display: 'flex',
+                                                marginTop: '10px',
+                                                border: selectedShipType === ship ? '2px solid red' : 'none'
+                                            }}>
+                                                <ShipView
+                                                    type={ship}
+                                                    orientation={Orientation.VERTICAL}
+                                                    key={ship.shipName}
+                                                    onClick={() => {
+                                                        setSelectedShipType(ship);
+                                                    }}
+                                                />
                                             </Box>
-                                        )
-                                    }
-                                </Box>
-                            </CardContent>
-                            <Divider/>
-                            <CardActions>
-                                <Button color="primary" fullWidth onClick={() => {
-                                    setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)));
-                                    const newUnplacedShips = new Map<ShipType, number>();
-                                    ships.forEach((count, ship) => newUnplacedShips.set(ship, 0));
-                                    setUnplacedShips(newUnplacedShips);
-                                }}>
-                                    Random Board
-                                </Button>
-                                <Button color="primary" fullWidth onClick={() => {
-                                    if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
-                                        onBoardReady(board);
-                                    else
-                                        alert("You must place all the ships!");
-                                }}>
-                                    Confirm Board
-                                </Button>
-                            </CardActions>
-                        </Card>
-                        <ErrorAlert error={error}/>
-                    </Grid>
-                    <Grid item lg={8} md={6} xs={12}>
-
-                        <BoardView board={board} onTileClicked={
-                            (row: number, col: number) => {
-                                if (selectedShipType == null)
-                                    return;
-
-                                if (!isValidShipCoordinate(new Coordinate(row, col),
-                                    Orientation.VERTICAL, selectedShipType.size, board.size)
-                                )
-                                    return;
-
-                                const ship = new Ship(selectedShipType, new Coordinate(row, col), Orientation.VERTICAL);
-                                if (board.canPlaceShip(ship)) {
-                                    placeShip(ship);
-
-                                    const newUnplacedShips = new Map(unplacedShips);
-                                    newUnplacedShips.set(selectedShipType, unplacedShips.get(selectedShipType)! - 1)
-
-                                    setUnplacedShips(newUnplacedShips);
-                                    setSelectedShipType(null);
-                                    setError(null);
+                                            <Box sx={{marginTop: '10px',}}>{count}</Box>
+                                        </Box>
+                                    )
                                 }
-                            }
-                        }>
-                            {board.fleet.map((ship, index) => {
-                                return <Box sx={{
-                                    position: 'absolute',
-                                    top: (ship.coordinate.row) * tileSize,
-                                    left: (ship.coordinate.col) * tileSize,
-                                    zIndex: 1
-                                }}>
-                                    <ShipView
-                                        type={ship.type}
-                                        orientation={ship.orientation}
-                                        key={ship.type.shipName + index}
-                                        onClick={() => {
-                                            if (!isValidShipCoordinate(
-                                                ship.coordinate, Orientation.opposite(ship.orientation),
-                                                ship.type.size, board.size)
-                                            )
-                                                return;
-
-                                            //Change orientation of this ship
-                                            const newShip = new Ship(ship.type,
-                                                ship.coordinate,
-                                                Orientation.opposite(ship.orientation));
-
-                                            if (board
-                                                .removeShip(ship)
-                                                .canPlaceShip(newShip)) {
-                                                setBoard(board.removeShip(ship).placeShip(newShip));
-                                            }
-                                        }
-                                        }
-                                    />
-                                </Box>
-                            })}
-                        </BoardView>
-
-                    </Grid>
+                            </Box>
+                        </CardContent>
+                        <Divider/>
+                        <CardActions>
+                            <Button color="primary" fullWidth onClick={() => {
+                                setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)));
+                                const newUnplacedShips = new Map<ShipType, number>();
+                                ships.forEach((count, ship) => newUnplacedShips.set(ship, 0));
+                                setUnplacedShips(newUnplacedShips);
+                            }}>
+                                Random Board
+                            </Button>
+                            <Button color="primary" fullWidth onClick={() => {
+                                if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
+                                    onBoardReady(board);
+                                else
+                                    alert("You must place all the ships!");
+                            }}>
+                                Confirm Board
+                            </Button>
+                        </CardActions>
+                    </Card>
+                    <ErrorAlert error={error}/>
                 </Grid>
-            </Container>
-        </Box>
+                <Grid item lg={8} md={6} xs={12}>
+
+                    <BoardView board={board} enabled={true} onTileClicked={
+                        (coordinate) => {
+                            if (selectedShipType == null)
+                                return;
+
+                            if (!isValidShipCoordinate(coordinate,
+                                Orientation.VERTICAL, selectedShipType.size, board.size)
+                            )
+                                return;
+
+                            const ship = new Ship(selectedShipType, coordinate, Orientation.VERTICAL);
+                            if (board.canPlaceShip(ship)) {
+                                placeShip(ship);
+
+                                const newUnplacedShips = new Map(unplacedShips);
+                                newUnplacedShips.set(selectedShipType, unplacedShips.get(selectedShipType)! - 1)
+
+                                setUnplacedShips(newUnplacedShips);
+                                setSelectedShipType(null);
+                                setError(null);
+                            }
+                        }
+                    }>
+                        {board.fleet.map((ship, index) => {
+                            return <Box sx={{
+                                position: 'absolute',
+                                top: (ship.coordinate.row) * tileSize,
+                                left: (ship.coordinate.col) * tileSize,
+                            }}>
+                                <ShipView
+                                    type={ship.type}
+                                    orientation={ship.orientation}
+                                    key={ship.type.shipName + index}
+                                    onClick={() => {
+                                        if (!isValidShipCoordinate(
+                                            ship.coordinate, Orientation.opposite(ship.orientation),
+                                            ship.type.size, board.size)
+                                        )
+                                            return;
+
+                                        //Change orientation of this ship
+                                        const newShip = new Ship(ship.type,
+                                            ship.coordinate,
+                                            Orientation.opposite(ship.orientation));
+
+                                        if (board
+                                            .removeShip(ship)
+                                            .canPlaceShip(newShip)) {
+                                            setBoard(board.removeShip(ship).placeShip(newShip));
+                                        }
+                                    }
+                                    }
+                                />
+                            </Box>
+                        })}
+                    </BoardView>
+
+                </Grid>
+            </Grid>
+        </Container>
     );
 }
 

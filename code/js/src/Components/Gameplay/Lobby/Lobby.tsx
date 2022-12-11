@@ -22,7 +22,7 @@ function Lobby() {
     const [games, setGames] = React.useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null);
     const [gamesLoaded, setGamesLoaded] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-    const [battleshipsService, setBattleshipsService] = useBattleshipsService()
+    const battleshipsService = useBattleshipsService()
 
     useEffect(() => {
         if (gamesLoaded)
@@ -58,7 +58,7 @@ function Lobby() {
             }
 
             navigationState.setLinks(battleshipsService.links)
-            navigate(`/gameplay`);
+            navigate(`/game/${res.properties!.gameId}`);
         }
 
         joinGame();

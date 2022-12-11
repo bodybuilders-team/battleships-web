@@ -13,17 +13,15 @@ import {getCoordinates, isValidShipCoordinate, Ship} from "../ship/Ship";
 export class Board {
     readonly size: number;
     readonly grid: ReadonlyArray<Cell>;
+    readonly fleet: ReadonlyArray<Ship>;
 
-    get fleet(): Ship[] {
-        return this.grid
+    constructor(boardSize: number, grid: ReadonlyArray<Cell>) {
+        this.size = boardSize;
+        this.grid = grid;
+        this.fleet = this.grid
             .filter(cell => cell instanceof ShipCell)
             .map(cell => (cell as ShipCell).ship)
             .filter((ship, index, self) => self.indexOf(ship) === index); // distinct
-    }
-
-    constructor(boardSize: number, grid: Cell[]) {
-        this.size = boardSize;
-        this.grid = grid;
     }
 
     getCell(coordinate: Coordinate): Cell {
@@ -44,11 +42,10 @@ export const maxBoardSize = 18;
  */
 export function generateEmptyMatrix(size: number): Cell[] {
     const grid: Cell[] = [];
-    for (let i = 1; i <= size; i++) {
-        for (let j = 1; j <= size; j++) {
-            grid.push(new WaterCell(new Coordinate(i, j)));
-        }
+    for (let i = 0; i < size*size; i++) {
+        grid.push(new WaterCell(Coordinate.fromIndex(i, size), false));
     }
+
     return grid;
 }
 
@@ -64,6 +61,9 @@ export function toIndex(coordinate: Coordinate, size: number): number {
     return (coordinate.row - 1) * size + (coordinate.col - 1);
 }
 
+
+
+
 /**
  * Generates a matrix of cells with the ships placed randomly.
  *
@@ -72,7 +72,7 @@ export function toIndex(coordinate: Coordinate, size: number): number {
  *
  * @return matrix of [size] with the [ships] placed randomly
  */
-export function generateRandomMatrix(size: number, ships: Map<ShipType, number>): Cell[] {
+export function generateRandomMatrix(size: number, ships: ReadonlyMap<ShipType, number>): Cell[] {
     const grid = generateEmptyMatrix(size);
 
     const shuffledShips: ShipType[] = Array.from(ships.entries()).flatMap(([shipType, count]) => {
@@ -104,7 +104,7 @@ export function generateRandomMatrix(size: number, ships: Map<ShipType, number>)
         const ship = possibleShips[randomIndex];
 
         ship.coordinates.forEach(coordinate => {
-            grid[toIndex(coordinate, size)] = new ShipCell(coordinate, ship);
+            grid[toIndex(coordinate, size)] = new ShipCell(coordinate, false, ship);
         });
     });
 
