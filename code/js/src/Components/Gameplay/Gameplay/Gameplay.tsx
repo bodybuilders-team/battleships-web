@@ -9,7 +9,7 @@ import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {Rels} from "../../../Utils/navigation/Rels";
 import ShootingGameplay from "./Shooting/ShootingGameplay";
-import BoardSetupGameplay from "../BoardSetup/BoardSetupGameplay";
+import BoardSetupGameplay from "./BoardSetup/BoardSetupGameplay";
 import {Game} from "../../../Domain/games/game/Game";
 import GameFinished from "../Shared/EndGame/GameFinished";
 import {Uris} from "../../../Utils/navigation/Uris";
@@ -58,6 +58,7 @@ export default function Gameplay() {
     if (game?.state.phase === "DEPLOYING_FLEETS")
         return (
             <BoardSetupGameplay
+                finalTime={game.state.phaseEndTime}
                 gameConfig={game!.config}
                 onFinished={fetchGame}
             />

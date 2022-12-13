@@ -1,24 +1,24 @@
 import * as React from "react";
 import {useState} from "react";
-import BoardView from "../Shared/Board/BoardView";
-import {ConfigurableBoard} from "../../../Domain/games/board/ConfigurableBoard";
+import BoardView from "../../Shared/Board/BoardView";
+import {ConfigurableBoard} from "../../../../Domain/games/board/ConfigurableBoard";
 import Grid from "@mui/material/Grid";
 import {Card, CardActions, CardContent, Divider} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ShipView from "../Shared/Ship/ShipView";
-import {ShipType} from "../../../Domain/games/ship/ShipType";
-import {Orientation} from "../../../Domain/games/ship/Orientation";
-import {Board, generateEmptyMatrix, generateRandomMatrix} from "../../../Domain/games/board/Board";
+import ShipView from "../../Shared/Ship/ShipView";
+import {ShipType} from "../../../../Domain/games/ship/ShipType";
+import {Orientation} from "../../../../Domain/games/ship/Orientation";
+import {Board, generateEmptyMatrix, generateRandomMatrix} from "../../../../Domain/games/board/Board";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import {isValidShipCoordinate, Ship} from "../../../Domain/games/ship/Ship";
-import ErrorAlert from "../../Shared/ErrorAlert";
+import {isValidShipCoordinate, Ship} from "../../../../Domain/games/ship/Ship";
+import ErrorAlert from "../../../Shared/ErrorAlert";
 import useConfigurableBoard from "./useConfigurableBoard";
-import {tileSize} from "../Shared/Board/Tile";
-import {CountdownTimer} from "../Shared/CountdownTimer/CountdownTimer";
-import LeaveGameAlert from "../Shared/LeaveGame/LeaveGameAlert";
-import LeaveGameButton from "../Shared/LeaveGame/LeaveGameButton";
+import {tileSize} from "../../Shared/Board/Tile";
+import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
+import LeaveGameAlert from "../../Shared/LeaveGame/LeaveGameAlert";
+import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton";
 import {CheckRounded, CycloneRounded} from "@mui/icons-material";
 
 /**
@@ -88,14 +88,16 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                                             <Box sx={{
                                                 display: 'flex',
                                                 marginTop: '10px',
-                                                border: selectedShipType === ship ? '2px solid red' : 'none'
+                                                border: selectedShipType === ship ? '2px solid red' : 'none',
+                                                opacity: count === 0 ? 0.5 : 1
                                             }}>
                                                 <ShipView
                                                     type={ship}
                                                     orientation={Orientation.VERTICAL}
                                                     key={ship.shipName}
                                                     onClick={() => {
-                                                        setSelectedShipType(ship);
+                                                        if (count > 0)
+                                                            setSelectedShipType(ship);
                                                     }}
                                                 />
                                             </Box>
@@ -151,7 +153,7 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                 <Grid item lg={8} md={6} xs={12}>
                     <BoardView board={board} enabled={true} onTileClicked={
                         (coordinate) => {
-                            if (selectedShipType == null)
+                            if (selectedShipType == null || unplacedShips.get(selectedShipType) == 0)
                                 return;
 
                             if (!isValidShipCoordinate(coordinate,

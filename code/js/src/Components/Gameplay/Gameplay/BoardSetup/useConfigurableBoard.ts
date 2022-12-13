@@ -1,7 +1,7 @@
-import {Cell} from "../../../Domain/games/Cell";
+import {Cell} from "../../../../Domain/games/Cell";
 import {useCallback, useState} from "react";
-import {ConfigurableBoard} from "../../../Domain/games/board/ConfigurableBoard";
-import {Ship} from "../../../Domain/games/ship/Ship";
+import {ConfigurableBoard} from "../../../../Domain/games/board/ConfigurableBoard";
+import {Ship} from "../../../../Domain/games/ship/Ship";
 
 /**
  * Hook to manage the configurable board state.
