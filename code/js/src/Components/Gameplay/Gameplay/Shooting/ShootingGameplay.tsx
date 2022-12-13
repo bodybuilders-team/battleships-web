@@ -13,18 +13,20 @@ import {throwError} from "../../../../Services/utils/errorUtils";
 import PageContent from "../../../Shared/PageContent";
 import LoadingSpinner from "../../../Shared/LoadingSpinner";
 import {Game} from "../../../../Domain/games/game/Game";
+import {useSession} from "../../../../Utils/Session";
 
 /**
  * Porperties for the ShootingGameplay component.
  */
 interface ShootingGameplayProps {
     game: Game;
+    onFinished: () => void;
 }
 
 /**
  * ShootingGameplay component.
  */
-export default function ShootingGameplay({game}: ShootingGameplayProps) {
+export default function ShootingGameplay({game, onFinished}: ShootingGameplayProps) {
     const battleshipsService = useBattleshipsService();
     const [error, setError] = useState<string | null>(null);
     const [myFleet, setMyFleet] = useState<Ship[]>();
@@ -68,7 +70,9 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
     }, []);
 
     if (myFleet)
-        return <Shooting game={game} myFleet={myFleet}/>;
+        return <Shooting game={game} myFleet={myFleet} onFinished={onFinished} onTimeUp={() => {
+            setTimeout(onFinished, 2000) // wait for the server to update the game
+        }}/>;
     else
         return (
             <PageContent error={error}>

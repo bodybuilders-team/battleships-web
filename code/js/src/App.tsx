@@ -6,17 +6,18 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import {useNavigationState} from "./Utils/navigation/NavigationState";
 import {useBattleshipsService} from "./Services/NavigationBattleshipsService";
 import {useLoggedIn} from "./Utils/Session";
+import EndGamePopup, {EndGameCause, WinningPlayer} from "./Components/Gameplay/Shared/EndGamePopup";
 import Home from './Components/Home/Home';
 import Login from "./Components/Authentication/Login/Login";
 import Register from "./Components/Authentication/Register/Register";
-import Ranking from "./Components/Ranking/Ranking";
 import Profile from "./Components/Profile/Profile";
+import Ranking from "./Components/Ranking/Ranking";
 import GameplayMenu from "./Components/Gameplay/GameplayMenu/GameplayMenu";
 import Gameplay from "./Components/Gameplay/Gameplay/Gameplay";
-import About from "./Components/About/About";
 import Matchmake from "./Components/Gameplay/Matchmake/Matchmake";
-import Lobby from "./Components/Gameplay/Lobby/Lobby";
 import CreateGame from "./Components/Gameplay/CreateGame/CreateGame";
+import Lobby from "./Components/Gameplay/Lobby/Lobby";
+import About from "./Components/About/About";
 
 /**
  * App component.
@@ -29,7 +30,7 @@ export default function App() {
     useEffect(() => {
         async function getHome() {
             await battleshipsService.getHome();
-            navigationState.setLinks(battleshipsService.links);
+            ;
         }
 
         getHome();
@@ -84,6 +85,7 @@ export default function App() {
                     <Route path="/about" element={<About/>}/>
                 </Routes>
             </div>
+
         </div>
     );
 }

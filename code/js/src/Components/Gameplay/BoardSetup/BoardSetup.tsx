@@ -24,22 +24,24 @@ import {CheckRounded, CycloneRounded} from "@mui/icons-material";
 /**
  * Board setup props
  *
- * @param finalTime the time in seconds that the player has to finish the board setup
- * @param boardSize the size of the board
- * @param ships the list of ships to be placed
- * @param onBoardReady the callback to be called when the board is ready
+ * @property finalTime the time in seconds that the player has to finish the board setup
+ * @property boardSize the size of the board
+ * @property ships the list of ships to be placed
+ * @property onBoardReady the callback to be called when the board is ready
  */
 interface BoardSetupProps {
     finalTime: number;
     boardSize: number;
     ships: ReadonlyMap<ShipType, number>;
     onBoardReady: (board: Board) => void;
+    onLeaveGame: () => void;
+    onTimeUp: () => void;
 }
 
 /**
  * BoardSetup component.
  */
-function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps) {
+function BoardSetup({finalTime, boardSize, ships, onBoardReady, onLeaveGame, onTimeUp}: BoardSetupProps) {
     const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize));
     const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships);
     const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null);
@@ -51,7 +53,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
             <Typography variant="h4">Board Setup</Typography>
             <Box sx={{mb: "5px"}}>
                 <CountdownTimer finalTime={finalTime} onTimeUp={() => {
-                    setError("Time is up!")
+                    onTimeUp()
                 }}/>
             </Box>
 
@@ -60,6 +62,7 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady}: BoardSetupProps
                 onLeave={() => {
                     setLeavingGame(false);
                     // TODO: leave game
+                    onLeaveGame();
                 }}
                 onStay={() => setLeavingGame(false)}
             />

@@ -64,7 +64,7 @@ export default function Lobby() {
                 return;
             }
 
-            navigationState.setLinks(battleshipsService.links)
+
             navigate(`/game/${res.properties!.gameId}`);
         }
 

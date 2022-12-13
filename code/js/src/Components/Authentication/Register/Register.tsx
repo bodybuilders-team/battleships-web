@@ -64,7 +64,7 @@ export default function Register() {
                     ?? throwError("User home link is undefined")
             });
 
-            navigationState.setLinks(battleshipsService.links)
+
             navigate('/');
         }
     });

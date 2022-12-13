@@ -36,4 +36,12 @@ export class Game {
             players: game.players.map(player => player.toPlayerModel())
         }
     }
+
+    getPlayer(username: string): Player | undefined {
+        return this.players.find(player => player.username === username);
+    }
+
+    getOpponent(username: string): Player | undefined {
+        return this.players.find(player => player.username !== this.creator)
+    }
 }

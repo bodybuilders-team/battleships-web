@@ -73,7 +73,7 @@ export default function CreateGame() {
                 return;
             }
 
-            navigationState.setLinks(battleshipsService.links)
+
             setGameId(res.properties!.gameId);
             setWaitingForOpponent(true);
         }
@@ -96,7 +96,7 @@ export default function CreateGame() {
 
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
             setWaitingForOpponent(false);
-            navigationState.setLinks(battleshipsService.links);
+            ;
             navigate(`/game/${gameId}`);
             return true;
         }

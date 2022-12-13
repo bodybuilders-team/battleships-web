@@ -29,6 +29,7 @@ export default function Ranking() {
                 throw new Error("Entities are undefined");
 
             const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User);
+
             setRanking(users);
         }
 

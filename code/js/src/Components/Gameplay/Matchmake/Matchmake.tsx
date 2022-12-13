@@ -43,7 +43,7 @@ export default function Matchmake() {
             const gameId = res.properties!.gameId;
             setGameId(gameId);
 
-            navigationState.setLinks(battleshipsService.links);
+            ;
             if (!res.properties!.wasCreated) {
                 setMatchmade(true);
                 navigate(`/game/${gameId}`);
@@ -76,7 +76,7 @@ export default function Matchmake() {
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
             setMatchmade(true);
             setWaitingForOpponent(false);
-            navigationState.setLinks(battleshipsService.links);
+            ;
             navigate(`/game/${gameId}`);
             return true;
         }

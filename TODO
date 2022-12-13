@@ -13,6 +13,7 @@ Backend:
 Frontend:
 - EndGamePopup
 - Profile (maybe game history)
+- Retry on api error
 
 Random or Never Ending Tasks:
 - Add more tests

@@ -21,7 +21,7 @@ interface PageContentProps {
  */
 export default function PageContent({title, error, children}: PageContentProps) {
     return (
-        <Container component="main" maxWidth="xs">
+        <Container maxWidth="xs">
             <h1>{title}</h1>
             <Box
                 sx={{

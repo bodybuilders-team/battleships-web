@@ -32,7 +32,6 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
     const [gameState, setGameState] = useState<GameState>(game.state);
     const [myBoard, setMyBoard] = useState<MyBoard>(MyBoard.fromFleet(game.config.gridSize, myFleet));
     const [opponentBoard, setOpponentBoard] = useState<OpponentBoard>(new OpponentBoard(game.config.gridSize));
-    const [winner, setWinner] = useState<string | null>(null);
     const [finished, setFinished] = useState<boolean>(false);
     const [myTurn, setMyTurn] = useState<boolean>(game.state.turn == session!.username);
     const [switchTurnWithDelay, setSwitchTurnWithDelay] = useState<boolean>(false);

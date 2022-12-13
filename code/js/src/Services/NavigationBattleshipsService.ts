@@ -27,7 +27,7 @@ export default class NavigationBattleshipsService {
     }
 
     constructor(links: Map<string, string>, private sessionManager: SessionManager) {
-        this._links = new Map(links);
+        this._links = links;
         this.usersService = new NavigationUsersService(this, sessionManager);
         this.gamesService = new NavigationGamesService(this, sessionManager);
         this.playersService = new NavigationPlayersService(this, sessionManager);

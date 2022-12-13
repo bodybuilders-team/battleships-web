@@ -1,8 +1,9 @@
 import {Board, generateEmptyMatrix} from "./Board";
 import {Cell, ShipCell, UnknownShipCell, WaterCell} from "../Cell";
-import {throwError} from "../../../Services/utils/errorUtils";
 import {ShotResult} from "../shot/ShotResult";
 import {FiredShot} from "../shot/FiredShot";
+import {Ship} from "../ship/Ship";
+import {Coordinate} from "../Coordinate";
 
 /**
  * The opponent's board.
@@ -27,11 +28,11 @@ export class OpponentBoard extends Board {
      * @return the board after the attack
      */
     updateWith(firedShots: FiredShot[]): OpponentBoard {
-        const sunkCoordinates = new Map();
+        const sunkCoordinates = new Map<Coordinate[], Ship>();
         firedShots
             .map(shot => shot.sunkShip)
             .filter(ship => ship != null)
-            .forEach(ship => sunkCoordinates.set(ship?.coordinates ?? throwError("Ship should not be null"), ship));
+            .forEach(ship => sunkCoordinates.set(ship!.coordinates, ship!));
 
         return new OpponentBoard(this.size, this.grid.map(cell => {
             const firedShot = firedShots.find(shot => shot.coordinate.equals(cell.coordinate));
@@ -44,7 +45,13 @@ export class OpponentBoard extends Board {
             if (!(cell instanceof WaterCell))
                 throw Error("Opponent cell can only be not hit if it is water cell");
 
-            const sunkShip = sunkCoordinates.get(cell.coordinate);
+            const sunkShip = Array.from(sunkCoordinates.entries())
+                .find(([coordinates]) =>
+                    coordinates.find(
+                        coordinate => coordinate.equals(cell!.coordinate)
+                    ) != null
+                )?.[1]
+
             if (sunkShip != null)
                 return new ShipCell(cell.coordinate, true, sunkShip);
 

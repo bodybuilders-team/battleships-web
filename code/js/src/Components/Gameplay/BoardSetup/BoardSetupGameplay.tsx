@@ -10,7 +10,9 @@ import LoadingSpinner from "../../Shared/LoadingSpinner";
 import PageContent from "../../Shared/PageContent";
 import {useInterval} from "../Shared/useInterval";
 import {GameConfig} from "../../../Domain/games/game/GameConfig";
-import {GameState} from "../../../Domain/games/game/GameState";
+import {useNavigate} from "react-router-dom";
+import {Problem} from "../../../Services/media/Problem";
+import {ProblemTypes} from "../../../Utils/types/problemTypes";
 
 /**
  * Properties for BoardSetupGameplay component.
@@ -20,7 +22,7 @@ import {GameState} from "../../../Domain/games/game/GameState";
  */
 interface BoardSetupGameplayProps {
     gameConfig: GameConfig;
-    onBoardSetupPhaseFinished: (gameState: GameState) => void;
+    onFinished: () => void;
 }
 
 const pollingDelay = 1000;
@@ -28,13 +30,15 @@ const pollingDelay = 1000;
 /**
  * BoardSetupGameplay component.
  */
-export default function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinished}: BoardSetupGameplayProps) {
+export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupGameplayProps) {
     const battleshipsService = useBattleshipsService();
     const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const [fetchingGameState, setFetchingGameState] = useState<boolean>(true);
     const [finalTime, setFinalTime] = useState<number | null>(null);
+
+    const navigate = useNavigate()
 
     /**
      * Callback when the board setup phase is finished.
@@ -54,6 +58,12 @@ export default function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinishe
         }));
 
         if (err) {
+            const a = err as Problem;
+            if (err instanceof Problem && a.type === ProblemTypes.INVALID_PHASE) {
+                onFinished();
+                return
+            }
+
             handleError(err, setError);
             return;
         }
@@ -76,7 +86,7 @@ export default function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinishe
 
         if (res.properties!.phase !== "DEPLOYING_FLEETS") {
             setWaitingForOpponent(false);
-            onBoardSetupPhaseFinished(new GameState(res.properties!));
+            onFinished();
             return true;
         }
 
@@ -104,6 +114,17 @@ export default function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinishe
         fetchGameState();
     }, [fetchingGameState]);
 
+    async function leaveGame() {
+        const [err, res] = await to(battleshipsService.gamesService.leaveGame());
+
+        if (err) {
+            handleError(err, setError);
+            return;
+        }
+
+        navigate("/gameplay-menu");
+    }
+
 
     if (isWaitingForOpponent)
         return (
@@ -117,12 +138,19 @@ export default function BoardSetupGameplay({gameConfig, onBoardSetupPhaseFinishe
                 <LoadingSpinner text={"Loading game state..."}/>
             </PageContent>
         );
-    else
+    else {
         return (
             <BoardSetup
                 finalTime={finalTime!}
                 boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
                 onBoardReady={onBoardSetupFinished}
+                onLeaveGame={leaveGame}
+                onTimeUp={() => {
+                    setTimeout(() => {
+                        onFinished();
+                    }, 2000); // wait a bit to let the server update the game state to finished
+                }}
             />
         );
+    }
 }

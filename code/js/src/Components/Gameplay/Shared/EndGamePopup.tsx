@@ -1,19 +1,36 @@
 import * as React from "react";
-import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import DialogContentText from '@mui/material/DialogContentText';
+import {Dialog, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {HomeRounded, RefreshRounded} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
 
 /**
  * Properties for the EndGamePopup component.
  *
- * @param winningPlayer the player who won the game
- * @param cause the cause of the end of the game
+ * @property winningPlayer the player who won the game
+ * @property cause the cause of the end of the game
  */
 interface EndGamePopupProps {
+    open: boolean;
     winningPlayer: WinningPlayer;
     cause: EndGameCause;
+    playerInfo: PlayerInfo;
+    opponentInfo: PlayerInfo;
+}
+
+/**
+ * Player info
+ *
+ * @property name the name of the player
+ * @property points the points of the player
+ * @property avatar the avatar of the player
+ */
+interface PlayerInfo {
+    name: string;
+    points: number;
+    avatar?: string;
 }
 
 /**
@@ -42,61 +59,144 @@ export enum WinningPlayer {
 }
 
 /**
+ * Player info component.
+ * Displays the name and avatar of a player.
+ *
+ * @param name the name of the player
+ * @param avatar the avatar of the player
+ */
+function PlayerInfoCard({playerInfo: {name, avatar}}: { playerInfo: PlayerInfo }) {
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 2,
+                ml: 2
+            }}
+        >
+            <Avatar
+                sx={{
+                    width: 60,
+                    height: 80,
+                }}
+                variant={"square"}
+                src={avatar}
+            />
+            <Typography
+                sx={{
+                    mt: 1,
+
+                }}
+                variant="h6"
+            >
+                {name}
+            </Typography>
+        </Box>
+    );
+}
+
+/**
  * The EndGamePopup component.
  */
-export default function EndGamePopup({winningPlayer, cause,}: EndGamePopupProps) {
+export default function EndGamePopup({open, winningPlayer, cause, playerInfo, opponentInfo}: EndGamePopupProps) {
     const navigate = useNavigate();
 
     return (
-        <Dialog open={true} onClose={undefined}>
-            <DialogTitle>
-                {
-                    (
-                        winningPlayer === WinningPlayer.YOU
-                            ? "You won!"
-                            : "You lost!"
-                    )
-                    + " " + (cause === EndGameCause.DESTRUCTION
-                            ? "Fleet destroyed"
-                            : cause === EndGameCause.RESIGNATION
-                                ? "Resigned"
-                                : "Timeout"
-                    )
-                }
-            </DialogTitle>
-
-            <DialogContent>
-                <DialogContentText>
+        <Dialog open={open} onClose={undefined}>
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                px: 4,
+            }}>
+                <Typography variant="h5">
                     {
-                        // TODO:
+                        (
+                            winningPlayer === WinningPlayer.YOU
+                                ? "You won!"
+                                : "You lost!"
+                        )
                     }
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button
-                    fullWidth
-                    size="large"
-                    variant="contained"
-                    sx={{mt: 3, mb: 2}}
-                    startIcon={<HomeRounded/>}
-                    color="primary"
-                    onClick={() => navigate("/")}
-                >
-                    Home
-                </Button>
-                // play again
-                <Button
-                    fullWidth
-                    size="large"
-                    variant="contained"
-                    sx={{mt: 3, mb: 2}}
-                    startIcon={<RefreshRounded/>}
-                    color="primary"
-                    onClick={() => navigate("/gameplay-menu")}
-                >
-                    Play Again
-                </Button>
-            </DialogActions>
+                </Typography>
+
+                <Typography sx={{
+                    fontSize: "0.7rem",
+                }}>
+                    {
+                        "By " + (
+                            (cause === EndGameCause.DESTRUCTION
+                                    ? "fleet destruction"
+                                    : cause === EndGameCause.RESIGNATION
+                                        ? "resignation"
+                                        : "timeout"
+                            )
+                        )
+                    }
+                </Typography>
+                <Typography variant="h6">
+                    {
+                        (winningPlayer === WinningPlayer.YOU)
+                            ? "+" + playerInfo.points + " points"
+                            : "No points won"
+                    }
+                </Typography>
+
+
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mt: 2,
+                }}>
+                    <PlayerInfoCard playerInfo={playerInfo}/>
+                    <PlayerInfoCard playerInfo={opponentInfo}/>
+                </Box>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    mt: 2,
+                }}>
+
+                    <Button
+                        size="large"
+                        variant="contained"
+                        sx={{
+                            mb: 2,
+                            maxWidth: "70%",
+                            maxHeight: "35px",
+                        }}
+                        startIcon={<HomeRounded/>}
+                        color="primary"
+                        onClick={() => navigate("/")}
+                    >
+                        Home
+                    </Button>
+
+                    <Button
+                        size="small"
+                        variant="contained"
+                        sx={{
+                            mb: 2,
+
+                            maxWidth: "70%",
+                            maxHeight: "35px",
+                        }}
+                        startIcon={<RefreshRounded/>}
+                        color="primary"
+                        onClick={() => navigate("/gameplay-menu")}
+                    >
+                        Play Again
+                    </Button>
+                </Box>
+            </Box>
         </Dialog>
     );
 }

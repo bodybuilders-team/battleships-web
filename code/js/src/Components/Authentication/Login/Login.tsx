@@ -27,7 +27,6 @@ import {PasswordTextField} from "../Shared/PasswordTextField";
  */
 export default function Login() {
     const navigate = useNavigate();
-    const navigationState = useNavigationState();
 
     const battleshipsService = useBattleshipsService();
     const sessionManager = useSessionManager();
@@ -62,7 +61,7 @@ export default function Login() {
                     ?? throwError("User home link is undefined")
             });
 
-            navigationState.setLinks(battleshipsService.links);
+            ;
             navigate('/');
         }
     });

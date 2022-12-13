@@ -63,7 +63,6 @@ export default function NavBar() {
                     battleshipsService.usersService.logout(session.refreshToken)
                 );
 
-                navigationState.setLinks(new Map());
                 navigate('/');
             },
             auth: true

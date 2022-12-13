@@ -19,6 +19,9 @@ import LeaveGameButton from "../../Shared/LeaveGameButton";
 import Container from "@mui/material/Container";
 import {CancelRounded, RefreshRounded} from "@mui/icons-material";
 import RoundView from "./RoundView";
+import to from "../../../../Utils/await-to";
+import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
+import {useNavigate} from "react-router-dom";
 
 /**
  * Properties for the Shooting component.
@@ -29,16 +32,19 @@ import RoundView from "./RoundView";
 interface ShootingProps {
     game: Game;
     myFleet: Ship[];
+    onFinished: () => void;
+    onTimeUp: () => void;
 }
 
 /**
  * Shooting component.
  */
-export default function Shooting({game, myFleet}: ShootingProps) {
+export default function Shooting({game, myFleet, onFinished, onTimeUp}: ShootingProps) {
     const [error, setError] = useState<string | null>(null);
 
     const [leavingGame, setLeavingGame] = useState<boolean>(false);
-
+    const battleshipsService = useBattleshipsService();
+    const navigate = useNavigate()
     const {shootingState, fire} = useShooting(game, myFleet, (err) => {
         handleError(err, setError);
     });
@@ -50,6 +56,22 @@ export default function Shooting({game, myFleet}: ShootingProps) {
         if (shootingState.myTurn)
             setCanFireShots(true);
     }, [shootingState.myTurn]);
+
+    async function leaveGame() {
+        const [err, res] = await to(battleshipsService.gamesService.leaveGame());
+
+        if (err) {
+            handleError(err, setError);
+            return;
+        }
+
+        navigate("/gameplay-menu");
+    }
+
+    useEffect(() => {
+        if (shootingState.finished)
+            onFinished();
+    }, [shootingState.finished]);
 
     return (
 
@@ -67,7 +89,10 @@ export default function Shooting({game, myFleet}: ShootingProps) {
                 }}>
                     <CountdownTimer
                         finalTime={shootingState.gameState.phaseEndTime}
-                        onTimeUp={() => setCanFireShots(false)}
+                        onTimeUp={() => {
+                            setCanFireShots(false)
+                            onTimeUp()
+                        }}
                     />
                     <RoundView round={shootingState.gameState.round!}/>
                 </Box>
@@ -76,7 +101,7 @@ export default function Shooting({game, myFleet}: ShootingProps) {
                     open={leavingGame}
                     onLeave={() => {
                         setLeavingGame(false);
-                        // TODO: leave game
+                        leaveGame()
                     }}
                     onStay={() => setLeavingGame(false)}
                 />
