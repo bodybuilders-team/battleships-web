@@ -6,6 +6,7 @@
  * @property round the round of the game
  * @property turn the turn of the game
  * @property winner the winner of the game
+ * @property endCause the cause of the game ending
  */
 export class GameState {
     readonly phase: "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED";
@@ -13,6 +14,7 @@ export class GameState {
     readonly round: number | null;
     readonly turn: string | null;
     readonly winner: string | null;
+    readonly endCause: string | null;
 
     constructor(gameStateModel: GameStateModel) {
         this.phase = gameStateModel.phase;
@@ -20,5 +22,6 @@ export class GameState {
         this.round = gameStateModel.round;
         this.turn = gameStateModel.turn;
         this.winner = gameStateModel.winner;
+        this.endCause = gameStateModel.endCause;
     }
 }

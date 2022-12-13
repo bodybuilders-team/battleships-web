@@ -10,19 +10,22 @@ import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTO
  * @property round the current round
  * @property turn the current turn
  * @property winner the winner of the game
+ * @property endCause the cause of the game ending
  */
 data class GameStateModel(
     val phase: String,
     val phaseEndTime: Long,
     val round: Int?,
     val turn: String?,
-    val winner: String?
+    val winner: String?,
+    val endCause: String?
 ) {
     constructor(gameStateDTO: GameStateDTO) : this(
         phase = gameStateDTO.phase,
         phaseEndTime = gameStateDTO.phaseEndTime,
         round = gameStateDTO.round,
         turn = gameStateDTO.turn,
-        winner = gameStateDTO.winner
+        winner = gameStateDTO.winner,
+        endCause = gameStateDTO.endCause
     )
 }

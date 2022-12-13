@@ -41,6 +41,14 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        fetchGameState()
+    }, [fetchingGameState]);
+
+    useInterval(() => {
+        checkIfOpponentDeployedFleet()
+    }, pollingDelay, [isWaitingForOpponent]);
+
     /**
      * Callback when the board setup phase is finished.
      *
@@ -71,7 +79,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         setWaitingForOpponent(true);
     }
 
-    useInterval(async () => {
+    async function checkIfOpponentDeployedFleet() {
         if (!isWaitingForOpponent)
             return true;
 
@@ -80,6 +88,11 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         );
 
         if (err) {
+            if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
+                setShowEndGamePopup(true);
+                return;
+            }
+
             handleError(err, setError);
             return true;
         }
@@ -91,28 +104,31 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         }
 
         return false;
-    }, pollingDelay, [isWaitingForOpponent]);
+    }
 
-    useEffect(() => {
+
+    async function fetchGameState() {
         if (!fetchingGameState)
             return;
 
-        async function fetchGameState() {
-            const [err, res] = await to(
-                battleshipsService.gamesService.getGameState()
-            );
+        const [err, res] = await to(
+            battleshipsService.gamesService.getGameState()
+        );
 
-            if (err) {
-                handleError(err, setError);
+        if (err) {
+            if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
+                setShowEndGamePopup(true);
                 return;
             }
 
-            setFinalTime(res.properties!.phaseEndTime);
-            setFetchingGameState(false);
+            handleError(err, setError);
+            return;
         }
 
-        fetchGameState();
-    }, [fetchingGameState]);
+        setFinalTime(res.properties!.phaseEndTime);
+        setFetchingGameState(false);
+    }
+
 
     /**
      * Callback when the user wants to leave the game.
@@ -131,15 +147,25 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
 
     if (isWaitingForOpponent)
         return (
-            <PageContent error={error}>
-                <LoadingSpinner text={"Waiting for opponent to deploy his fleet..."}/>
-            </PageContent>
+            <>
+                <PageContent error={error}>
+                    <LoadingSpinner text={"Waiting for opponent to deploy his fleet..."}/>
+                </PageContent>
+                <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
+                    handleError(err, setError);
+                }}/>
+            </>
         );
     else if (fetchingGameState)
         return (
-            <PageContent error={error}>
-                <LoadingSpinner text={"Loading game state..."}/>
-            </PageContent>
+            <>
+                <PageContent error={error}>
+                    <LoadingSpinner text={"Loading game state..."}/>
+                </PageContent>
+                <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
+                    handleError(err, setError);
+                }}/>
+            </>
         );
     else
         return (
@@ -149,6 +175,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
                     boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
                     onBoardReady={onBoardSetupFinished}
                     onLeaveGame={leaveGame}
+                    error={error}
                     onTimeUp={() => {
                         setShowEndGamePopup(true);
                     }}

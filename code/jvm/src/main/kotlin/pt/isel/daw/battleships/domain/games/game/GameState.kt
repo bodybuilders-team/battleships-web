@@ -25,6 +25,7 @@ import javax.persistence.OneToOne
  * @property round the current round
  * @property turn the current player
  * @property winner the winner player
+ * @property endCause the cause of the game ending
  */
 @Embeddable
 class GameState {
@@ -46,6 +47,10 @@ class GameState {
     @JoinColumn(name = "winner", nullable = true)
     var winner: Player?
 
+    @Column(name = "end_cause", nullable = true)
+    @Enumerated(EnumType.STRING)
+    var endCause: EndCause? = null
+
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(
         phase: GamePhase = WAITING_FOR_PLAYERS,
@@ -53,6 +58,7 @@ class GameState {
         round: Int? = null,
         turn: Player? = null,
         winner: Player? = null,
+        endCause: EndCause? = null
     ) {
         if (round != null && round < 0)
             throw InvalidGameStateException("Round must be positive")
@@ -66,14 +72,18 @@ class GameState {
         if (winner != null && phase != FINISHED)
             throw InvalidGameStateException("Winner can only be set when the game is finished")
 
-        if (winner == null && phase == FINISHED)
-            throw InvalidGameStateException("Winner must be set when the game is finished")
+        if (endCause != null && phase != FINISHED)
+            throw InvalidGameStateException("EndCause can only be set when the game is finished")
+
+        if (endCause == null && phase == FINISHED)
+            throw InvalidGameStateException("EndCause must be set when the game is finished")
 
         this.phase = phase
         this.phaseExpirationTime = phaseExpirationTime
         this.round = round
         this.turn = turn
         this.winner = winner
+        this.endCause = endCause
     }
 
     /**
@@ -110,6 +120,15 @@ class GameState {
                 IN_PROGRESS -> FINISHED
                 FINISHED -> throw IllegalStateException("Cannot advance from FINISHED phase.")
             }
+    }
+
+    /**
+     * The game end causes.
+     */
+    enum class EndCause {
+        DESTRUCTION,
+        RESIGNATION,
+        TIMEOUT
     }
 
     companion object {

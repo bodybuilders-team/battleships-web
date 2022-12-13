@@ -8,11 +8,13 @@ import {useEffect} from "react";
  * @param dependencies the dependencies of the hook
  */
 export function useTimeout(callback: () => void, delay: number, dependencies: any[]) {
-    useEffect(() => {
+    useEffect(activateTimeout, dependencies);
+
+    function activateTimeout() {
         const timeoutId = setTimeout(callback, delay);
 
         return () => {
             clearTimeout(timeoutId);
         };
-    }, dependencies);
+    }
 }

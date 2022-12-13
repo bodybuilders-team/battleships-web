@@ -54,10 +54,18 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
     const [selectedCells, setSelectedCells] = useState<Coordinate[]>([]);
     const [canFireShots, setCanFireShots] = useState<boolean>(shootingState.myTurn);
 
-    useEffect(() => {
+    useEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn]);
+    useEffect(callOnFinishIfGameIsFinished, [shootingState.finished]);
+
+    function disableFireShotsWhenNotMyTurn() {
         if (shootingState.myTurn)
             setCanFireShots(true);
-    }, [shootingState.myTurn]);
+    }
+
+    function callOnFinishIfGameIsFinished() {
+        if (shootingState.finished)
+            onFinished();
+    }
 
     /**
      * Callback to call when the player wants to leave the game.
@@ -73,10 +81,6 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
         navigate("/gameplay-menu");
     }
 
-    useEffect(() => {
-        if (shootingState.finished)
-            onFinished();
-    }, [shootingState.finished]);
 
     return (
 

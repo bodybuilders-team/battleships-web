@@ -31,7 +31,9 @@ function FetchedEndGamePopup({open, onError}: FetchedEndGamePopupProps) {
     const battleshipsService = useBattleshipsService();
     const navigate = useNavigate()
 
-    useInterval(async function fetchGame() {
+    useInterval(fetchGame, POLLING_DELAY, [open]);
+
+    async function fetchGame() {
         if (!open) return false;
 
         if (!battleshipsService.links.get(Rels.GAME)) {
@@ -58,8 +60,7 @@ function FetchedEndGamePopup({open, onError}: FetchedEndGamePopupProps) {
         }
 
         return false
-    }, POLLING_DELAY, [open]);
-
+    }
 
     if (game != null) {
         const session = useSession()
@@ -67,15 +68,24 @@ function FetchedEndGamePopup({open, onError}: FetchedEndGamePopupProps) {
 
         const player = game.getPlayer(username)!
         const opponent = game.getOpponent(username)!
+        console.log(game.state.winner)
 
         return <EndGamePopup
             open={game?.state.phase === "FINISHED"}
             winningPlayer={
-                game.state.winner === session?.username!
-                    ? WinningPlayer.YOU : WinningPlayer.OPPONENT
-            } cause={
-            EndGameCause.DESTRUCTION
-        }
+                game.state.winner == null ? WinningPlayer.NONE :
+                    game.state.winner === session?.username!
+                        ? WinningPlayer.YOU : WinningPlayer.OPPONENT
+            } cause={(() => {
+            switch (game.state.endCause) {
+                case "DESTRUCTION":
+                    return EndGameCause.DESTRUCTION
+                case "TIMEOUT":
+                    return EndGameCause.TIMEOUT
+                default:
+                    return EndGameCause.RESIGNATION
+            }
+        })()}
             playerInfo={{
                 name: player.username,
                 points: player.points

@@ -6,6 +6,7 @@
  * @property round the round of the game
  * @property turn the turn of the game
  * @property winner the winner of the game
+ * @property endCause the cause of the game ending
  */
 interface GameStateModel {
     phase: "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED";
@@ -13,4 +14,5 @@ interface GameStateModel {
     round: number | null;
     turn: string | null;
     winner: string | null;
+    endCause: string | null;
 }

@@ -138,8 +138,11 @@ class GamesServiceImpl(
 
         when (game.state.phase) {
             GameState.GamePhase.FINISHED -> throw InvalidPhaseException("Game has already finished")
-            GameState.GamePhase.WAITING_FOR_PLAYERS, GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame()
-            else -> game.finishGame(winner = game.getOpponent(player))
+            GameState.GamePhase.WAITING_FOR_PLAYERS, GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame(
+                GameState.EndCause.RESIGNATION
+            )
+
+            else -> game.finishGame(winner = game.getOpponent(player), cause = GameState.EndCause.RESIGNATION)
         }
     }
 

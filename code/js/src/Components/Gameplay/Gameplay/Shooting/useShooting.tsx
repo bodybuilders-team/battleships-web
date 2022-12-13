@@ -38,7 +38,10 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
     const [myTurn, setMyTurn] = useState<boolean>(game.state.turn == session!.username);
     const [switchTurnWithDelay, setSwitchTurnWithDelay] = useState<boolean>(false);
 
-    useInterval(async () => {
+    useInterval(checkIfOpponentHasFinishedHisTurn, POLLING_DELAY, [myTurn]);
+    useTimeout(switchTurn, TURN_SWITCH_DELAY, [switchTurnWithDelay]);
+
+    async function checkIfOpponentHasFinishedHisTurn() {
         if (myTurn)
             return true;
 
@@ -69,15 +72,16 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
         }
 
         return false;
-    }, POLLING_DELAY, [myTurn]);
+    }
 
-    useTimeout(() => {
+    function switchTurn() {
         if (!switchTurnWithDelay)
             return;
 
         setSwitchTurnWithDelay(false);
         setMyTurn(!myTurn);
-    }, TURN_SWITCH_DELAY, [switchTurnWithDelay]);
+    }
+
 
     /**
      * Shoots at the opponent.

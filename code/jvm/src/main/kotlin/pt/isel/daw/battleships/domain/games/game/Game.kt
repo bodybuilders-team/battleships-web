@@ -167,7 +167,8 @@ class Game {
     /**
      * Changes the game phase to FINISHED in case the game is aborted.
      */
-    fun abortGame() {
+    fun abortGame(cause: GameState.EndCause = GameState.EndCause.RESIGNATION) {
+        state.endCause = cause
         state.phase = GameState.GamePhase.FINISHED
     }
 
@@ -176,10 +177,10 @@ class Game {
      *
      * @param winner the winner of the game
      */
-    fun finishGame(winner: Player) {
+    fun finishGame(winner: Player, cause: GameState.EndCause = GameState.EndCause.DESTRUCTION) {
         state.phase = GameState.GamePhase.FINISHED
         state.winner = winner
-
+        state.endCause = cause
         players.forEach { it.user.points += it.points }
     }
 
@@ -196,9 +197,10 @@ class Game {
 
             val winner = getOpponent(currentPlayer)
 
-            finishGame(winner)
-        } else
-            abortGame()
+            finishGame(winner, GameState.EndCause.TIMEOUT)
+        } else {
+            abortGame(GameState.EndCause.TIMEOUT)
+        }
     }
 
     companion object {

@@ -55,7 +55,7 @@ class PlayersServiceImpl(
             throw InvalidPhaseException("Game is not in the deploying fleet phase")
 
         if (game.state.phaseExpired()) {
-            game.abortGame()
+            game.abortGame(GameState.EndCause.TIMEOUT)
             throw FleetDeployTimeExpiredException("The fleet deploy time has expired.")
         }
 
@@ -121,7 +121,7 @@ class PlayersServiceImpl(
         val shots = player.shoot(coordinates = shotsCoordinates)
 
         if (opponent.deployedShips.all(DeployedShip::isSunk))
-            game.finishGame(winner = player)
+            game.finishGame(winner = player, cause = GameState.EndCause.DESTRUCTION)
         else {
             game.updatePhase()
 

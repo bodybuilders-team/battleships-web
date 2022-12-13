@@ -17,7 +17,6 @@ const POLLING_DELAY = 1000;
  */
 export default function Matchmake() {
     const navigate = useNavigate();
-
     const battleshipsService = useBattleshipsService();
 
     const [error, setError] = useState<string | null>(null);
@@ -26,38 +25,34 @@ export default function Matchmake() {
     const [gameId, setGameId] = useState<number | null>(null);
 
     useEffect(() => {
-        let cancelled = false;
-
-        async function fetchMatchmake() {
-            const [err, res] = await to(
-                battleshipsService.gamesService.matchmake(defaultGameConfig)
-            );
-
-            if (err) {
-                handleError(err, setError);
-                return;
-            }
-
-            const gameId = res.properties!.gameId;
-            setGameId(gameId);
-
-            if (!res.properties!.wasCreated) {
-                setMatchmade(true);
-                navigate(`/game/${gameId}`);
-                return;
-            }
-
-            setWaitingForOpponent(true);
-        }
-
-        fetchMatchmake();
-
-        return () => {
-            cancelled = true
-        };
+        matchmake()
     }, []);
 
-    useInterval(async () => {
+    useInterval(checkIfOpponentJoined, POLLING_DELAY, [isWaitingForOpponent]);
+
+    async function matchmake() {
+        const [err, res] = await to(
+            battleshipsService.gamesService.matchmake(defaultGameConfig)
+        );
+
+        if (err) {
+            handleError(err, setError);
+            return;
+        }
+
+        const gameId = res.properties!.gameId;
+        setGameId(gameId);
+
+        if (!res.properties!.wasCreated) {
+            setMatchmade(true);
+            navigate(`/game/${gameId}`);
+            return;
+        }
+
+        setWaitingForOpponent(true);
+    }
+
+    async function checkIfOpponentJoined() {
         if (!isWaitingForOpponent)
             return true;
 
@@ -78,7 +73,7 @@ export default function Matchmake() {
         }
 
         return false;
-    }, POLLING_DELAY, [isWaitingForOpponent]);
+    }
 
     return (
         <PageContent title={"Matchmake"} error={error}>

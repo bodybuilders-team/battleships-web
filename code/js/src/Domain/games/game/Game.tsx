@@ -37,7 +37,8 @@ export class Game {
                 phaseEndTime: game.state.phaseEndTime,
                 round: game.state.round,
                 turn: game.state.turn,
-                winner: game.state.winner
+                winner: game.state.winner,
+                endCause: game.state.endCause
             },
             players: game.players.map(player => player.toPlayerModel())
         };

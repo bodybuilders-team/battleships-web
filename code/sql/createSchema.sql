@@ -47,6 +47,7 @@ CREATE TABLE games
     round                     INT,
     turn                      INT,
     winner                    INT,
+    end_cause                 VARCHAR(20),
 
     CONSTRAINT name_length CHECK (char_length(name) > 0),
     CONSTRAINT grid_size_is_valid CHECK ( grid_size >= 7 AND grid_size <= 18 ),
@@ -55,7 +56,8 @@ CREATE TABLE games
     CONSTRAINT shots_per_round_is_valid CHECK ( shots_per_round >= 1 AND shots_per_round <= 5 ),
     CONSTRAINT max_time_per_round_is_valid CHECK ( max_time_per_round >= 10 AND max_time_per_round <= 120 ),
     CONSTRAINT phase_is_valid CHECK ( phase IN ('WAITING_FOR_PLAYERS', 'DEPLOYING_FLEETS', 'IN_PROGRESS', 'FINISHED') ),
-    CONSTRAINT round_is_valid CHECK ( round >= 1 )
+    CONSTRAINT round_is_valid CHECK ( round >= 1 ),
+    CONSTRAINT end_cause_is_valid CHECK ( end_cause IN ('DESTRUCTION', 'RESIGNATION', 'TIMEOUT') )
 );
 
 CREATE TABLE players

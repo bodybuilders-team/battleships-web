@@ -109,9 +109,11 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                 <Typography variant="h5">
                     {
                         (
-                            winningPlayer === WinningPlayer.YOU
-                                ? "You won!"
-                                : "You lost!"
+                            winningPlayer === WinningPlayer.NONE ?
+                                "Game Aborted" :
+                                winningPlayer === WinningPlayer.YOU
+                                    ? "You won!"
+                                    : "You lost!"
                         )
                     }
                 </Typography>

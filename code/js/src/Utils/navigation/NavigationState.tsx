@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useContext, useMemo} from "react";
+import {useContext, useRef} from "react";
 
 /**
  * NavigationState interface.
@@ -24,9 +24,9 @@ const NavigationStateContext = React.createContext<NavigationState>({
  * @param children the children to render
  */
 export function NavigationState({children}: { children: React.ReactNode }) {
-    // Check this, basically we switched to useRef because we didn't
-    // want to re-render the whole app when the links changed
-    const links = useMemo(() => new Map<string, string>(), []);
+    // Needs to be useRef to avoid re-rendering the children, also can't
+    // be useMemo because useMemo may reset the state.
+    const links = useRef(new Map<string, string>()).current;
 
     return (
         <NavigationStateContext.Provider value={{

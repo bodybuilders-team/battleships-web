@@ -25,7 +25,11 @@ export default function Gameplay() {
     const [game, setGame] = useState<Game | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchGame = async () => {
+    useEffect(() => {
+        fetchGame();
+    }, []);
+
+    async function fetchGame() {
         if (!battleshipsService.links.get(Rels.GAME)) {
             navigate("/");
             return;
@@ -47,10 +51,6 @@ export default function Gameplay() {
         setGame(newGame);
     }
 
-    useEffect(() => {
-        fetchGame();
-    }, []);
-
 
     if (game?.state.phase === "DEPLOYING_FLEETS")
         return (
@@ -62,7 +62,7 @@ export default function Gameplay() {
             />
         );
     else if (game?.state.phase === "IN_PROGRESS")
-        return <ShootingGameplay game={game!} />;
+        return <ShootingGameplay game={game!}/>;
     else if (game?.state.phase === "FINISHED") {
         const username = session!.username
 
@@ -72,11 +72,19 @@ export default function Gameplay() {
         return <EndGamePopup
             open={game?.state.phase === "FINISHED"}
             winningPlayer={
-                game.state.winner === session?.username!
-                    ? WinningPlayer.YOU : WinningPlayer.OPPONENT
-            } cause={
-            EndGameCause.DESTRUCTION
-        }
+                game.state.winner == null ? WinningPlayer.NONE :
+                    game.state.winner === session?.username!
+                        ? WinningPlayer.YOU : WinningPlayer.OPPONENT
+            } cause={(() => {
+            switch (game.state.endCause) {
+                case "DESTRUCTION":
+                    return EndGameCause.DESTRUCTION
+                case "TIMEOUT":
+                    return EndGameCause.TIMEOUT
+                default:
+                    return EndGameCause.RESIGNATION
+            }
+        })()}
             playerInfo={{
                 name: player.username,
                 points: player.points

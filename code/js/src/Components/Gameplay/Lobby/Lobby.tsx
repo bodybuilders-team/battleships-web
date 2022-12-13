@@ -27,44 +27,40 @@ export default function Lobby() {
     const [gamesLoaded, setGamesLoaded] = useState(false);
 
     useEffect(() => {
+        fetchGames()
+    }, []);
+
+    async function fetchGames() {
         if (gamesLoaded)
             return;
 
-        const fetchGames = async () => {
-            const [err, res] = await to(battleshipsService.gamesService.getGames());
+        const [err, res] = await to(battleshipsService.gamesService.getGames());
 
-            if (err) {
-                handleError(err, setError);
-                return;
-            }
-
-            const filteredGames = res
-                .getEmbeddedSubEntities<GetGameOutputModel>()
-                .filter(game =>
-                    game.properties?.state.phase === "WAITING_FOR_PLAYERS" &&
-                    game.properties?.creator !== session?.username
-                );
-
-            setGames(filteredGames);
-            setGamesLoaded(true);
+        if (err) {
+            handleError(err, setError);
+            return;
         }
 
-        fetchGames();
-    });
+        const filteredGames = res
+            .getEmbeddedSubEntities<GetGameOutputModel>()
+            .filter(game =>
+                game.properties?.state.phase === "WAITING_FOR_PLAYERS" &&
+                game.properties?.creator !== session?.username
+            );
 
-    function handleJoinGame(joinGameLink: string) {
-        async function joinGame() {
-            const [err, res] = await to(battleshipsService.gamesService.joinGame(joinGameLink));
+        setGames(filteredGames);
+        setGamesLoaded(true);
+    }
 
-            if (err) {
-                handleError(err, setError);
-                return;
-            }
+    async function handleJoinGame(joinGameLink: string) {
+        const [err, res] = await to(battleshipsService.gamesService.joinGame(joinGameLink));
 
-            navigate(`/game/${res.properties!.gameId}`);
+        if (err) {
+            handleError(err, setError);
+            return;
         }
 
-        joinGame();
+        navigate(`/game/${res.properties!.gameId}`);
     }
 
     return (

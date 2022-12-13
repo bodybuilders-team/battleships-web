@@ -17,24 +17,24 @@ export default function Ranking() {
     const [ranking, setRanking] = useState<User[]>([]);
 
     useEffect(() => {
-        async function fetchRanking() {
-            const [err, res] = await to(battleshipsService.usersService.getUsers());
+        fetchRanking();
+    }, [])
 
-            if (err) {
-                handleError(err, setError);
-                return;
-            }
+    async function fetchRanking() {
+        const [err, res] = await to(battleshipsService.usersService.getUsers());
 
-            if (res?.entities === undefined)
-                throw new Error("Entities are undefined");
-
-            const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User);
-
-            setRanking(users);
+        if (err) {
+            handleError(err, setError);
+            return;
         }
 
-        fetchRanking();
-    }, []);
+        if (res?.entities === undefined)
+            throw new Error("Entities are undefined");
+
+        const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User);
+
+        setRanking(users);
+    }
 
     return (
         <PageContent title="Ranking" error={error}>

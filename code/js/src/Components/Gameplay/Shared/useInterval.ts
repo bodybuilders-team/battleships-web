@@ -8,7 +8,9 @@ import {useEffect} from "react";
  * @param dependencies the dependencies of the hook
  */
 export function useInterval(callback: () => Promise<boolean> | boolean | void, delay: number, dependencies?: any[]) {
-    useEffect(() => {
+    useEffect(activateInterval, dependencies);
+
+    function activateInterval() {
         let cancelled = false;
         let timeoutId: NodeJS.Timeout | undefined = undefined;
 
@@ -29,5 +31,5 @@ export function useInterval(callback: () => Promise<boolean> | boolean | void, d
             if (timeoutId !== undefined)
                 clearTimeout(timeoutId);
         };
-    }, dependencies);
+    }
 }

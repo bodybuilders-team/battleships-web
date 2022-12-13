@@ -13,7 +13,8 @@ class GameStateModelTests {
             phaseEndTime = 1L,
             round = 1,
             turn = null,
-            winner = null
+            winner = null,
+            endCause = null
         )
     }
 
@@ -36,7 +37,8 @@ class GameStateModelTests {
                 phaseEndTime = 1L,
                 round = 1,
                 turn = null,
-                winner = null
+                winner = null,
+                endCause = null
             )
     }
 }

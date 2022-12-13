@@ -11,7 +11,9 @@ export function useCountdownTimer(finalTime: number, onTimeUp?: () => void, upda
     const finalTimeDate = new Date(finalTime).getTime();
     const [currentTime, setCurrentTime] = useState(finalTimeDate - new Date().getTime());
 
-    useEffect(() => {
+    useEffect(activateCountdown, [finalTime]);
+
+    function activateCountdown() {
         const id = setInterval(() => {
             const newTime = finalTimeDate - new Date().getTime();
 
@@ -24,7 +26,7 @@ export function useCountdownTimer(finalTime: number, onTimeUp?: () => void, upda
         }, updateInterval);
 
         return () => clearInterval(id);
-    }, [finalTime]);
+    }
 
     // Parse currentTime to days, hours, minutes and seconds
     const days = Math.floor(currentTime / (1000 * 60 * 60 * 24));

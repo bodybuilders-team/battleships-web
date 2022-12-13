@@ -14,6 +14,8 @@ import PageContent from "../../../Shared/PageContent";
 import LoadingSpinner from "../../../Shared/LoadingSpinner";
 import {Game} from "../../../../Domain/games/game/Game";
 import FetchedEndGamePopup from "../../Shared/FetchedEndGamePopup";
+import {Problem} from "../../../../Services/media/Problem";
+import {ProblemTypes} from "../../../../Utils/types/problemTypes";
 
 /**
  * Properties for the ShootingGameplay component.
@@ -33,6 +35,10 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
     const [error, setError] = useState<string | null>(null);
     const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [myFleet, setMyFleet] = useState<Ship[]>();
+
+    useEffect(() => {
+        fetchMyFleet();
+    }, []);
 
     /**
      * Parses the fleet from the deployed ship models.
@@ -61,6 +67,10 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
         const [err, res] = await to(battleshipsService.playersService.getMyFleet());
 
         if (err) {
+            if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
+                setShowEndGamePopup(true);
+                return;
+            }
             handleError(err, setError);
             return;
         }
@@ -68,9 +78,6 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
         setMyFleet(parseFleet(res?.properties?.ships!));
     }
 
-    useEffect(() => {
-        fetchMyFleet();
-    }, []);
 
     if (myFleet)
         return (
@@ -87,8 +94,13 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
         );
     else
         return (
-            <PageContent error={error}>
-                <LoadingSpinner text={"Loading fleet..."}/>
-            </PageContent>
+            <>
+                <PageContent error={error}>
+                    <LoadingSpinner text={"Loading game state..."}/>
+                </PageContent>
+                <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
+                    handleError(err, setError);
+                }}/>
+            </>
         );
 }

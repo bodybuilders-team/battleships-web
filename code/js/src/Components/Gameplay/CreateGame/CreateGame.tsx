@@ -41,6 +41,8 @@ export default function CreateGame() {
     const [gameId, setGameId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    useInterval(checkIfOpponentHasConnected, POLLING_DELAY, [isWaitingForOpponent]);
+
     /**
      * Handles the creation of a game.
      */
@@ -78,7 +80,7 @@ export default function CreateGame() {
         createGame();
     }
 
-    useInterval(async () => {
+  async function checkIfOpponentHasConnected() {
         if (!isWaitingForOpponent)
             return true;
 
@@ -98,7 +100,8 @@ export default function CreateGame() {
         }
 
         return false;
-    }, POLLING_DELAY, [isWaitingForOpponent]);
+    }
+
 
     if (isWaitingForOpponent)
         return (

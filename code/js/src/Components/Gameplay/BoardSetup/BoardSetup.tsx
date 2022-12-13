@@ -26,6 +26,7 @@ import {CheckRounded, CycloneRounded} from "@mui/icons-material";
  *
  * @property finalTime the time in seconds that the player has to finish the board setup
  * @property boardSize the size of the board
+ * @property error the error message
  * @property ships the list of ships to be placed
  * @property onBoardReady the callback to be called when the board is ready
  * @property onLeaveGame the callback to be called when the player leaves the game
@@ -34,6 +35,7 @@ import {CheckRounded, CycloneRounded} from "@mui/icons-material";
 interface BoardSetupProps {
     finalTime: number;
     boardSize: number;
+    error: string | null;
     ships: ReadonlyMap<ShipType, number>;
     onBoardReady: (board: Board) => void;
     onLeaveGame: () => void;
@@ -43,12 +45,11 @@ interface BoardSetupProps {
 /**
  * BoardSetup component.
  */
-function BoardSetup({finalTime, boardSize, ships, onBoardReady, onLeaveGame, onTimeUp}: BoardSetupProps) {
+function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGame, onTimeUp}: BoardSetupProps) {
     const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize));
     const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships);
     const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null);
     const [leavingGame, setLeavingGame] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
 
     return (
         <Container maxWidth="lg">
@@ -168,7 +169,6 @@ function BoardSetup({finalTime, boardSize, ships, onBoardReady, onLeaveGame, onT
 
                                 setUnplacedShips(newUnplacedShips);
                                 setSelectedShipType(null);
-                                setError(null);
                             }
                         }
                     }>
