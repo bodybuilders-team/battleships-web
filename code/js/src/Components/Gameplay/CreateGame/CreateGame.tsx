@@ -17,7 +17,6 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {useInterval} from "../Shared/useInterval";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 
@@ -28,7 +27,6 @@ const POLLING_DELAY = 1000;
  */
 export default function CreateGame() {
     const navigate = useNavigate();
-    const navigationState = useNavigationState();
 
     const battleshipsService = useBattleshipsService();
 
@@ -73,7 +71,6 @@ export default function CreateGame() {
                 return;
             }
 
-
             setGameId(res.properties!.gameId);
             setWaitingForOpponent(true);
         }
@@ -96,7 +93,6 @@ export default function CreateGame() {
 
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
             setWaitingForOpponent(false);
-            ;
             navigate(`/game/${gameId}`);
             return true;
         }

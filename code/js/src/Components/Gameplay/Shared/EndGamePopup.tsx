@@ -9,8 +9,11 @@ import Avatar from "@mui/material/Avatar";
 /**
  * Properties for the EndGamePopup component.
  *
+ * @property open whether the popup is open
  * @property winningPlayer the player who won the game
  * @property cause the cause of the end of the game
+ * @property playerInfo the player info
+ * @property opponentInfo the opponent info
  */
 interface EndGamePopupProps {
     open: boolean;
@@ -67,16 +70,14 @@ export enum WinningPlayer {
  */
 function PlayerInfoCard({playerInfo: {name, avatar}}: { playerInfo: PlayerInfo }) {
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 2,
-                ml: 2
-            }}
-        >
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mr: 2,
+            ml: 2
+        }}>
             <Avatar
                 sx={{
                     width: 60,
@@ -85,15 +86,7 @@ function PlayerInfoCard({playerInfo: {name, avatar}}: { playerInfo: PlayerInfo }
                 variant={"square"}
                 src={avatar}
             />
-            <Typography
-                sx={{
-                    mt: 1,
-
-                }}
-                variant="h6"
-            >
-                {name}
-            </Typography>
+            <Typography sx={{mt: 1,}} variant="h6">{name}</Typography>
         </Box>
     );
 }
@@ -123,9 +116,7 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                     }
                 </Typography>
 
-                <Typography sx={{
-                    fontSize: "0.7rem",
-                }}>
+                <Typography sx={{fontSize: "0.7rem",}}>
                     {
                         "By " + (
                             (cause === EndGameCause.DESTRUCTION
@@ -145,7 +136,6 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                     }
                 </Typography>
 
-
                 <Box sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -164,7 +154,6 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                     width: "100%",
                     mt: 2,
                 }}>
-
                     <Button
                         size="large"
                         variant="contained"
@@ -185,7 +174,6 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                         variant="contained"
                         sx={{
                             mb: 2,
-
                             maxWidth: "70%",
                             maxHeight: "35px",
                         }}

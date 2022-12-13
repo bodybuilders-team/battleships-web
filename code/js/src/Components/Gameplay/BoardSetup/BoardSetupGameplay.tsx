@@ -18,7 +18,7 @@ import {ProblemTypes} from "../../../Utils/types/problemTypes";
  * Properties for BoardSetupGameplay component.
  *
  * @property gameConfig the game config
- * @property onBoardSetupPhaseFinished callback when the board setup phase is finished
+ * @property onFinished callback when the board setup phase is finished
  */
 interface BoardSetupGameplayProps {
     gameConfig: GameConfig;
@@ -38,7 +38,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
     const [fetchingGameState, setFetchingGameState] = useState<boolean>(true);
     const [finalTime, setFinalTime] = useState<number | null>(null);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     /**
      * Callback when the board setup phase is finished.
@@ -61,7 +61,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
             const a = err as Problem;
             if (err instanceof Problem && a.type === ProblemTypes.INVALID_PHASE) {
                 onFinished();
-                return
+                return;
             }
 
             handleError(err, setError);
@@ -114,8 +114,11 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         fetchGameState();
     }, [fetchingGameState]);
 
+    /**
+     * Callback when the user wants to leave the game.
+     */
     async function leaveGame() {
-        const [err, res] = await to(battleshipsService.gamesService.leaveGame());
+        const [err] = await to(battleshipsService.gamesService.leaveGame());
 
         if (err) {
             handleError(err, setError);
@@ -138,7 +141,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
                 <LoadingSpinner text={"Loading game state..."}/>
             </PageContent>
         );
-    else {
+    else
         return (
             <BoardSetup
                 finalTime={finalTime!}
@@ -152,5 +155,4 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
                 }}
             />
         );
-    }
 }

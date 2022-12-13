@@ -9,7 +9,6 @@ import {useBattleshipsService} from "../../../Services/NavigationBattleshipsServ
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 import GameCard from "./GameCard";
 import {useNavigate} from "react-router-dom";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {useSession} from "../../../Utils/Session";
 import Typography from "@mui/material/Typography";
@@ -19,7 +18,6 @@ import Typography from "@mui/material/Typography";
  */
 export default function Lobby() {
     const navigate = useNavigate();
-    const navigationState = useNavigationState();
 
     const battleshipsService = useBattleshipsService();
     const session = useSession();
@@ -48,7 +46,6 @@ export default function Lobby() {
                 );
 
             setGames(filteredGames);
-
             setGamesLoaded(true);
         }
 
@@ -64,7 +61,6 @@ export default function Lobby() {
                 return;
             }
 
-
             navigate(`/game/${res.properties!.gameId}`);
         }
 
@@ -76,9 +72,7 @@ export default function Lobby() {
             {
                 gamesLoaded
                     ? games?.length === 0
-                        ? <Typography variant="h5" component="div" sx={{flexGrow: 1}}>
-                            No games available
-                        </Typography>
+                        ? <Typography variant="h5" component="div" sx={{flexGrow: 1}}>No games available</Typography>
                         : games?.map(game =>
                             <GameCard key={game.properties?.id} game={game.properties!} onJoinGameRequest={() => {
                                 handleJoinGame(game.getAction(Rels.JOIN_GAME));

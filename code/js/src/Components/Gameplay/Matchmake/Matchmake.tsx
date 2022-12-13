@@ -7,7 +7,6 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {useInterval} from "../Shared/useInterval";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
@@ -18,7 +17,6 @@ const POLLING_DELAY = 1000;
  */
 export default function Matchmake() {
     const navigate = useNavigate();
-    const navigationState = useNavigationState();
 
     const battleshipsService = useBattleshipsService();
 
@@ -43,7 +41,6 @@ export default function Matchmake() {
             const gameId = res.properties!.gameId;
             setGameId(gameId);
 
-            ;
             if (!res.properties!.wasCreated) {
                 setMatchmade(true);
                 navigate(`/game/${gameId}`);
@@ -76,7 +73,6 @@ export default function Matchmake() {
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
             setMatchmade(true);
             setWaitingForOpponent(false);
-            ;
             navigate(`/game/${gameId}`);
             return true;
         }

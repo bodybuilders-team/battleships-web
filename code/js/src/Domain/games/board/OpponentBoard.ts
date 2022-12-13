@@ -50,7 +50,7 @@ export class OpponentBoard extends Board {
                     coordinates.find(
                         coordinate => coordinate.equals(cell!.coordinate)
                     ) != null
-                )?.[1]
+                )?.[1];
 
             if (sunkShip != null)
                 return new ShipCell(cell.coordinate, true, sunkShip);

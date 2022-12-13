@@ -16,7 +16,6 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import ErrorAlert from "../../Shared/ErrorAlert";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {throwError} from "../../../Services/utils/errorUtils";
 import {UsernameTextField} from "../Shared/UsernameTextField";
@@ -61,7 +60,6 @@ export default function Login() {
                     ?? throwError("User home link is undefined")
             });
 
-            ;
             navigate('/');
         }
     });

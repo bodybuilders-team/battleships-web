@@ -9,7 +9,6 @@ import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {Rels} from "../../../Utils/navigation/Rels";
 import ShootingGameplay from "./Shooting/ShootingGameplay";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import BoardSetupGameplay from "../BoardSetup/BoardSetupGameplay";
 import {Game} from "../../../Domain/games/game/Game";
 import EndGamePopup, {EndGameCause, WinningPlayer} from "../Shared/EndGamePopup";
@@ -21,7 +20,7 @@ import Box from "@mui/material/Box";
  */
 export default function Gameplay() {
     const navigate = useNavigate();
-    const session = useSession()
+    const session = useSession();
     const battleshipsService = useBattleshipsService();
 
     const [lastGamePhase, setLastGamePhase] = useState<string | null>(null);

@@ -3,10 +3,8 @@ import {useEffect} from 'react';
 import './App.css';
 import NavBar from "./Layouts/NavBar";
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {useNavigationState} from "./Utils/navigation/NavigationState";
 import {useBattleshipsService} from "./Services/NavigationBattleshipsService";
 import {useLoggedIn} from "./Utils/Session";
-import EndGamePopup, {EndGameCause, WinningPlayer} from "./Components/Gameplay/Shared/EndGamePopup";
 import Home from './Components/Home/Home';
 import Login from "./Components/Authentication/Login/Login";
 import Register from "./Components/Authentication/Register/Register";
@@ -23,18 +21,16 @@ import About from "./Components/About/About";
  * App component.
  */
 export default function App() {
-    const navigationState = useNavigationState();
     const loggedIn = useLoggedIn();
     const battleshipsService = useBattleshipsService();
 
     useEffect(() => {
         async function getHome() {
             await battleshipsService.getHome();
-            ;
         }
 
         getHome();
-    }, [])
+    }, []);
 
 
     /**

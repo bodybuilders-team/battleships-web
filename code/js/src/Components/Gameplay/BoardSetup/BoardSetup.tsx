@@ -28,6 +28,8 @@ import {CheckRounded, CycloneRounded} from "@mui/icons-material";
  * @property boardSize the size of the board
  * @property ships the list of ships to be placed
  * @property onBoardReady the callback to be called when the board is ready
+ * @property onLeaveGame the callback to be called when the player leaves the game
+ * @property onTimeUp the callback to be called when the time is up
  */
 interface BoardSetupProps {
     finalTime: number;

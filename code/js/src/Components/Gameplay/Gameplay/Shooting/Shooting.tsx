@@ -28,6 +28,8 @@ import {useNavigate} from "react-router-dom";
  *
  * @property game the game to play
  * @property myFleet the fleet of the player
+ * @property onFinished the callback to call when the game is finished
+ * @property onTimeUp the callback to call when the time is up
  */
 interface ShootingProps {
     game: Game;
@@ -57,8 +59,11 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
             setCanFireShots(true);
     }, [shootingState.myTurn]);
 
+    /**
+     * Callback to call when the player wants to leave the game.
+     */
     async function leaveGame() {
-        const [err, res] = await to(battleshipsService.gamesService.leaveGame());
+        const [err] = await to(battleshipsService.gamesService.leaveGame());
 
         if (err) {
             handleError(err, setError);
@@ -90,8 +95,8 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                     <CountdownTimer
                         finalTime={shootingState.gameState.phaseEndTime}
                         onTimeUp={() => {
-                            setCanFireShots(false)
-                            onTimeUp()
+                            setCanFireShots(false);
+                            onTimeUp();
                         }}
                     />
                     <RoundView round={shootingState.gameState.round!}/>
@@ -101,7 +106,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                     open={leavingGame}
                     onLeave={() => {
                         setLeavingGame(false);
-                        leaveGame()
+                        leaveGame();
                     }}
                     onStay={() => setLeavingGame(false)}
                 />
@@ -121,56 +126,8 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                         <Typography variant="h5" sx={{textAlign: "center", mb: "5px"}}>My Board</Typography>
                         <BoardView board={shootingState.myBoard} enabled={!shootingState.myTurn}>
                             {shootingState.myBoard.fleet.map((ship, index) => {
-                                return <Box sx={{
-                                    position: 'absolute',
-                                    top: (ship.coordinate.row) * tileSize,
-                                    left: (ship.coordinate.col) * tileSize,
-                                }}>
-                                    <ShipView
-                                        type={ship.type}
-                                        orientation={ship.orientation}
-                                        key={ship.type.shipName + index}
-                                    />
-                                </Box>
-                            })}
-                            {shootingState.myBoard.grid.map((cell) => {
-                                if (cell.wasHit)
-                                    return <Box sx={{
-                                        position: 'absolute',
-                                        top: (cell.coordinate.row) * tileSize,
-                                        left: (cell.coordinate.col) * tileSize,
-                                    }}>
-                                        <TileHitView
-                                            hitShip={cell instanceof ShipCell || cell instanceof UnknownShipCell}/>
-                                    </Box>
-                                else
-                                    return null
-                            })}
-                        </BoardView>
-
-                    </Box>
-                    <Box sx={{
-                        display: 'flex',
-                        alignSelf: 'flex-start',
-                        flexDirection: 'column'
-                    }}>
-                        <Typography variant="h5" sx={{textAlign: "center", mb: "5px"}}>Opponent Board</Typography>
-                        <BoardView board={shootingState.opponentBoard} enabled={shootingState.myTurn} onTileClicked={
-                            (coordinate) => {
-                                if (!canFireShots || shootingState.opponentBoard.getCell(coordinate).wasHit)
-                                    return;
-
-                                if (selectedCells.find(c => c.equals(coordinate)) !== undefined)
-                                    setSelectedCells(selectedCells.filter(c => !c.equals(coordinate)));
-                                else if (selectedCells.length < game.config.shotsPerRound)
-                                    setSelectedCells([...selectedCells, coordinate]);
-                                else if (game.config.shotsPerRound == 1)
-                                    setSelectedCells([coordinate]);
-                            }
-                        }>
-                            {
-                                shootingState.opponentBoard.fleet.map((ship, index) => {
-                                    return <Box sx={{
+                                return (
+                                    <Box sx={{
                                         position: 'absolute',
                                         top: (ship.coordinate.row) * tileSize,
                                         left: (ship.coordinate.col) * tileSize,
@@ -181,19 +138,78 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                             key={ship.type.shipName + index}
                                         />
                                     </Box>
+                                );
+                            })}
+                            {
+                                shootingState.myBoard.grid.map((cell) => {
+                                    if (cell.wasHit)
+                                        return <Box sx={{
+                                            position: 'absolute',
+                                            top: (cell.coordinate.row) * tileSize,
+                                            left: (cell.coordinate.col) * tileSize,
+                                        }}>
+                                            <TileHitView
+                                                hitShip={cell instanceof ShipCell || cell instanceof UnknownShipCell}/>
+                                        </Box>
+                                    else
+                                        return null
+                                })
+                            }
+                        </BoardView>
+
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        alignSelf: 'flex-start',
+                        flexDirection: 'column'
+                    }}>
+                        <Typography variant="h5" sx={{textAlign: "center", mb: "5px"}}>Opponent Board</Typography>
+                        <BoardView
+                            board={shootingState.opponentBoard}
+                            enabled={shootingState.myTurn}
+                            onTileClicked={
+                                (coordinate) => {
+                                    if (!canFireShots || shootingState.opponentBoard.getCell(coordinate).wasHit)
+                                        return;
+
+                                    if (selectedCells.find(c => c.equals(coordinate)) !== undefined)
+                                        setSelectedCells(selectedCells.filter(c => !c.equals(coordinate)));
+                                    else if (selectedCells.length < game.config.shotsPerRound)
+                                        setSelectedCells([...selectedCells, coordinate]);
+                                    else if (game.config.shotsPerRound == 1)
+                                        setSelectedCells([coordinate]);
+                                }
+                            }>
+                            {
+                                shootingState.opponentBoard.fleet.map((ship, index) => {
+                                    return (
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: (ship.coordinate.row) * tileSize,
+                                            left: (ship.coordinate.col) * tileSize,
+                                        }}>
+                                            <ShipView
+                                                type={ship.type}
+                                                orientation={ship.orientation}
+                                                key={ship.type.shipName + index}
+                                            />
+                                        </Box>
+                                    );
                                 })
                             }
                             {
                                 selectedCells.map((coordinate) => {
-                                    return <Box sx={{
-                                        position: 'absolute',
-                                        top: (coordinate.row) * tileSize,
-                                        left: (coordinate.col) * tileSize,
-                                        width: tileSize,
-                                        height: tileSize,
-                                        border: '4px solid green',
-                                        pointerEvents: "none",
-                                    }}/>;
+                                    return (
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: (coordinate.row) * tileSize,
+                                            left: (coordinate.col) * tileSize,
+                                            width: tileSize,
+                                            height: tileSize,
+                                            border: '4px solid green',
+                                            pointerEvents: "none",
+                                        }}/>
+                                    );
                                 })
                             }
                             {

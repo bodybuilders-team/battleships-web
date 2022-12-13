@@ -23,14 +23,12 @@ export default function PageContent({title, error, children}: PageContentProps) 
     return (
         <Container maxWidth="xs">
             <h1>{title}</h1>
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
+            <Box sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}>
                 <ErrorAlert error={error ?? null}/>
                 {children}
             </Box>

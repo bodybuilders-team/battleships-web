@@ -20,7 +20,13 @@ export class Game {
         this.players = gameModel.players.map(player => new Player(player));
     }
 
-    static toGameModel(game: Game): GetGameOutputModel {
+    /**
+     * Converts a Game to a GetGameOutputModel.
+     *
+     * @param game the game to convert
+     * @return the GetGameOutputModel
+     */
+    static toGetGameOutputModel(game: Game): GetGameOutputModel {
         return {
             id: game.id,
             name: game.name,
@@ -34,14 +40,26 @@ export class Game {
                 winner: game.state.winner
             },
             players: game.players.map(player => player.toPlayerModel())
-        }
+        };
     }
 
+    /**
+     * Returns the player that is playing the game.
+     *
+     * @param username the username of the player
+     *
+     * @return the player that is playing the game or undefined if the player is not playing the game
+     */
     getPlayer(username: string): Player | undefined {
         return this.players.find(player => player.username === username);
     }
 
-    getOpponent(username: string): Player | undefined {
-        return this.players.find(player => player.username !== this.creator)
+    /**
+     * Returns the opponent of the player that is playing the game.
+     *
+     * @return the opponent of the player that is playing the game or undefined if the player is not playing the game
+     */
+    getOpponent(): Player | undefined {
+        return this.players.find(player => player.username !== this.creator);
     }
 }
