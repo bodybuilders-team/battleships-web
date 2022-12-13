@@ -1,7 +1,3 @@
-Project structure:
-- Improve frontend structure: maybe separate Components and Pages?
-- Clean up frontend code
-
 Documentation:
 - Review and improve backend documentation
 - Review and improve frontend documentation
@@ -9,13 +5,12 @@ Documentation:
 
 Backend:
 - Implement blacklist of tokens
+- Improve getGames
 
 Frontend:
-- EndGamePopup
-- Profile (maybe game history)
 - Retry on api error
+- Improve getGames and getUsers
 
 Random or Never Ending Tasks:
 - Add more tests
 - Implement private games
-- Profile pics and other user data

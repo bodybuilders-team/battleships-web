@@ -30,6 +30,9 @@ export default function Lobby() {
         fetchGames()
     }, []);
 
+    /**
+     * Fetches the games.
+     */
     async function fetchGames() {
         if (gamesLoaded)
             return;
@@ -52,6 +55,11 @@ export default function Lobby() {
         setGamesLoaded(true);
     }
 
+    /**
+     * Handles the join game button click.
+     *
+     * @param joinGameLink the link to join the game
+     */
     async function handleJoinGame(joinGameLink: string) {
         const [err, res] = await to(battleshipsService.gamesService.joinGame(joinGameLink));
 

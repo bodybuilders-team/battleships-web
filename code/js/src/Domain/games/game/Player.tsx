@@ -22,6 +22,6 @@ export class Player {
         return {
             username: this.username,
             points: this.points
-        }
+        };
     }
 }

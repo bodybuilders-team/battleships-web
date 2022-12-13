@@ -6,9 +6,9 @@ import {useState} from "react";
 import {GameState} from "../../../../Domain/games/game/GameState";
 import {MyBoard} from "../../../../Domain/games/board/MyBoard";
 import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard";
-import {useInterval} from "../../Shared/useInterval";
+import {useInterval} from "../../Shared/TimersHooks/useInterval";
 import to from "../../../../Utils/await-to";
-import {useTimeout} from "../../Shared/useTimeout";
+import {useTimeout} from "../../Shared/TimersHooks/useTimeout";
 import {Coordinate} from "../../../../Domain/games/Coordinate";
 import {throwError} from "../../../../Services/utils/errorUtils";
 import {FiredShot} from "../../../../Domain/games/shot/FiredShot";
@@ -41,6 +41,9 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
     useInterval(checkIfOpponentHasFinishedHisTurn, POLLING_DELAY, [myTurn]);
     useTimeout(switchTurn, TURN_SWITCH_DELAY, [switchTurnWithDelay]);
 
+    /**
+     * Checks if the opponent has finished his turn.
+     */
     async function checkIfOpponentHasFinishedHisTurn() {
         if (myTurn)
             return true;
@@ -74,6 +77,9 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
         return false;
     }
 
+    /**
+     * Switches the turn.
+     */
     function switchTurn() {
         if (!switchTurnWithDelay)
             return;
@@ -130,5 +136,8 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
         }) ?? throwError("No shots found");
     }
 
-    return {shootingState: {gameState, myBoard, opponentBoard, finished, myTurn}, fire};
+    return {
+        shootingState: {gameState, myBoard, opponentBoard, finished, myTurn},
+        fire
+    };
 }

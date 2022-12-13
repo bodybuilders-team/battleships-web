@@ -48,7 +48,6 @@ export class Game {
      * Returns the player that is playing the game.
      *
      * @param username the username of the player
-     *
      * @return the player that is playing the game or undefined if the player is not playing the game
      */
     getPlayer(username: string): Player | undefined {
@@ -58,6 +57,7 @@ export class Game {
     /**
      * Returns the opponent of the player that is playing the game.
      *
+     * @param username the username of the player
      * @return the opponent of the player that is playing the game or undefined if the player is not playing the game
      */
     getOpponent(username: string): Player | undefined {

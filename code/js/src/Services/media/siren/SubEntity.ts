@@ -18,11 +18,11 @@ export type SubEntity<T> = EmbeddedSubEntity<T> | EmbeddedLink;
  * @property title the title of the link (optional)
  */
 export interface IEmbeddedLink {
-    class?: string[]
-    rel: string[]
-    href: string
-    type?: string
-    title?: string
+    class?: string[];
+    rel: string[];
+    href: string;
+    type?: string;
+    title?: string;
 }
 
 /**
@@ -35,11 +35,11 @@ export interface IEmbeddedLink {
  * @property title the title of the link (optional)
  */
 export class EmbeddedLink implements IEmbeddedLink {
-    class?: string[]
-    rel: string[]
-    href: string
-    type?: string
-    title?: string
+    class?: string[];
+    rel: string[];
+    href: string;
+    type?: string;
+    title?: string;
 
     constructor(link: IEmbeddedLink) {
         this.class = link.class;
@@ -63,12 +63,12 @@ export class EmbeddedLink implements IEmbeddedLink {
  * @property links the links to other entities (optional)
  */
 export interface IEmbeddedSubEntity<T> {
-    class?: string[]
-    rel: string[]
-    properties?: T
-    entities?: SubEntity<any>[]
-    actions?: Action[]
-    links?: Link[]
+    class?: string[];
+    rel: string[];
+    properties?: T;
+    entities?: SubEntity<any>[];
+    actions?: Action[];
+    links?: Link[];
 }
 
 /**
@@ -84,12 +84,12 @@ export interface IEmbeddedSubEntity<T> {
  * @property links the links to other entities (optional)
  */
 export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
-    class?: string[]
-    rel: string[]
-    properties?: T
-    entities?: SubEntity<any>[]
-    actions?: Action[]
-    links?: Link[]
+    class?: string[];
+    rel: string[];
+    properties?: T;
+    entities?: SubEntity<any>[];
+    actions?: Action[];
+    links?: Link[];
 
     constructor(entity: IEmbeddedSubEntity<T>) {
         this.class = entity.class;
@@ -100,38 +100,71 @@ export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
         this.actions = entity.actions;
     }
 
-    getActionLinks(): Map<string, string> {
-        const map = new Map<string, string>();
-
-        this.actions?.forEach(action => {
-            map.set(action.name, action.href);
-        })
-
-        return map;
-    }
-
-    getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
-        return this.entities?.filter(entity => !Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedSubEntity<T>(entity as IEmbeddedSubEntity<T>)) ?? [];
-    }
-
-    getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
-        const embeddedLinks = this.entities?.filter(entity => Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? [];
-
-        return embeddedLinks
-            .filter(link => rels.every((rel) => link.rel.includes(rel)));
-    }
-
+    /**
+     * Gets the link with the given [rels] from [links].
+     *
+     * @param rels the relations of the link
+     * @return the link with the given [rels]
+     */
     getLink(...rels: string[]): string {
         return this.links
             ?.find(link => rels.every((rel) => link.rel.includes(rel)))
             ?.href ?? throwError("Link not found");
     }
 
-    getAction(...names: string[]): string {
+    /**
+     * Gets the action with the given [name] from [actions].
+     *
+     * @param name the name of the action
+     * @return the action with the given [name]
+     */
+    getAction(name: string): string {
         return this.actions
-            ?.find(action => names.every((name) => action.name.includes(name)))
+            ?.find(action => action.name === name)
             ?.href ?? throwError("Action not found");
+    }
+
+    /**
+     * Gets the links from the actions in a map where the key is the action name and the value is the action link.
+     *
+     * @return the links from the actions in a map
+     */
+    getActionLinks(): Map<string, string> {
+        const map = new Map<string, string>();
+
+        this.actions?.forEach(action => {
+            map.set(action.name, action.href);
+        });
+
+        return map;
+    }
+
+    /**
+     * Gets the embedded sub entities with the given [rels] from [entities],
+     * appropriately casting to EmbeddedSubEntity of [T].
+     *
+     * @return the embedded sub entities with the given [rels]
+     */
+    getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
+        return this.entities
+            ?.filter(entity => !Object.keys(entity).includes("href"))
+            .map(entity => new EmbeddedSubEntity<T>(entity as IEmbeddedSubEntity<T>)) ?? [];
+    }
+
+    /**
+     * Gets the embedded links with the given [rels] from [entities],
+     * appropriately casting to EmbeddedLink.
+     *
+     * @param rels the relations of the embedded links
+     *
+     * @return the embedded links with the given [rels]
+     */
+    getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
+        const embeddedLinks = this.entities
+            ?.filter(entity => Object.keys(entity).includes("href"))
+            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? [];
+
+        return embeddedLinks
+            .filter(link => rels.every((rel) => link.rel.includes(rel)));
     }
 }

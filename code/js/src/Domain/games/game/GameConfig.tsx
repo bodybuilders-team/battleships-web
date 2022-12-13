@@ -39,17 +39,33 @@ export class GameConfig {
         };
     }
 
-    static shipTypesModelToMap(shipTypes: ShipTypeModel[]) {
+    /**
+     * Converts a list of ShipTypeModels to a map of ShipTypes and quantities.
+     *
+     * @param shipTypes the list of ShipTypeModels
+     * @returns the map of ShipTypes and quantities
+     */
+    static shipTypesModelToMap(shipTypes: ShipTypeModel[]): Map<ShipType, number> {
         const map = new Map<ShipType, number>();
+
         shipTypes.forEach(shipType => map.set(shipType, shipType.quantity));
+
         return map;
     }
 
-    static mapToShipTypesModel(shipTypes: ReadonlyMap<ShipType, number>) {
+    /**
+     * Converts a map of ShipTypes and quantities to a list of ShipTypeModels.
+     *
+     * @param shipTypes the map of ShipTypes and quantities
+     * @returns the list of ShipTypeModels
+     */
+    static mapToShipTypesModel(shipTypes: ReadonlyMap<ShipType, number>): ShipTypeModel[] {
         const shipTypesModel: ShipTypeModel[] = [];
+
         shipTypes.forEach((quantity, shipType) => {
             shipTypesModel.push({...shipType, quantity});
         });
+
         return shipTypesModel;
     }
 }

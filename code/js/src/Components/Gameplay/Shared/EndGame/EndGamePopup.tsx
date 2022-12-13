@@ -5,6 +5,9 @@ import {HomeRounded, RefreshRounded} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
+import {Uris} from "../../../../Utils/navigation/Uris";
+import HOME = Uris.HOME;
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**
  * Properties for the EndGamePopup component.
@@ -24,7 +27,7 @@ interface EndGamePopupProps {
 }
 
 /**
- * Player info
+ * Player info.
  *
  * @property name the name of the player
  * @property points the points of the player
@@ -109,9 +112,9 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                 <Typography variant="h5">
                     {
                         (
-                            winningPlayer === WinningPlayer.NONE ?
-                                "Game Aborted" :
-                                winningPlayer === WinningPlayer.YOU
+                            winningPlayer === WinningPlayer.NONE
+                                ? "Game Aborted"
+                                : winningPlayer === WinningPlayer.YOU
                                     ? "You won!"
                                     : "You lost!"
                         )
@@ -166,7 +169,7 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                         }}
                         startIcon={<HomeRounded/>}
                         color="primary"
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate(HOME)}
                     >
                         Home
                     </Button>
@@ -181,7 +184,7 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                         }}
                         startIcon={<RefreshRounded/>}
                         color="primary"
-                        onClick={() => navigate("/gameplay-menu")}
+                        onClick={() => navigate(GAMEPLAY_MENU)}
                     >
                         Play Again
                     </Button>

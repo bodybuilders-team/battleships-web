@@ -71,8 +71,8 @@ export function isValidShipCoordinate(
 ): boolean {
     const col = coordinate.col;
     const row = coordinate.row;
-    const maxShipCol = (coordinate.col + size - 1)
-    const maxShipRow = (coordinate.row + size - 1)
+    const maxShipCol = (coordinate.col + size - 1);
+    const maxShipRow = (coordinate.row + size - 1);
 
     return (
         orientation === Orientation.HORIZONTAL &&

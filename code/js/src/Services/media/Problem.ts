@@ -10,14 +10,14 @@
  * @see <a href="https://tools.ietf.org/html/rfc7807">Problem Details for HTTP APIs</a>
  */
 export interface Problem {
-    type: string
-    title: string
-    status: number
-    detail?: string
-    instance?: string
+    type: string;
+    title: string;
+    status: number;
+    detail?: string;
+    instance?: string;
     properties?: {
-        [key: string]: string
-    }
+        [key: string]: string;
+    };
 }
 
 /**

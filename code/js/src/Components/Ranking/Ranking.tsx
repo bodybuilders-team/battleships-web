@@ -18,8 +18,11 @@ export default function Ranking() {
 
     useEffect(() => {
         fetchRanking();
-    }, [])
+    }, []);
 
+    /**
+     * Fetches the ranking.
+     */
     async function fetchRanking() {
         const [err, res] = await to(battleshipsService.usersService.getUsers());
 

@@ -10,7 +10,7 @@ export interface User {
     username: string;
     email: string;
     points: number;
-    numberOfGamesPlayed: number
+    numberOfGamesPlayed: number;
 }
 
 export class User {

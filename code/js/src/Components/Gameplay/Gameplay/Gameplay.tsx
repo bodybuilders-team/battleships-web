@@ -11,15 +11,15 @@ import {Rels} from "../../../Utils/navigation/Rels";
 import ShootingGameplay from "./Shooting/ShootingGameplay";
 import BoardSetupGameplay from "../BoardSetup/BoardSetupGameplay";
 import {Game} from "../../../Domain/games/game/Game";
-import EndGamePopup, {EndGameCause, WinningPlayer} from "../Shared/EndGamePopup";
-import {useSession} from "../../../Utils/Session";
+import GameFinished from "../Shared/EndGame/GameFinished";
+import {Uris} from "../../../Utils/navigation/Uris";
+import HOME = Uris.HOME;
 
 /**
  * Gameplay component.
  */
 export default function Gameplay() {
     const navigate = useNavigate();
-    const session = useSession();
     const battleshipsService = useBattleshipsService();
 
     const [game, setGame] = useState<Game | null>(null);
@@ -29,9 +29,12 @@ export default function Gameplay() {
         fetchGame();
     }, []);
 
+    /**
+     * Fetches the game.
+     */
     async function fetchGame() {
         if (!battleshipsService.links.get(Rels.GAME)) {
-            navigate("/");
+            navigate(HOME);
             return;
         }
 
@@ -56,45 +59,14 @@ export default function Gameplay() {
         return (
             <BoardSetupGameplay
                 gameConfig={game!.config}
-                onFinished={() => {
-                    fetchGame()
-                }}
+                onFinished={fetchGame}
             />
         );
     else if (game?.state.phase === "IN_PROGRESS")
         return <ShootingGameplay game={game!}/>;
-    else if (game?.state.phase === "FINISHED") {
-        const username = session!.username
-
-        const player = game.getPlayer(username)!
-        const opponent = game.getOpponent(username)!
-
-        return <EndGamePopup
-            open={game?.state.phase === "FINISHED"}
-            winningPlayer={
-                game.state.winner == null ? WinningPlayer.NONE :
-                    game.state.winner === session?.username!
-                        ? WinningPlayer.YOU : WinningPlayer.OPPONENT
-            } cause={(() => {
-            switch (game.state.endCause) {
-                case "DESTRUCTION":
-                    return EndGameCause.DESTRUCTION
-                case "TIMEOUT":
-                    return EndGameCause.TIMEOUT
-                default:
-                    return EndGameCause.RESIGNATION
-            }
-        })()}
-            playerInfo={{
-                name: player.username,
-                points: player.points
-            }}
-            opponentInfo={{
-                name: opponent.username,
-                points: opponent.points
-            }}
-        />
-    } else
+    else if (game?.state.phase === "FINISHED")
+        return <GameFinished game={game}/>;
+    else
         return (
             <PageContent error={error}>
                 <LoadingSpinner text={"Loading game..."}/>

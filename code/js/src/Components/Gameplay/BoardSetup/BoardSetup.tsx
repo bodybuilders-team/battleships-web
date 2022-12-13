@@ -17,8 +17,8 @@ import ErrorAlert from "../../Shared/ErrorAlert";
 import useConfigurableBoard from "./useConfigurableBoard";
 import {tileSize} from "../Shared/Board/Tile";
 import {CountdownTimer} from "../Shared/CountdownTimer/CountdownTimer";
-import LeaveGameAlert from "../Shared/LeaveGameAlert";
-import LeaveGameButton from "../Shared/LeaveGameButton";
+import LeaveGameAlert from "../Shared/LeaveGame/LeaveGameAlert";
+import LeaveGameButton from "../Shared/LeaveGame/LeaveGameButton";
 import {CheckRounded, CycloneRounded} from "@mui/icons-material";
 
 /**
@@ -64,7 +64,6 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                 open={leavingGame}
                 onLeave={() => {
                     setLeavingGame(false);
-                    // TODO: leave game
                     onLeaveGame();
                 }}
                 onStay={() => setLeavingGame(false)}
@@ -172,35 +171,37 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                             }
                         }
                     }>
-                        {board.fleet.map((ship, index) => {
-                            return <Box key={ship.type.shipName} sx={{
-                                position: 'absolute',
-                                top: (ship.coordinate.row) * tileSize,
-                                left: (ship.coordinate.col) * tileSize,
-                            }}>
-                                <ShipView
-                                    type={ship.type}
-                                    orientation={ship.orientation}
-                                    key={ship.type.shipName + index}
-                                    onClick={() => {
-                                        if (!isValidShipCoordinate(
-                                            ship.coordinate, Orientation.opposite(ship.orientation),
-                                            ship.type.size, board.size)
-                                        )
-                                            return;
+                        {
+                            board.fleet.map((ship, index) => {
+                                return <Box key={ship.type.shipName} sx={{
+                                    position: 'absolute',
+                                    top: (ship.coordinate.row) * tileSize,
+                                    left: (ship.coordinate.col) * tileSize,
+                                }}>
+                                    <ShipView
+                                        type={ship.type}
+                                        orientation={ship.orientation}
+                                        key={ship.type.shipName + index}
+                                        onClick={() => {
+                                            if (!isValidShipCoordinate(
+                                                ship.coordinate, Orientation.opposite(ship.orientation),
+                                                ship.type.size, board.size)
+                                            )
+                                                return;
 
-                                        // Change orientation of this ship
-                                        const newShip = new Ship(ship.type,
-                                            ship.coordinate,
-                                            Orientation.opposite(ship.orientation)
-                                        );
+                                            // Change orientation of this ship
+                                            const newShip = new Ship(ship.type,
+                                                ship.coordinate,
+                                                Orientation.opposite(ship.orientation)
+                                            );
 
-                                        if (board.removeShip(ship).canPlaceShip(newShip))
-                                            setBoard(board.removeShip(ship).placeShip(newShip));
-                                    }}
-                                />
-                            </Box>
-                        })}
+                                            if (board.removeShip(ship).canPlaceShip(newShip))
+                                                setBoard(board.removeShip(ship).placeShip(newShip));
+                                        }}
+                                    />
+                                </Box>
+                            })
+                        }
                     </BoardView>
                 </Grid>
             </Grid>

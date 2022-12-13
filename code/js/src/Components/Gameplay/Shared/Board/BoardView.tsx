@@ -34,34 +34,36 @@ export default function BoardView({board, enabled, onTileClicked, children}: Boa
                 opacity: enabled ? 1 : 0.5
             }}>
             <Grid container columns={board.size + 1}>
-                {Array.from(Array((board.size + 1) * (board.size + 1)).keys()).map((tileIndex) => {
-                        const col = tileIndex % (board.size + 1);
-                        const row = Math.floor(tileIndex / (board.size + 1));
+                {
+                    Array.from(Array((board.size + 1) * (board.size + 1)).keys()).map((tileIndex) => {
+                            const col = tileIndex % (board.size + 1);
+                            const row = Math.floor(tileIndex / (board.size + 1));
 
-                        return <Grid item key={tileIndex} xs={1} sm={1} md={1}>
-                            {
-                                tileIndex == 0
-                                    ? <Box sx={{width: tileSize, height: tileSize}}/>
-                                    : (
-                                        tileIndex <= board.size
-                                            ? <Box sx={{width: tileSize, height: tileSize}}>
-                                                {String.fromCharCode(64 + tileIndex)}
-                                            </Box>
-                                            : (
-                                                col === 0
-                                                    ? <Box sx={{width: tileSize, height: tileSize}}>
-                                                        {row}
-                                                    </Box>
-                                                    : <Tile onClick={() => {
-                                                        if (onTileClicked)
-                                                            onTileClicked(new Coordinate(col, row));
-                                                    }}/>
-                                            )
-                                    )
-                            }
-                        </Grid>
-                    }
-                )}
+                            return <Grid item key={tileIndex} xs={1} sm={1} md={1}>
+                                {
+                                    tileIndex == 0
+                                        ? <Box sx={{width: tileSize, height: tileSize}}/>
+                                        : (
+                                            tileIndex <= board.size
+                                                ? <Box sx={{width: tileSize, height: tileSize}}>
+                                                    {String.fromCharCode(64 + tileIndex)}
+                                                </Box>
+                                                : (
+                                                    col === 0
+                                                        ? <Box sx={{width: tileSize, height: tileSize}}>
+                                                            {row}
+                                                        </Box>
+                                                        : <Tile onClick={() => {
+                                                            if (onTileClicked)
+                                                                onTileClicked(new Coordinate(col, row));
+                                                        }}/>
+                                                )
+                                        )
+                                }
+                            </Grid>
+                        }
+                    )
+                }
             </Grid>
             {children}
         </Box>

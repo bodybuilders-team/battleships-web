@@ -10,6 +10,9 @@ import {useEffect} from "react";
 export function useTimeout(callback: () => void, delay: number, dependencies: any[]) {
     useEffect(activateTimeout, dependencies);
 
+    /**
+     * Activates the timeout.
+     */
     function activateTimeout() {
         const timeoutId = setTimeout(callback, delay);
 

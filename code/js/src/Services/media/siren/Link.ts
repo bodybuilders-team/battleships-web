@@ -8,11 +8,11 @@
  * @property type the media type of the link (optional)
  */
 export interface ILink {
-    rel: string[]
-    class?: string[]
-    href: string
-    title?: string
-    type?: string
+    rel: string[];
+    class?: string[];
+    href: string;
+    title?: string;
+    type?: string;
 }
 
 /**
@@ -25,11 +25,11 @@ export interface ILink {
  * @property type the media type of the link (optional)
  */
 export class Link implements ILink {
-    rel: string[]
-    class?: string[]
-    href: string
-    title?: string
-    type?: string
+    rel: string[];
+    class?: string[];
+    href: string;
+    title?: string;
+    type?: string;
 
     constructor(link: ILink) {
         this.rel = link.rel;

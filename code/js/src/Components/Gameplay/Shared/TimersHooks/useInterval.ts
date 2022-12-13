@@ -10,6 +10,9 @@ import {useEffect} from "react";
 export function useInterval(callback: () => Promise<boolean> | boolean | void, delay: number, dependencies?: any[]) {
     useEffect(activateInterval, dependencies);
 
+    /**
+     * Activates the interval.
+     */
     function activateInterval() {
         let cancelled = false;
         let timeoutId: NodeJS.Timeout | undefined = undefined;

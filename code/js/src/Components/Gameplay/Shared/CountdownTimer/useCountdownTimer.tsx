@@ -13,6 +13,9 @@ export function useCountdownTimer(finalTime: number, onTimeUp?: () => void, upda
 
     useEffect(activateCountdown, [finalTime]);
 
+    /**
+     * Activates the countdown.
+     */
     function activateCountdown() {
         const id = setInterval(() => {
             const newTime = finalTimeDate - new Date().getTime();

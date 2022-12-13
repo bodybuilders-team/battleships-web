@@ -16,6 +16,18 @@ import Matchmake from "./Components/Gameplay/Matchmake/Matchmake";
 import CreateGame from "./Components/Gameplay/CreateGame/CreateGame";
 import Lobby from "./Components/Gameplay/Lobby/Lobby";
 import About from "./Components/About/About";
+import {Uris} from "./Utils/navigation/Uris";
+import HOME = Uris.HOME;
+import LOGIN = Uris.LOGIN;
+import REGISTER = Uris.REGISTER;
+import PROFILE = Uris.PROFILE;
+import RANKING = Uris.RANKING;
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
+import GAME = Uris.GAME;
+import MATCHMAKE = Uris.MATCHMAKE;
+import CREATE_GAME = Uris.CREATE_GAME;
+import LOBBY = Uris.LOBBY;
+import ABOUT = Uris.ABOUT;
 
 /**
  * App component.
@@ -25,12 +37,15 @@ export default function App() {
     const battleshipsService = useBattleshipsService();
 
     useEffect(() => {
-        async function getHome() {
-            await battleshipsService.getHome();
-        }
-
         getHome();
     }, []);
+
+    /**
+     * Fetches the home page.
+     */
+    async function getHome() {
+        await battleshipsService.getHome();
+    }
 
 
     /**
@@ -40,7 +55,7 @@ export default function App() {
      */
     function ProtectedRoute({children}: { children: React.ReactElement }) {
         if (!loggedIn)
-            return <Navigate to="/login" replace/>;
+            return <Navigate to={LOGIN} replace/>;
 
         return children;
     }
@@ -53,7 +68,7 @@ export default function App() {
      */
     function PublicRoute({children}: { children: React.ReactElement }) {
         if (loggedIn)
-            return <Navigate to="/profile" replace/>;
+            return <Navigate to={PROFILE} replace/>;
 
         return children;
     }
@@ -64,21 +79,21 @@ export default function App() {
 
             <div className="App-content">
                 <Routes>
-                    <Route path="/" element={<Home/>}/>
+                    <Route path={HOME} element={<Home/>}/>
 
-                    <Route path="/login" element={<PublicRoute><Login/></PublicRoute>}/>
-                    <Route path="/register" element={<PublicRoute><Register/></PublicRoute>}/>
-                    <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
+                    <Route path={LOGIN} element={<PublicRoute><Login/></PublicRoute>}/>
+                    <Route path={REGISTER} element={<PublicRoute><Register/></PublicRoute>}/>
+                    <Route path={PROFILE} element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
 
-                    <Route path="/ranking" element={<Ranking/>}/>
+                    <Route path={RANKING} element={<Ranking/>}/>
 
-                    <Route path="/gameplay-menu" element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>
-                    <Route path="/game/:id" element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
-                    <Route path="/matchmake" element={<ProtectedRoute><Matchmake/></ProtectedRoute>}/>
-                    <Route path="/create-game" element={<ProtectedRoute><CreateGame/></ProtectedRoute>}/>
-                    <Route path="/lobby" element={<ProtectedRoute><Lobby/></ProtectedRoute>}/>
+                    <Route path={GAMEPLAY_MENU} element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>
+                    <Route path={GAME} element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
+                    <Route path={MATCHMAKE} element={<ProtectedRoute><Matchmake/></ProtectedRoute>}/>
+                    <Route path={CREATE_GAME} element={<ProtectedRoute><CreateGame/></ProtectedRoute>}/>
+                    <Route path={LOBBY} element={<ProtectedRoute><Lobby/></ProtectedRoute>}/>
 
-                    <Route path="/about" element={<About/>}/>
+                    <Route path={ABOUT} element={<About/>}/>
                 </Routes>
             </div>
 

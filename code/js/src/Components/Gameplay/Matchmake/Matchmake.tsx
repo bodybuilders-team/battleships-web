@@ -7,7 +7,7 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useInterval} from "../Shared/useInterval";
+import {useInterval} from "../Shared/TimersHooks/useInterval";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
 const POLLING_DELAY = 1000;
@@ -25,11 +25,14 @@ export default function Matchmake() {
     const [gameId, setGameId] = useState<number | null>(null);
 
     useEffect(() => {
-        matchmake()
+        matchmake();
     }, []);
 
     useInterval(checkIfOpponentJoined, POLLING_DELAY, [isWaitingForOpponent]);
 
+    /**
+     * Matchmakes the player.
+     */
     async function matchmake() {
         const [err, res] = await to(
             battleshipsService.gamesService.matchmake(defaultGameConfig)
@@ -52,6 +55,11 @@ export default function Matchmake() {
         setWaitingForOpponent(true);
     }
 
+    /**
+     * Checks if the opponent has joined the game.
+     *
+     * @returns true if the opponent has joined, false otherwise
+     */
     async function checkIfOpponentJoined() {
         if (!isWaitingForOpponent)
             return true;

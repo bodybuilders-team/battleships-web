@@ -32,7 +32,6 @@ export class ConfigurableBoard extends Board {
      * Places a ship in the board.
      *
      * @param ship the ship to place
-     *
      * @return the new board with the ship placed
      */
     placeShip(ship: Ship): ConfigurableBoard {

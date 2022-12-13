@@ -54,13 +54,11 @@ export default function GameCard({game, onJoinGameRequest}: GameCardProps) {
                 subheader={"Created by " + game.creator}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "start"
-                    }}
-                >
+                <CardContent sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start"
+                }}>
                     < Typography>Grid Size: {game.config.gridSize}</Typography>
                     <Typography>Board Layout Time: {game.config.maxTimeForLayoutPhase}s</Typography>
                     <Typography>Shots per Round: {game.config.shotsPerRound}</Typography>

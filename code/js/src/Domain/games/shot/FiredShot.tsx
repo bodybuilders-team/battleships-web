@@ -14,10 +14,10 @@ import {Orientation} from "../ship/Orientation";
  * @property sunkShip the ship that was sunk by the shot, or null if the shot didn't sink any ship
  */
 export class FiredShot {
-    readonly coordinate: Coordinate
-    readonly round: number
-    readonly result: ShotResult
-    readonly sunkShip: Ship | null
+    readonly coordinate: Coordinate;
+    readonly round: number;
+    readonly result: ShotResult;
+    readonly sunkShip: Ship | null;
 
     constructor(firedShotModel: FiredShotModel, shipTypes: ReadonlyMap<ShipType, number>) {
         this.coordinate = Coordinate.fromCoordinateModel(firedShotModel.coordinate);

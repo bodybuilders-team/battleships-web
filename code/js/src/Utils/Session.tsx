@@ -10,10 +10,10 @@ import {createContext, useContext, useState} from 'react';
  * @property userHomeLink the user home link
  */
 export interface Session {
-    readonly username: string,
-    readonly accessToken: string,
-    readonly refreshToken: string,
-    readonly userHomeLink: string
+    readonly username: string;
+    readonly accessToken: string;
+    readonly refreshToken: string;
+    readonly userHomeLink: string;
 }
 
 /**
@@ -24,9 +24,9 @@ export interface Session {
  * @property clearSession clears the session data
  */
 export interface SessionManager {
-    readonly session: Session | null,
-    readonly  setSession: (session: Session) => void
-    readonly  clearSession: () => void
+    readonly session: Session | null;
+    readonly  setSession: (session: Session) => void;
+    readonly  clearSession: () => void;
 }
 
 const SessionManagerContext = createContext<SessionManager>({

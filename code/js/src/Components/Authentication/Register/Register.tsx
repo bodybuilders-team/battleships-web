@@ -15,7 +15,6 @@ import {useSessionManager} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import ErrorAlert from "../../Shared/ErrorAlert";
 import PageContent from "../../Shared/PageContent";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {throwError} from "../../../Services/utils/errorUtils";
@@ -28,7 +27,6 @@ import {EmailTextField} from "../Shared/EmailTextField";
  */
 export default function Register() {
     const navigate = useNavigate();
-    const navigationState = useNavigationState();
 
     const battleshipsService = useBattleshipsService();
     const sessionManager = useSessionManager();

@@ -16,12 +16,12 @@ import {throwError} from "../../utils/errorUtils";
  * @property title the title of the entity (optional)
  */
 export interface ISirenEntity<T> {
-    class?: string[]
-    properties?: T
-    entities?: SubEntity<unknown>[]
-    actions?: Action[]
-    links?: Link[]
-    title?: string
+    class?: string[];
+    properties?: T;
+    entities?: SubEntity<unknown>[];
+    actions?: Action[];
+    links?: Link[];
+    title?: string;
 }
 
 /**
@@ -37,12 +37,12 @@ export interface ISirenEntity<T> {
  * @property title the title of the entity (optional)
  */
 export class SirenEntity<T> implements ISirenEntity<T> {
-    class?: string[]
-    properties?: T
-    entities?: SubEntity<unknown>[]
-    actions?: Action[]
-    links?: Link[]
-    title?: string
+    class?: string[];
+    properties?: T;
+    entities?: SubEntity<unknown>[];
+    actions?: Action[];
+    links?: Link[];
+    title?: string;
 
     constructor(entity: ISirenEntity<T>) {
         this.class = entity.class;
@@ -50,9 +50,38 @@ export class SirenEntity<T> implements ISirenEntity<T> {
         this.entities = entity.entities;
         this.actions = entity.actions;
         this.links = entity.links;
-        this.title = entity.title
+        this.title = entity.title;
     }
 
+    /**
+     * Gets the link with the given [rels] from [links].
+     *
+     * @param rels the relations of the link
+     * @return the link with the given [rels]
+     */
+    getLink(...rels: string[]): string {
+        return this.links
+            ?.find(link => rels.every((rel) => link.rel.includes(rel)))
+            ?.href ?? throwError("Link not found");
+    }
+
+    /**
+     * Gets the action with the given [name] from [actions].
+     *
+     * @param name the name of the action
+     * @return the action with the given [name]
+     */
+    getAction(name: string): string {
+        return this.actions
+            ?.find(action => action.name === name)
+            ?.href ?? throwError("Action not found");
+    }
+
+    /**
+     * Gets the links from the actions in a map where the key is the action name and the value is the action link.
+     *
+     * @return the links from the actions in a map
+     */
     getActionLinks(): Map<string, string> {
         const map = new Map<string, string>();
 
@@ -63,12 +92,26 @@ export class SirenEntity<T> implements ISirenEntity<T> {
         return map;
     }
 
+    /**
+     * Gets the embedded sub entities with the given [rels] from [entities],
+     * appropriately casting to EmbeddedSubEntity of [T].
+     *
+     * @return the embedded sub entities with the given [rels]
+     */
     getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
         return this.entities
             ?.filter(entity => !Object.keys(entity).includes("href"))
             .map(entity => new EmbeddedSubEntity(entity as IEmbeddedSubEntity<T>)) ?? [];
     }
 
+    /**
+     * Gets the embedded links with the given [rels] from [entities],
+     * appropriately casting to EmbeddedLink.
+     *
+     * @param rels the relations of the embedded links
+     *
+     * @return the embedded links with the given [rels]
+     */
     getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
         const embeddedLinks = this.entities
             ?.filter(entity => Object.keys(entity).includes("href"))
@@ -76,12 +119,6 @@ export class SirenEntity<T> implements ISirenEntity<T> {
 
         return embeddedLinks
             .filter(link => rels.every((rel) => link.rel.includes(rel)));
-    }
-
-    getLink(...rels: string[]): string {
-        return this.links
-            ?.find(link => rels.every((rel) => link.rel.includes(rel)))
-            ?.href ?? throwError("Link not found");
     }
 }
 

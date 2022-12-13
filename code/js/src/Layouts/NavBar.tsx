@@ -18,7 +18,6 @@ import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
 import to from "../Utils/await-to";
 import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
 import {Rels} from "../Utils/navigation/Rels";
-import {useNavigationState} from '../Utils/navigation/NavigationState';
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -37,7 +36,6 @@ export default function NavBar() {
     const sessionManager = useSessionManager();
     const session = useSession();
     const battleshipsService = useBattleshipsService();
-    const navigationState = useNavigationState();
 
     const settings = [
         {
@@ -131,15 +129,13 @@ export default function NavBar() {
                             }}
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
-                            sx={{
-                                display: {xs: 'block', md: 'none'},
-                            }}
+                            sx={{display: {xs: 'block', md: 'none'},}}
                         >
                             {pages.map((page) => (
                                 (page.auth && loggedIn || !page.auth && !loggedIn || page.auth === undefined) &&
                                 <MenuItem key={page.name} onClick={() => {
-                                    handleCloseNavMenu()
-                                    navigate(page.href)
+                                    handleCloseNavMenu();
+                                    navigate(page.href);
                                 }}>
                                     <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
@@ -172,8 +168,8 @@ export default function NavBar() {
                             <Button
                                 key={page.name}
                                 onClick={() => {
-                                    handleCloseNavMenu()
-                                    navigate(page.href)
+                                    handleCloseNavMenu();
+                                    navigate(page.href);
                                 }}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
@@ -181,7 +177,6 @@ export default function NavBar() {
                             </Button>
                         ))}
                     </Box>
-
                     {
                         loggedIn
                             ? <Box sx={{flexGrow: 0}}>
@@ -209,8 +204,8 @@ export default function NavBar() {
                                     {settings.map((setting) => (
                                         (setting.auth && loggedIn || !setting.auth && !loggedIn || setting.auth === undefined) &&
                                         <MenuItem key={setting.name} onClick={() => {
-                                            handleCloseUserMenu()
-                                            setting.callback()
+                                            handleCloseUserMenu();
+                                            setting.callback();
                                         }}>
                                             <Typography textAlign="center">{setting.name}</Typography>
                                         </MenuItem>

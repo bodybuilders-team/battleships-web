@@ -1,5 +1,5 @@
 /**
- * Problem types of battleships problem jsons
+ * Problem types of battleships problem jsons.
  */
 export namespace ProblemTypes {
     export const INVALID_PHASE =

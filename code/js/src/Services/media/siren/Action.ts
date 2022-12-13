@@ -32,7 +32,7 @@ export interface IAction {
  */
 export class Action implements IAction {
     name: string;
-    class?: string[]
+    class?: string[];
     method?: string;
     href: string;
     title?: string;
@@ -54,30 +54,26 @@ export class Action implements IAction {
  * A field that is part of an action.
  *
  * @property name the name of the field
- * @property class the class of the field (optional)
- * @property type the type of the field (optional)
  * @property value the value of the field (optional)
- * @property title the title of the field (optional)
+ * @property type the type of the field (optional)
  */
 export interface IField {
     name: string;
-    value?: string
-    type?: string
+    value?: string;
+    type?: string;
 }
 
 /**
  * A field that is part of an action.
  *
  * @property name the name of the field
- * @property class the class of the field (optional)
- * @property type the type of the field (optional)
  * @property value the value of the field (optional)
- * @property title the title of the field (optional)
+ * @property type the type of the field (optional)
  */
 export class Field implements IField {
     name: string;
-    value?: string
-    type?: string
+    value?: string;
+    type?: string;
 
     constructor(field: IField) {
         this.name = field.name;

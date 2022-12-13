@@ -13,7 +13,7 @@ import {throwError} from "../../../../Services/utils/errorUtils";
 import PageContent from "../../../Shared/PageContent";
 import LoadingSpinner from "../../../Shared/LoadingSpinner";
 import {Game} from "../../../../Domain/games/game/Game";
-import FetchedEndGamePopup from "../../Shared/FetchedEndGamePopup";
+import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup";
 import {Problem} from "../../../../Services/media/Problem";
 import {ProblemTypes} from "../../../../Utils/types/problemTypes";
 
@@ -21,7 +21,6 @@ import {ProblemTypes} from "../../../../Utils/types/problemTypes";
  * Properties for the ShootingGameplay component.
  *
  * @property game the game which is being played
- * @property onFinished the callback to be called when the game is finished
  */
 interface ShootingGameplayProps {
     game: Game;
@@ -82,11 +81,15 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
     if (myFleet)
         return (
             <>
-                <Shooting game={game} myFleet={myFleet} onFinished={() => {
-                    setShowEndGamePopup(true);
-                }} onTimeUp={() => {
-                    setShowEndGamePopup(true);
-                }}/>
+                <Shooting
+                    game={game}
+                    myFleet={myFleet}
+                    onFinished={() => {
+                        setShowEndGamePopup(true);
+                    }}
+                    onTimeUp={() => {
+                        setShowEndGamePopup(true);
+                    }}/>
                 <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
                     handleError(err, setError);
                 }}/>

@@ -14,14 +14,17 @@ import Typography from "@mui/material/Typography";
 import {Game} from "../../../../Domain/games/game/Game";
 import TileHitView from "../../Shared/Board/TileHitView";
 import useShooting from "./useShooting";
-import LeaveGameAlert from "../../Shared/LeaveGameAlert";
-import LeaveGameButton from "../../Shared/LeaveGameButton";
+import LeaveGameAlert from "../../Shared/LeaveGame/LeaveGameAlert";
+import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton";
 import Container from "@mui/material/Container";
 import {CancelRounded, RefreshRounded} from "@mui/icons-material";
 import RoundView from "./RoundView";
 import to from "../../../../Utils/await-to";
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
 import {useNavigate} from "react-router-dom";
+import {Uris} from "../../../../Utils/navigation/Uris";
+import ErrorAlert from "../../../Shared/ErrorAlert";
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**
  * Properties for the Shooting component.
@@ -57,11 +60,17 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
     useEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn]);
     useEffect(callOnFinishIfGameIsFinished, [shootingState.finished]);
 
+    /**
+     * Disables the fire shots button when it's not my turn.
+     */
     function disableFireShotsWhenNotMyTurn() {
         if (shootingState.myTurn)
             setCanFireShots(true);
     }
 
+    /**
+     * Calls the onFinished callback if the game is finished.
+     */
     function callOnFinishIfGameIsFinished() {
         if (shootingState.finished)
             onFinished();
@@ -78,12 +87,10 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
             return;
         }
 
-        navigate("/gameplay-menu");
+        navigate(GAMEPLAY_MENU);
     }
 
-
     return (
-
         <Container maxWidth="lg">
             <Box sx={{
                 display: "flex",
@@ -105,6 +112,8 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                     />
                     <RoundView round={shootingState.gameState.round!}/>
                 </Box>
+
+                <ErrorAlert error={error}/>
 
                 <LeaveGameAlert
                     open={leavingGame}
@@ -129,34 +138,39 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                     }}>
                         <Typography variant="h5" sx={{textAlign: "center", mb: "5px"}}>My Board</Typography>
                         <BoardView board={shootingState.myBoard} enabled={!shootingState.myTurn}>
-                            {shootingState.myBoard.fleet.map((ship, index) => {
-                                return (
-                                    <Box sx={{
-                                        position: 'absolute',
-                                        top: (ship.coordinate.row) * tileSize,
-                                        left: (ship.coordinate.col) * tileSize,
-                                    }}>
-                                        <ShipView
-                                            type={ship.type}
-                                            orientation={ship.orientation}
-                                            key={ship.type.shipName + index}
-                                        />
-                                    </Box>
-                                );
-                            })}
+                            {
+                                shootingState.myBoard.fleet.map((ship, index) => {
+                                    return (
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: (ship.coordinate.row) * tileSize,
+                                            left: (ship.coordinate.col) * tileSize,
+                                        }}>
+                                            <ShipView
+                                                type={ship.type}
+                                                orientation={ship.orientation}
+                                                key={ship.type.shipName + index}
+                                            />
+                                        </Box>
+                                    );
+                                })
+                            }
                             {
                                 shootingState.myBoard.grid.map((cell) => {
                                     if (cell.wasHit)
-                                        return <Box sx={{
-                                            position: 'absolute',
-                                            top: (cell.coordinate.row) * tileSize,
-                                            left: (cell.coordinate.col) * tileSize,
-                                        }}>
-                                            <TileHitView
-                                                hitShip={cell instanceof ShipCell || cell instanceof UnknownShipCell}/>
-                                        </Box>
+                                        return (
+                                            <Box sx={{
+                                                position: 'absolute',
+                                                top: (cell.coordinate.row) * tileSize,
+                                                left: (cell.coordinate.col) * tileSize,
+                                            }}>
+                                                <TileHitView hitShip={
+                                                    cell instanceof ShipCell || cell instanceof UnknownShipCell
+                                                }/>
+                                            </Box>
+                                        );
                                     else
-                                        return null
+                                        return null;
                                 })
                             }
                         </BoardView>
@@ -225,8 +239,9 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                                 top: (cell.coordinate.row) * tileSize,
                                                 left: (cell.coordinate.col) * tileSize,
                                             }}>
-                                                <TileHitView
-                                                    hitShip={cell instanceof ShipCell || cell instanceof UnknownShipCell}/>
+                                                <TileHitView hitShip={
+                                                    cell instanceof ShipCell || cell instanceof UnknownShipCell
+                                                }/>
                                             </Box>
                                         );
                                     else

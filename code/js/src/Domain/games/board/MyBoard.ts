@@ -63,6 +63,6 @@ export class MyBoard extends Board {
                     throw Error("UnknownShipCell should not be present in MyBoard");
                 }
             )
-        )
+        );
     }
 }

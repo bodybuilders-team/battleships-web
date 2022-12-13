@@ -8,12 +8,14 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 import PageContent from "../../Shared/PageContent";
-import {useInterval} from "../Shared/useInterval";
+import {useInterval} from "../Shared/TimersHooks/useInterval";
 import {GameConfig} from "../../../Domain/games/game/GameConfig";
 import {useNavigate} from "react-router-dom";
 import {Problem} from "../../../Services/media/Problem";
 import {ProblemTypes} from "../../../Utils/types/problemTypes";
-import FetchedEndGamePopup from "../Shared/FetchedEndGamePopup";
+import FetchedEndGamePopup from "../Shared/EndGame/FetchedEndGamePopup";
+import {Uris} from "../../../Utils/navigation/Uris";
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**
  * Properties for BoardSetupGameplay component.
@@ -26,7 +28,7 @@ interface BoardSetupGameplayProps {
     onFinished: () => void;
 }
 
-const pollingDelay = 1000;
+const POLLING_DELAY = 1000;
 
 /**
  * BoardSetupGameplay component.
@@ -47,7 +49,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
 
     useInterval(() => {
         checkIfOpponentDeployedFleet()
-    }, pollingDelay, [isWaitingForOpponent]);
+    }, POLLING_DELAY, [isWaitingForOpponent]);
 
     /**
      * Callback when the board setup phase is finished.
@@ -79,6 +81,9 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         setWaitingForOpponent(true);
     }
 
+    /**
+     * Checks if the opponent has deployed the fleet.
+     */
     async function checkIfOpponentDeployedFleet() {
         if (!isWaitingForOpponent)
             return true;
@@ -106,7 +111,9 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         return false;
     }
 
-
+    /**
+     * Fetches the game state.
+     */
     async function fetchGameState() {
         if (!fetchingGameState)
             return;
@@ -141,7 +148,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
             return;
         }
 
-        navigate("/gameplay-menu");
+        navigate(GAMEPLAY_MENU);
     }
 
 

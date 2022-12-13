@@ -17,7 +17,7 @@ import {handleError} from "../../../Services/utils/fetchSiren";
 import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useInterval} from "../Shared/useInterval";
+import {useInterval} from "../Shared/TimersHooks/useInterval";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 
 const POLLING_DELAY = 1000;
@@ -80,7 +80,10 @@ export default function CreateGame() {
         createGame();
     }
 
-  async function checkIfOpponentHasConnected() {
+    /**
+     * Checks if the opponent has connected.
+     */
+    async function checkIfOpponentHasConnected() {
         if (!isWaitingForOpponent)
             return true;
 
@@ -225,8 +228,9 @@ export default function CreateGame() {
                                                 >
                                                     <Add/>
                                                 </IconButton>
-                                                <Typography id="ship-quantity-selector"
-                                                            gutterBottom>{quantity}</Typography>
+                                                <Typography id="ship-quantity-selector" gutterBottom>
+                                                    {quantity}
+                                                </Typography>
                                                 <IconButton
                                                     aria-label="remove"
                                                     color="primary"
