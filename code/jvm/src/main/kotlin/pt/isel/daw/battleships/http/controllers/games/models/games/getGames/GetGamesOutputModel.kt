@@ -1,7 +1,5 @@
 package pt.isel.daw.battleships.http.controllers.games.models.games.getGames
 
-import pt.isel.daw.battleships.service.games.dtos.game.GamesDTO
-
 /**
  * A Get Games Output Model.
  *
@@ -9,8 +7,4 @@ import pt.isel.daw.battleships.service.games.dtos.game.GamesDTO
  */
 data class GetGamesOutputModel(
     val totalCount: Int
-) {
-    constructor(gamesDTO: GamesDTO) : this(
-        totalCount = gamesDTO.totalCount
-    )
-}
+)

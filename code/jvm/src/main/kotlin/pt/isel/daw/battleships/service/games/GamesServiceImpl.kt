@@ -86,15 +86,10 @@ class GamesServiceImpl(
             }
 
             game.updateIfPhaseExpired()
+            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
+                continue
 
-            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) continue
-
-            if (game.hasPlayer(username = user.username))
-                throw AlreadyJoinedException("You have already joined this game")
-
-            game.addPlayer(player = Player(game = game, user = user))
-
-            game.updatePhase()
+            joinGame(user = user, game = game)
 
             return MatchmakeResponseDTO(
                 game = GameDTO(game = game),
@@ -136,6 +131,18 @@ class GamesServiceImpl(
             )
         )
 
+    override fun leaveGame(token: String, gameId: Int) {
+        val user = authenticateUser(token = token)
+        val game = getGameById(gameId = gameId)
+        val player = game.getPlayer(username = user.username)
+
+        when (game.state.phase) {
+            GameState.GamePhase.FINISHED -> throw InvalidPhaseException("Game has already finished")
+            GameState.GamePhase.WAITING_FOR_PLAYERS, GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame()
+            else -> game.finishGame(winner = game.getOpponent(player))
+        }
+    }
+
     /**
      * Joins a game.
      *
@@ -149,30 +156,11 @@ class GamesServiceImpl(
         if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
             throw InvalidPhaseException("Waiting for players phase is over")
 
-        if (game.state.phaseExpired()) {
-            game.abortGame()
-            throw InvalidPhaseException("Waiting for players phase is over")
-        }
-
         if (game.hasPlayer(username = user.username))
             throw AlreadyJoinedException("You have already joined this game")
 
         game.addPlayer(player = Player(game = game, user = user))
         game.updatePhase()
-    }
-
-    override fun leaveGame(token: String, gameId: Int) {
-        val user = authenticateUser(token = token)
-        val game = getGameById(gameId = gameId)
-        val player = game.getPlayer(username = user.username)
-
-
-        when (game.state.phase) {
-            GameState.GamePhase.FINISHED -> throw InvalidPhaseException("Game has already finished")
-            GameState.GamePhase.WAITING_FOR_PLAYERS, GameState.GamePhase.DEPLOYING_FLEETS -> game.abortGame()
-            else -> game.finishGame(winner = game.getOpponent(player))
-        }
-
     }
 
     /**

@@ -19,8 +19,8 @@ import pt.isel.daw.battleships.http.controllers.games.models.games.matchmake.Mat
 import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
-import pt.isel.daw.battleships.http.media.siren.SubEntity
 import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedLink
+import pt.isel.daw.battleships.http.media.siren.SubEntity.EmbeddedSubEntity
 import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.http.utils.Actions
 import pt.isel.daw.battleships.http.utils.Links
@@ -60,12 +60,12 @@ class GamesController(private val gamesService: GamesService) {
 
         return SirenEntity(
             `class` = listOf(Rels.LIST_GAMES),
-            properties = GetGamesOutputModel(gamesDTO = games),
+            properties = GetGamesOutputModel(totalCount = games.totalCount),
             links = listOf(
                 Links.self(Uris.games())
             ),
             entities = games.games.map { game ->
-                SubEntity.EmbeddedSubEntity(
+                EmbeddedSubEntity(
                     rel = listOf(Rels.ITEM, Rels.GAME, "${Rels.GAME}-${game.id}"),
                     properties = GetGameOutputModel(gameDTO = game),
                     links = listOf(

@@ -194,7 +194,8 @@ class UsersController(private val usersService: UsersService) {
             `class` = listOf(Rels.REFRESH_TOKEN),
             properties = RefreshTokenOutputModel(refreshTokenOutputDTO = refreshDTO),
             links = listOf(
-                Links.home
+                Links.home,
+                Links.userHome
             )
         )
     }
