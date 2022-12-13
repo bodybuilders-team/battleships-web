@@ -13,7 +13,6 @@ import BoardSetupGameplay from "../BoardSetup/BoardSetupGameplay";
 import {Game} from "../../../Domain/games/game/Game";
 import EndGamePopup, {EndGameCause, WinningPlayer} from "../Shared/EndGamePopup";
 import {useSession} from "../../../Utils/Session";
-import Box from "@mui/material/Box";
 
 /**
  * Gameplay component.
@@ -23,14 +22,10 @@ export default function Gameplay() {
     const session = useSession();
     const battleshipsService = useBattleshipsService();
 
-    const [lastGamePhase, setLastGamePhase] = useState<string | null>(null);
     const [game, setGame] = useState<Game | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const fetchGame = async () => {
-        if (game !== null)
-            setLastGamePhase(game.state.phase);
-
         if (!battleshipsService.links.get(Rels.GAME)) {
             navigate("/");
             return;
@@ -56,58 +51,45 @@ export default function Gameplay() {
         fetchGame();
     }, []);
 
-    if (game == null)
+
+    if (game?.state.phase === "DEPLOYING_FLEETS")
+        return (
+            <BoardSetupGameplay
+                gameConfig={game!.config}
+                onFinished={() => {
+                    fetchGame()
+                }}
+            />
+        );
+    else if (game?.state.phase === "IN_PROGRESS")
+        return <ShootingGameplay game={game!} />;
+    else if (game?.state.phase === "FINISHED") {
+        const username = session!.username
+
+        const player = game.getPlayer(username)!
+        const opponent = game.getOpponent(username)!
+
+        return <EndGamePopup
+            open={game?.state.phase === "FINISHED"}
+            winningPlayer={
+                game.state.winner === session?.username!
+                    ? WinningPlayer.YOU : WinningPlayer.OPPONENT
+            } cause={
+            EndGameCause.DESTRUCTION
+        }
+            playerInfo={{
+                name: player.username,
+                points: player.points
+            }}
+            opponentInfo={{
+                name: opponent.username,
+                points: opponent.points
+            }}
+        />
+    } else
         return (
             <PageContent error={error}>
                 <LoadingSpinner text={"Loading game..."}/>
             </PageContent>
         );
-
-    function CurrentPhaseComponent() {
-        if (game?.state.phase === "DEPLOYING_FLEETS" ||
-            (lastGamePhase === "DEPLOYING_FLEETS" && game?.state.phase === "FINISHED"))
-            return (
-                <BoardSetupGameplay
-                    gameConfig={game!.config}
-                    onFinished={() => {
-                        fetchGame()
-                    }}
-                />
-            );
-        else if (game?.state.phase === "IN_PROGRESS" ||
-            (lastGamePhase === "IN_PROGRESS" && game?.state.phase === "FINISHED"))
-            return <ShootingGameplay game={game!} onFinished={() => {
-                fetchGame()
-            }
-            }/>;
-
-        return null
-    }
-
-    const username = session!.username
-
-    const player = game.getPlayer(username)!
-    const opponent = game.getOpponent(username)!
-
-    // TODO: Make sure parent gameplay component does not rerender so that the background does not change
-    //  that or change the whole flow so that the background is not changed
-    return <Box>
-        <CurrentPhaseComponent/>
-        <EndGamePopup open={game?.state.phase === "FINISHED"} winningPlayer={
-            game.state.winner === session?.username!
-                ? WinningPlayer.YOU : WinningPlayer.OPPONENT
-        } cause={
-            // TODO: add smthg like this. game.state.cause
-            EndGameCause.DESTRUCTION
-        } // Fix cause
-                      playerInfo={{
-                          name: player.username,
-                          points: player.points
-                      }}
-                      opponentInfo={{
-                          name: opponent.username,
-                          points: opponent.points
-                      }}
-        />
-    </Box>
 }

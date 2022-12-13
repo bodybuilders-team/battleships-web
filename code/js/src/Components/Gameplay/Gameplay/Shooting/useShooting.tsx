@@ -12,6 +12,8 @@ import {useTimeout} from "../../Shared/useTimeout";
 import {Coordinate} from "../../../../Domain/games/Coordinate";
 import {throwError} from "../../../../Services/utils/errorUtils";
 import {FiredShot} from "../../../../Domain/games/shot/FiredShot";
+import {Problem} from "../../../../Services/media/Problem";
+import {ProblemTypes} from "../../../../Utils/types/problemTypes";
 
 const TURN_SWITCH_DELAY = 1000;
 const POLLING_DELAY = 1000;
@@ -90,6 +92,10 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
         }));
 
         if (err) {
+            if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
+                setFinished(true);
+                return;
+            }
             onError(err);
             return;
         }

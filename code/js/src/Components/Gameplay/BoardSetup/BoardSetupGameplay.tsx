@@ -13,6 +13,7 @@ import {GameConfig} from "../../../Domain/games/game/GameConfig";
 import {useNavigate} from "react-router-dom";
 import {Problem} from "../../../Services/media/Problem";
 import {ProblemTypes} from "../../../Utils/types/problemTypes";
+import FetchedEndGamePopup from "../Shared/FetchedEndGamePopup";
 
 /**
  * Properties for BoardSetupGameplay component.
@@ -34,7 +35,7 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
     const battleshipsService = useBattleshipsService();
     const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
+    const [showEndGamePopup, setShowEndGamePopup] = useState<boolean>(false);
     const [fetchingGameState, setFetchingGameState] = useState<boolean>(true);
     const [finalTime, setFinalTime] = useState<number | null>(null);
 
@@ -58,9 +59,8 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         }));
 
         if (err) {
-            const a = err as Problem;
-            if (err instanceof Problem && a.type === ProblemTypes.INVALID_PHASE) {
-                onFinished();
+            if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
+                setShowEndGamePopup(true);
                 return;
             }
 
@@ -143,16 +143,19 @@ export default function BoardSetupGameplay({gameConfig, onFinished}: BoardSetupG
         );
     else
         return (
-            <BoardSetup
-                finalTime={finalTime!}
-                boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
-                onBoardReady={onBoardSetupFinished}
-                onLeaveGame={leaveGame}
-                onTimeUp={() => {
-                    setTimeout(() => {
-                        onFinished();
-                    }, 2000); // wait a bit to let the server update the game state to finished
-                }}
-            />
+            <>
+                <BoardSetup
+                    finalTime={finalTime!}
+                    boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
+                    onBoardReady={onBoardSetupFinished}
+                    onLeaveGame={leaveGame}
+                    onTimeUp={() => {
+                        setShowEndGamePopup(true);
+                    }}
+                />
+                <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
+                    handleError(err, setError);
+                }}/>
+            </>
         );
 }

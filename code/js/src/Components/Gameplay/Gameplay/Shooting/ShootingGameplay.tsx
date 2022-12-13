@@ -13,6 +13,7 @@ import {throwError} from "../../../../Services/utils/errorUtils";
 import PageContent from "../../../Shared/PageContent";
 import LoadingSpinner from "../../../Shared/LoadingSpinner";
 import {Game} from "../../../../Domain/games/game/Game";
+import FetchedEndGamePopup from "../../Shared/FetchedEndGamePopup";
 
 /**
  * Properties for the ShootingGameplay component.
@@ -22,15 +23,15 @@ import {Game} from "../../../../Domain/games/game/Game";
  */
 interface ShootingGameplayProps {
     game: Game;
-    onFinished: () => void;
 }
 
 /**
  * ShootingGameplay component.
  */
-export default function ShootingGameplay({game, onFinished}: ShootingGameplayProps) {
+export default function ShootingGameplay({game}: ShootingGameplayProps) {
     const battleshipsService = useBattleshipsService();
     const [error, setError] = useState<string | null>(null);
+    const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [myFleet, setMyFleet] = useState<Ship[]>();
 
     /**
@@ -73,9 +74,16 @@ export default function ShootingGameplay({game, onFinished}: ShootingGameplayPro
 
     if (myFleet)
         return (
-            <Shooting game={game} myFleet={myFleet} onFinished={onFinished} onTimeUp={() => {
-                setTimeout(onFinished, 2000) // wait for the server to update the game
-            }}/>
+            <>
+                <Shooting game={game} myFleet={myFleet} onFinished={() => {
+                    setShowEndGamePopup(true);
+                }} onTimeUp={() => {
+                    setShowEndGamePopup(true);
+                }}/>
+                <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
+                    handleError(err, setError);
+                }}/>
+            </>
         );
     else
         return (

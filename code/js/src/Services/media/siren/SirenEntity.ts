@@ -1,6 +1,6 @@
 import {Link} from "./Link";
 import {Action} from "./Action";
-import {EmbeddedLink, EmbeddedSubEntity, IEmbeddedLink, SubEntity} from "./SubEntity";
+import {EmbeddedLink, EmbeddedSubEntity, IEmbeddedLink, IEmbeddedSubEntity, SubEntity} from "./SubEntity";
 import {throwError} from "../../utils/errorUtils";
 
 /**
@@ -66,7 +66,7 @@ export class SirenEntity<T> implements ISirenEntity<T> {
     getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
         return this.entities
             ?.filter(entity => !Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedSubEntity(entity as EmbeddedSubEntity<T>)) ?? [];
+            .map(entity => new EmbeddedSubEntity(entity as IEmbeddedSubEntity<T>)) ?? [];
     }
 
     getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {

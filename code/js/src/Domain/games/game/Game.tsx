@@ -59,7 +59,7 @@ export class Game {
      *
      * @return the opponent of the player that is playing the game or undefined if the player is not playing the game
      */
-    getOpponent(): Player | undefined {
-        return this.players.find(player => player.username !== this.creator);
+    getOpponent(username: string): Player | undefined {
+        return this.players.find(player => player.username !== username);
     }
 }
