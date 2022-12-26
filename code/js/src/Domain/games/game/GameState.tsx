@@ -9,7 +9,7 @@
  * @property endCause the cause of the game ending
  */
 export class GameState {
-    readonly phase: "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED";
+    readonly phase: GamePhase;
     readonly phaseEndTime: number;
     readonly round: number | null;
     readonly turn: string | null;

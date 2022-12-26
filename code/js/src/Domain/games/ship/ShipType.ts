@@ -20,7 +20,7 @@ export class ShipType {
 export const defaultShipTypes: Map<ShipType, number> = new Map<ShipType, number>([
     [new ShipType(5, "Carrier", 50), 1],
     [new ShipType(4, "Battleship", 40), 1],
-    [new ShipType(3, "Cruiser", 30), 3],
-    [new ShipType(3, "Submarine", 30), 2],
+    [new ShipType(3, "Cruiser", 30), 1],
+    [new ShipType(3, "Submarine", 30), 1],
     [new ShipType(2, "Destroyer", 20), 1]
 ]);
