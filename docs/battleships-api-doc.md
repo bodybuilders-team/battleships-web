@@ -45,7 +45,6 @@ In our specification, we highlight the following aspects:
 
 The **API journey** is as represented in the following diagram:
 
-<!--suppress HtmlDeprecatedAttribute -->
 <p align="center">
     <img src="diagrams/battleships-diagrams-resource-link-relations.svg" alt="Entity Relationship Diagram"/>
 </p>

@@ -104,13 +104,17 @@ export default function CreateGame() {
             </PageContent>
         );
     else
-        return <GameConfig setGameName={setGameName}
-                           gridSize={gridSize} setGridSize={setGridSize}
-                           maxTimePerRound={maxTimePerRound} setMaxTimePerRound={setMaxTimePerRound}
-                           shotsPerRound={shotsPerRound} setShotsPerRound={setShotsPerRound}
-                           maxTimeForLayoutPhase={maxTimeForLayoutPhase}
-                           setMaxTimeForLayoutPhase={setMaxTimeForLayoutPhase}
-                           shipTypes={shipTypes} setShipTypes={setShipTypes}
-                           handleCreateGame={handleCreateGame}
-                           error={error}/>;
+        return (
+            <GameConfig
+                setGameName={setGameName}
+                gridSize={gridSize} setGridSize={setGridSize}
+                maxTimePerRound={maxTimePerRound} setMaxTimePerRound={setMaxTimePerRound}
+                shotsPerRound={shotsPerRound} setShotsPerRound={setShotsPerRound}
+                maxTimeForLayoutPhase={maxTimeForLayoutPhase}
+                setMaxTimeForLayoutPhase={setMaxTimeForLayoutPhase}
+                shipTypes={shipTypes} setShipTypes={setShipTypes}
+                handleCreateGame={handleCreateGame}
+                error={error}
+            />
+        );
 }

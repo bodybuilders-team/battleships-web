@@ -45,13 +45,9 @@ section.
 
 The following diagram holds the Entity-Relationship model for the information managed by the system.
 
-<!--suppress ALL -->
 <p align="center">
-    <img src="diagrams/battleships-diagrams-er-diagram.svg" alt="Entity Relationship Diagram"/>
+    <img src="../../docs/diagrams/battleships-diagrams-er-diagram.svg" alt="Entity Relationship Diagram"/>
 </p>
-
-The conceptual model is stored in the [`docs/battleships-db`](../../docs/diagrams/battleships-diagrams-er-diagram.svg)
-folder.
 
 We highlight the following aspects:
 
@@ -125,7 +121,7 @@ We highlight the following aspects of this model:
 ## Application Architecture
 
 <p align="center">
-    <img src="diagrams/battleships-diagrams-system-architecture.svg" alt="System Architecture"/>
+    <img src="../../docs/diagrams/battleships-diagrams-system-architecture.svg" alt="System Architecture"/>
 </p>
 
 The JVM application is organized as follows:

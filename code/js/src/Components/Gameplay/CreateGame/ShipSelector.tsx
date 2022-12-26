@@ -17,6 +17,7 @@ const maxShipQuantity = 5;
  *
  * @property shipTypes the ship types
  * @property setShipTypes callback to set the ship types
+ * @property gridSize the grid size
  */
 interface ShipSelectorProps {
     shipTypes: Map<ShipType, number>;
@@ -27,58 +28,58 @@ interface ShipSelectorProps {
 /**
  * ShipSelector component.
  */
-function ShipSelector({shipTypes, setShipTypes, gridSize}: ShipSelectorProps) {
+export default function ShipSelector({shipTypes, setShipTypes, gridSize}: ShipSelectorProps) {
 
     let totalTilesOccupied = 0;
     Array.from(shipTypes.entries()).forEach(([shipType, count]) => {
         totalTilesOccupied += shipType.size * count;
     });
 
-    return <Box>
-        <Typography id="ships-selector" gutterBottom>
-            Ships
-        </Typography>
-        <Grid container spacing={2} justifyContent={"center"}>
-            {
-                Array.from(shipTypes.entries())
-                    .map(([ship, quantity]) => {
-                        return (
-                            <Grid item key={ship.shipName}>
-                                <Box sx={{height: 200}}>
-                                    <ShipView type={ship} orientation={Orientation.VERTICAL}/>
-                                </Box>
-                                <IconButton
-                                    aria-label="add"
-                                    color="primary"
-                                    onClick={() => {
-                                        if (quantity < maxShipQuantity)
-                                            setShipTypes(new Map(shipTypes.set(ship, quantity + 1)));
-                                    }}
-                                    disabled={quantity >= maxShipQuantity || totalTilesOccupied + ship.size >=
-                                        gridSize * gridSize * maxBoardOccupancyPercentage}
-                                >
-                                    <Add/>
-                                </IconButton>
-                                <Typography id="ship-quantity-selector" gutterBottom>
-                                    {quantity}
-                                </Typography>
-                                <IconButton
-                                    aria-label="remove"
-                                    color="primary"
-                                    onClick={() => {
-                                        if (quantity > minShipQuantity)
-                                            setShipTypes(new Map(shipTypes.set(ship, quantity - 1)));
-                                    }}
-                                    disabled={quantity <= minShipQuantity}
-                                >
-                                    <Remove/>
-                                </IconButton>
-                            </Grid>
-                        );
-                    })
-            }
-        </Grid>
-    </Box>
+    return (
+        <Box>
+            <Typography id="ships-selector" gutterBottom>
+                Ships
+            </Typography>
+            <Grid container spacing={2} justifyContent={"center"}>
+                {
+                    Array.from(shipTypes.entries())
+                        .map(([ship, quantity]) => {
+                            return (
+                                <Grid item key={ship.shipName}>
+                                    <Box sx={{height: 200}}>
+                                        <ShipView type={ship} orientation={Orientation.VERTICAL}/>
+                                    </Box>
+                                    <IconButton
+                                        aria-label="add"
+                                        color="primary"
+                                        onClick={() => {
+                                            if (quantity < maxShipQuantity)
+                                                setShipTypes(new Map(shipTypes.set(ship, quantity + 1)));
+                                        }}
+                                        disabled={quantity >= maxShipQuantity || totalTilesOccupied + ship.size >=
+                                            gridSize * gridSize * maxBoardOccupancyPercentage}
+                                    >
+                                        <Add/>
+                                    </IconButton>
+                                    <Typography id="ship-quantity-selector" gutterBottom>
+                                        {quantity}
+                                    </Typography>
+                                    <IconButton
+                                        aria-label="remove"
+                                        color="primary"
+                                        onClick={() => {
+                                            if (quantity > minShipQuantity)
+                                                setShipTypes(new Map(shipTypes.set(ship, quantity - 1)));
+                                        }}
+                                        disabled={quantity <= minShipQuantity}
+                                    >
+                                        <Remove/>
+                                    </IconButton>
+                                </Grid>
+                            );
+                        })
+                }
+            </Grid>
+        </Box>
+    );
 }
-
-export default ShipSelector;

@@ -35,15 +35,17 @@ import pt.isel.daw.battleships.utils.JwtProvider
 class GamesServiceImpl(
     private val gamesRepository: GamesRepository,
     usersRepository: UsersRepository,
-    jwtProvider: JwtProvider,
+    jwtProvider: JwtProvider
 ) : GamesService, AuthenticatedService(usersRepository, jwtProvider) {
 
-    override fun getGames(offset: Int, limit: Int): GamesDTO {
-        if (offset < 0 || limit < 0)
+    override fun getGames(offset: Int, limit: Int, player: String?): GamesDTO {
+        if (offset < 0 || limit < 0) {
             throw InvalidPaginationParamsException("Offset and limit must be positive")
+        }
 
-        if (limit > MAX_GAMES_LIMIT)
+        if (limit > MAX_GAMES_LIMIT) {
             throw InvalidPaginationParamsException("Limit must be less than $MAX_GAMES_LIMIT")
+        }
 
         return GamesDTO(
             games = gamesRepository
@@ -86,8 +88,9 @@ class GamesServiceImpl(
             }
 
             game.updateIfPhaseExpired()
-            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
+            if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
                 continue
+            }
 
             joinGame(user = user, game = game)
 
@@ -156,11 +159,13 @@ class GamesServiceImpl(
      * @throws AlreadyJoinedException if the user is already in the game
      */
     private fun joinGame(user: User, game: Game) {
-        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS)
+        if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
             throw InvalidPhaseException("Waiting for players phase is over")
+        }
 
-        if (game.hasPlayer(username = user.username))
+        if (game.hasPlayer(username = user.username)) {
             throw AlreadyJoinedException("You have already joined this game")
+        }
 
         game.addPlayer(player = Player(game = game, user = user))
         game.updatePhase()

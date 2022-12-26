@@ -46,3 +46,14 @@ services:
     depends_on:
       - battleships-service-1
       - battleships-service-2
+
+  battleships-client:
+    container_name: battleships-client
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile-client
+    image: battleships-client
+    ports:
+      - "80:80"
+    depends_on:
+      - nginx

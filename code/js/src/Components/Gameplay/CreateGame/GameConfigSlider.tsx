@@ -27,24 +27,32 @@ interface GameConfigSliderProps {
 /**
  * GameConfigSlider component.
  */
-function GameConfigSlider({id, label, defaultValue, step, min, max, onValueChange}: GameConfigSliderProps) {
-    return <Box>
-        <Typography id={id} gutterBottom>
-            {label}
-        </Typography>
-        <Slider
-            defaultValue={defaultValue}
-            aria-labelledby={id}
-            valueLabelDisplay="auto"
-            step={step}
-            marks
-            min={min}
-            max={max}
-            onChange={(event, value) => {
-                onValueChange(value as number);
-            }}
-        />
-    </Box>
+export default function GameConfigSlider({
+                                             id,
+                                             label,
+                                             defaultValue,
+                                             step,
+                                             min,
+                                             max,
+                                             onValueChange
+                                         }: GameConfigSliderProps) {
+    return (
+        <Box>
+            <Typography id={id} gutterBottom>
+                {label}
+            </Typography>
+            <Slider
+                defaultValue={defaultValue}
+                aria-labelledby={id}
+                valueLabelDisplay="auto"
+                step={step}
+                marks
+                min={min}
+                max={max}
+                onChange={(event, value) => {
+                    onValueChange(value as number);
+                }}
+            />
+        </Box>
+    );
 }
-
-export default GameConfigSlider;

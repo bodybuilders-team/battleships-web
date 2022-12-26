@@ -8,6 +8,7 @@ object Params {
     const val LIMIT_PARAM = "limit"
     const val ORDER_BY_PARAM = "orderBy"
     const val SORT_DIRECTION_PARAM = "sortDirection"
+    const val PLAYER_PARAM = "player"
 
     const val OFFSET_DEFAULT = 0
     const val LIMIT_DEFAULT = 10

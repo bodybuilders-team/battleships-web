@@ -19,4 +19,16 @@ class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : Ga
         gamesRepository
             .findAllByStatePhase(phase = GameState.GamePhase.WAITING_FOR_PLAYERS)
             .filter { game -> game.config == config }
+
+    override fun findAllByPlayerAndStatePhase(
+        player: String,
+        phase: GameState.GamePhase,
+        offset: Int,
+        limit: Int
+    ): Stream<Game> =
+        gamesRepository
+            .findAllByStatePhase(phase = phase)
+            .filter { game -> game.players.any { it.user.username == player } }
+            .skip(offset.toLong())
+            .limit(limit.toLong())
 }

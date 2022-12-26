@@ -24,12 +24,13 @@ interface GamesService {
      *
      * @param offset the offset of the pagination
      * @param limit the limit of the pagination
+     * @param player if present, the list of games will be filtered by the player
      *
      * @return the DTO with the information of the games
      * @throws InvalidPaginationParamsException if the offset or limit are invalid
      * @throws NotFoundException if the user is not found
      */
-    fun getGames(offset: Int, limit: Int): GamesDTO
+    fun getGames(offset: Int, limit: Int, player: String?): GamesDTO
 
     /**
      * Creates a new game.

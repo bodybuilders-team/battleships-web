@@ -1,0 +1,17 @@
+FROM node:16-alpine AS CACHE_IMAGE
+
+ARG DEPENDENCY=./code/js
+ARG APP_HOME=/usr/app
+
+WORKDIR $APP_HOME
+
+ENV PATH $APP_HOME/node_modules/.bin:$PATH
+
+COPY $DEPENDENCY/package.json $APP_HOME
+COPY $DEPENDENCY/package-lock.json $APP_HOME
+
+RUN npm install
+
+COPY $DEPENDENCY $APP_HOME
+
+CMD ["npm", "start"]

@@ -76,90 +76,92 @@ function GameConfig(
         error
     }: GameConfigProps
 ) {
-    return <PageContent title={"Game Configuration"} error={error}>
-        <Box sx={{
-            mt: 1,
-            alignItems: 'center',
-            width: 400,
-        }}>
-            <TextField
-                margin="normal"
-                fullWidth
-                label="Game Name"
-                name="gameName"
-                onChange={(event) => {
-                    setGameName(event.target.value);
-                }}
-            />
+    return (
+        <PageContent title={"Game Configuration"} error={error}>
+            <Box sx={{
+                mt: 1,
+                alignItems: 'center',
+                width: 400,
+            }}>
+                <TextField
+                    margin="normal"
+                    fullWidth
+                    label="Game Name"
+                    name="gameName"
+                    onChange={(event) => {
+                        setGameName(event.target.value);
+                    }}
+                />
 
-            <GameConfigSlider
-                id={"board-size-slider"}
-                label={`Grid Size ${gridSize}x${gridSize}`}
-                defaultValue={defaultBoardSize}
-                step={1}
-                min={minBoardSize}
-                max={maxBoardSize}
-                onValueChange={(value) => {
-                    setGridSize(value);
+                <GameConfigSlider
+                    id={"board-size-slider"}
+                    label={`Grid Size ${gridSize}x${gridSize}`}
+                    defaultValue={defaultBoardSize}
+                    step={1}
+                    min={minBoardSize}
+                    max={maxBoardSize}
+                    onValueChange={(value) => {
+                        setGridSize(value);
 
-                    Array.from(shipTypes.keys()).forEach(shipType => {
-                        shipTypes.set(shipType, 1);
-                    })
-                    setShipTypes(new Map(shipTypes));
-                }}
-            />
+                        Array.from(shipTypes.keys()).forEach(shipType => {
+                            shipTypes.set(shipType, 1);
+                        })
+                        setShipTypes(new Map(shipTypes));
+                    }}
+                />
 
-            <GameConfigSlider
-                id={"shots-per-turn-slider"}
-                label={`Shots per turn ${shotsPerRound}`}
-                defaultValue={defaultShotsPerTurn}
-                step={1}
-                min={minShotsPerTurn}
-                max={maxShotsPerTurn}
-                onValueChange={setShotsPerRound}
-            />
+                <GameConfigSlider
+                    id={"shots-per-turn-slider"}
+                    label={`Shots per turn ${shotsPerRound}`}
+                    defaultValue={defaultShotsPerTurn}
+                    step={1}
+                    min={minShotsPerTurn}
+                    max={maxShotsPerTurn}
+                    onValueChange={setShotsPerRound}
+                />
 
-            <GameConfigSlider
-                id={"time-per-turn-slider"}
-                label={`Time per turn ${maxTimePerRound} seconds`}
-                defaultValue={defaultMaxTimePerTurn}
-                step={stepMaxTimePerTurn}
-                min={minMaxTimePerTurn}
-                max={maxMaxTimePerTurn}
-                onValueChange={setMaxTimePerRound}
-            />
+                <GameConfigSlider
+                    id={"time-per-turn-slider"}
+                    label={`Time per turn ${maxTimePerRound} seconds`}
+                    defaultValue={defaultMaxTimePerTurn}
+                    step={stepMaxTimePerTurn}
+                    min={minMaxTimePerTurn}
+                    max={maxMaxTimePerTurn}
+                    onValueChange={setMaxTimePerRound}
+                />
 
-            <GameConfigSlider
-                id={"time-for-board-configuration-slider"}
-                label={`Time for board configuration ${maxTimeForLayoutPhase} seconds`}
-                defaultValue={defaultMaxTimeForLayoutPhase}
-                step={stepMaxTimeForLayoutPhase}
-                min={minMaxTimeForLayoutPhase}
-                max={maxMaxTimeForLayoutPhase}
-                onValueChange={setMaxTimeForLayoutPhase}
-            />
+                <GameConfigSlider
+                    id={"time-for-board-configuration-slider"}
+                    label={`Time for board configuration ${maxTimeForLayoutPhase} seconds`}
+                    defaultValue={defaultMaxTimeForLayoutPhase}
+                    step={stepMaxTimeForLayoutPhase}
+                    min={minMaxTimeForLayoutPhase}
+                    max={maxMaxTimeForLayoutPhase}
+                    onValueChange={setMaxTimeForLayoutPhase}
+                />
 
-            <ShipSelector
-                shipTypes={shipTypes}
-                setShipTypes={setShipTypes}
-                gridSize={gridSize}
-            />
+                <ShipSelector
+                    shipTypes={shipTypes}
+                    setShipTypes={setShipTypes}
+                    gridSize={gridSize}
+                />
 
-            <Button
-                fullWidth
-                size="large"
-                variant="contained"
-                sx={{mt: 3, mb: 2}}
-                startIcon={<Add/>}
-                color="primary"
-                onClick={() => {
-                    handleCreateGame();
-                }}
-            >
-                Create Game
-            </Button>
-        </Box>
-    </PageContent>
+                <Button
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    sx={{mt: 3, mb: 2}}
+                    startIcon={<Add/>}
+                    color="primary"
+                    onClick={() => {
+                        handleCreateGame();
+                    }}
+                >
+                    Create Game
+                </Button>
+            </Box>
+        </PageContent>
+    );
 }
 
 export default GameConfig;
