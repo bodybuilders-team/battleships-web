@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Typography from "@mui/material/Typography";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 import to from "../../../Utils/await-to";
@@ -8,6 +8,12 @@ import {useNavigate} from "react-router-dom";
 import PageContent from "../../Shared/PageContent";
 import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
 import {useInterval} from "../Shared/TimersHooks/useInterval";
+import {useSession} from "../../../Utils/Session";
+import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
+import {Game} from "../../../Domain/games/game/Game";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
+import {Rels} from "../../../Utils/navigation/Rels";
+import {useAbortableEffect} from "../../../Utils/abortableUtils";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
 const POLLING_DELAY = 1000;
@@ -23,17 +29,50 @@ export default function Matchmake() {
     const [matchmade, setMatchmade] = useState(false);
     const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
     const [gameId, setGameId] = useState<number | null>(null);
+    const session = useSession();
 
-    useEffect(() => {
+    const navigationState = useNavigationState()
+    useAbortableEffect(() => {
         matchmake();
+
+        return () => {
+            navigationState.links.delete(Rels.GAME);
+        }
     }, []);
 
     useInterval(checkIfOpponentJoined, POLLING_DELAY, [isWaitingForOpponent]);
+
+    async function checkIfThereIsAnAvailableGame() {
+        const [err, res] = await to(battleshipsService.gamesService.getGames({
+            username: session!.username,
+            phases: ["WAITING_FOR_PLAYERS"]
+        }));
+
+        if (err) {
+            handleError(err, setError);
+            return false;
+        }
+
+        const games = res.getEmbeddedSubEntities<GetGameOutputModel>()
+
+        if (games.length > 0) {
+            const game = new Game(games[0].properties!)
+
+            setGameId(game.id);
+            setWaitingForOpponent(true);
+            return true
+        }
+
+        return false
+    }
 
     /**
      * Matchmakes the player.
      */
     async function matchmake() {
+        if (await checkIfThereIsAnAvailableGame() == true)
+            return;
+
         const [err, res] = await to(
             battleshipsService.gamesService.matchmake(defaultGameConfig)
         );

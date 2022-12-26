@@ -25,21 +25,6 @@ export class GameConfig {
     }
 
     /**
-     * Converts the GameConfig to a GameConfigModel.
-     *
-     * @return the GameConfigModel
-     */
-    toGameConfigModel(): GameConfigModel {
-        return {
-            gridSize: this.gridSize,
-            shotsPerRound: this.shotsPerRound,
-            maxTimePerRound: this.maxTimePerRound,
-            maxTimeForLayoutPhase: this.maxTimeForLayoutPhase,
-            shipTypes: GameConfig.mapToShipTypesModel(this.shipTypes)
-        };
-    }
-
-    /**
      * Converts a list of ShipTypeModels to a map of ShipTypes and quantities.
      *
      * @param shipTypes the list of ShipTypeModels
@@ -67,5 +52,20 @@ export class GameConfig {
         });
 
         return shipTypesModel;
+    }
+
+    /**
+     * Converts the GameConfig to a GameConfigModel.
+     *
+     * @return the GameConfigModel
+     */
+    toGameConfigModel(): GameConfigModel {
+        return {
+            gridSize: this.gridSize,
+            shotsPerRound: this.shotsPerRound,
+            maxTimePerRound: this.maxTimePerRound,
+            maxTimeForLayoutPhase: this.maxTimeForLayoutPhase,
+            shipTypes: GameConfig.mapToShipTypesModel(this.shipTypes)
+        };
     }
 }

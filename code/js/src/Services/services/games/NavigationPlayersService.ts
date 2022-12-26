@@ -10,11 +10,16 @@ import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput";
 import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput";
 import NavigationBattleshipsService from "../../NavigationBattleshipsService";
 import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput";
+import {executeRequestAndRefreshTokenIfNecessary} from "../../utils/executeRequestUtils";
 
 /**
  * Service to navigate through the players endpoints.
  */
 export class NavigationPlayersService {
+    constructor(private battleshipsService: NavigationBattleshipsService, private sessionManager: SessionManager) {
+
+    }
+
     private get links(): Map<string, string> {
         return this.battleshipsService.links;
     }
@@ -23,84 +28,129 @@ export class NavigationPlayersService {
         return this.sessionManager.session ?? throwError("Session not found");
     }
 
-    constructor(private battleshipsService: NavigationBattleshipsService, private sessionManager: SessionManager) {
-    }
-
     /**
      * Gets the player's fleet.
      *
+     * @param signal the signal to cancel the request
+     *
      * @return a promise with the API result of the get my fleet request
      */
-    async getMyFleet(): Promise<GetMyFleetOutput> {
-        return await PlayersService.getMyFleet(
-            this.session.accessToken,
-            this.links.get(Rels.GET_MY_FLEET) ?? throwError("Get my fleet link not found")
-        );
+    async getMyFleet(signal?: AbortSignal): Promise<GetMyFleetOutput> {
+        return await executeRequestAndRefreshTokenIfNecessary(
+            this.battleshipsService.usersService,
+            this.sessionManager,
+            () => PlayersService.getMyFleet(
+                this.session.accessToken,
+                this.links.get(Rels.GET_MY_FLEET) ?? throwError("Get my fleet link not found"),
+                signal
+            ),
+            signal
+        )
     }
 
     /**
      * Deploys the player's fleet.
      *
      * @param fleet the fleet to deploy
+     * @param signal the signal to cancel the request
      *
      * @return a promise with the API result of the deploy fleet request
      */
-    async deployFleet(fleet: DeployFleetInput): Promise<DeployFleetOutput> {
-        return await PlayersService.deployFleet(
-            this.session.accessToken,
-            this.links.get(Rels.DEPLOY_FLEET) ?? throwError("Deploy fleet link not found"),
-            fleet
-        );
+    async deployFleet(fleet: DeployFleetInput, signal?: AbortSignal): Promise<DeployFleetOutput> {
+        return await executeRequestAndRefreshTokenIfNecessary(
+            this.battleshipsService.usersService,
+            this.sessionManager,
+            () => PlayersService.deployFleet(
+                this.session.accessToken,
+                this.links.get(Rels.DEPLOY_FLEET) ?? throwError("Deploy fleet link not found"),
+                fleet,
+                signal
+            ),
+            signal
+        )
     }
 
     /**
      * Gets the opponent's fleet.
      *
+     * @param signal the signal to cancel the request
+     *
      * @return a promise with the API result of the get opponent fleet request
      */
-    async getOpponentFleet(): Promise<GetOpponentFleetOutput> {
-        return await PlayersService.getOpponentFleet(
-            this.session.accessToken,
-            this.links.get(Rels.GET_OPPONENT_FLEET) ?? throwError("Get opponent fleet link not found")
-        );
+    async getOpponentFleet(signal?: AbortSignal): Promise<GetOpponentFleetOutput> {
+        return await executeRequestAndRefreshTokenIfNecessary(
+            this.battleshipsService.usersService,
+            this.sessionManager,
+            () => PlayersService.getOpponentFleet(
+                this.session.accessToken,
+                this.links.get(Rels.GET_OPPONENT_FLEET)
+                ?? throwError("Get opponent fleet link not found"),
+                signal
+            ),
+            signal
+        )
     }
 
     /**
      * Gets the player's shots.
      *
+     * @param signal the signal to cancel the request
+     *
      * @return a promise with the API result of the get my shots request
      */
-    async getMyShots(): Promise<GetMyShotsOutput> {
-        return await PlayersService.getMyShots(
-            this.session.accessToken,
-            this.links.get(Rels.GET_MY_SHOTS) ?? throwError("Get my shots link not found")
-        );
+    async getMyShots(signal?: AbortSignal): Promise<GetMyShotsOutput> {
+        return await executeRequestAndRefreshTokenIfNecessary(
+            this.battleshipsService.usersService,
+            this.sessionManager,
+            () => PlayersService.getMyShots(
+                this.session.accessToken,
+                this.links.get(Rels.GET_MY_SHOTS) ?? throwError("Get my shots link not found"),
+                signal
+            ),
+            signal
+        )
     }
 
     /**
      * Fires shots.
      *
      * @param shots the shots to fire
+     * @param signal the signal to cancel the request
      *
      * @return a promise with the API result of the fire shots request
      */
-    async fireShots(shots: FireShotsInput): Promise<FireShotsOutput> {
-        return await PlayersService.fireShots(
-            this.session.accessToken,
-            this.links.get(Rels.FIRE_SHOTS) ?? throwError("Fire shots link not found"),
-            shots
-        );
+    async fireShots(shots: FireShotsInput, signal?: AbortSignal): Promise<FireShotsOutput> {
+        return await executeRequestAndRefreshTokenIfNecessary(
+            this.battleshipsService.usersService,
+            this.sessionManager,
+            () => PlayersService.fireShots(
+                this.session.accessToken,
+                this.links.get(Rels.FIRE_SHOTS) ?? throwError("Fire shots link not found"),
+                shots,
+                signal
+            ),
+            signal
+        )
     }
 
     /**
      * Gets the opponent's shots.
      *
+     * @param signal the signal to cancel the request
+     *
      * @return a promise with the API result of the get opponent shots request
      */
-    async getOpponentShots(): Promise<GetOpponentShotsOutput> {
-        return await PlayersService.getOpponentShots(
-            this.session.accessToken,
-            this.links.get(Rels.GET_OPPONENT_SHOTS) ?? throwError("Get opponent shots link not found")
-        );
+    async getOpponentShots(signal?: AbortSignal): Promise<GetOpponentShotsOutput> {
+        return await executeRequestAndRefreshTokenIfNecessary(
+            this.battleshipsService.usersService,
+            this.sessionManager,
+            () => PlayersService.getOpponentShots(
+                this.session.accessToken,
+                this.links.get(Rels.GET_OPPONENT_SHOTS)
+                ?? throwError("Get opponent shots link not found"),
+                signal
+            ),
+            signal
+        )
     }
 }

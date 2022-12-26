@@ -41,11 +41,14 @@ import javax.validation.Valid
 class GamesController(private val gamesService: GamesService) {
 
     /**
-     * Handles the request to get a list of games.
+     * Handles the request to get a list of all the games.
      *
      * @param offset the offset of the list of games
      * @param limit the limit of the list of games
-     * @param player if present, the list of games will be filtered by the player
+     * @param username the username of the player
+     * @param excludeUsername the username of the player to exclude
+     * @param phases the phases of the games
+     * @param ids the ids of the games
      *
      * @return the response to the request with the list of games
      */
@@ -53,12 +56,18 @@ class GamesController(private val gamesService: GamesService) {
     fun getGames(
         @RequestParam(Params.OFFSET_PARAM) offset: Int? = null,
         @RequestParam(Params.LIMIT_PARAM) limit: Int? = null,
-        @RequestParam(Params.PLAYER_PARAM) player: String? = null
+        @RequestParam(Params.USERNAME_PARAM) username: String? = null,
+        @RequestParam(Params.EXCLUDE_USERNAME_PARAM) excludeUsername: String? = null,
+        @RequestParam(Params.GAME_PHASES_PARAM) phases: List<String>? = null,
+        @RequestParam(Params.IDS_PARAM) ids: List<Int>? = null
     ): SirenEntity<GetGamesOutputModel> {
         val games = gamesService.getGames(
             offset = offset ?: Params.OFFSET_DEFAULT,
             limit = limit ?: Params.LIMIT_DEFAULT,
-            player = player
+            username = username,
+            excludeUsername = excludeUsername,
+            phases = phases,
+            ids = ids
         )
 
         return SirenEntity(
@@ -75,8 +84,9 @@ class GamesController(private val gamesService: GamesService) {
                         Links.self(Uris.gameById(gameId = game.id))
                     ),
                     actions = listOf(
-                        Actions.joinGame(gameId = game.id)
-                    )
+                        Actions.joinGame(gameId = game.id),
+                        Actions.leaveGame(gameId = game.id)
+                    ),
                 )
             }
         )

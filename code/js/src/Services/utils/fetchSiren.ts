@@ -2,6 +2,19 @@ import {SirenEntity, sirenMediaType} from "../media/siren/SirenEntity";
 import {Problem, problemMediaType} from "../media/Problem";
 import * as React from "react";
 import {API_ENDPOINT} from "../BattleshipsService";
+import to from "../../Utils/await-to";
+
+export class NetworkError extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+export class UnexpectedResponseError extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
 
 /**
  * Fetches a Siren entity from the given URL.
@@ -10,34 +23,45 @@ import {API_ENDPOINT} from "../BattleshipsService";
  * @param token the token to send with the request
  * @param method the HTTP method to use
  * @param body the body to send with the request
+ * @param signal the signal to abort the request
  *
  * @return a promise that resolves to the Siren entity
  */
 export async function fetchSiren<T>(
     input: RequestInfo | URL,
-    token?: string | null,
+    token?: string,
     method?: string,
-    body?: BodyInit | null,
+    body?: BodyInit,
+    signal?: AbortSignal
 ): Promise<SirenEntity<T>> {
-    const res = await fetch(input, {
+
+    const headers: any = {
+        'Accept': `${sirenMediaType}, ${problemMediaType}`,
+        'Content-Type': 'application/json',
+    }
+
+    if (token)
+        headers['Authorization'] = `Bearer ${token}`;
+
+    const [err, res] = await to(fetch(input, {
         method: method,
-        headers: {
-            'Accept': `${sirenMediaType}, ${problemMediaType}`,
-            'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
-        },
-        body: body
-    });
+        headers,
+        body: body,
+        signal: signal,
+    }));
+
+    if (err)
+        throw new NetworkError(err.message);
 
     if (!res.ok) {
         if (res.headers.get('Content-Type') !== problemMediaType)
-            throw new Error(`Unexpected response type: ${res.headers.get('Content-Type')}`);
+            throw new UnexpectedResponseError(`Unexpected response type: ${res.headers.get('Content-Type')}`);
 
         throw new Problem(await res.json());
     }
 
     if (res.headers.get('Content-Type') !== sirenMediaType)
-        throw new Error(`Unexpected response type: ${res.headers.get('Content-Type')}`);
+        throw new UnexpectedResponseError(`Unexpected response type: ${res.headers.get('Content-Type')}`);
 
     const json = await res.json();
 
@@ -64,11 +88,12 @@ export function handleError(
  * Sends a GET request to the specified link.
  *
  * @param input the link to send the request to
+ * @param signal the signal to abort the request
  *
  * @return the result of the request
  */
-export function get<T>(input: RequestInfo | URL): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + input);
+export function get<T>(input: RequestInfo | URL, signal?: AbortSignal): Promise<SirenEntity<T>> {
+    return fetchSiren<T>(API_ENDPOINT + input, undefined, undefined, undefined, signal);
 }
 
 /**
@@ -76,11 +101,12 @@ export function get<T>(input: RequestInfo | URL): Promise<SirenEntity<T>> {
  *
  * @param input the link to send the request to
  * @param token the token to send in the header
+ * @param signal the signal to abort the request
  *
  * @return the result of the request
  */
-export function getWithAuth<T>(input: RequestInfo | URL, token: string): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + input, token);
+export function getWithAuth<T>(input: RequestInfo | URL, token: string, signal?: AbortSignal): Promise<SirenEntity<T>> {
+    return fetchSiren<T>(API_ENDPOINT + input, token, undefined, undefined, signal);
 }
 
 /**
@@ -88,11 +114,12 @@ export function getWithAuth<T>(input: RequestInfo | URL, token: string): Promise
  *
  * @param input the link to send the request to
  * @param body the body to send in the request
+ * @param signal the signal to abort the request
  *
  * @return the result of the request
  */
-export function post<T>(input: RequestInfo | URL, body: BodyInit | null): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + input, null, 'POST', body);
+export function post<T>(input: RequestInfo | URL, body: BodyInit, signal?: AbortSignal): Promise<SirenEntity<T>> {
+    return fetchSiren<T>(API_ENDPOINT + input, undefined, 'POST', body, signal);
 }
 
 /**
@@ -100,14 +127,16 @@ export function post<T>(input: RequestInfo | URL, body: BodyInit | null): Promis
  *
  * @param link the link to send the request to
  * @param token the token to send in the header
- * @param body the body to send in the request, if null, an empty request is sent
+ * @param body the body to send in the request, if undefined, an empty request is sent
+ * @param signal the signal to abort the request
  *
  * @return the result of the request
  */
 export function postWithAuth<T>(
     link: RequestInfo | URL,
     token: string,
-    body?: BodyInit | null
+    body?: BodyInit,
+    signal?: AbortSignal
 ): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + link, token, 'POST', body);
+    return fetchSiren<T>(API_ENDPOINT + link, token, 'POST', body, signal);
 }

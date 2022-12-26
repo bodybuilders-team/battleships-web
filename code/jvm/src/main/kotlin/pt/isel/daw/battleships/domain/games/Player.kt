@@ -130,14 +130,14 @@ class Player {
         val rowsRange = game.config.rowsRange
 
         return (
-                orientation == Orientation.HORIZONTAL &&
-                        (coordinate.col + size - 1) in colsRange &&
-                        coordinate.row in rowsRange
-                ) || (
-                orientation == Orientation.VERTICAL &&
-                        (coordinate.row + size - 1) in rowsRange &&
-                        coordinate.col in colsRange
-                )
+            orientation == Orientation.HORIZONTAL &&
+                (coordinate.col + size - 1) in colsRange &&
+                coordinate.row in rowsRange
+            ) || (
+            orientation == Orientation.VERTICAL &&
+                (coordinate.row + size - 1) in rowsRange &&
+                coordinate.col in colsRange
+            )
     }
 
     /**

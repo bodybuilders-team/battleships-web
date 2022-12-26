@@ -4,7 +4,7 @@ import {GetGameOutputModel} from "../../../Services/services/games/models/games/
 import {Player} from "./Player";
 
 export class Game {
-    readonly id: string
+    readonly id: number
     readonly name: string;
     readonly creator: string;
     readonly config: GameConfig;

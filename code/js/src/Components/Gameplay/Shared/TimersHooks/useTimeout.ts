@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useAbortableEffect} from "../../../../Utils/abortableUtils";
 
 /**
  * Hook that calls a function after a delay.
@@ -8,7 +8,7 @@ import {useEffect} from "react";
  * @param dependencies the dependencies of the hook
  */
 export function useTimeout(callback: () => void, delay: number, dependencies: any[]) {
-    useEffect(activateTimeout, dependencies);
+    useAbortableEffect(activateTimeout, dependencies);
 
     /**
      * Activates the timeout.

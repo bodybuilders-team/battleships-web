@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {EmbeddedSubEntity} from "../../../Services/media/siren/SubEntity";
 import to from "../../../Utils/await-to";
 import {handleError} from "../../../Services/utils/fetchSiren";
@@ -12,6 +12,7 @@ import {useNavigate} from "react-router-dom";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {useSession} from "../../../Utils/Session";
 import Typography from "@mui/material/Typography";
+import {useAbortableEffect} from "../../../Utils/abortableUtils";
 
 /**
  * Lobby component.
@@ -26,7 +27,7 @@ export default function Lobby() {
     const [games, setGames] = useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null);
     const [gamesLoaded, setGamesLoaded] = useState(false);
 
-    useEffect(() => {
+    useAbortableEffect(() => {
         fetchGames()
     }, []);
 
@@ -37,7 +38,10 @@ export default function Lobby() {
         if (gamesLoaded)
             return;
 
-        const [err, res] = await to(battleshipsService.gamesService.getGames());
+        const [err, res] = await to(battleshipsService.gamesService.getGames({
+            excludeUsername: session!.username,
+            phases: ["WAITING_FOR_PLAYERS"]
+        }));
 
         if (err) {
             handleError(err, setError);
@@ -46,10 +50,6 @@ export default function Lobby() {
 
         const filteredGames = res
             .getEmbeddedSubEntities<GetGameOutputModel>()
-            .filter(game =>
-                game.properties?.state.phase === "WAITING_FOR_PLAYERS" &&
-                game.properties?.creator !== session?.username
-            );
 
         setGames(filteredGames);
         setGamesLoaded(true);

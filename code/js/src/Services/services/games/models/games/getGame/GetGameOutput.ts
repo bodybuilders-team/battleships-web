@@ -10,7 +10,7 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity"
  * @property players the players of the game
  */
 export interface GetGameOutputModel {
-    id: string;
+    id: number;
     name: string;
     creator: string;
     config: GameConfigModel;

@@ -15,7 +15,11 @@ plugins {
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
+    idea
 }
+
+
 
 noArg {
     annotation(NoArg::class.java.`package`.name + "." + NoArg::class.java.simpleName)
@@ -26,7 +30,17 @@ repositories {
     mavenCentral()
 }
 
+idea {
+    module {
+        val kaptMain = file("build/generated/source/kapt/main")
+        sourceDirs.plusAssign(kaptMain)
+        generatedSourceDirs.plusAssign(kaptMain)
+    }
+}
+
 dependencies {
+    kapt("org.hibernate:hibernate-jpamodelgen")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -34,6 +48,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    annotationProcessor("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.postgresql:postgresql")
 
@@ -45,6 +60,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
+
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

@@ -4,8 +4,10 @@ import NavigationUsersService from "./services/users/NavigationUsersService";
 import {NavigationPlayersService} from "./services/games/NavigationPlayersService";
 import {useNavigationState} from "../Utils/navigation/NavigationState";
 import {useMemo} from "react";
-import {SessionManager, useSessionManager} from "../Utils/Session";
+import {Session, SessionManager, useSessionManager} from "../Utils/Session";
 import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
+import {throwError} from "./utils/errorUtils";
+import {executeRequest} from "./utils/executeRequestUtils";
 
 
 /**
@@ -16,38 +18,43 @@ import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
  * @property playersService the service that handles the players
  */
 export default class NavigationBattleshipsService {
-
     readonly usersService: NavigationUsersService;
     readonly gamesService: NavigationGamesService;
     readonly playersService: NavigationPlayersService;
+    public readonly links: Map<string, string>
+    protected sessionManager: SessionManager;
 
-    private readonly _links: Map<string, string>
-    public get links(): Map<string, string> {
-        return this._links;
-    }
-
-    constructor(links: Map<string, string>, private sessionManager: SessionManager) {
-        this._links = links;
+    constructor(links: Map<string, string>, sessionManager: SessionManager) {
+        this.links = links;
+        this.sessionManager = sessionManager;
         this.usersService = new NavigationUsersService(this, sessionManager);
         this.gamesService = new NavigationGamesService(this, sessionManager);
         this.playersService = new NavigationPlayersService(this, sessionManager);
     }
 
+    protected get session(): Session {
+        return this.sessionManager.session ?? throwError("Session not found");
+    }
+
     /**
      * Gets the home information.
      *
+     * @param signal the signal to cancel the request
+     *
      * @return the API result of the get home request
      */
-    async getHome(): Promise<GetHomeOutput> {
-        const res = await BattleshipsService.getHome();
+    async getHome(signal?: AbortSignal): Promise<GetHomeOutput> {
+        const res = await executeRequest(() => BattleshipsService.getHome(signal), signal)
 
         res.getActionLinks()
             .forEach((value, key) => {
-                this._links.set(key, value);
+                this.links.set(key, value);
             });
 
         return res;
     }
+
+
 }
 
 /**

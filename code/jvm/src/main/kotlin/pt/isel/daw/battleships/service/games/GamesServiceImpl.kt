@@ -19,9 +19,10 @@ import pt.isel.daw.battleships.service.games.dtos.game.GameDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GamesDTO
 import pt.isel.daw.battleships.service.games.dtos.game.MatchmakeResponseDTO
-import pt.isel.daw.battleships.service.utils.OffsetPageRequest
 import pt.isel.daw.battleships.service.utils.findFirstOrNull
 import pt.isel.daw.battleships.utils.JwtProvider
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
 
 /**
  * Service that handles the business logic of the games.
@@ -38,22 +39,47 @@ class GamesServiceImpl(
     jwtProvider: JwtProvider
 ) : GamesService, AuthenticatedService(usersRepository, jwtProvider) {
 
-    override fun getGames(offset: Int, limit: Int, player: String?): GamesDTO {
-        if (offset < 0 || limit < 0) {
-            throw InvalidPaginationParamsException("Offset and limit must be positive")
-        }
+    @PersistenceContext
+    lateinit var entityManager: EntityManager
 
-        if (limit > MAX_GAMES_LIMIT) {
+    override fun getGames(
+        offset: Int,
+        limit: Int,
+        username: String?,
+        excludeUsername: String?,
+        phases: List<String>?,
+        ids: List<Int>?
+    ): GamesDTO {
+        if (offset < 0 || limit < 0)
+            throw InvalidPaginationParamsException("Offset and limit must be positive")
+
+        if (limit > MAX_GAMES_LIMIT)
             throw InvalidPaginationParamsException("Limit must be less than $MAX_GAMES_LIMIT")
-        }
+
+        val (filteredGames, count) = gamesRepository
+            .findAllWithCount(
+                username,
+                excludeUsername,
+                phases,
+                ids,
+                limit.toLong(),
+                offset.toLong()
+            )
 
         return GamesDTO(
-            games = gamesRepository
-                .findAll(OffsetPageRequest(offset.toLong(), limit))
-                .toList()
+            games = filteredGames
                 .onEach(Game::updateIfPhaseExpired)
+                .let { games ->// Need to filter again because the updateIfPhaseExpired can change the phase
+                    if (phases != null)
+                        games.filter {
+                            it.state.phase in phases.map { phase ->
+                                GameState.GamePhase.valueOf(phase)
+                            }
+                        }
+                    else games
+                }
                 .map(::GameDTO),
-            totalCount = gamesRepository.count().toInt()
+            totalCount = count.toInt()
         )
     }
 
@@ -87,8 +113,11 @@ class GamesServiceImpl(
                 )
             }
 
+            entityManager.lock(game, javax.persistence.LockModeType.PESSIMISTIC_WRITE)
+
             game.updateIfPhaseExpired()
             if (game.state.phase != GameState.GamePhase.WAITING_FOR_PLAYERS) {
+                entityManager.lock(game, javax.persistence.LockModeType.NONE)
                 continue
             }
 
@@ -183,6 +212,7 @@ class GamesServiceImpl(
         val game = gamesRepository
             .findById(id = gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
+        entityManager.lock(game, javax.persistence.LockModeType.PESSIMISTIC_WRITE)
 
         game.updateIfPhaseExpired()
 

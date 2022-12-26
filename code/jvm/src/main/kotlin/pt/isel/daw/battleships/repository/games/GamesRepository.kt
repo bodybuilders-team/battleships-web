@@ -43,14 +43,23 @@ interface GamesRepositoryCustom {
     fun findAllAvailableGamesWithConfig(config: GameConfig): Stream<Game>
 
     /**
-     * Finds the games that have the giver player, are in the given phase, with the giver offset and limit.
+     * Finds all games with the given parameters.
      *
-     * @param player the username of the player
-     * @param phase the phase of the games
-     * @param offset the offset of the pagination
-     * @param limit the limit of the pagination
+     * @param username the username of the player
+     * @param excludeUsername the username of the player to exclude
+     * @param phase the phase of the game
+     * @param ids the IDs of the games
+     * @param limit the maximum number of games to return
+     * @param offset the offset of the games to return
      *
      * @return stream with the games that have the giver player, are in the given phase, with the giver offset and limit
      */
-    fun findAllByPlayerAndStatePhase(player: String, phase: GamePhase, offset: Int, limit: Int): Stream<Game>
+    fun findAllWithCount(
+        username: String?,
+        excludeUsername: String?,
+        phase: List<String>?,
+        ids: List<Int>?,
+        limit: Long,
+        offset: Long
+    ): GamesRepositoryCustomImpl.GamesWithCountResponse
 }

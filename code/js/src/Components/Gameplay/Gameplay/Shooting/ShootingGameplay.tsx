@@ -1,6 +1,6 @@
 import Shooting from "./Shooting";
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import to from "../../../../Utils/await-to";
 import {Ship} from "../../../../Domain/games/ship/Ship";
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
@@ -16,6 +16,7 @@ import {Game} from "../../../../Domain/games/game/Game";
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup";
 import {Problem} from "../../../../Services/media/Problem";
 import {ProblemTypes} from "../../../../Utils/types/problemTypes";
+import {useAbortableEffect} from "../../../../Utils/abortableUtils";
 
 /**
  * Properties for the ShootingGameplay component.
@@ -35,7 +36,7 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
     const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [myFleet, setMyFleet] = useState<Ship[]>();
 
-    useEffect(() => {
+    useAbortableEffect(() => {
         fetchMyFleet();
     }, []);
 

@@ -5,9 +5,9 @@
 The project development is divided into 2 phases:
 
 * **Phase 1**: Development of the Web API for the Battleships game - **backend**
-  * The backend documentation is available [here](code/jvm/README.md)
+    * The backend documentation is available [here](code/jvm/README.md)
 * **Phase 2**: Development of the Web UI for the Battleships game - **frontend**
-  * The fronted documentation is available [here](code/js/README.md)
+    * The fronted documentation is available [here](code/js/README.md)
 
 The HTTP API documentation required for a frontend client application to use this API is
 available [here](docs/battleships-api-doc.md).

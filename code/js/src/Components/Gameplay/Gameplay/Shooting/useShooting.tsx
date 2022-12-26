@@ -7,13 +7,14 @@ import {GameState} from "../../../../Domain/games/game/GameState";
 import {MyBoard} from "../../../../Domain/games/board/MyBoard";
 import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard";
 import {useInterval} from "../../Shared/TimersHooks/useInterval";
-import to from "../../../../Utils/await-to";
 import {useTimeout} from "../../Shared/TimersHooks/useTimeout";
 import {Coordinate} from "../../../../Domain/games/Coordinate";
 import {throwError} from "../../../../Services/utils/errorUtils";
 import {FiredShot} from "../../../../Domain/games/shot/FiredShot";
 import {Problem} from "../../../../Services/media/Problem";
 import {ProblemTypes} from "../../../../Utils/types/problemTypes";
+import {useMountedSignal} from "../../../../Utils/useMounted";
+import to from "../../../../Utils/await-to";
 
 const TURN_SWITCH_DELAY = 1000;
 const POLLING_DELAY = 1000;
@@ -29,8 +30,6 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
     const battleshipsService = useBattleshipsService();
     const session = useSession();
 
-    // TODO: Combine state into one object, to do this we need to separate api calls from state updates
-    // Maybe we can do this with a redux?
     const [gameState, setGameState] = useState<GameState>(game.state);
     const [myBoard, setMyBoard] = useState<MyBoard>(MyBoard.fromFleet(game.config.gridSize, myFleet));
     const [opponentBoard, setOpponentBoard] = useState<OpponentBoard>(new OpponentBoard(game.config.gridSize));
@@ -39,7 +38,10 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
     const [switchTurnWithDelay, setSwitchTurnWithDelay] = useState<boolean>(false);
 
     useInterval(checkIfOpponentHasFinishedHisTurn, POLLING_DELAY, [myTurn]);
+
     useTimeout(switchTurn, TURN_SWITCH_DELAY, [switchTurnWithDelay]);
+
+    const mountedSignal = useMountedSignal();
 
     /**
      * Checks if the opponent has finished his turn.
@@ -99,7 +101,8 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
             shots: shots.map(shot => {
                 return {coordinate: shot.toCoordinateModel()}
             })
-        }));
+        }))
+
 
         if (err) {
             if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {

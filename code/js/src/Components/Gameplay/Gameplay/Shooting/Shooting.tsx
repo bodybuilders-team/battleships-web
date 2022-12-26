@@ -1,6 +1,6 @@
 import {handleError} from "../../../../Services/utils/fetchSiren";
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Box from "@mui/material/Box";
 import BoardView from "../../Shared/Board/BoardView";
 import Button from "@mui/material/Button";
@@ -19,12 +19,14 @@ import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton";
 import Container from "@mui/material/Container";
 import {CancelRounded, RefreshRounded} from "@mui/icons-material";
 import RoundView from "./RoundView";
-import to from "../../../../Utils/await-to";
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
 import {useNavigate} from "react-router-dom";
 import {Uris} from "../../../../Utils/navigation/Uris";
 import ErrorAlert from "../../../Shared/ErrorAlert";
+import {useMountedSignal} from "../../../../Utils/useMounted";
+import to from "../../../../Utils/await-to";
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
+import {useAbortableEffect} from "../../../../Utils/abortableUtils";
 
 /**
  * Properties for the Shooting component.
@@ -57,8 +59,8 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
     const [selectedCells, setSelectedCells] = useState<Coordinate[]>([]);
     const [canFireShots, setCanFireShots] = useState<boolean>(shootingState.myTurn);
 
-    useEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn]);
-    useEffect(callOnFinishIfGameIsFinished, [shootingState.finished]);
+    useAbortableEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn]);
+    useAbortableEffect(callOnFinishIfGameIsFinished, [shootingState.finished]);
 
     /**
      * Disables the fire shots button when it's not my turn.
@@ -76,11 +78,12 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
             onFinished();
     }
 
+
     /**
      * Callback to call when the player wants to leave the game.
      */
     async function leaveGame() {
-        const [err] = await to(battleshipsService.gamesService.leaveGame());
+        const [err, res] = await to(battleshipsService.gamesService.leaveGame())
 
         if (err) {
             handleError(err, setError);

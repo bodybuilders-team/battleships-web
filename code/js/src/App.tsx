@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {useEffect} from 'react';
 import './App.css';
 import NavBar from "./Layouts/NavBar";
 import {Navigate, Route, Routes} from 'react-router-dom';
@@ -17,6 +16,8 @@ import CreateGame from "./Components/Gameplay/CreateGame/CreateGame";
 import Lobby from "./Components/Gameplay/Lobby/Lobby";
 import About from "./Components/About/About";
 import {Uris} from "./Utils/navigation/Uris";
+import {useMountedSignal} from "./Utils/useMounted";
+import {useAbortableEffect} from "./Utils/abortableUtils";
 import HOME = Uris.HOME;
 import LOGIN = Uris.LOGIN;
 import REGISTER = Uris.REGISTER;
@@ -29,24 +30,25 @@ import CREATE_GAME = Uris.CREATE_GAME;
 import LOBBY = Uris.LOBBY;
 import ABOUT = Uris.ABOUT;
 
+
 /**
  * App component.
  */
 export default function App() {
     const loggedIn = useLoggedIn();
     const battleshipsService = useBattleshipsService();
+    const mountedSignal = useMountedSignal()
 
-    useEffect(() => {
+    useAbortableEffect(() => {
         getHome();
-    }, []);
+    })
 
     /**
      * Fetches the home page.
      */
     async function getHome() {
-        await battleshipsService.getHome();
+        await battleshipsService.getHome(mountedSignal)
     }
-
 
     /**
      * Protection route component, redirects to login page if not logged in.

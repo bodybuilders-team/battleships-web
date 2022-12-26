@@ -16,14 +16,14 @@ export class Ship {
     coordinate: Coordinate;
     orientation: Orientation;
 
-    get coordinates(): Coordinate[] {
-        return getCoordinates(this.type, this.coordinate, this.orientation);
-    }
-
     constructor(type: ShipType, coordinate: Coordinate, orientation: Orientation) {
         this.type = type;
         this.coordinate = coordinate;
         this.orientation = orientation;
+    }
+
+    get coordinates(): Coordinate[] {
+        return getCoordinates(this.type, this.coordinate, this.orientation);
     }
 }
 

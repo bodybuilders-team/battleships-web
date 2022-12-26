@@ -9,7 +9,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from '../Shared/useForm';
-import to from "../../../Utils/await-to";
 import {useSessionManager} from "../../../Utils/Session";
 import {validatePassword, validateUsername} from '../Shared/validateFields';
 import {handleError} from "../../../Services/utils/fetchSiren";
@@ -20,6 +19,8 @@ import {Rels} from "../../../Utils/navigation/Rels";
 import {throwError} from "../../../Services/utils/errorUtils";
 import {UsernameTextField} from "../Shared/UsernameTextField";
 import {PasswordTextField} from "../Shared/PasswordTextField";
+import {useMountedSignal} from "../../../Utils/useMounted";
+import {abortableTo} from "../../../Utils/abortableUtils";
 
 /**
  * Login component.
@@ -31,6 +32,7 @@ export default function Login() {
     const sessionManager = useSessionManager();
 
     const [formError, setFormError] = useState<string | null>(null);
+    const mountedSignal = useMountedSignal()
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {username: '', password: ''},
@@ -42,7 +44,7 @@ export default function Login() {
         },
         onSubmit: async (values) => {
             const {username, password} = values;
-            const [err, res] = await to(battleshipsService.usersService.login(username, password));
+            const [err, res] = await abortableTo(battleshipsService.usersService.login(username, password, mountedSignal));
 
             if (err) {
                 handleError(err, setFormError);

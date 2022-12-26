@@ -26,18 +26,6 @@ export class Coordinate {
     }
 
     /**
-     * Converts a Coordinate to a CoordinateModel.
-     *
-     * @return the CoordinateModel
-     */
-    toCoordinateModel(): CoordinateModel {
-        return {
-            col: String.fromCharCode('A'.charCodeAt(0) + this.col - 1),
-            row: this.row
-        };
-    }
-
-    /**
      * Returns a coordinate given an index and a board size.
      *
      * @param index the index
@@ -48,6 +36,18 @@ export class Coordinate {
         const col = index % size + 1;
 
         return new Coordinate(col, row);
+    }
+
+    /**
+     * Converts a Coordinate to a CoordinateModel.
+     *
+     * @return the CoordinateModel
+     */
+    toCoordinateModel(): CoordinateModel {
+        return {
+            col: String.fromCharCode('A'.charCodeAt(0) + this.col - 1),
+            row: this.row
+        };
     }
 
     equals(other: Coordinate): boolean {

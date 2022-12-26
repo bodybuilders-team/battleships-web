@@ -22,6 +22,9 @@ import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedFleetDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.FiredShotsDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
 import pt.isel.daw.battleships.utils.JwtProvider
+import javax.persistence.EntityManager
+import javax.persistence.LockModeType
+import javax.persistence.PersistenceContext
 
 /**
  * Service that handles the business logic of the players.
@@ -37,6 +40,9 @@ class PlayersServiceImpl(
     usersRepository: UsersRepository,
     jwtProvider: JwtProvider,
 ) : PlayersService, AuthenticatedService(usersRepository, jwtProvider) {
+
+    @PersistenceContext
+    lateinit var entityManager: EntityManager
 
     override fun getFleet(token: String, gameId: Int): DeployedFleetDTO {
         val user = authenticateUser(token = token)
@@ -156,6 +162,8 @@ class PlayersServiceImpl(
         val game = gamesRepository
             .findById(id = gameId)
             ?: throw NotFoundException("Game with id $gameId not found")
+
+        entityManager.lock(game, LockModeType.PESSIMISTIC_WRITE)
 
         game.updateIfPhaseExpired()
 

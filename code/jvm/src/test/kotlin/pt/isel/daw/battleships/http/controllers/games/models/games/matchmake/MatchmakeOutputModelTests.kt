@@ -26,7 +26,7 @@ class MatchmakeOutputModelTests {
     companion object {
         val defaultMatchmakeOutputModel
             get() = MatchmakeOutputModel(
-                gameId=1,
+                gameId = 1,
                 wasCreated = true
             )
     }

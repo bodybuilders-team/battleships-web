@@ -119,12 +119,12 @@ class ExceptionHandler {
             title = "Invalid request body${
                 ex.rootCause?.also { println(it) }.let {
                     ": " +
-                            when (it) {
-                                is UnrecognizedPropertyException -> "Unknown property '${it.propertyName}'"
-                                is JsonParseException -> it.originalMessage
-                                is MissingKotlinParameterException -> "Missing property '${it.parameter.name}'"
-                                else -> null
-                            }
+                        when (it) {
+                            is UnrecognizedPropertyException -> "Unknown property '${it.propertyName}'"
+                            is JsonParseException -> it.originalMessage
+                            is MissingKotlinParameterException -> "Missing property '${it.parameter.name}'"
+                            else -> null
+                        }
                 }
             }",
             status = HttpStatus.BAD_REQUEST.value()

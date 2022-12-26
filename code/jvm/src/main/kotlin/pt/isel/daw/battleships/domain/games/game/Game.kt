@@ -189,7 +189,7 @@ class Game {
      *
      */
     fun updateIfPhaseExpired() {
-        if (!state.phaseExpired()) return
+        if (!state.phaseExpired() || state.phase == GameState.GamePhase.FINISHED) return
 
         if (state.phase == GameState.GamePhase.IN_PROGRESS) {
             val currentPlayer = state.turn

@@ -10,6 +10,11 @@ object Params {
     const val SORT_DIRECTION_PARAM = "sortDirection"
     const val PLAYER_PARAM = "player"
 
+    const val USERNAME_PARAM = "username"
+    const val EXCLUDE_USERNAME_PARAM = "excludeUsername"
+    const val GAME_PHASES_PARAM = "phases"
+    const val IDS_PARAM = "ids"
+
     const val OFFSET_DEFAULT = 0
     const val LIMIT_DEFAULT = 10
 

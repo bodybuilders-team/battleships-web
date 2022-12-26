@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {
     Card,
     CardContent,
@@ -16,10 +16,12 @@ import {
 import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
 import {useSession} from "../../Utils/Session";
 import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput";
-import to from "../../Utils/await-to";
 import {handleError} from "../../Services/utils/fetchSiren";
 import {Game} from "../../Domain/games/game/Game";
 import ErrorAlert from "../Shared/ErrorAlert";
+import to from "../../Utils/await-to";
+import {useMountedSignal} from "../../Utils/useMounted";
+import {AbortedError, useAbortableEffect} from "../../Utils/abortableUtils";
 
 /**
  * GameHistory component.
@@ -32,9 +34,11 @@ export default function GameHistory() {
     const [games, setGames] = useState<Game[] | null>(null);
     const [gamesLoaded, setGamesLoaded] = useState(false);
 
-    useEffect(() => {
+    useAbortableEffect(() => {
         fetchGames()
     }, []);
+
+    const mountedSignal = useMountedSignal();
 
     /**
      * Fetches the games.
@@ -43,21 +47,23 @@ export default function GameHistory() {
         if (gamesLoaded)
             return;
 
-        const [err, res] = await to(battleshipsService.gamesService.getGames());
+        const [err, res] = await to(battleshipsService.gamesService.getGames({
+            username: session!.username,
+            phases: ["FINISHED"]
+        }, mountedSignal));
+
+        if (err instanceof AbortedError)
+            throw err;
 
         if (err) {
             handleError(err, setError);
             return;
         }
 
-        const filteredGames = res
+        const games = res
             .getEmbeddedSubEntities<GetGameOutputModel>()
-            .filter(game =>
-                game.properties?.state.phase === "FINISHED" &&
-                game.properties?.creator !== session?.username // TODO: games from user
-            );
 
-        setGames(filteredGames.map(game => new Game(game.properties!)));
+        setGames(games.map(game => new Game(game.properties!)));
         setGamesLoaded(true);
     }
 
@@ -77,6 +83,7 @@ export default function GameHistory() {
                                 <TableCell>Game</TableCell>
                                 <TableCell>Opponent</TableCell>
                                 <TableCell>Winner</TableCell>
+                                <TableCell>End Cause</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -86,6 +93,7 @@ export default function GameHistory() {
                                         <TableCell component="th" scope="row">{game.name}</TableCell>
                                         <TableCell>{game.getOpponent(session?.username!)?.username}</TableCell>
                                         <TableCell>{game.state.winner}</TableCell>
+                                        <TableCell>{game.state.endCause}</TableCell>
                                     </TableRow>
                                 ))
                             }

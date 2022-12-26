@@ -9,9 +9,11 @@ export namespace BattleshipsService {
     /**
      * Gets the home information.
      *
+     * @param signal the signal to abort the request
+     *
      * @return the API result of the get home request
      */
-    export async function getHome(): Promise<GetHomeOutput> {
-        return await get("/");
+    export async function getHome(signal?: AbortSignal): Promise<GetHomeOutput> {
+        return await get("/", signal);
     }
 }

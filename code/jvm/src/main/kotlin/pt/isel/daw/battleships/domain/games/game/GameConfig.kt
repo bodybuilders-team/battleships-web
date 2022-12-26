@@ -92,7 +92,7 @@ class GameConfig {
      */
     fun testShipTypes(ships: List<UndeployedShip>): Boolean =
         shipTypes.sumOf { shipType -> shipType.quantity } == ships.size &&
-                shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
+            shipTypes.all { shipType -> shipType.quantity == ships.count { shipType == it.type } }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

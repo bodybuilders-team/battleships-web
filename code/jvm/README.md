@@ -6,16 +6,16 @@
 
 * [Introduction](#introduction)
 * [Modeling the Database](#modeling-the-database)
-  * [Conceptual Model](#conceptual-model)
-  * [Physical Model](#physical-model)
+    * [Conceptual Model](#conceptual-model)
+    * [Physical Model](#physical-model)
 * [Application Architecture](#application-architecture)
-  * [Presentation Layer](#presentation-layer)
-  * [Business Logic Layer](#business-logic-layer)
-  * [Data Access Layer](#data-access-layer)
-  * [Data Representation](#data-representation)
-  * [Authentication](#authentication)
-  * [Error Handling](#error-handling)
-  * [Running the Application](#running-the-application)
+    * [Presentation Layer](#presentation-layer)
+    * [Business Logic Layer](#business-logic-layer)
+    * [Data Access Layer](#data-access-layer)
+    * [Data Representation](#data-representation)
+    * [Authentication](#authentication)
+    * [Error Handling](#error-handling)
+    * [Running the Application](#running-the-application)
 * [Conclusions - Critical Evaluatio](#conclusions---critical-evaluation)
 
 ---
@@ -67,28 +67,28 @@ We highlight the following aspects:
 The conceptual model has the following restrictions:
 
 * `User` entity:
-  * The `username` and `email` attributes should be unique;
-  * The `username` attribute length should be between 3 and 40 characters;
-  * The `email` attribute needs to follow the following pattern: `^[A-Za-z0-9+_.-]+@(.+)$`;
-  * The `points` attrinbute (also present in the `Player` entity) should not have negative values;
+    * The `username` and `email` attributes should be unique;
+    * The `username` attribute length should be between 3 and 40 characters;
+    * The `email` attribute needs to follow the following pattern: `^[A-Za-z0-9+_.-]+@(.+)$`;
+    * The `points` attrinbute (also present in the `Player` entity) should not have negative values;
 
 * `Game`, `GameState` and `GameConfig` entities:
-  * The `name` attribute should have a length between 1 and 40 characters;
-  * The `phase` attribute only accepts the following values: `WAITING_FOR_PLAYERS`, `GRID_LAYOUT`, `IN_PROGRESS`
-    , `FINISHED`;
-  * The `grid_size` attribute should be between 7 and 18;
-  * The `max_time_for_layout_phase` should be between 10 and 120 seconds;
-  * The `max_time_per_round` should be between 50 and 120 seconds;
-  * The `shots_per_round` should be between 1 and 5;
-  * The `round` attribute (also present in the `Shot` entity) should be greater than 0;
+    * The `name` attribute should have a length between 1 and 40 characters;
+    * The `phase` attribute only accepts the following values: `WAITING_FOR_PLAYERS`, `GRID_LAYOUT`, `IN_PROGRESS`
+      , `FINISHED`;
+    * The `grid_size` attribute should be between 7 and 18;
+    * The `max_time_for_layout_phase` should be between 10 and 120 seconds;
+    * The `max_time_per_round` should be between 50 and 120 seconds;
+    * The `shots_per_round` should be between 1 and 5;
+    * The `round` attribute (also present in the `Shot` entity) should be greater than 0;
 
 * `Ship` and `ShipType` entities:
-  * The `ship_name` attribute should have a length between 1 and 40 characters;
-  * The `quantity` attribute should be between 0 and 10;
-  * The `size` attribute should be between 1 and 7;
-  * The `points` attribute should be between 1 and 100;
-  * The `orientation` attribute only accepts the following values: `VERTICAL`, `HORIZONTAL`:
-  * The `lives` attribute should be between 0 and 7;
+    * The `ship_name` attribute should have a length between 1 and 40 characters;
+    * The `quantity` attribute should be between 0 and 10;
+    * The `size` attribute should be between 1 and 7;
+    * The `points` attribute should be between 1 and 100;
+    * The `orientation` attribute only accepts the following values: `VERTICAL`, `HORIZONTAL`:
+    * The `lives` attribute should be between 0 and 7;
 
 * The `col` attribute should be a character between `A` and `R`;
 * The `row` attribute should be between 1 and 18;
@@ -158,12 +158,12 @@ The presentation layer is organized as follows:
 * [`/media`](src/main/kotlin/pt/isel/daw/battleships/http/media) - contains the classes that represent
   the media types used in the application, such as `application/vnd.siren+json` and `application/problem+json`;
 * [`/utils`](src/main/kotlin/pt/isel/daw/battleships/http/utils) - contains some utility objects, like:
-  * [`Uris`](src/main/kotlin/pt/isel/daw/battleships/http/utils/Uris.kt) - object that contains the URIs of the
-    application used by the controllers;
-  * [`Actions`](src/main/kotlin/pt/isel/daw/battleships/http/utils/Actions.kt) - object that contains the actions
-    used by the controllers;
-  * [`Uris`](src/main/kotlin/pt/isel/daw/battleships/http/utils/Uris.kt) - object that contains the Uris
-    used by the controllers.
+    * [`Uris`](src/main/kotlin/pt/isel/daw/battleships/http/utils/Uris.kt) - object that contains the URIs of the
+      application used by the controllers;
+    * [`Actions`](src/main/kotlin/pt/isel/daw/battleships/http/utils/Actions.kt) - object that contains the actions
+      used by the controllers;
+    * [`Uris`](src/main/kotlin/pt/isel/daw/battleships/http/utils/Uris.kt) - object that contains the Uris
+      used by the controllers.
 
 ---
 
