@@ -15,6 +15,7 @@ import {Problem} from "../../../../Services/media/Problem";
 import {ProblemTypes} from "../../../../Utils/types/problemTypes";
 import {useMountedSignal} from "../../../../Utils/useMounted";
 import to from "../../../../Utils/await-to";
+import {abortableTo} from "../../../../Utils/abortableUtils";
 
 const TURN_SWITCH_DELAY = 1000;
 const POLLING_DELAY = 1000;
@@ -50,7 +51,7 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
         if (myTurn)
             return true;
 
-        const [err, res] = await to(battleshipsService.gamesService.getGameState());
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGameState());
 
         if (err) {
             onError(err);
@@ -97,7 +98,7 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
      * @param shots shots to shoot
      */
     async function fire(shots: Coordinate[]) {
-        const [err, res] = await to(battleshipsService.playersService.fireShots({
+        const [err, res] = await abortableTo(battleshipsService.playersService.fireShots({
             shots: shots.map(shot => {
                 return {coordinate: shot.toCoordinateModel()}
             })
@@ -127,11 +128,11 @@ export default function useShooting(game: Game, myFleet: Ship[], onError: (error
      * Gets the opponent shots.
      */
     async function getOpponentShots() {
-        const [err, res] = await to(battleshipsService.playersService.getOpponentShots());
+        const [err, res] = await abortableTo(battleshipsService.playersService.getOpponentShots());
 
         if (err) {
             onError(err);
-            return;
+            return null;
         }
 
         return res?.properties?.shots.map((shot) => {

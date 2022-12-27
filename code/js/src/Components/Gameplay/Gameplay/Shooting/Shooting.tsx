@@ -26,7 +26,7 @@ import ErrorAlert from "../../../Shared/ErrorAlert";
 import {useMountedSignal} from "../../../../Utils/useMounted";
 import to from "../../../../Utils/await-to";
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
-import {useAbortableEffect} from "../../../../Utils/abortableUtils";
+import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils";
 
 /**
  * Properties for the Shooting component.
@@ -83,7 +83,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
      * Callback to call when the player wants to leave the game.
      */
     async function leaveGame() {
-        const [err, res] = await to(battleshipsService.gamesService.leaveGame())
+        const [err, res] = await abortableTo(battleshipsService.gamesService.leaveGame())
 
         if (err) {
             handleError(err, setError);

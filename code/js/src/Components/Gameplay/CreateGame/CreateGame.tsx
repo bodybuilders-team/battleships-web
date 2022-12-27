@@ -10,6 +10,7 @@ import {useBattleshipsService} from "../../../Services/NavigationBattleshipsServ
 import {useInterval} from "../Shared/TimersHooks/useInterval";
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 import GameConfig from "./GameConfig";
+import {abortableTo} from "../../../Utils/abortableUtils";
 
 const POLLING_DELAY = 1000;
 
@@ -39,7 +40,7 @@ export default function CreateGame() {
      */
     function handleCreateGame() {
         async function createGame() {
-            const [err, res] = await to(
+            const [err, res] = await abortableTo(
                 battleshipsService.gamesService.createGame(
                     {
                         name: gameName,
@@ -78,7 +79,7 @@ export default function CreateGame() {
         if (!isWaitingForOpponent)
             return true;
 
-        const [err, res] = await to(
+        const [err, res] = await abortableTo(
             battleshipsService.gamesService.getGameState()
         );
 

@@ -7,7 +7,7 @@ import to from "../../Utils/await-to";
 import {handleError} from "../../Services/utils/fetchSiren";
 import PageContent from "../Shared/PageContent";
 import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
-import {useAbortableEffect} from "../../Utils/abortableUtils";
+import {abortableTo, useAbortableEffect} from "../../Utils/abortableUtils";
 
 /**
  * Ranking component.
@@ -25,7 +25,7 @@ export default function Ranking() {
      * Fetches the ranking.
      */
     async function fetchRanking() {
-        const [err, res] = await to(battleshipsService.usersService.getUsers());
+        const [err, res] = await abortableTo(battleshipsService.usersService.getUsers());
 
         if (err) {
             handleError(err, setError);

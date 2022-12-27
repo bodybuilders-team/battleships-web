@@ -131,7 +131,7 @@ export default class NavigationUsersService {
      */
     async logout(refreshToken: string, signal?: AbortSignal) {
         if (!this.links.get(Rels.LOGOUT))
-            await this.battleshipsService.getHome(signal);
+            await this.battleshipsService.usersService.getUserHome(signal);
 
         await executeRequest(() => UsersService.logout(
             this.links.get(Rels.LOGOUT) ?? throwError("Logout link not found"),

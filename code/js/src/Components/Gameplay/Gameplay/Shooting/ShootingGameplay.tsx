@@ -16,7 +16,7 @@ import {Game} from "../../../../Domain/games/game/Game";
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup";
 import {Problem} from "../../../../Services/media/Problem";
 import {ProblemTypes} from "../../../../Utils/types/problemTypes";
-import {useAbortableEffect} from "../../../../Utils/abortableUtils";
+import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils";
 
 /**
  * Properties for the ShootingGameplay component.
@@ -64,7 +64,7 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
      * Fetches the fleet.
      */
     async function fetchMyFleet() {
-        const [err, res] = await to(battleshipsService.playersService.getMyFleet());
+        const [err, res] = await abortableTo(battleshipsService.playersService.getMyFleet());
 
         if (err) {
             if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {

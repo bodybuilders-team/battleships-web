@@ -21,7 +21,7 @@ import {Game} from "../../Domain/games/game/Game";
 import ErrorAlert from "../Shared/ErrorAlert";
 import to from "../../Utils/await-to";
 import {useMountedSignal} from "../../Utils/useMounted";
-import {AbortedError, useAbortableEffect} from "../../Utils/abortableUtils";
+import {abortableTo, AbortedError, useAbortableEffect} from "../../Utils/abortableUtils";
 
 /**
  * GameHistory component.
@@ -47,7 +47,7 @@ export default function GameHistory() {
         if (gamesLoaded)
             return;
 
-        const [err, res] = await to(battleshipsService.gamesService.getGames({
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             username: session!.username,
             phases: ["FINISHED"]
         }, mountedSignal));

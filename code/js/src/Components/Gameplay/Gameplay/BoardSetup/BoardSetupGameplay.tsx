@@ -16,6 +16,7 @@ import {ProblemTypes} from "../../../../Utils/types/problemTypes";
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup";
 import {Uris} from "../../../../Utils/navigation/Uris";
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
+import {abortableTo} from "../../../../Utils/abortableUtils";
 
 /**
  * Properties for BoardSetupGameplay component.
@@ -53,7 +54,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
      * @param board the board
      */
     async function onBoardSetupFinished(board: Board) {
-        const [err] = await to(battleshipsService.playersService.deployFleet({
+        const [err] = await abortableTo(battleshipsService.playersService.deployFleet({
             fleet: board.fleet.map(ship => {
                     return {
                         type: ship.type.shipName,
@@ -81,7 +82,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
      * Fetches the game state.
      */
     async function fetchGameState() {
-        const [err, res] = await to(
+        const [err, res] = await abortableTo(
             battleshipsService.gamesService.getGameState()
         );
 
@@ -107,7 +108,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
      * Callback when the user wants to leave the game.
      */
     async function leaveGame() {
-        const [err] = await to(battleshipsService.gamesService.leaveGame());
+        const [err] = await abortableTo(battleshipsService.gamesService.leaveGame());
 
         if (err) {
             handleError(err, setError);

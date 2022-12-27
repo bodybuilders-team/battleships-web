@@ -15,9 +15,8 @@ import MenuItem from '@mui/material/MenuItem';
 import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded';
 import {useNavigate} from 'react-router-dom';
 import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
-import to from "../Utils/await-to";
 import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
-import {Rels} from "../Utils/navigation/Rels";
+import {abortableTo} from "../Utils/abortableUtils";
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -46,20 +45,16 @@ export default function NavBar() {
         {
             name: 'Logout',
             callback: async () => {
-                sessionManager.clearSession()
                 if (!session) {
                     navigate('/');
                     return;
                 }
 
-                if (!battleshipsService.links.get(Rels.LOGOUT)) {
-                    await battleshipsService.getHome();
-                    await battleshipsService.usersService.getUserHome();
-                }
-
-                await to(
+                await abortableTo(
                     battleshipsService.usersService.logout(session.refreshToken)
-                );
+                )
+
+                sessionManager.clearSession()
 
                 navigate('/');
             },

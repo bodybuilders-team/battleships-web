@@ -10,7 +10,7 @@ import ShootingGameplay from "./Shooting/ShootingGameplay";
 import BoardSetupGameplay from "./BoardSetup/BoardSetupGameplay";
 import {Game} from "../../../Domain/games/game/Game";
 import GameFinished from "../Shared/EndGame/GameFinished";
-import {useAbortableEffect} from "../../../Utils/abortableUtils";
+import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils";
 
 /**
  * Gameplay component.
@@ -29,7 +29,7 @@ export default function Gameplay() {
      * Fetches the game.
      */
     async function fetchGame() {
-        const [err, res] = await to(
+        const [err, res] = await abortableTo(
             battleshipsService.gamesService.getGame()
         );
 

@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import GameFinished from "./GameFinished";
 import {Uris} from "../../../../Utils/navigation/Uris";
 import HOME = Uris.HOME;
+import {abortableTo} from "../../../../Utils/abortableUtils";
 
 /**
  * Properties for the FetchedEndGamePopup component.
@@ -45,7 +46,7 @@ export default function FetchedEndGamePopup({open, onError}: FetchedEndGamePopup
             return true;
         }
 
-        const [err, res] = await to(battleshipsService.gamesService.getGame());
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGame());
 
         if (err) {
             onError(err);

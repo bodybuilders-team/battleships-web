@@ -12,7 +12,7 @@ import {useNavigate} from "react-router-dom";
 import {Rels} from "../../../Utils/navigation/Rels";
 import {useSession} from "../../../Utils/Session";
 import Typography from "@mui/material/Typography";
-import {useAbortableEffect} from "../../../Utils/abortableUtils";
+import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils";
 
 /**
  * Lobby component.
@@ -38,7 +38,7 @@ export default function Lobby() {
         if (gamesLoaded)
             return;
 
-        const [err, res] = await to(battleshipsService.gamesService.getGames({
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             excludeUsername: session!.username,
             phases: ["WAITING_FOR_PLAYERS"]
         }));
@@ -61,7 +61,7 @@ export default function Lobby() {
      * @param joinGameLink the link to join the game
      */
     async function handleJoinGame(joinGameLink: string) {
-        const [err, res] = await to(battleshipsService.gamesService.joinGame(joinGameLink));
+        const [err, res] = await abortableTo(battleshipsService.gamesService.joinGame(joinGameLink));
 
         if (err) {
             handleError(err, setError);

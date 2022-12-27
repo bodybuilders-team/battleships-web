@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from '../Shared/useForm';
 import {validateEmail, validatePassword, validateUsername} from '../Shared/validateFields';
-import to from '../../../Utils/await-to';
 import {useSessionManager} from "../../../Utils/Session";
 import {handleError} from "../../../Services/utils/fetchSiren";
 import ErrorAlert from "../../Shared/ErrorAlert";
@@ -21,6 +20,8 @@ import {throwError} from "../../../Services/utils/errorUtils";
 import {PasswordTextField} from "../Shared/PasswordTextField";
 import {UsernameTextField} from "../Shared/UsernameTextField";
 import {EmailTextField} from "../Shared/EmailTextField";
+import {useMountedSignal} from '../../../Utils/useMounted';
+import {abortableTo} from "../../../Utils/abortableUtils";
 
 /**
  * Register component.
@@ -32,6 +33,7 @@ export default function Register() {
     const sessionManager = useSessionManager();
 
     const [formError, setFormError] = useState<string | null>(null);
+    const mountedSignal = useMountedSignal()
 
     const {handleSubmit, handleChange, errors} = useForm({
         initialValues: {email: '', username: '', password: ''},
@@ -44,7 +46,9 @@ export default function Register() {
         },
         onSubmit: async (values) => {
             const {email, username, password} = values;
-            const [err, res] = await to(battleshipsService.usersService.register(email, username, password));
+            const [err, res] = await abortableTo(
+                battleshipsService.usersService.register(email, username, password, mountedSignal)
+            );
 
             if (err) {
                 handleError(err, setFormError);

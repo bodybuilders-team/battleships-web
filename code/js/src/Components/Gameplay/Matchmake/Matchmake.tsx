@@ -13,7 +13,7 @@ import {GetGameOutputModel} from "../../../Services/services/games/models/games/
 import {Game} from "../../../Domain/games/game/Game";
 import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 import {Rels} from "../../../Utils/navigation/Rels";
-import {useAbortableEffect} from "../../../Utils/abortableUtils";
+import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json');
 const POLLING_DELAY = 1000;
@@ -42,8 +42,12 @@ export default function Matchmake() {
 
     useInterval(checkIfOpponentJoined, POLLING_DELAY, [isWaitingForOpponent]);
 
+    /**
+     * Checks if there's an available game.
+     *
+     */
     async function checkIfThereIsAnAvailableGame() {
-        const [err, res] = await to(battleshipsService.gamesService.getGames({
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             username: session!.username,
             phases: ["WAITING_FOR_PLAYERS"]
         }));
@@ -73,7 +77,7 @@ export default function Matchmake() {
         if (await checkIfThereIsAnAvailableGame() == true)
             return;
 
-        const [err, res] = await to(
+        const [err, res] = await abortableTo(
             battleshipsService.gamesService.matchmake(defaultGameConfig)
         );
 
@@ -103,7 +107,7 @@ export default function Matchmake() {
         if (!isWaitingForOpponent)
             return true;
 
-        const [err, res] = await to(
+        const [err, res] = await abortableTo(
             battleshipsService.gamesService.getGameState()
         );
 
