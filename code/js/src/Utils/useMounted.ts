@@ -1,10 +1,10 @@
 import * as React from "react"
-import {useAbortableEffect} from "./abortableUtils"
+import {useEffect} from "react"
 
 export function useMounted() {
     const isMounted = React.useRef(false)
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         isMounted.current = true
         return () => {
             isMounted.current = false
@@ -17,7 +17,7 @@ export function useMounted() {
 export function useMountedSignal() {
     const controller = React.useRef<AbortController>(new AbortController())
 
-    useAbortableEffect(() => {
+    useEffect(() => {
 
         return () => {
             controller.current.abort()

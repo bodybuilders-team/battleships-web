@@ -1,5 +1,4 @@
-import {useState} from "react"
-import {useAbortableEffect} from "../../../../Utils/abortableUtils"
+import {useEffect, useState} from "react"
 
 /**
  * Hook that returns the current time.
@@ -12,7 +11,7 @@ export function useCountdownTimer(finalTime: number, onTimeUp?: () => void, upda
     const finalTimeDate = new Date(finalTime).getTime()
     const [currentTime, setCurrentTime] = useState(finalTimeDate - new Date().getTime())
 
-    useAbortableEffect(activateCountdown, [finalTime])
+    useEffect(activateCountdown, [finalTime])
 
     /**
      * Activates the countdown.
@@ -22,6 +21,9 @@ export function useCountdownTimer(finalTime: number, onTimeUp?: () => void, upda
             const newTime = finalTimeDate - new Date().getTime()
 
             if (newTime <= 0) {
+                if (onTimeUp)
+                    onTimeUp()
+
                 clearInterval(id)
                 setCurrentTime(0)
             } else

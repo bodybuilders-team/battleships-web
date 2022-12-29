@@ -5,6 +5,8 @@
  * @property {number} y - The y offset.
  */
 export class Offset {
+    public static readonly ZERO = new Offset(0, 0)
+
     constructor(public x: number, public y: number) {
     }
 
@@ -25,6 +27,4 @@ export class Offset {
     subtract(offset: Offset): Offset {
         return new Offset(this.x - offset.x, this.y - offset.y)
     }
-
-    public static readonly ZERO = new Offset(0, 0)
 }

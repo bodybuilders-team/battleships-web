@@ -1,5 +1,5 @@
 import * as React from "react"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {
     Card,
     CardContent,
@@ -19,9 +19,9 @@ import {GetGameOutputModel} from "../../Services/services/games/models/games/get
 import {handleError} from "../../Services/utils/fetchSiren"
 import {Game} from "../../Domain/games/game/Game"
 import ErrorAlert from "../Shared/ErrorAlert"
-import to from "../../Utils/await-to"
 import {useMountedSignal} from "../../Utils/useMounted"
-import {abortableTo, AbortedError, useAbortableEffect} from "../../Utils/abortableUtils"
+import {abortableTo, AbortedError} from "../../Utils/abortableUtils"
+import {useNavigationState} from "../../Utils/navigation/NavigationState";
 
 /**
  * GameHistory component.
@@ -33,9 +33,14 @@ export default function GameHistory() {
     const [error, setError] = useState<string | null>(null)
     const [games, setGames] = useState<Game[] | null>(null)
     const [gamesLoaded, setGamesLoaded] = useState(false)
+    const navigationState = useNavigationState()
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         fetchGames()
+
+        return () => {
+            navigationState.clearGameLinks()
+        }
     }, [])
 
     const mountedSignal = useMountedSignal()
@@ -51,9 +56,6 @@ export default function GameHistory() {
             username: session!.username,
             phases: ["FINISHED"]
         }, mountedSignal))
-
-        if (err instanceof AbortedError)
-            throw err
 
         if (err) {
             handleError(err, setError)
@@ -89,7 +91,7 @@ export default function GameHistory() {
                         <TableBody>
                             {
                                 games?.map(game => (
-                                    <TableRow key={game.name} sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                                    <TableRow key={game.id} sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                                         <TableCell component="th" scope="row">{game.name}</TableCell>
                                         <TableCell>{game.getOpponent(session?.username!)?.username}</TableCell>
                                         <TableCell>{game.state.winner}</TableCell>

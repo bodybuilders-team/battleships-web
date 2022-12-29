@@ -38,6 +38,10 @@ export class Coordinate {
         return new Coordinate(col, row)
     }
 
+    static isValid(col: number, row: number, size: number): boolean {
+        return col >= 1 && col <= size && row >= 1 && row <= size
+    }
+
     /**
      * Converts a Coordinate to a CoordinateModel.
      *
@@ -48,10 +52,6 @@ export class Coordinate {
             col: String.fromCharCode('A'.charCodeAt(0) + this.col - 1),
             row: this.row
         }
-    }
-
-    static isValid(col: number, row: number, size: number): boolean {
-        return col >= 1 && col <= size && row >= 1 && row <= size
     }
 
     equals(other: Coordinate): boolean {

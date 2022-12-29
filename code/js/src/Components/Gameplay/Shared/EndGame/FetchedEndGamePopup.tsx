@@ -3,14 +3,14 @@ import {useState} from "react"
 import {Game} from "../../../../Domain/games/game/Game"
 import {useInterval} from "../TimersHooks/useInterval"
 import {Rels} from "../../../../Utils/navigation/Rels"
-import to from "../../../../Utils/await-to"
 import {GetGameOutputModel} from "../../../../Services/services/games/models/games/getGame/GetGameOutput"
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
 import {useNavigate} from "react-router-dom"
 import GameFinished from "./GameFinished"
 import {Uris} from "../../../../Utils/navigation/Uris"
-import HOME = Uris.HOME
 import {abortableTo} from "../../../../Utils/abortableUtils"
+import HOME = Uris.HOME;
+import {useMountedSignal} from "../../../../Utils/useMounted";
 
 /**
  * Properties for the FetchedEndGamePopup component.
@@ -35,6 +35,7 @@ export default function FetchedEndGamePopup({open, onError}: FetchedEndGamePopup
 
     useInterval(fetchGame, POLLING_DELAY, [open])
 
+    const mountedSignal = useMountedSignal()
     /**
      * Fetches the game.
      */
@@ -42,11 +43,12 @@ export default function FetchedEndGamePopup({open, onError}: FetchedEndGamePopup
         if (!open) return false
 
         if (!battleshipsService.links.get(Rels.GAME)) {
+            console.log("No game link found in fetched end game popup")
             navigate(HOME)
             return true
         }
 
-        const [err, res] = await abortableTo(battleshipsService.gamesService.getGame())
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGame(mountedSignal))
 
         if (err) {
             onError(err)

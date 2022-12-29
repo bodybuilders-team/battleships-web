@@ -1,10 +1,10 @@
 import Grid from "@mui/material/Grid"
 import * as React from "react"
+import {ForwardedRef} from "react"
 import Box from "@mui/material/Box"
 import Tile, {tileSize} from "./Tile"
 import {Board} from "../../../../Domain/games/board/Board"
 import {Coordinate} from "../../../../Domain/games/Coordinate"
-import {ForwardedRef, RefObject} from "react"
 
 /**
  * Properties for the BoardView component.

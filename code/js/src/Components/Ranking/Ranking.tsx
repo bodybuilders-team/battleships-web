@@ -1,13 +1,13 @@
 import * as React from "react"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material"
 import {User} from "../../Domain/users/User"
 import {EmbeddedSubEntity} from "../../Services/media/siren/SubEntity"
-import to from "../../Utils/await-to"
 import {handleError} from "../../Services/utils/fetchSiren"
 import PageContent from "../Shared/PageContent"
 import {useBattleshipsService} from "../../Services/NavigationBattleshipsService"
-import {abortableTo, useAbortableEffect} from "../../Utils/abortableUtils"
+import {abortableTo} from "../../Utils/abortableUtils"
+import {useMountedSignal} from "../../Utils/useMounted";
 
 /**
  * Ranking component.
@@ -16,8 +16,9 @@ export default function Ranking() {
     const battleshipsService = useBattleshipsService()
     const [error, setError] = useState<string | null>(null)
     const [ranking, setRanking] = useState<User[]>([])
+    const mountedSignal = useMountedSignal()
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         fetchRanking()
     }, [])
 
@@ -25,7 +26,7 @@ export default function Ranking() {
      * Fetches the ranking.
      */
     async function fetchRanking() {
-        const [err, res] = await abortableTo(battleshipsService.usersService.getUsers())
+        const [err, res] = await abortableTo(battleshipsService.usersService.getUsers(mountedSignal))
 
         if (err) {
             handleError(err, setError)

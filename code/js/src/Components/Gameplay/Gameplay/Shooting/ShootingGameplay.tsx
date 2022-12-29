@@ -1,7 +1,6 @@
 import Shooting from "./Shooting"
 import * as React from "react"
-import {useState} from "react"
-import to from "../../../../Utils/await-to"
+import {useEffect, useState} from "react"
 import {Ship} from "../../../../Domain/games/ship/Ship"
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
 import {handleError} from "../../../../Services/utils/fetchSiren"
@@ -16,7 +15,8 @@ import {Game} from "../../../../Domain/games/game/Game"
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup"
 import {Problem} from "../../../../Services/media/Problem"
 import {ProblemTypes} from "../../../../Utils/types/problemTypes"
-import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils"
+import {abortableTo} from "../../../../Utils/abortableUtils"
+import {useMountedSignal} from "../../../../Utils/useMounted";
 
 /**
  * Properties for the ShootingGameplay component.
@@ -35,8 +35,9 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
     const [error, setError] = useState<string | null>(null)
     const [showEndGamePopup, setShowEndGamePopup] = useState(false)
     const [myFleet, setMyFleet] = useState<Ship[]>()
+    const mountedSignal = useMountedSignal()
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         fetchMyFleet()
     }, [])
 
@@ -64,7 +65,7 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
      * Fetches the fleet.
      */
     async function fetchMyFleet() {
-        const [err, res] = await abortableTo(battleshipsService.playersService.getMyFleet())
+        const [err, res] = await abortableTo(battleshipsService.playersService.getMyFleet(mountedSignal))
 
         if (err) {
             if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
@@ -77,7 +78,6 @@ export default function ShootingGameplay({game}: ShootingGameplayProps) {
 
         setMyFleet(parseFleet(res?.properties?.ships!))
     }
-
 
     if (myFleet)
         return (

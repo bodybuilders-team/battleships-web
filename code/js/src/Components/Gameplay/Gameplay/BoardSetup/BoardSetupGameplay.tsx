@@ -2,7 +2,6 @@ import BoardSetup from "./BoardSetup"
 import * as React from "react"
 import {useState} from "react"
 import {Board} from "../../../../Domain/games/board/Board"
-import to from "../../../../Utils/await-to"
 import {Orientation} from "../../../../Domain/games/ship/Orientation"
 import {handleError} from "../../../../Services/utils/fetchSiren"
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
@@ -15,8 +14,9 @@ import {Problem} from "../../../../Services/media/Problem"
 import {ProblemTypes} from "../../../../Utils/types/problemTypes"
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup"
 import {Uris} from "../../../../Utils/navigation/Uris"
-import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU
 import {abortableTo} from "../../../../Utils/abortableUtils"
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
+import {useMountedSignal} from "../../../../Utils/useMounted";
 
 /**
  * Properties for BoardSetupGameplay component.
@@ -43,6 +43,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
     const [showEndGamePopup, setShowEndGamePopup] = useState<boolean>(false)
 
     const navigate = useNavigate()
+    const mountedSignal = useMountedSignal()
 
     useInterval(() => {
         fetchGameState()
@@ -63,7 +64,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
                     }
                 }
             )
-        }))
+        }, mountedSignal))
 
         if (err) {
             if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
@@ -83,7 +84,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
      */
     async function fetchGameState() {
         const [err, res] = await abortableTo(
-            battleshipsService.gamesService.getGameState()
+            battleshipsService.gamesService.getGameState(mountedSignal)
         )
 
         if (err) {
@@ -108,7 +109,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
      * Callback when the user wants to leave the game.
      */
     async function leaveGame() {
-        const [err] = await abortableTo(battleshipsService.gamesService.leaveGame())
+        const [err] = await abortableTo(battleshipsService.gamesService.leaveGame(mountedSignal))
 
         if (err) {
             handleError(err, setError)

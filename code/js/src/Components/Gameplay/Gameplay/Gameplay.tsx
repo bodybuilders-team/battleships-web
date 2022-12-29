@@ -1,6 +1,5 @@
 import * as React from "react"
-import {useState} from "react"
-import to from "../../../Utils/await-to"
+import {useEffect, useState} from "react"
 import {handleError} from "../../../Services/utils/fetchSiren"
 import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput"
 import LoadingSpinner from "../../Shared/LoadingSpinner"
@@ -10,7 +9,9 @@ import ShootingGameplay from "./Shooting/ShootingGameplay"
 import BoardSetupGameplay from "./BoardSetup/BoardSetupGameplay"
 import {Game} from "../../../Domain/games/game/Game"
 import GameFinished from "../Shared/EndGame/GameFinished"
-import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils"
+import {abortableTo} from "../../../Utils/abortableUtils"
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
+import {useMountedSignal} from "../../../Utils/useMounted";
 
 /**
  * Gameplay component.
@@ -20,9 +21,15 @@ export default function Gameplay() {
 
     const [game, setGame] = useState<Game | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const navigationState = useNavigationState()
+    const mountedSignal = useMountedSignal()
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         fetchGame()
+
+        return () => {
+            navigationState.clearGameLinks()
+        }
     }, [])
 
     /**
@@ -30,7 +37,7 @@ export default function Gameplay() {
      */
     async function fetchGame() {
         const [err, res] = await abortableTo(
-            battleshipsService.gamesService.getGame()
+            battleshipsService.gamesService.getGame(mountedSignal)
         )
 
         if (err) {

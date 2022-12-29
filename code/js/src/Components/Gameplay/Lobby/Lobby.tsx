@@ -1,7 +1,6 @@
 import * as React from "react"
-import {useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import {EmbeddedSubEntity} from "../../../Services/media/siren/SubEntity"
-import to from "../../../Utils/await-to"
 import {handleError} from "../../../Services/utils/fetchSiren"
 import PageContent from "../../Shared/PageContent"
 import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput"
@@ -12,7 +11,9 @@ import {useNavigate} from "react-router-dom"
 import {Rels} from "../../../Utils/navigation/Rels"
 import {useSession} from "../../../Utils/Session"
 import Typography from "@mui/material/Typography"
-import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils"
+import {abortableTo} from "../../../Utils/abortableUtils"
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
+import {useMountedSignal} from "../../../Utils/useMounted";
 
 /**
  * Lobby component.
@@ -26,9 +27,17 @@ export default function Lobby() {
     const [error, setError] = useState<string | null>(null)
     const [games, setGames] = useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null)
     const [gamesLoaded, setGamesLoaded] = useState(false)
+    const joinedGameRef = useRef(false)
+    const navigationState = useNavigationState()
+    const mountedSignal = useMountedSignal()
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         fetchGames()
+
+        return () => {
+            if (!joinedGameRef.current)
+                navigationState.clearGameLinks()
+        }
     }, [])
 
     /**
@@ -41,7 +50,7 @@ export default function Lobby() {
         const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             excludeUsername: session!.username,
             phases: ["WAITING_FOR_PLAYERS"]
-        }))
+        },mountedSignal))
 
         if (err) {
             handleError(err, setError)
@@ -61,13 +70,14 @@ export default function Lobby() {
      * @param joinGameLink the link to join the game
      */
     async function handleJoinGame(joinGameLink: string) {
-        const [err, res] = await abortableTo(battleshipsService.gamesService.joinGame(joinGameLink))
+        const [err, res] = await abortableTo(battleshipsService.gamesService.joinGame(joinGameLink,mountedSignal))
 
         if (err) {
             handleError(err, setError)
             return
         }
 
+        joinedGameRef.current = true
         navigate(`/game/${res.properties!.gameId}`)
     }
 

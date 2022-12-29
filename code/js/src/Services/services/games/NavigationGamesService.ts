@@ -12,7 +12,7 @@ import NavigationBattleshipsService from "../../NavigationBattleshipsService"
 import {CreateGameInput} from "./models/games/createGame/CreateGameInput"
 import {CreateGameOutput} from "./models/games/createGame/CreateGameOutput"
 import {executeRequest, executeRequestAndRefreshTokenIfNecessary} from "../../utils/executeRequestUtils"
-import GetGamesParams = GamesService.GetGamesParams
+import GetGamesParams = GamesService.GetGamesParams;
 
 
 /**
@@ -54,6 +54,7 @@ export class NavigationGamesService {
             this.links.set(`${Rels.GAME}-${id}`, entity.getLink(Rels.SELF))
             this.links.set(`${Rels.JOIN_GAME}-${id}`, entity.getAction(Rels.JOIN_GAME))
             this.links.set(`${Rels.GAME_STATE}-${id}`, entity.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
+            console.log(this.links)
         })
 
         return res

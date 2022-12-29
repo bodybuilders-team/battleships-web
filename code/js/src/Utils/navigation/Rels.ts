@@ -32,4 +32,5 @@ export namespace Rels {
     export const GET_MY_SHOTS = "get-my-shots"
     export const GET_OPPONENT_SHOTS = "get-opponent-shots"
     export const FIRE_SHOTS = "fire-shots"
+    export const GET_MY_BOARD = "get-my-board"
 }

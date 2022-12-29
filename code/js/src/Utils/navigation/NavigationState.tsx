@@ -1,5 +1,6 @@
 import * as React from "react"
 import {useContext, useRef} from "react"
+import {Rels} from "./Rels";
 
 /**
  * NavigationState interface.
@@ -9,10 +10,15 @@ import {useContext, useRef} from "react"
  */
 interface NavigationState {
     links: Map<string, string>
+
+    clearGameLinks(): void;
 }
 
 const NavigationStateContext = React.createContext<NavigationState>({
     links: new Map<string, string>(),
+    clearGameLinks: () => {
+
+    }
 })
 
 /**
@@ -27,7 +33,29 @@ export function NavigationState({children}: { children: React.ReactNode }) {
 
     return (
         <NavigationStateContext.Provider value={{
-            links
+            links,
+            clearGameLinks: () => {
+                //Clear all game links
+                const oldLinks = new Map(links)
+                oldLinks.forEach((value, key) => {
+                    if (key.startsWith(Rels.GAME) ||
+                        key.startsWith(Rels.JOIN_GAME)
+                    )
+                        links.delete(key)
+
+                    switch (key) {
+                        case Rels.DEPLOY_FLEET:
+                        case Rels.FIRE_SHOTS:
+                        case Rels.GET_OPPONENT_FLEET:
+                        case Rels.GET_OPPONENT_SHOTS:
+                        case Rels.GET_MY_FLEET:
+                        case Rels.GET_MY_SHOTS:
+                        case Rels.LEAVE_GAME:
+                        case Rels.GET_MY_BOARD:
+                            links.delete(key)
+                    }
+                })
+            }
         }}>
             {children}
         </NavigationStateContext.Provider>

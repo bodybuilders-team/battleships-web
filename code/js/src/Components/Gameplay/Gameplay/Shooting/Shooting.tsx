@@ -1,6 +1,6 @@
 import {handleError} from "../../../../Services/utils/fetchSiren"
 import * as React from "react"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import Box from "@mui/material/Box"
 import BoardView from "../../Shared/Board/BoardView"
 import Button from "@mui/material/Button"
@@ -23,10 +23,9 @@ import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsS
 import {useNavigate} from "react-router-dom"
 import {Uris} from "../../../../Utils/navigation/Uris"
 import ErrorAlert from "../../../Shared/ErrorAlert"
-import {useMountedSignal} from "../../../../Utils/useMounted"
-import to from "../../../../Utils/await-to"
-import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU
-import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils"
+import {abortableTo} from "../../../../Utils/abortableUtils"
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
+import {useMountedSignal} from "../../../../Utils/useMounted";
 
 /**
  * Properties for the Shooting component.
@@ -55,12 +54,13 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
     const {shootingState, fire} = useShooting(game, myFleet, (err) => {
         handleError(err, setError)
     })
+    const mountedSignal = useMountedSignal()
 
     const [selectedCells, setSelectedCells] = useState<Coordinate[]>([])
     const [canFireShots, setCanFireShots] = useState<boolean>(shootingState.myTurn)
 
-    useAbortableEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn])
-    useAbortableEffect(callOnFinishIfGameIsFinished, [shootingState.finished])
+    useEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn])
+    useEffect(callOnFinishIfGameIsFinished, [shootingState.finished])
 
     /**
      * Disables the fire shots button when it's not my turn.
@@ -83,7 +83,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
      * Callback to call when the player wants to leave the game.
      */
     async function leaveGame() {
-        const [err, res] = await abortableTo(battleshipsService.gamesService.leaveGame())
+        const [err, res] = await abortableTo(battleshipsService.gamesService.leaveGame(mountedSignal))
 
         if (err) {
             handleError(err, setError)
@@ -144,7 +144,9 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                             {
                                 shootingState.myBoard.fleet.map((ship, index) => {
                                     return (
-                                        <Box sx={{
+                                        <Box
+                                            key={ship.type.shipName + index}
+                                            sx={{
                                             position: 'absolute',
                                             top: (ship.coordinate.row) * tileSize,
                                             left: (ship.coordinate.col) * tileSize,
@@ -152,7 +154,6 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                             <ShipView
                                                 shipType={ship.type}
                                                 orientation={ship.orientation}
-                                                key={ship.type.shipName + index}
                                             />
                                         </Box>
                                     )
@@ -204,7 +205,9 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                             {
                                 shootingState.opponentBoard.fleet.map((ship, index) => {
                                     return (
-                                        <Box sx={{
+                                        <Box
+                                            key={ship.type.shipName + index}
+                                            sx={{
                                             position: 'absolute',
                                             top: (ship.coordinate.row) * tileSize,
                                             left: (ship.coordinate.col) * tileSize,
@@ -212,7 +215,6 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                             <ShipView
                                                 shipType={ship.type}
                                                 orientation={ship.orientation}
-                                                key={ship.type.shipName + index}
                                             />
                                         </Box>
                                     )

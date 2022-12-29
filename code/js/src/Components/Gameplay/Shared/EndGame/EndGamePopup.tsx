@@ -6,8 +6,8 @@ import {useNavigate} from "react-router-dom"
 import Box from "@mui/material/Box"
 import Avatar from "@mui/material/Avatar"
 import {Uris} from "../../../../Utils/navigation/Uris"
-import HOME = Uris.HOME
-import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU
+import HOME = Uris.HOME;
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**
  * Properties for the EndGamePopup component.

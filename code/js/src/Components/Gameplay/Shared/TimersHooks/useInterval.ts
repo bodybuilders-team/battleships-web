@@ -1,4 +1,4 @@
-import {useAbortableEffect} from "../../../../Utils/abortableUtils"
+import {useEffect} from "react";
 
 /**
  * Hook that calls a function every interval.
@@ -8,7 +8,7 @@ import {useAbortableEffect} from "../../../../Utils/abortableUtils"
  * @param dependencies the dependencies of the hook
  */
 export function useInterval(callback: () => Promise<boolean> | boolean | void, delay: number, dependencies?: any[]) {
-    useAbortableEffect(activateInterval, dependencies)
+    useEffect(activateInterval, dependencies)
 
     /**
      * Activates the interval.

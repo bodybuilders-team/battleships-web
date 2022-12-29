@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {useEffect} from 'react'
 import './App.css'
 import NavBar from "./Layouts/NavBar"
 import {Navigate, Route, Routes} from 'react-router-dom'
@@ -17,7 +18,6 @@ import Lobby from "./Components/Gameplay/Lobby/Lobby"
 import About from "./Components/About/About"
 import {Uris} from "./Utils/navigation/Uris"
 import {useMountedSignal} from "./Utils/useMounted"
-import {useAbortableEffect} from "./Utils/abortableUtils"
 import HOME = Uris.HOME;
 import LOGIN = Uris.LOGIN;
 import REGISTER = Uris.REGISTER;
@@ -38,7 +38,7 @@ export default function App() {
     const battleshipsService = useBattleshipsService()
     const mountedSignal = useMountedSignal()
 
-    useAbortableEffect(() => {
+    useEffect(() => {
         getHome()
     })
 
@@ -57,6 +57,12 @@ export default function App() {
     function ProtectedRoute({children}: { children: React.ReactElement }) {
         if (!loggedIn)
             return <Navigate to={LOGIN} replace/>
+
+        useEffect(() => {
+            return () => {
+                console.log("unmounting protected route")
+            }
+        }, [])
 
         return children
     }
@@ -90,6 +96,7 @@ export default function App() {
 
                     <Route path={GAMEPLAY_MENU} element={<ProtectedRoute><GameplayMenu/></ProtectedRoute>}/>
                     <Route path={GAME} element={<ProtectedRoute><Gameplay/></ProtectedRoute>}/>
+
                     <Route path={MATCHMAKE} element={<ProtectedRoute><Matchmake/></ProtectedRoute>}/>
                     <Route path={CREATE_GAME} element={<ProtectedRoute><CreateGame/></ProtectedRoute>}/>
                     <Route path={LOBBY} element={<ProtectedRoute><Lobby/></ProtectedRoute>}/>

@@ -65,6 +65,7 @@ export default class NavigationBattleshipsService {
  */
 export function useBattleshipsService() {
     const navigationState = useNavigationState()
+    console.log(navigationState)
     const sessionManager = useSessionManager()
 
     return useMemo(() => {

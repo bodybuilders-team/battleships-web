@@ -2,7 +2,6 @@ import * as React from "react"
 import {useState} from "react"
 import {defaultShipTypes, ShipType} from "../../../Domain/games/ship/ShipType"
 import {defaultBoardSize} from "../../../Domain/games/board/Board"
-import to from "../../../Utils/await-to"
 import {handleError} from "../../../Services/utils/fetchSiren"
 import {useNavigate} from "react-router-dom"
 import PageContent from "../../Shared/PageContent"
@@ -11,6 +10,7 @@ import {useInterval} from "../Shared/TimersHooks/useInterval"
 import LoadingSpinner from "../../Shared/LoadingSpinner"
 import GameConfig from "./GameConfig"
 import {abortableTo} from "../../../Utils/abortableUtils"
+import {useMountedSignal} from "../../../Utils/useMounted";
 
 const POLLING_DELAY = 1000
 
@@ -34,6 +34,7 @@ export default function CreateGame() {
     const [error, setError] = useState<string | null>(null)
 
     useInterval(checkIfOpponentHasConnected, POLLING_DELAY, [isWaitingForOpponent])
+    const mountedSignal = useMountedSignal()
 
     /**
      * Handles the creation of a game.
@@ -55,8 +56,9 @@ export default function CreateGame() {
                                 quantity: count,
                                 points: shipType.points
                             }))
-                        }
-                    }
+                        },
+                    },
+                    mountedSignal
                 )
             )
 
@@ -80,7 +82,7 @@ export default function CreateGame() {
             return true
 
         const [err, res] = await abortableTo(
-            battleshipsService.gamesService.getGameState()
+            battleshipsService.gamesService.getGameState(mountedSignal)
         )
 
         if (err) {

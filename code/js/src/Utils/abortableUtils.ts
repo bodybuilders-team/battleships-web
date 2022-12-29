@@ -1,4 +1,3 @@
-import * as React from "react"
 import to from "./await-to"
 
 /**
@@ -9,26 +8,6 @@ export class AbortedError extends Error {
     constructor() {
         super("Aborted")
     }
-}
-
-/**
- * A side effect that catches the AbortedError and does not rethrow it
- *
- * @param effect The side effect to run
- * @param dependencies The dependencies of the side effect
- */
-export function useAbortableEffect(
-    effect: () => void | (() => void),
-    dependencies?: React.DependencyList
-) {
-    React.useEffect(() => {
-        try {
-            effect()
-        } catch (e) {
-            if (!(e instanceof AbortedError))
-                throw e
-        }
-    }, dependencies)
 }
 
 /**
