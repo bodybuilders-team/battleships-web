@@ -9,7 +9,7 @@ declare global {
          * @param predicate the predicate to match elements
          * @param newFunc the function to generate the new value
          */
-        replaceIf(predicate: (value: T) => boolean, newFunc: (value: T) => T): ReadonlyArray<T>;
+        replaceIf(predicate: (value: T) => boolean, newFunc: (value: T) => T): ReadonlyArray<T>
     }
 
     interface Array<T> {
@@ -20,12 +20,12 @@ declare global {
          * @param predicate the predicate to match elements
          * @param newFunc the function to generate the new value
          */
-        replaceIf(predicate: (value: T) => boolean, newFunc: (value: T) => T): Array<T>;
+        replaceIf(predicate: (value: T) => boolean, newFunc: (value: T) => T): Array<T>
     }
 }
 
 Array.prototype.replaceIf = function (predicate, newFunc) {
     return this.map((value) => {
-        return predicate(value) ? newFunc(value) : value;
-    });
+        return predicate(value) ? newFunc(value) : value
+    })
 }

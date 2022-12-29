@@ -1,8 +1,8 @@
-import {Cell, ShipCell, WaterCell} from "../Cell";
-import {Coordinate} from "../Coordinate";
-import {ShipType} from "../ship/ShipType";
-import {Orientation} from "../ship/Orientation";
-import {getCoordinates, isValidShipCoordinate, Ship} from "../ship/Ship";
+import {Cell, ShipCell, WaterCell} from "../Cell"
+import {Coordinate} from "../Coordinate"
+import {ShipType} from "../ship/ShipType"
+import {Orientation} from "../ship/Orientation"
+import {getCoordinates, isValidShipCoordinate, Ship} from "../ship/Ship"
 
 /**
  * A board in the game.
@@ -11,17 +11,17 @@ import {getCoordinates, isValidShipCoordinate, Ship} from "../ship/Ship";
  * @property grid the grid of cells
  */
 export class Board {
-    readonly size: number;
-    readonly grid: ReadonlyArray<Cell>;
-    readonly fleet: ReadonlyArray<Ship>;
+    readonly size: number
+    readonly grid: ReadonlyArray<Cell>
+    readonly fleet: ReadonlyArray<Ship>
 
     constructor(boardSize: number, grid: ReadonlyArray<Cell>) {
-        this.size = boardSize;
-        this.grid = grid;
+        this.size = boardSize
+        this.grid = grid
         this.fleet = this.grid
             .filter(cell => cell instanceof ShipCell)
             .map(cell => (cell as ShipCell).ship)
-            .filter((ship, index, self) => self.indexOf(ship) === index); // distinct
+            .filter((ship, index, self) => self.indexOf(ship) === index) // distinct
     }
 
     /**
@@ -33,13 +33,13 @@ export class Board {
      * @throws IllegalArgumentException if [coordinate] is out of bounds
      */
     getCell(coordinate: Coordinate): Cell {
-        return this.grid[toIndex(coordinate, this.size)];
+        return this.grid[toIndex(coordinate, this.size)]
     }
 }
 
-export const defaultBoardSize = 10;
-export const minBoardSize = 7;
-export const maxBoardSize = 18;
+export const defaultBoardSize = 10
+export const minBoardSize = 7
+export const maxBoardSize = 18
 
 /**
  * Generates a matrix only with water cells.
@@ -48,12 +48,12 @@ export const maxBoardSize = 18;
  * @return generated matrix
  */
 export function generateEmptyMatrix(size: number): Cell[] {
-    const grid: Cell[] = [];
+    const grid: Cell[] = []
     for (let i = 0; i < size * size; i++) {
-        grid.push(new WaterCell(Coordinate.fromIndex(i, size), false));
+        grid.push(new WaterCell(Coordinate.fromIndex(i, size), false))
     }
 
-    return grid;
+    return grid
 }
 
 /**
@@ -65,7 +65,7 @@ export function generateEmptyMatrix(size: number): Cell[] {
  * @return the matrix index obtained from the coordinate
  */
 export function toIndex(coordinate: Coordinate, size: number): number {
-    return (coordinate.row - 1) * size + (coordinate.col - 1);
+    return (coordinate.row - 1) * size + (coordinate.col - 1)
 }
 
 
@@ -78,13 +78,13 @@ export function toIndex(coordinate: Coordinate, size: number): number {
  * @return matrix of [size] with the [ships] placed randomly
  */
 export function generateRandomMatrix(size: number, ships: ReadonlyMap<ShipType, number>): Cell[] {
-    const grid = generateEmptyMatrix(size);
+    const grid = generateEmptyMatrix(size)
 
     const shuffledShips: ShipType[] = Array.from(ships.entries())
         .flatMap(([shipType, count]) => {
-            return Array(count).fill(shipType);
+            return Array(count).fill(shipType)
         })
-        .sort(() => Math.random() - 0.5);
+        .sort(() => Math.random() - 0.5)
 
     shuffledShips.forEach(shipType => {
         const possibleShips = grid
@@ -93,27 +93,27 @@ export function generateRandomMatrix(size: number, ships: ReadonlyMap<ShipType, 
                 return [Orientation.HORIZONTAL, Orientation.VERTICAL]
                     .filter(orientation => isValidShipCoordinate(cell.coordinate, orientation, shipType.size, size))
                     .flatMap(orientation => {
-                        const coordinates = getCoordinates(shipType, cell.coordinate, orientation);
+                        const coordinates = getCoordinates(shipType, cell.coordinate, orientation)
 
                         if (
                             coordinates.every(coordinate => {
-                                    return grid[toIndex(coordinate, size)] instanceof WaterCell;
+                                    return grid[toIndex(coordinate, size)] instanceof WaterCell
                                 }
                             )
                         )
-                            return [new Ship(shipType, coordinates[0], orientation)];
+                            return [new Ship(shipType, coordinates[0], orientation)]
                         else
-                            return [];
-                    });
-            });
+                            return []
+                    })
+            })
 
-        const randomIndex = Math.floor(Math.random() * possibleShips.length);
-        const ship = possibleShips[randomIndex];
+        const randomIndex = Math.floor(Math.random() * possibleShips.length)
+        const ship = possibleShips[randomIndex]
 
         ship.coordinates.forEach(coordinate => {
-            grid[toIndex(coordinate, size)] = new ShipCell(coordinate, false, ship);
-        });
-    });
+            grid[toIndex(coordinate, size)] = new ShipCell(coordinate, false, ship)
+        })
+    })
 
-    return grid;
+    return grid
 }

@@ -9,12 +9,12 @@
  * @property endCause the cause of the game ending
  */
 interface GameStateModel {
-    phase: GamePhase;
-    phaseEndTime: number;
-    round: number | null;
-    turn: string | null;
-    winner: string | null;
-    endCause: string | null;
+    phase: GamePhase
+    phaseEndTime: number
+    round: number | null
+    turn: string | null
+    winner: string | null
+    endCause: string | null
 }
 
-type GamePhase = "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED";
+type GamePhase = "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED"

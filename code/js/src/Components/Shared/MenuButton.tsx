@@ -1,5 +1,5 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
+import * as React from "react"
+import Button from "@mui/material/Button"
 
 /**
  * Properties of the MenuButton component.
@@ -9,9 +9,9 @@ import Button from "@mui/material/Button";
  * @property onClick the click handler
  */
 interface MenuButtonProps {
-    title: string;
-    icon?: React.ReactNode;
-    onClick?: () => void;
+    title: string
+    icon?: React.ReactNode
+    onClick?: () => void
 }
 
 /**
@@ -30,5 +30,5 @@ export default function MenuButton({title, icon, onClick}: MenuButtonProps) {
         >
             {title}
         </Button>
-    );
+    )
 }

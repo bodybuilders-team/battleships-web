@@ -1,11 +1,11 @@
-import {getWithAuth, postWithAuth} from "../../utils/fetchSiren";
-import {GetMyFleetOutput} from "./models/players/getMyFleet/GetMyFleetOutput";
-import {DeployFleetOutput} from "./models/players/deployFleet/DeployFleetOutput";
-import {GetOpponentFleetOutput} from "./models/players/getOpponentFleet/GetOpponentFleetOutput";
-import {GetMyShotsOutput} from "./models/players/getMyShots/GetMyShotsOutput";
-import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput";
-import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput";
-import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput";
+import {getWithAuth, postWithAuth} from "../../utils/fetchSiren"
+import {GetMyFleetOutput} from "./models/players/getMyFleet/GetMyFleetOutput"
+import {DeployFleetOutput} from "./models/players/deployFleet/DeployFleetOutput"
+import {GetOpponentFleetOutput} from "./models/players/getOpponentFleet/GetOpponentFleetOutput"
+import {GetMyShotsOutput} from "./models/players/getMyShots/GetMyShotsOutput"
+import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput"
+import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput"
+import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput"
 
 export namespace PlayersService {
 
@@ -23,7 +23,7 @@ export namespace PlayersService {
         getMyFleetLink: string,
         signal?: AbortSignal
     ): Promise<GetMyFleetOutput> {
-        return await getWithAuth(getMyFleetLink, token, signal);
+        return await getWithAuth(getMyFleetLink, token, signal)
     }
 
     /**
@@ -42,7 +42,7 @@ export namespace PlayersService {
         fleet: DeployFleetInput,
         signal?: AbortSignal
     ): Promise<DeployFleetOutput> {
-        return await postWithAuth(deployFleetLink, token, JSON.stringify(fleet), signal);
+        return await postWithAuth(deployFleetLink, token, JSON.stringify(fleet), signal)
     }
 
     /**
@@ -59,7 +59,7 @@ export namespace PlayersService {
         getOpponentFleetLink: string,
         signal?: AbortSignal
     ): Promise<GetOpponentFleetOutput> {
-        return await getWithAuth(getOpponentFleetLink, token, signal);
+        return await getWithAuth(getOpponentFleetLink, token, signal)
     }
 
     /**
@@ -76,7 +76,7 @@ export namespace PlayersService {
         getMyShotsLink: string,
         signal?: AbortSignal
     ): Promise<GetMyShotsOutput> {
-        return await getWithAuth(getMyShotsLink, token, signal);
+        return await getWithAuth(getMyShotsLink, token, signal)
     }
 
     /**
@@ -95,7 +95,7 @@ export namespace PlayersService {
         shots: FireShotsInput,
         signal?: AbortSignal
     ): Promise<FireShotsOutput> {
-        return await postWithAuth(fireShotsLink, token, JSON.stringify(shots), signal);
+        return await postWithAuth(fireShotsLink, token, JSON.stringify(shots), signal)
     }
 
     /**
@@ -112,6 +112,6 @@ export namespace PlayersService {
         getOpponentShotsLink: string,
         signal?: AbortSignal
     ): Promise<GetOpponentShotsOutput> {
-        return await getWithAuth(getOpponentShotsLink, token, signal);
+        return await getWithAuth(getOpponentShotsLink, token, signal)
     }
 }

@@ -1,6 +1,6 @@
-import {AuthenticationOutput} from "../AuthenticationOutput";
+import {AuthenticationOutput} from "../AuthenticationOutput"
 
 /**
  * The Login Output.
  */
-export type LoginOutput = AuthenticationOutput;
+export type LoginOutput = AuthenticationOutput

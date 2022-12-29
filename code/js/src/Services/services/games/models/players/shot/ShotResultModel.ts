@@ -4,5 +4,5 @@
  * @property result the result of the shot
  */
 interface ShotResultModel {
-    result: string;
+    result: string
 }

@@ -1,7 +1,7 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
+import * as React from "react"
+import Box from "@mui/material/Box"
 
-export const tileSize = 40;
+export const tileSize = 40
 
 /**
  * Properties for the Tile component.
@@ -9,7 +9,7 @@ export const tileSize = 40;
  * @property onClick the callback to be called when the tile is clicked
  */
 interface TileProps {
-    onClick?: () => void;
+    onClick?: () => void
 }
 
 /**
@@ -26,5 +26,5 @@ export default function Tile({onClick}: TileProps) {
             }}
             onClick={onClick}
         />
-    );
+    )
 }

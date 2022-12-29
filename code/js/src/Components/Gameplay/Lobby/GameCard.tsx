@@ -1,15 +1,15 @@
-import * as React from "react";
-import {useState} from "react";
-import {styled} from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import Collapse from "@mui/material/Collapse";
-import IconButton, {IconButtonProps} from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {PlayArrow} from "@mui/icons-material";
-import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
+import * as React from "react"
+import {useState} from "react"
+import {styled} from "@mui/material/styles"
+import Card from "@mui/material/Card"
+import CardHeader from "@mui/material/CardHeader"
+import CardContent from "@mui/material/CardContent"
+import Collapse from "@mui/material/Collapse"
+import IconButton, {IconButtonProps} from "@mui/material/IconButton"
+import Typography from "@mui/material/Typography"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import {PlayArrow} from "@mui/icons-material"
+import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput"
 
 
 /**
@@ -19,18 +19,18 @@ import {GetGameOutputModel} from "../../../Services/services/games/models/games/
  * @property onJoinGameRequest the callback to call when the user wants to join the game
  */
 interface GameCardProps {
-    game: GetGameOutputModel;
-    onJoinGameRequest: () => void;
+    game: GetGameOutputModel
+    onJoinGameRequest: () => void
 }
 
 /**
  * Game card component.
  */
 export default function GameCard({game, onJoinGameRequest}: GameCardProps) {
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(false)
     const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+        setExpanded(!expanded)
+    }
 
     return (
         <Card sx={{maxWidth: 345}}>
@@ -66,7 +66,7 @@ export default function GameCard({game, onJoinGameRequest}: GameCardProps) {
                 </CardContent>
             </Collapse>
         </Card>
-    );
+    )
 }
 
 /**
@@ -75,16 +75,16 @@ export default function GameCard({game, onJoinGameRequest}: GameCardProps) {
  * @property expand expanded state
  */
 interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
+    expand: boolean
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-    const {expand, ...other} = props;
-    return <IconButton {...other} />;
+    const {expand, ...other} = props
+    return <IconButton {...other} />
 })(({theme, expand}) => ({
     transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
     marginLeft: "auto",
     transition: theme.transitions.create("transform", {
         duration: theme.transitions.duration.shortest
     })
-}));
+}))

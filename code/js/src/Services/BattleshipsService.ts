@@ -1,7 +1,7 @@
-import {get} from "./utils/fetchSiren";
-import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
+import {get} from "./utils/fetchSiren"
+import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput"
 
-export const API_ENDPOINT = "http://localhost:8080";
+export const API_ENDPOINT = "http://localhost:8080"
 
 
 export namespace BattleshipsService {
@@ -14,6 +14,6 @@ export namespace BattleshipsService {
      * @return the API result of the get home request
      */
     export async function getHome(signal?: AbortSignal): Promise<GetHomeOutput> {
-        return await get("/", signal);
+        return await get("/", signal)
     }
 }

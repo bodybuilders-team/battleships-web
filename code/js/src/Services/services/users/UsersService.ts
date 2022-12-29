@@ -1,10 +1,10 @@
-import {RegisterOutput} from "./models/register/RegisterOutput";
-import {LoginOutput} from "./models/login/LoginOutput";
-import {LogoutOutput} from "./models/logout/LogoutOutput";
-import {get, post} from "../../utils/fetchSiren";
-import {GetUsersOutput} from "./models/getUsers/GetUsersOutput";
-import {SirenEntity} from "../../media/siren/SirenEntity";
-import {RefreshTokenOutput} from "./models/refreshToken/RefreshTokenOutput";
+import {RegisterOutput} from "./models/register/RegisterOutput"
+import {LoginOutput} from "./models/login/LoginOutput"
+import {LogoutOutput} from "./models/logout/LogoutOutput"
+import {get, post} from "../../utils/fetchSiren"
+import {GetUsersOutput} from "./models/getUsers/GetUsersOutput"
+import {SirenEntity} from "../../media/siren/SirenEntity"
+import {RefreshTokenOutput} from "./models/refreshToken/RefreshTokenOutput"
 
 export namespace UsersService {
 
@@ -17,7 +17,7 @@ export namespace UsersService {
      * @return the API result of the get user home request
      */
     export async function getUserHome(userHomeLink: string, signal?: AbortSignal): Promise<SirenEntity<void>> {
-        return await get(userHomeLink);
+        return await get(userHomeLink)
     }
 
     /**
@@ -29,7 +29,7 @@ export namespace UsersService {
      * @return the API result of the get users request
      */
     export async function getUsers(listUsersLink: string, signal?: AbortSignal): Promise<GetUsersOutput> {
-        return await get(listUsersLink, signal);
+        return await get(listUsersLink, signal)
     }
 
     /**
@@ -50,7 +50,7 @@ export namespace UsersService {
         password: string,
         signal?: AbortSignal
     ): Promise<RegisterOutput> {
-        return await post(registerLink, JSON.stringify({email, username, password}), signal);
+        return await post(registerLink, JSON.stringify({email, username, password}), signal)
     }
 
     /**
@@ -69,7 +69,7 @@ export namespace UsersService {
         password: string,
         signal?: AbortSignal
     ): Promise<LoginOutput> {
-        return await post(loginLink, JSON.stringify({username, password}), signal);
+        return await post(loginLink, JSON.stringify({username, password}), signal)
     }
 
     /**
@@ -86,7 +86,7 @@ export namespace UsersService {
         refreshToken: string,
         signal?: AbortSignal
     ): Promise<LogoutOutput> {
-        return await post(logoutLink, JSON.stringify({refreshToken}), signal);
+        return await post(logoutLink, JSON.stringify({refreshToken}), signal)
     }
 
     /**
@@ -97,7 +97,7 @@ export namespace UsersService {
      * @return the API result of the refresh token request
      */
     export function refreshToken(refreshTokenLink: string, refreshToken: string, signal?: AbortSignal): Promise<RefreshTokenOutput> {
-        return post(refreshTokenLink, JSON.stringify({refreshToken}), signal);
+        return post(refreshTokenLink, JSON.stringify({refreshToken}), signal)
     }
 
 

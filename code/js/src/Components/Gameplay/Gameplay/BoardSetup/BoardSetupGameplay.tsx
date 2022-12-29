@@ -1,22 +1,22 @@
-import BoardSetup from "./BoardSetup";
-import * as React from "react";
-import {useState} from "react";
-import {Board} from "../../../../Domain/games/board/Board";
-import to from "../../../../Utils/await-to";
-import {Orientation} from "../../../../Domain/games/ship/Orientation";
-import {handleError} from "../../../../Services/utils/fetchSiren";
-import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
-import LoadingSpinner from "../../../Shared/LoadingSpinner";
-import PageContent from "../../../Shared/PageContent";
-import {useInterval} from "../../Shared/TimersHooks/useInterval";
-import {GameConfig} from "../../../../Domain/games/game/GameConfig";
-import {useNavigate} from "react-router-dom";
-import {Problem} from "../../../../Services/media/Problem";
-import {ProblemTypes} from "../../../../Utils/types/problemTypes";
-import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup";
-import {Uris} from "../../../../Utils/navigation/Uris";
-import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
-import {abortableTo} from "../../../../Utils/abortableUtils";
+import BoardSetup from "./BoardSetup"
+import * as React from "react"
+import {useState} from "react"
+import {Board} from "../../../../Domain/games/board/Board"
+import to from "../../../../Utils/await-to"
+import {Orientation} from "../../../../Domain/games/ship/Orientation"
+import {handleError} from "../../../../Services/utils/fetchSiren"
+import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
+import LoadingSpinner from "../../../Shared/LoadingSpinner"
+import PageContent from "../../../Shared/PageContent"
+import {useInterval} from "../../Shared/TimersHooks/useInterval"
+import {GameConfig} from "../../../../Domain/games/game/GameConfig"
+import {useNavigate} from "react-router-dom"
+import {Problem} from "../../../../Services/media/Problem"
+import {ProblemTypes} from "../../../../Utils/types/problemTypes"
+import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup"
+import {Uris} from "../../../../Utils/navigation/Uris"
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU
+import {abortableTo} from "../../../../Utils/abortableUtils"
 
 /**
  * Properties for BoardSetupGameplay component.
@@ -26,27 +26,27 @@ import {abortableTo} from "../../../../Utils/abortableUtils";
  * @property onFinished callback when the board setup phase is finished
  */
 interface BoardSetupGameplayProps {
-    finalTime: number;
-    gameConfig: GameConfig;
-    onFinished: () => void;
+    finalTime: number
+    gameConfig: GameConfig
+    onFinished: () => void
 }
 
-const POLLING_DELAY = 1000;
+const POLLING_DELAY = 1000
 
 /**
  * BoardSetupGameplay component.
  */
 export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: BoardSetupGameplayProps) {
-    const battleshipsService = useBattleshipsService();
-    const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [showEndGamePopup, setShowEndGamePopup] = useState<boolean>(false);
+    const battleshipsService = useBattleshipsService()
+    const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
+    const [showEndGamePopup, setShowEndGamePopup] = useState<boolean>(false)
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     useInterval(() => {
         fetchGameState()
-    }, POLLING_DELAY, [isWaitingForOpponent]);
+    }, POLLING_DELAY, [isWaitingForOpponent])
 
     /**
      * Callback when the board setup phase is finished.
@@ -63,19 +63,19 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
                     }
                 }
             )
-        }));
+        }))
 
         if (err) {
             if (err instanceof Problem && err.type === ProblemTypes.INVALID_PHASE) {
-                setShowEndGamePopup(true);
-                return;
+                setShowEndGamePopup(true)
+                return
             }
 
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
-        setWaitingForOpponent(true);
+        setWaitingForOpponent(true)
     }
 
     /**
@@ -84,23 +84,23 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
     async function fetchGameState() {
         const [err, res] = await abortableTo(
             battleshipsService.gamesService.getGameState()
-        );
+        )
 
         if (err) {
-            handleError(err, setError);
-            return false;
+            handleError(err, setError)
+            return false
         }
 
         if (isWaitingForOpponent && res.properties!.phase == "IN_PROGRESS") {
-            setWaitingForOpponent(false);
-            onFinished();
-            return true;
+            setWaitingForOpponent(false)
+            onFinished()
+            return true
         } else if (res?.properties?.phase == "FINISHED") {
-            setShowEndGamePopup(true);
-            return true;
+            setShowEndGamePopup(true)
+            return true
         }
 
-        return false;
+        return false
     }
 
 
@@ -108,14 +108,14 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
      * Callback when the user wants to leave the game.
      */
     async function leaveGame() {
-        const [err] = await abortableTo(battleshipsService.gamesService.leaveGame());
+        const [err] = await abortableTo(battleshipsService.gamesService.leaveGame())
 
         if (err) {
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
-        navigate(GAMEPLAY_MENU);
+        navigate(GAMEPLAY_MENU)
     }
 
 
@@ -126,10 +126,10 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
                     <LoadingSpinner text={"Waiting for opponent to deploy his fleet..."}/>
                 </PageContent>
                 <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
-                    handleError(err, setError);
+                    handleError(err, setError)
                 }}/>
             </>
-        );
+        )
     else return (
         <>
             <BoardSetup
@@ -139,12 +139,12 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
                 onLeaveGame={leaveGame}
                 error={error}
                 onTimeUp={() => {
-                    setShowEndGamePopup(true);
+                    setShowEndGamePopup(true)
                 }}
             />
             <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
-                handleError(err, setError);
+                handleError(err, setError)
             }}/>
         </>
-    );
+    )
 }

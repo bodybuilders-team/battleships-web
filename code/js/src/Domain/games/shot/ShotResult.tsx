@@ -22,13 +22,13 @@ export namespace ShotResult {
     export function parse(shotResult: string): ShotResult {
         switch (shotResult) {
             case "HIT":
-                return ShotResult.HIT;
+                return ShotResult.HIT
             case "MISS":
-                return ShotResult.MISS;
+                return ShotResult.MISS
             case "SUNK":
-                return ShotResult.SUNK;
+                return ShotResult.SUNK
         }
 
-        throw new Error("Unknown shot result");
+        throw new Error("Unknown shot result")
     }
 }

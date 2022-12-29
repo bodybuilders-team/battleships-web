@@ -1,9 +1,10 @@
-import Grid from "@mui/material/Grid";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Tile, {tileSize} from "./Tile";
-import {Board} from "../../../../Domain/games/board/Board";
-import {Coordinate} from "../../../../Domain/games/Coordinate";
+import Grid from "@mui/material/Grid"
+import * as React from "react"
+import Box from "@mui/material/Box"
+import Tile, {tileSize} from "./Tile"
+import {Board} from "../../../../Domain/games/board/Board"
+import {Coordinate} from "../../../../Domain/games/Coordinate"
+import {ForwardedRef, RefObject} from "react"
 
 /**
  * Properties for the BoardView component.
@@ -14,16 +15,16 @@ import {Coordinate} from "../../../../Domain/games/Coordinate";
  * @property children the children to be displayed on top of the board
  */
 interface BoardViewProps {
-    board: Board;
-    enabled: boolean;
-    onTileClicked?: (coordinate: Coordinate) => void;
-    children?: React.ReactNode;
+    board: Board
+    enabled: boolean
+    onTileClicked?: (coordinate: Coordinate) => void
+    children?: React.ReactNode
 }
 
 /**
  * BoardView component.
  */
-export default function BoardView({board, enabled, onTileClicked, children}: BoardViewProps) {
+function BoardView({board, enabled, onTileClicked, children}: BoardViewProps, ref: ForwardedRef<HTMLDivElement>) {
     return (
         <Box
             sx={{
@@ -33,11 +34,11 @@ export default function BoardView({board, enabled, onTileClicked, children}: Boa
                 position: "relative",
                 opacity: enabled ? 1 : 0.5
             }}>
-            <Grid container columns={board.size + 1}>
+            <Grid ref={ref} container columns={board.size + 1}>
                 {
                     Array.from(Array((board.size + 1) * (board.size + 1)).keys()).map((tileIndex) => {
-                            const col = tileIndex % (board.size + 1);
-                            const row = Math.floor(tileIndex / (board.size + 1));
+                            const col = tileIndex % (board.size + 1)
+                            const row = Math.floor(tileIndex / (board.size + 1))
 
                             return <Grid item key={tileIndex} xs={1} sm={1} md={1}>
                                 {
@@ -55,7 +56,7 @@ export default function BoardView({board, enabled, onTileClicked, children}: Boa
                                                         </Box>
                                                         : <Tile onClick={() => {
                                                             if (onTileClicked)
-                                                                onTileClicked(new Coordinate(col, row));
+                                                                onTileClicked(new Coordinate(col, row))
                                                         }}/>
                                                 )
                                         )
@@ -67,5 +68,7 @@ export default function BoardView({board, enabled, onTileClicked, children}: Boa
             </Grid>
             {children}
         </Box>
-    );
+    )
 }
+
+export default React.forwardRef(BoardView)

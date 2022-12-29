@@ -6,7 +6,7 @@
  * @property orientation the orientation
  */
 interface DeployedShipModel {
-    type: string;
-    coordinate: CoordinateModel;
-    orientation: string;
+    type: string
+    coordinate: CoordinateModel
+    orientation: string
 }

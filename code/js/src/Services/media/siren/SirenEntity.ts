@@ -1,7 +1,7 @@
-import {Link} from "./Link";
-import {Action} from "./Action";
-import {EmbeddedLink, EmbeddedSubEntity, IEmbeddedLink, IEmbeddedSubEntity, SubEntity} from "./SubEntity";
-import {throwError} from "../../utils/errorUtils";
+import {Link} from "./Link"
+import {Action} from "./Action"
+import {EmbeddedLink, EmbeddedSubEntity, IEmbeddedLink, IEmbeddedSubEntity, SubEntity} from "./SubEntity"
+import {throwError} from "../../utils/errorUtils"
 
 /**
  * Siren is a specification for representing hypermedia entities in JSON.
@@ -16,12 +16,12 @@ import {throwError} from "../../utils/errorUtils";
  * @property title the title of the entity (optional)
  */
 export interface ISirenEntity<T> {
-    class?: string[];
-    properties?: T;
-    entities?: SubEntity<unknown>[];
-    actions?: Action[];
-    links?: Link[];
-    title?: string;
+    class?: string[]
+    properties?: T
+    entities?: SubEntity<unknown>[]
+    actions?: Action[]
+    links?: Link[]
+    title?: string
 }
 
 /**
@@ -37,20 +37,20 @@ export interface ISirenEntity<T> {
  * @property title the title of the entity (optional)
  */
 export class SirenEntity<T> implements ISirenEntity<T> {
-    class?: string[];
-    properties?: T;
-    entities?: SubEntity<unknown>[];
-    actions?: Action[];
-    links?: Link[];
-    title?: string;
+    class?: string[]
+    properties?: T
+    entities?: SubEntity<unknown>[]
+    actions?: Action[]
+    links?: Link[]
+    title?: string
 
     constructor(entity: ISirenEntity<T>) {
-        this.class = entity.class;
-        this.properties = entity.properties;
-        this.entities = entity.entities;
-        this.actions = entity.actions;
-        this.links = entity.links;
-        this.title = entity.title;
+        this.class = entity.class
+        this.properties = entity.properties
+        this.entities = entity.entities
+        this.actions = entity.actions
+        this.links = entity.links
+        this.title = entity.title
     }
 
     /**
@@ -62,7 +62,7 @@ export class SirenEntity<T> implements ISirenEntity<T> {
     getLink(...rels: string[]): string {
         return this.links
             ?.find(link => rels.every((rel) => link.rel.includes(rel)))
-            ?.href ?? throwError("Link not found");
+            ?.href ?? throwError("Link not found")
     }
 
     /**
@@ -74,7 +74,7 @@ export class SirenEntity<T> implements ISirenEntity<T> {
     getAction(name: string): string {
         return this.actions
             ?.find(action => action.name === name)
-            ?.href ?? throwError("Action not found");
+            ?.href ?? throwError("Action not found")
     }
 
     /**
@@ -83,13 +83,13 @@ export class SirenEntity<T> implements ISirenEntity<T> {
      * @return the links from the actions in a map
      */
     getActionLinks(): Map<string, string> {
-        const map = new Map<string, string>();
+        const map = new Map<string, string>()
 
         this.actions?.forEach(action => {
-            map.set(action.name, action.href);
-        });
+            map.set(action.name, action.href)
+        })
 
-        return map;
+        return map
     }
 
     /**
@@ -101,7 +101,7 @@ export class SirenEntity<T> implements ISirenEntity<T> {
     getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
         return this.entities
             ?.filter(entity => !Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedSubEntity(entity as IEmbeddedSubEntity<T>)) ?? [];
+            .map(entity => new EmbeddedSubEntity(entity as IEmbeddedSubEntity<T>)) ?? []
     }
 
     /**
@@ -115,11 +115,11 @@ export class SirenEntity<T> implements ISirenEntity<T> {
     getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
         const embeddedLinks = this.entities
             ?.filter(entity => Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? [];
+            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? []
 
         return embeddedLinks
-            .filter(link => rels.every((rel) => link.rel.includes(rel)));
+            .filter(link => rels.every((rel) => link.rel.includes(rel)))
     }
 }
 
-export const sirenMediaType = "application/vnd.siren+json";
+export const sirenMediaType = "application/vnd.siren+json"

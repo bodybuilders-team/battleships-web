@@ -1,25 +1,51 @@
-import * as React from "react";
-import {useState} from "react";
-import BoardView from "../../Shared/Board/BoardView";
-import {ConfigurableBoard} from "../../../../Domain/games/board/ConfigurableBoard";
-import Grid from "@mui/material/Grid";
-import {Card, CardActions, CardContent, Divider} from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ShipView from "../../Shared/Ship/ShipView";
-import {ShipType} from "../../../../Domain/games/ship/ShipType";
-import {Orientation} from "../../../../Domain/games/ship/Orientation";
-import {Board, generateEmptyMatrix, generateRandomMatrix} from "../../../../Domain/games/board/Board";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import {isValidShipCoordinate, Ship} from "../../../../Domain/games/ship/Ship";
-import ErrorAlert from "../../../Shared/ErrorAlert";
-import useConfigurableBoard from "./useConfigurableBoard";
-import {tileSize} from "../../Shared/Board/Tile";
-import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
-import LeaveGameAlert from "../../Shared/LeaveGame/LeaveGameAlert";
-import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton";
-import {CheckRounded, CycloneRounded} from "@mui/icons-material";
+import * as React from "react"
+import {useState} from "react"
+import BoardView from "../../Shared/Board/BoardView"
+import {ConfigurableBoard} from "../../../../Domain/games/board/ConfigurableBoard"
+import Grid from "@mui/material/Grid"
+import Box from "@mui/material/Box"
+import ShipView from "../../Shared/Ship/ShipView"
+import {ShipType} from "../../../../Domain/games/ship/ShipType"
+import {Orientation} from "../../../../Domain/games/ship/Orientation"
+import {Board, generateEmptyMatrix, generateRandomMatrix} from "../../../../Domain/games/board/Board"
+import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
+import {isValidShipCoordinate, Ship} from "../../../../Domain/games/ship/Ship"
+import ErrorAlert from "../../../Shared/ErrorAlert"
+import useConfigurableBoard from "./useConfigurableBoard"
+import {tileSize} from "../../Shared/Board/Tile"
+import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer"
+import LeaveGameAlert from "../../Shared/LeaveGame/LeaveGameAlert"
+import {Coordinate} from "../../../../Domain/games/Coordinate"
+import {Offset} from "./utils/Offset"
+import ShipPlacingMenuView from "./components/ShipPlacingMenuView"
+import {getPosition} from "./utils/getPosition"
+import PlacedDraggableShipView from "./components/PlacedDraggableShipView"
+import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton"
+
+
+/**
+ * Drag state.
+ *
+ * @property ship Ship being dragged.
+ * @property isPlaced Whether the ship is placed or not.
+ * @property dragOffset Offset of the drag.
+ */
+class DragState {
+    readonly ship: Ship | null
+    readonly isPlaced: boolean
+    readonly dragOffset: Offset
+
+    constructor(ship: Ship | null = null, isPlaced: boolean = false, dragOffset: Offset = Offset.ZERO) {
+        this.ship = ship
+        this.isPlaced = isPlaced
+        this.dragOffset = dragOffset
+    }
+
+    reset(): DragState {
+        return new DragState(null, false, Offset.ZERO)
+    }
+}
 
 /**
  * Board setup props
@@ -33,183 +59,207 @@ import {CheckRounded, CycloneRounded} from "@mui/icons-material";
  * @property onTimeUp the callback to be called when the time is up
  */
 interface BoardSetupProps {
-    finalTime: number;
-    boardSize: number;
-    error: string | null;
-    ships: ReadonlyMap<ShipType, number>;
-    onBoardReady: (board: Board) => void;
-    onLeaveGame: () => void;
-    onTimeUp: () => void;
+    finalTime: number
+    boardSize: number
+    error: string | null
+    ships: ReadonlyMap<ShipType, number>
+    onBoardReady: (board: Board) => void
+    onLeaveGame: () => void
+    onTimeUp: () => void
 }
 
 /**
  * BoardSetup component.
  */
 function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGame, onTimeUp}: BoardSetupProps) {
-    const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize));
-    const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships);
-    const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null);
-    const [leavingGame, setLeavingGame] = useState<boolean>(false);
+    const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize))
+    const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships)
+    const [dragState, setDragState] = useState<DragState>(new DragState())
+    const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null)
+    const [leavingGame, setLeavingGame] = useState<boolean>(false)
+    const boardRef = React.useRef<HTMLDivElement>(null)
 
-    return (
-        <Container maxWidth="lg">
-            <Typography variant="h4">Board Setup</Typography>
-            <Box sx={{mb: "5px"}}>
-                <CountdownTimer finalTime={finalTime} onTimeUp={() => {
-                    onTimeUp()
-                }}/>
-            </Box>
 
-            <LeaveGameAlert
-                open={leavingGame}
-                onLeave={() => {
-                    setLeavingGame(false);
-                    onLeaveGame();
-                }}
-                onStay={() => setLeavingGame(false)}
-            />
+    function handleDrag(offset: Offset) {
+        const newDragStateOffset = dragState.dragOffset.add(offset)
 
-            <Grid container spacing={3}>
-                <Grid item lg={4} md={6} xs={12}>
-                    <Card>
-                        <CardContent>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
-                            }}>
-                                {
-                                    Array.from(unplacedShips.entries()).map(([ship, count]) =>
-                                        <Box key={ship.shipName} sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                marginTop: '10px',
-                                                border: selectedShipType === ship ? '2px solid red' : 'none',
-                                                opacity: count === 0 ? 0.5 : 1
-                                            }}>
-                                                <ShipView
-                                                    type={ship}
-                                                    orientation={Orientation.VERTICAL}
-                                                    key={ship.shipName}
-                                                    onClick={() => {
-                                                        if (count > 0)
-                                                            setSelectedShipType(ship);
-                                                    }}
-                                                />
-                                            </Box>
-                                            <Box sx={{marginTop: '10px'}}>{count}</Box>
-                                        </Box>
-                                    )
-                                }
-                            </Box>
-                        </CardContent>
-                        <Divider/>
-                        <CardActions sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="contained"
-                                sx={{mt: 3, mb: 2}}
-                                startIcon={<CycloneRounded/>}
-                                color="primary"
-                                onClick={() => {
-                                    setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)));
-                                    const newUnplacedShips = new Map<ShipType, number>();
-                                    ships.forEach((count, ship) => newUnplacedShips.set(ship, 0));
-                                    setUnplacedShips(newUnplacedShips);
-                                }}
-                            >
-                                Random Board
-                            </Button>
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="contained"
-                                sx={{mt: 3, mb: 2}}
-                                startIcon={<CheckRounded/>}
-                                color="primary"
-                                onClick={() => {
-                                    if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
-                                        onBoardReady(board);
-                                    else
-                                        alert("You must place all the ships!");
-                                }}
-                            >
-                                Confirm Board
-                            </Button>
-                        </CardActions>
-                    </Card>
-                    <ErrorAlert error={error}/>
-                </Grid>
-                <Grid item lg={8} md={6} xs={12}>
-                    <BoardView board={board} enabled={true} onTileClicked={
-                        (coordinate) => {
-                            if (selectedShipType == null || unplacedShips.get(selectedShipType) == 0)
-                                return;
+        if (dragState.dragOffset.x !== newDragStateOffset.x ||
+            dragState.dragOffset.y !== newDragStateOffset.y) {
+            setDragState(
+                new DragState(
+                    dragState.ship,
+                    dragState.isPlaced,
+                    newDragStateOffset
+                )
+            )
+        }
+    }
 
-                            if (!isValidShipCoordinate(coordinate,
-                                Orientation.VERTICAL, selectedShipType.size, board.size)
-                            )
-                                return;
+    function getCoordinateAfterDragEnd(shipType: ShipType) {
+        setDragState(dragState.reset())
 
-                            const ship = new Ship(selectedShipType, coordinate, Orientation.VERTICAL);
-                            if (board.canPlaceShip(ship)) {
-                                placeShip(ship);
+        const boardOffset = getPosition(boardRef.current as HTMLElement)
 
-                                const newUnplacedShips = new Map(unplacedShips);
-                                newUnplacedShips.set(selectedShipType, unplacedShips.get(selectedShipType)! - 1);
+        //Calculate coordinate based on offset and boardOffset
+        const coordinateX = Math.round((dragState.dragOffset.x - boardOffset.left) / tileSize)
+        const coordinateY = Math.round((dragState.dragOffset.y - boardOffset.top) / tileSize)
 
-                                setUnplacedShips(newUnplacedShips);
-                                setSelectedShipType(null);
+        if (!Coordinate.isValid(coordinateX, coordinateY, boardSize))
+            return
+
+        const coordinate = new Coordinate(coordinateX, coordinateY)
+
+
+        if (!isValidShipCoordinate(coordinate,
+            Orientation.VERTICAL, shipType.size, board.size)
+        )
+            return null
+
+        return coordinate
+    }
+
+    return (<>
+            {
+                dragState.ship != null &&
+                <div
+                    style={{
+                        position: "absolute",
+                        zIndex: 1000,
+                        left: dragState.dragOffset.x,
+                        top: dragState.dragOffset.y,
+                    }}
+                >
+                    <ShipView shipType={dragState.ship.type} orientation={dragState.ship.orientation}/>
+                </div>
+            }
+            <Container maxWidth="lg">
+                <Typography variant="h4">Board Setup</Typography>
+                <Box sx={{mb: "5px"}}>
+                    <CountdownTimer finalTime={finalTime} onTimeUp={() => {
+                        onTimeUp()
+                    }}/>
+                </Box>
+
+                <LeaveGameAlert
+                    open={leavingGame}
+                    onLeave={() => {
+                        setLeavingGame(false)
+                        onLeaveGame()
+                    }}
+                    onStay={() => setLeavingGame(false)}
+                />
+
+                <Grid container spacing={3}>
+                    <Grid item lg={4} md={6} xs={12}>
+                        <ShipPlacingMenuView
+                            shipTypes={unplacedShips}
+                            draggingUnplaced={(shipType) =>
+                                dragState.ship?.type == shipType && dragState.ship != null && !dragState.isPlaced
                             }
-                        }
-                    }>
-                        {
-                            board.fleet.map((ship, index) => {
-                                return <Box key={ship.type.shipName} sx={{
-                                    position: 'absolute',
-                                    top: (ship.coordinate.row) * tileSize,
-                                    left: (ship.coordinate.col) * tileSize,
-                                }}>
-                                    <ShipView
-                                        type={ship.type}
-                                        orientation={ship.orientation}
-                                        key={ship.type.shipName + index}
+                            onDragStart={(shipType, offset) => {
+                                setDragState(
+                                    new DragState(
+                                        new Ship(shipType,
+                                            new Coordinate(1, 1),
+                                            Orientation.VERTICAL),
+                                        false,
+                                        offset))
+                            }}
+                            onDragEnd={(shipType) => {
+                                const coordinate = getCoordinateAfterDragEnd(shipType)
+                                if (coordinate == null)
+                                    return
+
+                                const newShip = new Ship(shipType, coordinate, Orientation.VERTICAL)
+
+                                if (board.canPlaceShip(newShip)) {
+                                    placeShip(newShip)
+
+                                    const newUnplacedShips = new Map(unplacedShips)
+                                    newUnplacedShips.set(shipType, unplacedShips.get(shipType)! - 1)
+
+                                    setUnplacedShips(newUnplacedShips)
+                                }
+                            }}
+                            onDrag={handleDrag}
+                            onRandomBoardButtonPressed={() => {
+                                setBoard(new ConfigurableBoard(boardSize, generateRandomMatrix(boardSize, ships)))
+                                const newUnplacedShips = new Map<ShipType, number>()
+                                ships.forEach((count, ship) => newUnplacedShips.set(ship, 0))
+                                setUnplacedShips(newUnplacedShips)
+                            }
+                            }
+                            onConfirmBoardButtonPressed={() => {
+                                if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
+                                    onBoardReady(board)
+                                else
+                                    alert("You must place all the ships!")
+                            }}
+                        />
+
+
+                        <ErrorAlert error={error}/>
+                    </Grid>
+                    <Grid item lg={8} md={6} xs={12}>
+                        <BoardView ref={boardRef} board={board} enabled={true}>
+                            {
+                                board.fleet.map((placedShip, index) => {
+                                    return <PlacedDraggableShipView
+                                        ship={placedShip}
+                                        hide={dragState.ship == placedShip}
+                                        onDragStart={(ship, offset) => {
+                                            setDragState(
+                                                new DragState(
+                                                    ship,
+                                                    true,
+                                                    offset)
+                                            )
+                                        }}
+                                        onDragEnd={() => {
+                                            const coordinate = getCoordinateAfterDragEnd(placedShip.type)
+                                            if (coordinate == null)
+                                                return
+
+                                            const newShip = new Ship(placedShip.type, coordinate, placedShip.orientation)
+
+                                            if (board
+                                                .removeShip(placedShip)
+                                                .canPlaceShip(newShip)) {
+                                                setBoard(board.removeShip(placedShip)
+                                                    .placeShip(newShip))
+
+                                            }
+                                        }}
+
+                                        onDrag={handleDrag}
+
                                         onClick={() => {
                                             if (!isValidShipCoordinate(
-                                                ship.coordinate, Orientation.opposite(ship.orientation),
-                                                ship.type.size, board.size)
+                                                placedShip.coordinate, Orientation.opposite(placedShip.orientation),
+                                                placedShip.type.size, board.size)
                                             )
-                                                return;
+                                                return
 
                                             // Change orientation of this ship
-                                            const newShip = new Ship(ship.type,
-                                                ship.coordinate,
-                                                Orientation.opposite(ship.orientation)
-                                            );
+                                            const newShip = new Ship(placedShip.type,
+                                                placedShip.coordinate,
+                                                Orientation.opposite(placedShip.orientation)
+                                            )
 
-                                            if (board.removeShip(ship).canPlaceShip(newShip))
-                                                setBoard(board.removeShip(ship).placeShip(newShip));
-                                        }}
+                                            if (board.removeShip(placedShip).canPlaceShip(newShip))
+                                                setBoard(board.removeShip(placedShip).placeShip(newShip))
+                                        }
+                                        }
                                     />
-                                </Box>
-                            })
-                        }
-                    </BoardView>
+                                })
+                            }
+                        </BoardView>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <LeaveGameButton onClick={() => setLeavingGame(true)}/>
-        </Container>
-    );
+                <LeaveGameButton onClick={() => setLeavingGame(true)}/>
+            </Container>
+        </>
+    )
 }
 
-export default BoardSetup;
+export default BoardSetup

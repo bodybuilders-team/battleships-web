@@ -1,18 +1,18 @@
-import * as React from "react";
-import PageContent from "../../Shared/PageContent";
-import MenuButton from "../../Shared/MenuButton";
-import {AddRounded, PlayArrowRounded, SearchRounded} from "@mui/icons-material";
-import {useNavigate} from "react-router-dom";
-import {Uris} from "../../../Utils/navigation/Uris";
-import MATCHMAKE = Uris.MATCHMAKE;
-import CREATE_GAME = Uris.CREATE_GAME;
-import LOBBY = Uris.LOBBY;
+import * as React from "react"
+import PageContent from "../../Shared/PageContent"
+import MenuButton from "../../Shared/MenuButton"
+import {AddRounded, PlayArrowRounded, SearchRounded} from "@mui/icons-material"
+import {useNavigate} from "react-router-dom"
+import {Uris} from "../../../Utils/navigation/Uris"
+import MATCHMAKE = Uris.MATCHMAKE
+import CREATE_GAME = Uris.CREATE_GAME
+import LOBBY = Uris.LOBBY
 
 /**
  * GameplayMenu component.
  */
 export default function GameplayMenu() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     return (
         <PageContent title={"Gameplay Menu"}>
@@ -32,5 +32,5 @@ export default function GameplayMenu() {
                 onClick={() => navigate(LOBBY)}
             />
         </PageContent>
-    );
+    )
 }

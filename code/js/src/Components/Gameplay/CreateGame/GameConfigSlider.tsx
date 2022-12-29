@@ -1,7 +1,7 @@
-import Typography from "@mui/material/Typography";
-import {Slider} from "@mui/material";
-import Box from "@mui/material/Box";
-import * as React from "react";
+import Typography from "@mui/material/Typography"
+import {Slider} from "@mui/material"
+import Box from "@mui/material/Box"
+import * as React from "react"
 
 /**
  * GameConfigSlider properties.
@@ -15,13 +15,13 @@ import * as React from "react";
  * @param onValueChange the callback when the value of the slider changes
  */
 interface GameConfigSliderProps {
-    id: string;
-    label: string;
-    defaultValue: number;
-    step: number;
-    min: number;
-    max: number;
-    onValueChange: (value: number) => void;
+    id: string
+    label: string
+    defaultValue: number
+    step: number
+    min: number
+    max: number
+    onValueChange: (value: number) => void
 }
 
 /**
@@ -50,9 +50,9 @@ export default function GameConfigSlider({
                 min={min}
                 max={max}
                 onChange={(event, value) => {
-                    onValueChange(value as number);
+                    onValueChange(value as number)
                 }}
             />
         </Box>
-    );
+    )
 }

@@ -1,13 +1,13 @@
-import * as React from "react";
-import {Dialog, Typography} from "@mui/material";
-import Button from "@mui/material/Button";
-import {HomeRounded, RefreshRounded} from "@mui/icons-material";
-import {useNavigate} from "react-router-dom";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import {Uris} from "../../../../Utils/navigation/Uris";
-import HOME = Uris.HOME;
-import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
+import * as React from "react"
+import {Dialog, Typography} from "@mui/material"
+import Button from "@mui/material/Button"
+import {HomeRounded, RefreshRounded} from "@mui/icons-material"
+import {useNavigate} from "react-router-dom"
+import Box from "@mui/material/Box"
+import Avatar from "@mui/material/Avatar"
+import {Uris} from "../../../../Utils/navigation/Uris"
+import HOME = Uris.HOME
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU
 
 /**
  * Properties for the EndGamePopup component.
@@ -19,11 +19,11 @@ import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
  * @property opponentInfo the opponent info
  */
 interface EndGamePopupProps {
-    open: boolean;
-    winningPlayer: WinningPlayer;
-    cause: EndGameCause;
-    playerInfo: PlayerInfo;
-    opponentInfo: PlayerInfo;
+    open: boolean
+    winningPlayer: WinningPlayer
+    cause: EndGameCause
+    playerInfo: PlayerInfo
+    opponentInfo: PlayerInfo
 }
 
 /**
@@ -34,9 +34,9 @@ interface EndGamePopupProps {
  * @property avatar the avatar of the player
  */
 interface PlayerInfo {
-    name: string;
-    points: number;
-    avatar?: string;
+    name: string
+    points: number
+    avatar?: string
 }
 
 /**
@@ -91,14 +91,14 @@ function PlayerInfoCard({playerInfo: {name, avatar}}: { playerInfo: PlayerInfo }
             />
             <Typography sx={{mt: 1,}} variant="h6">{name}</Typography>
         </Box>
-    );
+    )
 }
 
 /**
  * The EndGamePopup component.
  */
 export default function EndGamePopup({open, winningPlayer, cause, playerInfo, opponentInfo}: EndGamePopupProps) {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     return (
         <Dialog open={open} onClose={undefined}>
@@ -191,5 +191,5 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                 </Box>
             </Box>
         </Dialog>
-    );
+    )
 }

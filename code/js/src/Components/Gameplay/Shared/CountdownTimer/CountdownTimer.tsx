@@ -1,8 +1,8 @@
-import * as React from "react";
-import TimerIcon from "@mui/icons-material/Timer";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import {useCountdownTimer} from "./useCountdownTimer";
+import * as React from "react"
+import TimerIcon from "@mui/icons-material/Timer"
+import Typography from "@mui/material/Typography"
+import Box from "@mui/material/Box"
+import {useCountdownTimer} from "./useCountdownTimer"
 
 /**
  * Properties for the CountdownTimer component.
@@ -12,16 +12,16 @@ import {useCountdownTimer} from "./useCountdownTimer";
  * @property criticalLastSeconds the number of seconds to consider the timer critical
  */
 interface CountdownTimerProps {
-    finalTime: number;
-    onTimeUp?: () => void;
-    criticalLastSeconds?: number;
+    finalTime: number
+    onTimeUp?: () => void
+    criticalLastSeconds?: number
 }
 
 /**
  * A countdown timer.
  */
 export function CountdownTimer({finalTime, onTimeUp, criticalLastSeconds = 10}: CountdownTimerProps) {
-    const {currentTime, minutes, seconds} = useCountdownTimer(finalTime, onTimeUp);
+    const {currentTime, minutes, seconds} = useCountdownTimer(finalTime, onTimeUp)
 
     return (
         <Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -34,5 +34,5 @@ export function CountdownTimer({finalTime, onTimeUp, criticalLastSeconds = 10}: 
                 {minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}
             </Typography>
         </Box>
-    );
+    )
 }

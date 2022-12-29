@@ -1,14 +1,14 @@
-import * as React from 'react';
-import {createRoot} from 'react-dom/client';
-import './index.css';
-import App from './App';
-import {BrowserRouter as Router} from 'react-router-dom';
-import {createTheme, ThemeProvider} from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import {Auth} from "./Utils/Session";
-import {NavigationState} from "./Utils/navigation/NavigationState";
+import * as React from 'react'
+import {createRoot} from 'react-dom/client'
+import './index.css'
+import App from './App'
+import {BrowserRouter as Router} from 'react-router-dom'
+import {createTheme, ThemeProvider} from "@mui/material/styles"
+import CssBaseline from "@mui/material/CssBaseline"
+import {Auth} from "./Utils/Session"
+import {NavigationState} from "./Utils/navigation/NavigationState"
 
-const root = createRoot(document.getElementById('root') as HTMLElement);
+const root = createRoot(document.getElementById('root') as HTMLElement)
 const theme = createTheme({
     components: {
         MuiButton: {
@@ -286,7 +286,7 @@ const theme = createTheme({
             lineHeight: 1.375
         }
     }
-});
+})
 
 root.render(
     <Router>
@@ -299,4 +299,4 @@ root.render(
             </Auth>
         </ThemeProvider>
     </Router>
-);
+)

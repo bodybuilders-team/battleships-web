@@ -1,5 +1,5 @@
-import TextField from "@mui/material/TextField";
-import * as React from "react";
+import TextField from "@mui/material/TextField"
+import * as React from "react"
 
 /**
  * Properties of the UsernameTextField component.
@@ -8,8 +8,8 @@ import * as React from "react";
  * @property onChange the change handler
  */
 interface UsernameTextFieldProps {
-    errors: any;
-    onChange: (event: any) => void;
+    errors: any
+    onChange: (event: any) => void
 }
 
 /**
@@ -27,5 +27,5 @@ export function UsernameTextField({errors, onChange}: UsernameTextFieldProps) {
             onChange={onChange}
             autoComplete="username"
         />
-    );
+    )
 }

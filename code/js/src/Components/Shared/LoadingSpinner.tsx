@@ -1,7 +1,7 @@
-import * as React from "react";
-import {CircularProgress} from "@mui/material";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import * as React from "react"
+import {CircularProgress} from "@mui/material"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
 /**
  * Properties for the LoadingSpinner component.
@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
  * @property text the text to be shown below the spinner
  */
 interface LoadingSpinnerProps {
-    text: string;
+    text: string
 }
 
 /**
@@ -26,5 +26,5 @@ export default function LoadingSpinner({text}: LoadingSpinnerProps) {
             <CircularProgress/>
             <Typography variant="h6">{text}</Typography>
         </Box>
-    );
+    )
 }

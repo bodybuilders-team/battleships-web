@@ -5,12 +5,12 @@
  * @property points the points of the player
  */
 export class Player {
-    readonly username: string;
-    readonly points: number;
+    readonly username: string
+    readonly points: number
 
     constructor(playerModel: PlayerModel) {
-        this.username = playerModel.username;
-        this.points = playerModel.points;
+        this.username = playerModel.username
+        this.points = playerModel.points
     }
 
     /**
@@ -22,6 +22,6 @@ export class Player {
         return {
             username: this.username,
             points: this.points
-        };
+        }
     }
 }

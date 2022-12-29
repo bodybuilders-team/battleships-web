@@ -1,5 +1,5 @@
-import * as React from "react";
-import to from "./await-to";
+import * as React from "react"
+import to from "./await-to"
 
 /**
  * An error that is thrown when a component is unmounted
@@ -7,7 +7,7 @@ import to from "./await-to";
  */
 export class AbortedError extends Error {
     constructor() {
-        super("Aborted");
+        super("Aborted")
     }
 }
 
@@ -23,12 +23,12 @@ export function useAbortableEffect(
 ) {
     React.useEffect(() => {
         try {
-            effect();
+            effect()
         } catch (e) {
             if (!(e instanceof AbortedError))
-                throw e;
+                throw e
         }
-    }, dependencies);
+    }, dependencies)
 }
 
 /**
@@ -45,25 +45,25 @@ export function setAbortableTimeout(callback: (...args: any[]) => void,
                                     signal?: AbortSignal, resolveIfAborted?: boolean, ...args: any[]) {
 
     if (signal)
-        signal.addEventListener("abort", abortHandler);
+        signal.addEventListener("abort", abortHandler)
 
-    const timeoutId = setTimeout(callbackWrapper, delay);
+    const timeoutId = setTimeout(callbackWrapper, delay)
 
     function callbackWrapper() {
         if (signal)
-            signal.removeEventListener("abort", abortHandler);
+            signal.removeEventListener("abort", abortHandler)
 
-        callback(...args);
+        callback(...args)
     }
 
     function abortHandler() {
-        clearTimeout(timeoutId);
+        clearTimeout(timeoutId)
 
         if (resolveIfAborted)
-            callback(...args);
+            callback(...args)
     }
 
-    return timeoutId;
+    return timeoutId
 }
 
 /**
@@ -76,15 +76,15 @@ export function delay(delay: number, signal?: AbortSignal) {
     return new Promise((resolve, reject) => {
         function callback() {
             if (signal && signal.aborted) {
-                reject(new AbortedError());
+                reject(new AbortedError())
                 return
             }
 
-            resolve(undefined);
+            resolve(undefined)
         }
 
-        setAbortableTimeout(callback, delay, signal, true);
-    });
+        setAbortableTimeout(callback, delay, signal, true)
+    })
 }
 
 /**
@@ -95,10 +95,10 @@ export function delay(delay: number, signal?: AbortSignal) {
 export async function abortableTo<T, E = Error>(promise: Promise<T>): Promise<[E, null] | [null, T]> {
     const data = await to<T, E>(promise)
 
-    const [err] = data;
+    const [err] = data
 
     if (err && err instanceof AbortedError)
-        throw err;
+        throw err
 
-    return data;
+    return data
 }

@@ -1,5 +1,5 @@
-import * as React from "react";
-import {useContext, useRef} from "react";
+import * as React from "react"
+import {useContext, useRef} from "react"
 
 /**
  * NavigationState interface.
@@ -8,15 +8,12 @@ import {useContext, useRef} from "react";
  * @property setLinks setter for links
  */
 interface NavigationState {
-    links: Map<string, string>;
-    setLinks: (links: Map<string, string>) => void;
+    links: Map<string, string>
 }
 
 const NavigationStateContext = React.createContext<NavigationState>({
     links: new Map<string, string>(),
-    setLinks: () => {
-    }
-});
+})
 
 /**
  * Provides the navigation state to the children.
@@ -26,20 +23,15 @@ const NavigationStateContext = React.createContext<NavigationState>({
 export function NavigationState({children}: { children: React.ReactNode }) {
     // Needs to be useRef to avoid re-rendering the children, also can't
     // be useMemo because useMemo may reset the state.
-    const links = useRef(new Map<string, string>()).current;
+    const links = useRef(new Map<string, string>()).current
 
     return (
         <NavigationStateContext.Provider value={{
-            links, setLinks: (newLinks) => {
-                links.clear();
-                newLinks.forEach((value, key) => {
-                    links.set(key, value)
-                });
-            }
+            links
         }}>
             {children}
         </NavigationStateContext.Provider>
-    );
+    )
 }
 
 /**
@@ -48,5 +40,5 @@ export function NavigationState({children}: { children: React.ReactNode }) {
  * @returns the navigation state
  */
 export function useNavigationState() {
-    return useContext(NavigationStateContext);
+    return useContext(NavigationStateContext)
 }

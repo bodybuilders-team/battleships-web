@@ -9,6 +9,7 @@
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.5",
     "react-router-dom": "^6.4.3"
   },
   "devDependencies": {

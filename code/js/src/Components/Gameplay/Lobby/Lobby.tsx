@@ -1,58 +1,58 @@
-import * as React from "react";
-import {useState} from "react";
-import {EmbeddedSubEntity} from "../../../Services/media/siren/SubEntity";
-import to from "../../../Utils/await-to";
-import {handleError} from "../../../Services/utils/fetchSiren";
-import PageContent from "../../Shared/PageContent";
-import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
-import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import LoadingSpinner from "../../Shared/LoadingSpinner";
-import GameCard from "./GameCard";
-import {useNavigate} from "react-router-dom";
-import {Rels} from "../../../Utils/navigation/Rels";
-import {useSession} from "../../../Utils/Session";
-import Typography from "@mui/material/Typography";
-import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils";
+import * as React from "react"
+import {useState} from "react"
+import {EmbeddedSubEntity} from "../../../Services/media/siren/SubEntity"
+import to from "../../../Utils/await-to"
+import {handleError} from "../../../Services/utils/fetchSiren"
+import PageContent from "../../Shared/PageContent"
+import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput"
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService"
+import LoadingSpinner from "../../Shared/LoadingSpinner"
+import GameCard from "./GameCard"
+import {useNavigate} from "react-router-dom"
+import {Rels} from "../../../Utils/navigation/Rels"
+import {useSession} from "../../../Utils/Session"
+import Typography from "@mui/material/Typography"
+import {abortableTo, useAbortableEffect} from "../../../Utils/abortableUtils"
 
 /**
  * Lobby component.
  */
 export default function Lobby() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const battleshipsService = useBattleshipsService();
-    const session = useSession();
+    const battleshipsService = useBattleshipsService()
+    const session = useSession()
 
-    const [error, setError] = useState<string | null>(null);
-    const [games, setGames] = useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null);
-    const [gamesLoaded, setGamesLoaded] = useState(false);
+    const [error, setError] = useState<string | null>(null)
+    const [games, setGames] = useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null)
+    const [gamesLoaded, setGamesLoaded] = useState(false)
 
     useAbortableEffect(() => {
         fetchGames()
-    }, []);
+    }, [])
 
     /**
      * Fetches the games.
      */
     async function fetchGames() {
         if (gamesLoaded)
-            return;
+            return
 
         const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             excludeUsername: session!.username,
             phases: ["WAITING_FOR_PLAYERS"]
-        }));
+        }))
 
         if (err) {
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
         const filteredGames = res
             .getEmbeddedSubEntities<GetGameOutputModel>()
 
-        setGames(filteredGames);
-        setGamesLoaded(true);
+        setGames(filteredGames)
+        setGamesLoaded(true)
     }
 
     /**
@@ -61,14 +61,14 @@ export default function Lobby() {
      * @param joinGameLink the link to join the game
      */
     async function handleJoinGame(joinGameLink: string) {
-        const [err, res] = await abortableTo(battleshipsService.gamesService.joinGame(joinGameLink));
+        const [err, res] = await abortableTo(battleshipsService.gamesService.joinGame(joinGameLink))
 
         if (err) {
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
-        navigate(`/game/${res.properties!.gameId}`);
+        navigate(`/game/${res.properties!.gameId}`)
     }
 
     return (
@@ -79,11 +79,11 @@ export default function Lobby() {
                         ? <Typography variant="h5" component="div" sx={{flexGrow: 1}}>No games available</Typography>
                         : games?.map(game =>
                             <GameCard key={game.properties?.id} game={game.properties!} onJoinGameRequest={() => {
-                                handleJoinGame(game.getAction(Rels.JOIN_GAME));
+                                handleJoinGame(game.getAction(Rels.JOIN_GAME))
                             }}/>
                         )
                     : <LoadingSpinner text={"Loading games..."}/>
             }
         </PageContent>
-    );
+    )
 }

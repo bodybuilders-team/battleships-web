@@ -1,6 +1,6 @@
-import {SirenEntity} from "../../../media/siren/SirenEntity";
-import {AuthorModel} from "../AuthorModel";
-import {VCRepositoryModel} from "../VCRepositoryModel";
+import {SirenEntity} from "../../../media/siren/SirenEntity"
+import {AuthorModel} from "../AuthorModel"
+import {VCRepositoryModel} from "../VCRepositoryModel"
 
 /**
  * The Get Home Output Model.
@@ -12,11 +12,11 @@ import {VCRepositoryModel} from "../VCRepositoryModel";
  * @property repository the repository of the application
  */
 interface GetHomeOutputModel {
-    title: string;
-    version: string;
-    description: string;
-    authors: AuthorModel[];
-    repository: VCRepositoryModel;
+    title: string
+    version: string
+    description: string
+    authors: AuthorModel[]
+    repository: VCRepositoryModel
 }
 
 /**

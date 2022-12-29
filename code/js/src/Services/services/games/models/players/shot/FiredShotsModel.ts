@@ -4,5 +4,5 @@
  * @property shots the list of shots created
  */
 interface FiredShotsModel {
-    shots: FiredShotModel[];
+    shots: FiredShotModel[]
 }

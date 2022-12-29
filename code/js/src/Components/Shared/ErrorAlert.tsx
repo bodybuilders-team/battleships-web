@@ -1,5 +1,5 @@
-import {Alert} from "@mui/material";
-import * as React from "react";
+import {Alert} from "@mui/material"
+import * as React from "react"
 
 /**
  * Properties of the ErrorAlert component.
@@ -7,7 +7,7 @@ import * as React from "react";
  * @property error the error to display
  */
 interface ErrorAlertProps {
-    error: string | null;
+    error: string | null
 }
 
 /**
@@ -20,5 +20,5 @@ export default function ErrorAlert({error}: ErrorAlertProps) {
         <>
             {error && <Alert severity="error">{error}</Alert>}
         </>
-    );
+    )
 }

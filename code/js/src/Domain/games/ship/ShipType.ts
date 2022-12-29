@@ -6,14 +6,14 @@
  * @property points the points that the ship is worth
  */
 export class ShipType {
-    size: number;
-    shipName: string;
-    points: number;
+    size: number
+    shipName: string
+    points: number
 
     constructor(size: number, shipName: string, points: number) {
-        this.size = size;
-        this.shipName = shipName;
-        this.points = points;
+        this.size = size
+        this.shipName = shipName
+        this.points = points
     }
 }
 
@@ -23,4 +23,4 @@ export const defaultShipTypes: Map<ShipType, number> = new Map<ShipType, number>
     [new ShipType(3, "Cruiser", 30), 1],
     [new ShipType(3, "Submarine", 30), 1],
     [new ShipType(2, "Destroyer", 20), 1]
-]);
+])

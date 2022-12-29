@@ -1,38 +1,38 @@
-import * as React from 'react';
-import {useState} from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import {useNavigate} from 'react-router-dom';
-import {useForm} from '../Shared/useForm';
-import {validateEmail, validatePassword, validateUsername} from '../Shared/validateFields';
-import {useSessionManager} from "../../../Utils/Session";
-import {handleError} from "../../../Services/utils/fetchSiren";
-import ErrorAlert from "../../Shared/ErrorAlert";
-import PageContent from "../../Shared/PageContent";
-import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {Rels} from "../../../Utils/navigation/Rels";
-import {throwError} from "../../../Services/utils/errorUtils";
-import {PasswordTextField} from "../Shared/PasswordTextField";
-import {UsernameTextField} from "../Shared/UsernameTextField";
-import {EmailTextField} from "../Shared/EmailTextField";
-import {useMountedSignal} from '../../../Utils/useMounted';
-import {abortableTo} from "../../../Utils/abortableUtils";
+import * as React from 'react'
+import {useState} from 'react'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Typography from '@mui/material/Typography'
+import {useNavigate} from 'react-router-dom'
+import {useForm} from '../Shared/useForm'
+import {validateEmail, validatePassword, validateUsername} from '../Shared/validateFields'
+import {useSessionManager} from "../../../Utils/Session"
+import {handleError} from "../../../Services/utils/fetchSiren"
+import ErrorAlert from "../../Shared/ErrorAlert"
+import PageContent from "../../Shared/PageContent"
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService"
+import {Rels} from "../../../Utils/navigation/Rels"
+import {throwError} from "../../../Services/utils/errorUtils"
+import {PasswordTextField} from "../Shared/PasswordTextField"
+import {UsernameTextField} from "../Shared/UsernameTextField"
+import {EmailTextField} from "../Shared/EmailTextField"
+import {useMountedSignal} from '../../../Utils/useMounted'
+import {abortableTo} from "../../../Utils/abortableUtils"
 
 /**
  * Register component.
  */
 export default function Register() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const battleshipsService = useBattleshipsService();
-    const sessionManager = useSessionManager();
+    const battleshipsService = useBattleshipsService()
+    const sessionManager = useSessionManager()
 
-    const [formError, setFormError] = useState<string | null>(null);
+    const [formError, setFormError] = useState<string | null>(null)
     const mountedSignal = useMountedSignal()
 
     const {handleSubmit, handleChange, errors} = useForm({
@@ -42,21 +42,21 @@ export default function Register() {
                 email: validateEmail(values.email),
                 username: validateUsername(values.username),
                 password: validatePassword(values.password)
-            };
+            }
         },
         onSubmit: async (values) => {
-            const {email, username, password} = values;
+            const {email, username, password} = values
             const [err, res] = await abortableTo(
                 battleshipsService.usersService.register(email, username, password, mountedSignal)
-            );
+            )
 
             if (err) {
-                handleError(err, setFormError);
-                return;
+                handleError(err, setFormError)
+                return
             }
 
             if (res?.properties === undefined)
-                throw new Error("Properties are undefined");
+                throw new Error("Properties are undefined")
 
             sessionManager.setSession({
                 username,
@@ -64,12 +64,12 @@ export default function Register() {
                 refreshToken: res.properties.refreshToken,
                 userHomeLink: battleshipsService.links.get(Rels.USER_HOME)
                     ?? throwError("User home link is undefined")
-            });
+            })
 
 
-            navigate('/');
+            navigate('/')
         }
-    });
+    })
 
     return (
         <PageContent>
@@ -99,5 +99,5 @@ export default function Register() {
                 </Grid>
             </Box>
         </PageContent>
-    );
+    )
 }

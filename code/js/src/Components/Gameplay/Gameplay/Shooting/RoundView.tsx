@@ -1,7 +1,7 @@
-import Box from "@mui/material/Box";
-import * as React from "react";
-import {Divider} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box"
+import * as React from "react"
+import {Divider} from "@mui/material"
+import Typography from "@mui/material/Typography"
 
 /**
  * Properties for the RoundView component.
@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
  * @param round the round to display
  */
 interface RoundViewProps {
-    round: number;
+    round: number
 }
 
 /**
@@ -34,5 +34,5 @@ export default function RoundView({round}: RoundViewProps) {
                 {round}
             </Typography>
         </Box>
-    );
+    )
 }

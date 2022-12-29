@@ -10,15 +10,15 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity"
  * @property players the players of the game
  */
 export interface GetGameOutputModel {
-    id: number;
-    name: string;
-    creator: string;
-    config: GameConfigModel;
-    state: GameStateModel;
-    players: PlayerModel[];
+    id: number
+    name: string
+    creator: string
+    config: GameConfigModel
+    state: GameStateModel
+    players: PlayerModel[]
 }
 
 /**
  * The Get Game Output.
  */
-export type GetGameOutput = SirenEntity<GetGameOutputModel>;
+export type GetGameOutput = SirenEntity<GetGameOutputModel>

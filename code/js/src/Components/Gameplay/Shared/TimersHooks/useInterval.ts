@@ -1,4 +1,4 @@
-import {useAbortableEffect} from "../../../../Utils/abortableUtils";
+import {useAbortableEffect} from "../../../../Utils/abortableUtils"
 
 /**
  * Hook that calls a function every interval.
@@ -8,31 +8,31 @@ import {useAbortableEffect} from "../../../../Utils/abortableUtils";
  * @param dependencies the dependencies of the hook
  */
 export function useInterval(callback: () => Promise<boolean> | boolean | void, delay: number, dependencies?: any[]) {
-    useAbortableEffect(activateInterval, dependencies);
+    useAbortableEffect(activateInterval, dependencies)
 
     /**
      * Activates the interval.
      */
     function activateInterval() {
-        let cancelled = false;
-        let timeoutId: NodeJS.Timeout | undefined = undefined;
+        let cancelled = false
+        let timeoutId: NodeJS.Timeout | undefined = undefined
 
         /**
          * Calls the callback and schedules the next call.
          */
         async function tick() {
-            const shouldStop = await callback();
+            const shouldStop = await callback()
 
             if (!cancelled && !shouldStop)
-                timeoutId = setTimeout(tick, delay);
+                timeoutId = setTimeout(tick, delay)
         }
 
-        tick();
+        tick()
 
         return () => {
-            cancelled = true;
+            cancelled = true
             if (timeoutId !== undefined)
-                clearTimeout(timeoutId);
-        };
+                clearTimeout(timeoutId)
+        }
     }
 }

@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 
 /**
  * The Matchmake Output Model.
@@ -6,11 +6,11 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity";
  * @property wasCreated true if the game was created, false if it was joined
  */
 interface MatchmakeOutputModel {
-    gameId: number;
-    wasCreated: boolean;
+    gameId: number
+    wasCreated: boolean
 }
 
 /**
  * The Matchmake Output.
  */
-export type MatchmakeOutput = SirenEntity<MatchmakeOutputModel>;
+export type MatchmakeOutput = SirenEntity<MatchmakeOutputModel>

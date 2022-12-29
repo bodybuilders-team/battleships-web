@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../media/siren/SirenEntity"
 
 /**
  * The Authentication Output Model.
@@ -7,11 +7,11 @@ import {SirenEntity} from "../../../media/siren/SirenEntity";
  * @property refreshToken the refresh token
  */
 interface AuthenticationOutputModel {
-    accessToken: string;
-    refreshToken: string;
+    accessToken: string
+    refreshToken: string
 }
 
 /**
  * The Authentication Output.
  */
-export type AuthenticationOutput = SirenEntity<AuthenticationOutputModel>;
+export type AuthenticationOutput = SirenEntity<AuthenticationOutputModel>

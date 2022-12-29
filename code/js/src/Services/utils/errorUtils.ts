@@ -3,5 +3,5 @@
  * @param msg the error message
  */
 export function throwError(msg: string): never {
-    throw new Error(msg);
+    throw new Error(msg)
 }

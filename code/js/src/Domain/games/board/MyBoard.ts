@@ -1,7 +1,7 @@
-import {Board, generateEmptyMatrix, toIndex} from "./Board";
-import {Cell, ShipCell, WaterCell} from "../Cell";
-import {Ship} from "../ship/Ship";
-import {Coordinate} from "../Coordinate";
+import {Board, generateEmptyMatrix, toIndex} from "./Board"
+import {Cell, ShipCell, WaterCell} from "../Cell"
+import {Ship} from "../ship/Ship"
+import {Coordinate} from "../Coordinate"
 import "../../../Utils/arrayExtensions"
 
 /**
@@ -14,7 +14,7 @@ import "../../../Utils/arrayExtensions"
  */
 export class MyBoard extends Board {
     constructor(boardSize: number, grid: ReadonlyArray<Cell>) {
-        super(boardSize, grid);
+        super(boardSize, grid)
     }
 
     /**
@@ -26,15 +26,15 @@ export class MyBoard extends Board {
      * @return instance of [MyBoard]
      */
     static fromFleet(boardSize: number, fleet: ReadonlyArray<Ship>): MyBoard {
-        const grid = generateEmptyMatrix(boardSize);
+        const grid = generateEmptyMatrix(boardSize)
 
         fleet.forEach(ship =>
             ship.coordinates.forEach(coordinate =>
                 grid[toIndex(coordinate, boardSize)] = new ShipCell(coordinate, false, ship)
             )
-        );
+        )
 
-        return new MyBoard(boardSize, grid);
+        return new MyBoard(boardSize, grid)
     }
 
     /**
@@ -53,16 +53,16 @@ export class MyBoard extends Board {
                     firedCoordinates.find(coordinate => coordinate.equals(cell.coordinate)) !== undefined,
                 (cell) => {
                     if (cell.wasHit)
-                        throw Error(`Cell at ${cell.coordinate} was already hit`);
+                        throw Error(`Cell at ${cell.coordinate} was already hit`)
 
                     if (cell instanceof ShipCell)
-                        return new ShipCell(cell.coordinate, true, cell.ship);
+                        return new ShipCell(cell.coordinate, true, cell.ship)
                     else if (cell instanceof WaterCell)
-                        return new WaterCell(cell.coordinate, true);
+                        return new WaterCell(cell.coordinate, true)
 
-                    throw Error("UnknownShipCell should not be present in MyBoard");
+                    throw Error("UnknownShipCell should not be present in MyBoard")
                 }
             )
-        );
+        )
     }
 }

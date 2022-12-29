@@ -1,23 +1,23 @@
-import {GameConfig} from "./GameConfig";
-import {GameState} from "./GameState";
-import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput";
-import {Player} from "./Player";
+import {GameConfig} from "./GameConfig"
+import {GameState} from "./GameState"
+import {GetGameOutputModel} from "../../../Services/services/games/models/games/getGame/GetGameOutput"
+import {Player} from "./Player"
 
 export class Game {
     readonly id: number
-    readonly name: string;
-    readonly creator: string;
-    readonly config: GameConfig;
-    readonly state: GameState;
+    readonly name: string
+    readonly creator: string
+    readonly config: GameConfig
+    readonly state: GameState
     readonly players: ReadonlyArray<Player>
 
     constructor(gameModel: GetGameOutputModel) {
-        this.id = gameModel.id;
-        this.name = gameModel.name;
-        this.creator = gameModel.creator;
-        this.config = new GameConfig(gameModel.config);
-        this.state = new GameState(gameModel.state);
-        this.players = gameModel.players.map(player => new Player(player));
+        this.id = gameModel.id
+        this.name = gameModel.name
+        this.creator = gameModel.creator
+        this.config = new GameConfig(gameModel.config)
+        this.state = new GameState(gameModel.state)
+        this.players = gameModel.players.map(player => new Player(player))
     }
 
     /**
@@ -41,7 +41,7 @@ export class Game {
                 endCause: game.state.endCause
             },
             players: game.players.map(player => player.toPlayerModel())
-        };
+        }
     }
 
     /**
@@ -51,7 +51,7 @@ export class Game {
      * @return the player that is playing the game or undefined if the player is not playing the game
      */
     getPlayer(username: string): Player | undefined {
-        return this.players.find(player => player.username === username);
+        return this.players.find(player => player.username === username)
     }
 
     /**
@@ -61,6 +61,6 @@ export class Game {
      * @return the opponent of the player that is playing the game or undefined if the player is not playing the game
      */
     getOpponent(username: string): Player | undefined {
-        return this.players.find(player => player.username !== username);
+        return this.players.find(player => player.username !== username)
     }
 }

@@ -1,8 +1,8 @@
-import * as React from "react";
-import PageContent from "../Shared/PageContent";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import * as React from "react"
+import PageContent from "../Shared/PageContent"
+import Box from "@mui/material/Box"
+import IconButton from "@mui/material/IconButton"
+import Typography from "@mui/material/Typography"
 
 /**
  * About component.
@@ -82,7 +82,7 @@ export default function About() {
                 The project is open source and can be found on <a href={githubRepo}>GitHub</a>
             </Typography>
         </PageContent>
-    );
+    )
 }
 
 /**
@@ -95,11 +95,11 @@ export default function About() {
  * @property image the image of the author
  */
 interface AuthorInfo {
-    number: string;
-    name: string;
-    githubLink: string;
-    email: string;
-    image: string;
+    number: string
+    name: string
+    githubLink: string
+    email: string
+    image: string
 }
 
 const authors: AuthorInfo[] = [
@@ -124,6 +124,6 @@ const authors: AuthorInfo[] = [
         email: "48287@alunos.isel.pt",
         image: "https://avatars.githubusercontent.com/u/12070060?v=4"
     }
-];
+]
 
-const githubRepo = "https://github.com/isel-leic-daw/2022-daw-leic51d-g03";
+const githubRepo = "https://github.com/isel-leic-daw/2022-daw-leic51d-g03"

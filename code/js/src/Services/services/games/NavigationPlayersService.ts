@@ -1,16 +1,16 @@
-import {Session, SessionManager} from "../../../Utils/Session";
-import {throwError} from "../../utils/errorUtils";
-import {GetMyFleetOutput} from "./models/players/getMyFleet/GetMyFleetOutput";
-import {Rels} from "../../../Utils/navigation/Rels";
-import {PlayersService} from "./PlayersService";
-import {DeployFleetOutput} from "./models/players/deployFleet/DeployFleetOutput";
-import {GetOpponentFleetOutput} from "./models/players/getOpponentFleet/GetOpponentFleetOutput";
-import {GetMyShotsOutput} from "./models/players/getMyShots/GetMyShotsOutput";
-import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput";
-import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput";
-import NavigationBattleshipsService from "../../NavigationBattleshipsService";
-import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput";
-import {executeRequestAndRefreshTokenIfNecessary} from "../../utils/executeRequestUtils";
+import {Session, SessionManager} from "../../../Utils/Session"
+import {throwError} from "../../utils/errorUtils"
+import {GetMyFleetOutput} from "./models/players/getMyFleet/GetMyFleetOutput"
+import {Rels} from "../../../Utils/navigation/Rels"
+import {PlayersService} from "./PlayersService"
+import {DeployFleetOutput} from "./models/players/deployFleet/DeployFleetOutput"
+import {GetOpponentFleetOutput} from "./models/players/getOpponentFleet/GetOpponentFleetOutput"
+import {GetMyShotsOutput} from "./models/players/getMyShots/GetMyShotsOutput"
+import {FireShotsOutput} from "./models/players/fireShots/FireShotsOutput"
+import {GetOpponentShotsOutput} from "./models/players/getOpponentShots/GetOpponentShotsOutput"
+import NavigationBattleshipsService from "../../NavigationBattleshipsService"
+import {DeployFleetInput} from "./models/players/deployFleet/DeployFleetInput"
+import {executeRequestAndRefreshTokenIfNecessary} from "../../utils/executeRequestUtils"
 
 /**
  * Service to navigate through the players endpoints.
@@ -21,11 +21,11 @@ export class NavigationPlayersService {
     }
 
     private get links(): Map<string, string> {
-        return this.battleshipsService.links;
+        return this.battleshipsService.links
     }
 
     private get session(): Session {
-        return this.sessionManager.session ?? throwError("Session not found");
+        return this.sessionManager.session ?? throwError("Session not found")
     }
 
     /**

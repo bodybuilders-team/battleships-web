@@ -1,6 +1,6 @@
-import {SirenEntity} from "../../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 
 /**
  * The Get Game State Output.
  */
-export type GetGameStateOutput = SirenEntity<GameStateModel>;
+export type GetGameStateOutput = SirenEntity<GameStateModel>

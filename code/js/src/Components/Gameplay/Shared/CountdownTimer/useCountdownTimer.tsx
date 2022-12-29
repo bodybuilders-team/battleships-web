@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {useAbortableEffect} from "../../../../Utils/abortableUtils";
+import {useState} from "react"
+import {useAbortableEffect} from "../../../../Utils/abortableUtils"
 
 /**
  * Hook that returns the current time.
@@ -9,34 +9,34 @@ import {useAbortableEffect} from "../../../../Utils/abortableUtils";
  * @param updateInterval the interval to update the time
  */
 export function useCountdownTimer(finalTime: number, onTimeUp?: () => void, updateInterval: number = 1000) {
-    const finalTimeDate = new Date(finalTime).getTime();
-    const [currentTime, setCurrentTime] = useState(finalTimeDate - new Date().getTime());
+    const finalTimeDate = new Date(finalTime).getTime()
+    const [currentTime, setCurrentTime] = useState(finalTimeDate - new Date().getTime())
 
-    useAbortableEffect(activateCountdown, [finalTime]);
+    useAbortableEffect(activateCountdown, [finalTime])
 
     /**
      * Activates the countdown.
      */
     function activateCountdown() {
         const id = setInterval(() => {
-            const newTime = finalTimeDate - new Date().getTime();
+            const newTime = finalTimeDate - new Date().getTime()
 
             if (newTime <= 0) {
-                clearInterval(id);
-                setCurrentTime(0);
+                clearInterval(id)
+                setCurrentTime(0)
             } else
-                setCurrentTime(newTime);
+                setCurrentTime(newTime)
 
-        }, updateInterval);
+        }, updateInterval)
 
-        return () => clearInterval(id);
+        return () => clearInterval(id)
     }
 
     // Parse currentTime to days, hours, minutes and seconds
-    const days = Math.floor(currentTime / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((currentTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((currentTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((currentTime % (1000 * 60)) / 1000);
+    const days = Math.floor(currentTime / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((currentTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((currentTime % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((currentTime % (1000 * 60)) / 1000)
 
-    return {currentTime, days, hours, minutes, seconds};
+    return {currentTime, days, hours, minutes, seconds}
 }

@@ -1,4 +1,4 @@
-import {ShipType} from "../ship/ShipType";
+import {ShipType} from "../ship/ShipType"
 
 /**
  * A game configuration.
@@ -10,18 +10,18 @@ import {ShipType} from "../ship/ShipType";
  * @property ships the ships to be used in the game
  */
 export class GameConfig {
-    readonly gridSize: number;
-    readonly shotsPerRound: number;
-    readonly maxTimePerRound: number;
-    readonly maxTimeForLayoutPhase: number;
-    readonly shipTypes: ReadonlyMap<ShipType, number>;
+    readonly gridSize: number
+    readonly shotsPerRound: number
+    readonly maxTimePerRound: number
+    readonly maxTimeForLayoutPhase: number
+    readonly shipTypes: ReadonlyMap<ShipType, number>
 
     constructor(gameConfigModel: GameConfigModel) {
-        this.gridSize = gameConfigModel.gridSize;
-        this.shotsPerRound = gameConfigModel.shotsPerRound;
-        this.maxTimePerRound = gameConfigModel.maxTimePerRound;
-        this.maxTimeForLayoutPhase = gameConfigModel.maxTimeForLayoutPhase;
-        this.shipTypes = GameConfig.shipTypesModelToMap(gameConfigModel.shipTypes);
+        this.gridSize = gameConfigModel.gridSize
+        this.shotsPerRound = gameConfigModel.shotsPerRound
+        this.maxTimePerRound = gameConfigModel.maxTimePerRound
+        this.maxTimeForLayoutPhase = gameConfigModel.maxTimeForLayoutPhase
+        this.shipTypes = GameConfig.shipTypesModelToMap(gameConfigModel.shipTypes)
     }
 
     /**
@@ -31,11 +31,11 @@ export class GameConfig {
      * @returns the map of ShipTypes and quantities
      */
     static shipTypesModelToMap(shipTypes: ShipTypeModel[]): Map<ShipType, number> {
-        const map = new Map<ShipType, number>();
+        const map = new Map<ShipType, number>()
 
-        shipTypes.forEach(shipType => map.set(shipType, shipType.quantity));
+        shipTypes.forEach(shipType => map.set(shipType, shipType.quantity))
 
-        return map;
+        return map
     }
 
     /**
@@ -45,13 +45,13 @@ export class GameConfig {
      * @returns the list of ShipTypeModels
      */
     static mapToShipTypesModel(shipTypes: ReadonlyMap<ShipType, number>): ShipTypeModel[] {
-        const shipTypesModel: ShipTypeModel[] = [];
+        const shipTypesModel: ShipTypeModel[] = []
 
         shipTypes.forEach((quantity, shipType) => {
-            shipTypesModel.push({...shipType, quantity});
-        });
+            shipTypesModel.push({...shipType, quantity})
+        })
 
-        return shipTypesModel;
+        return shipTypesModel
     }
 
     /**
@@ -66,6 +66,6 @@ export class GameConfig {
             maxTimePerRound: this.maxTimePerRound,
             maxTimeForLayoutPhase: this.maxTimeForLayoutPhase,
             shipTypes: GameConfig.mapToShipTypesModel(this.shipTypes)
-        };
+        }
     }
 }

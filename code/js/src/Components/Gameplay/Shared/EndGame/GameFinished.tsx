@@ -1,25 +1,25 @@
-import {Game} from "../../../../Domain/games/game/Game";
-import {useSession} from "../../../../Utils/Session";
-import EndGamePopup, {EndGameCause, WinningPlayer} from "./EndGamePopup";
-import * as React from "react";
+import {Game} from "../../../../Domain/games/game/Game"
+import {useSession} from "../../../../Utils/Session"
+import EndGamePopup, {EndGameCause, WinningPlayer} from "./EndGamePopup"
+import * as React from "react"
 
 /**
  * Properties for the GameFinished component.
  */
 interface GameFinishedProps {
-    game: Game;
+    game: Game
 }
 
 /**
  * GameFinished component.
  */
 export default function GameFinished({game}: GameFinishedProps) {
-    const session = useSession();
+    const session = useSession()
 
-    const username = session!.username;
+    const username = session!.username
 
-    const player = game.getPlayer(username)!;
-    const opponent = game.getOpponent(username)!;
+    const player = game.getPlayer(username)!
+    const opponent = game.getOpponent(username)!
 
     return <EndGamePopup
         open={game?.state.phase === "FINISHED"}

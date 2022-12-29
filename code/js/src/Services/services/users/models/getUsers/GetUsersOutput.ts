@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../media/siren/SirenEntity"
 
 /**
  * The Get Users Output Model.
@@ -6,10 +6,10 @@ import {SirenEntity} from "../../../../media/siren/SirenEntity";
  * @property totalCount the total number of users
  */
 export interface GetUsersOutputModel {
-    totalCount: number;
+    totalCount: number
 }
 
 /**
  * The Get Users Output.
  */
-export type GetUsersOutput = SirenEntity<GetUsersOutputModel>;
+export type GetUsersOutput = SirenEntity<GetUsersOutputModel>

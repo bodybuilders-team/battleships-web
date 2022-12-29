@@ -1,5 +1,5 @@
-import {Coordinate} from "./Coordinate";
-import {Ship} from "./ship/Ship";
+import {Coordinate} from "./Coordinate"
+import {Ship} from "./ship/Ship"
 
 /**
  * A cell in the board.
@@ -8,12 +8,12 @@ import {Ship} from "./ship/Ship";
  * @property wasHit if the cell was hit
  */
 export class Cell {
-    readonly coordinate: Coordinate;
-    readonly wasHit: boolean;
+    readonly coordinate: Coordinate
+    readonly wasHit: boolean
 
     constructor(coordinate: Coordinate, wasHit: boolean) {
-        this.coordinate = coordinate;
-        this.wasHit = wasHit;
+        this.coordinate = coordinate
+        this.wasHit = wasHit
     }
 }
 
@@ -25,7 +25,7 @@ export interface WaterCell extends Cell {
 
 export class WaterCell extends Cell {
     constructor(coordinate: Coordinate, wasHit: boolean) {
-        super(coordinate, wasHit);
+        super(coordinate, wasHit)
     }
 }
 
@@ -35,13 +35,13 @@ export class WaterCell extends Cell {
  * @property ship the ship that is in this cell
  */
 export interface ShipCell extends Cell {
-    ship: Ship;
+    ship: Ship
 }
 
 export class ShipCell extends Cell {
     constructor(coordinate: Coordinate, wasHit: boolean, ship: Ship) {
-        super(coordinate, wasHit);
-        this.ship = ship;
+        super(coordinate, wasHit)
+        this.ship = ship
     }
 }
 
@@ -54,6 +54,6 @@ export interface UnknownShipCell extends Cell {
 
 export class UnknownShipCell extends Cell {
     constructor(coordinate: Coordinate, wasHit: boolean) {
-        super(coordinate, wasHit);
+        super(coordinate, wasHit)
     }
 }

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState} from 'react'
 
 /**
  * Configuration of a form.
@@ -8,9 +8,9 @@ import {useState} from 'react';
  * @property onSubmit the function to call when the form is submitted
  */
 interface FormConfig {
-    initialValues: any;
-    validate: (values: any) => any;
-    onSubmit: (values: any) => void;
+    initialValues: any
+    validate: (values: any) => any
+    onSubmit: (values: any) => void
 }
 
 /**
@@ -22,10 +22,10 @@ interface FormConfig {
  * @property errors the errors of the form fields
  */
 interface Form {
-    handleSubmit: (event: any) => void;
-    handleChange: (event: any) => void;
-    values: any;
-    errors: any;
+    handleSubmit: (event: any) => void
+    handleChange: (event: any) => void
+    values: any
+    errors: any
 }
 
 /**
@@ -35,9 +35,9 @@ interface Form {
  * @returns the form object
  */
 export function useForm(formConfig: FormConfig): Form {
-    const {initialValues, validate, onSubmit} = formConfig;
-    const [values, setValues] = useState(initialValues);
-    const [errors, setErrors] = useState({});
+    const {initialValues, validate, onSubmit} = formConfig
+    const [values, setValues] = useState(initialValues)
+    const [errors, setErrors] = useState({})
 
     /**
      * Handles the change of a form field.
@@ -45,8 +45,8 @@ export function useForm(formConfig: FormConfig): Form {
      * @param event the event
      */
     function handleChange(event: any) {
-        const {name, value} = event.target;
-        setValues({...values, [name]: value});
+        const {name, value} = event.target
+        setValues({...values, [name]: value})
     }
 
     /**
@@ -55,13 +55,13 @@ export function useForm(formConfig: FormConfig): Form {
      * @param event the event
      */
     function handleSubmit(event: any) {
-        event.preventDefault();
-        const errors = validate(values);
-        setErrors(errors);
+        event.preventDefault()
+        const errors = validate(values)
+        setErrors(errors)
 
         if (Object.values(errors).every(x => x == null))
-            onSubmit(values);
+            onSubmit(values)
     }
 
-    return {handleSubmit, handleChange, values, errors};
+    return {handleSubmit, handleChange, values, errors}
 }

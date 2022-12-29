@@ -1,16 +1,16 @@
-import * as React from "react";
-import {useState} from "react";
-import {Game} from "../../../../Domain/games/game/Game";
-import {useInterval} from "../TimersHooks/useInterval";
-import {Rels} from "../../../../Utils/navigation/Rels";
-import to from "../../../../Utils/await-to";
-import {GetGameOutputModel} from "../../../../Services/services/games/models/games/getGame/GetGameOutput";
-import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
-import {useNavigate} from "react-router-dom";
-import GameFinished from "./GameFinished";
-import {Uris} from "../../../../Utils/navigation/Uris";
-import HOME = Uris.HOME;
-import {abortableTo} from "../../../../Utils/abortableUtils";
+import * as React from "react"
+import {useState} from "react"
+import {Game} from "../../../../Domain/games/game/Game"
+import {useInterval} from "../TimersHooks/useInterval"
+import {Rels} from "../../../../Utils/navigation/Rels"
+import to from "../../../../Utils/await-to"
+import {GetGameOutputModel} from "../../../../Services/services/games/models/games/getGame/GetGameOutput"
+import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
+import {useNavigate} from "react-router-dom"
+import GameFinished from "./GameFinished"
+import {Uris} from "../../../../Utils/navigation/Uris"
+import HOME = Uris.HOME
+import {abortableTo} from "../../../../Utils/abortableUtils"
 
 /**
  * Properties for the FetchedEndGamePopup component.
@@ -19,54 +19,54 @@ import {abortableTo} from "../../../../Utils/abortableUtils";
  * @property onError callback for when an error occurs fetching
  */
 interface FetchedEndGamePopupProps {
-    open: boolean;
-    onError: (err: Error) => void;
+    open: boolean
+    onError: (err: Error) => void
 }
 
-const POLLING_DELAY = 1000;
+const POLLING_DELAY = 1000
 
 /**
  * EndGamePopup that fetches the game.
  */
 export default function FetchedEndGamePopup({open, onError}: FetchedEndGamePopupProps) {
-    const [game, setGame] = useState<Game | null>(null);
-    const battleshipsService = useBattleshipsService();
-    const navigate = useNavigate();
+    const [game, setGame] = useState<Game | null>(null)
+    const battleshipsService = useBattleshipsService()
+    const navigate = useNavigate()
 
-    useInterval(fetchGame, POLLING_DELAY, [open]);
+    useInterval(fetchGame, POLLING_DELAY, [open])
 
     /**
      * Fetches the game.
      */
     async function fetchGame() {
-        if (!open) return false;
+        if (!open) return false
 
         if (!battleshipsService.links.get(Rels.GAME)) {
-            navigate(HOME);
-            return true;
+            navigate(HOME)
+            return true
         }
 
-        const [err, res] = await abortableTo(battleshipsService.gamesService.getGame());
+        const [err, res] = await abortableTo(battleshipsService.gamesService.getGame())
 
         if (err) {
-            onError(err);
-            return true;
+            onError(err)
+            return true
         }
 
         if (res?.properties === undefined)
-            throw new Error("Properties are undefined");
+            throw new Error("Properties are undefined")
 
         if (res.properties.state.phase === "FINISHED") {
-            const newGame = new Game(res.properties as GetGameOutputModel);
-            setGame(newGame);
-            return true;
+            const newGame = new Game(res.properties as GetGameOutputModel)
+            setGame(newGame)
+            return true
         }
 
-        return false;
+        return false
     }
 
     if (game != null)
-        return <GameFinished game={game}/>;
+        return <GameFinished game={game}/>
     else
-        return null;
+        return null
 }

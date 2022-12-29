@@ -1,39 +1,39 @@
-import * as React from "react";
-import {useState} from "react";
-import {defaultShipTypes, ShipType} from "../../../Domain/games/ship/ShipType";
-import {defaultBoardSize} from "../../../Domain/games/board/Board";
-import to from "../../../Utils/await-to";
-import {handleError} from "../../../Services/utils/fetchSiren";
-import {useNavigate} from "react-router-dom";
-import PageContent from "../../Shared/PageContent";
-import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService";
-import {useInterval} from "../Shared/TimersHooks/useInterval";
-import LoadingSpinner from "../../Shared/LoadingSpinner";
-import GameConfig from "./GameConfig";
-import {abortableTo} from "../../../Utils/abortableUtils";
+import * as React from "react"
+import {useState} from "react"
+import {defaultShipTypes, ShipType} from "../../../Domain/games/ship/ShipType"
+import {defaultBoardSize} from "../../../Domain/games/board/Board"
+import to from "../../../Utils/await-to"
+import {handleError} from "../../../Services/utils/fetchSiren"
+import {useNavigate} from "react-router-dom"
+import PageContent from "../../Shared/PageContent"
+import {useBattleshipsService} from "../../../Services/NavigationBattleshipsService"
+import {useInterval} from "../Shared/TimersHooks/useInterval"
+import LoadingSpinner from "../../Shared/LoadingSpinner"
+import GameConfig from "./GameConfig"
+import {abortableTo} from "../../../Utils/abortableUtils"
 
-const POLLING_DELAY = 1000;
+const POLLING_DELAY = 1000
 
 /**
  * CreateGame component.
  */
 export default function CreateGame() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const battleshipsService = useBattleshipsService();
+    const battleshipsService = useBattleshipsService()
 
-    const [gameName, setGameName] = useState("Game");
-    const [gridSize, setGridSize] = useState(defaultBoardSize);
-    const [maxTimePerRound, setMaxTimePerRound] = useState(100);
-    const [shotsPerRound, setShotsPerRound] = useState(1);
-    const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = useState(100);
-    const [shipTypes, setShipTypes] = useState<Map<ShipType, number>>(defaultShipTypes);
+    const [gameName, setGameName] = useState("Game")
+    const [gridSize, setGridSize] = useState(defaultBoardSize)
+    const [maxTimePerRound, setMaxTimePerRound] = useState(100)
+    const [shotsPerRound, setShotsPerRound] = useState(1)
+    const [maxTimeForLayoutPhase, setMaxTimeForLayoutPhase] = useState(100)
+    const [shipTypes, setShipTypes] = useState<Map<ShipType, number>>(defaultShipTypes)
 
-    const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false);
-    const [gameId, setGameId] = useState<number | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false)
+    const [gameId, setGameId] = useState<number | null>(null)
+    const [error, setError] = useState<string | null>(null)
 
-    useInterval(checkIfOpponentHasConnected, POLLING_DELAY, [isWaitingForOpponent]);
+    useInterval(checkIfOpponentHasConnected, POLLING_DELAY, [isWaitingForOpponent])
 
     /**
      * Handles the creation of a game.
@@ -58,18 +58,18 @@ export default function CreateGame() {
                         }
                     }
                 )
-            );
+            )
 
             if (err) {
-                handleError(err, setError);
-                return;
+                handleError(err, setError)
+                return
             }
 
-            setGameId(res.properties!.gameId);
-            setWaitingForOpponent(true);
+            setGameId(res.properties!.gameId)
+            setWaitingForOpponent(true)
         }
 
-        createGame();
+        createGame()
     }
 
     /**
@@ -77,24 +77,24 @@ export default function CreateGame() {
      */
     async function checkIfOpponentHasConnected() {
         if (!isWaitingForOpponent)
-            return true;
+            return true
 
         const [err, res] = await abortableTo(
             battleshipsService.gamesService.getGameState()
-        );
+        )
 
         if (err) {
-            handleError(err, setError);
-            return true;
+            handleError(err, setError)
+            return true
         }
 
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
-            setWaitingForOpponent(false);
-            navigate(`/game/${gameId}`);
-            return true;
+            setWaitingForOpponent(false)
+            navigate(`/game/${gameId}`)
+            return true
         }
 
-        return false;
+        return false
     }
 
 
@@ -103,7 +103,7 @@ export default function CreateGame() {
             <PageContent error={error}>
                 <LoadingSpinner text={"Waiting for opponent..."}/>
             </PageContent>
-        );
+        )
     else
         return (
             <GameConfig
@@ -117,5 +117,5 @@ export default function CreateGame() {
                 handleCreateGame={handleCreateGame}
                 error={error}
             />
-        );
+        )
 }

@@ -1,6 +1,6 @@
-import {ShipType} from "./ShipType";
-import {Orientation} from "./Orientation";
-import {Coordinate} from "../Coordinate";
+import {ShipType} from "./ShipType"
+import {Orientation} from "./Orientation"
+import {Coordinate} from "../Coordinate"
 
 /**
  * A ship in the game.
@@ -12,18 +12,18 @@ import {Coordinate} from "../Coordinate";
  * @property coordinates list of coordinates occupied by the ship
  */
 export class Ship {
-    type: ShipType;
-    coordinate: Coordinate;
-    orientation: Orientation;
+    type: ShipType
+    coordinate: Coordinate
+    orientation: Orientation
 
     constructor(type: ShipType, coordinate: Coordinate, orientation: Orientation) {
-        this.type = type;
-        this.coordinate = coordinate;
-        this.orientation = orientation;
+        this.type = type
+        this.coordinate = coordinate
+        this.orientation = orientation
     }
 
     get coordinates(): Coordinate[] {
-        return getCoordinates(this.type, this.coordinate, this.orientation);
+        return getCoordinates(this.type, this.coordinate, this.orientation)
     }
 }
 
@@ -41,16 +41,16 @@ export function getCoordinates(
     coordinate: Coordinate,
     orientation: Orientation
 ): Coordinate[] {
-    const coordinates: Coordinate[] = [];
+    const coordinates: Coordinate[] = []
 
     for (let i = 0; i < shipType.size; i++) {
         if (orientation === Orientation.HORIZONTAL)
-            coordinates.push(new Coordinate(coordinate.col + i, coordinate.row));
+            coordinates.push(new Coordinate(coordinate.col + i, coordinate.row))
         else if (orientation === Orientation.VERTICAL)
-            coordinates.push(new Coordinate(coordinate.col, coordinate.row + i));
+            coordinates.push(new Coordinate(coordinate.col, coordinate.row + i))
     }
 
-    return coordinates;
+    return coordinates
 }
 
 /**
@@ -69,10 +69,10 @@ export function isValidShipCoordinate(
     size: number,
     boardSize: number
 ): boolean {
-    const col = coordinate.col;
-    const row = coordinate.row;
-    const maxShipCol = (coordinate.col + size - 1);
-    const maxShipRow = (coordinate.row + size - 1);
+    const col = coordinate.col
+    const row = coordinate.row
+    const maxShipCol = (coordinate.col + size - 1)
+    const maxShipRow = (coordinate.row + size - 1)
 
     return (
         orientation === Orientation.HORIZONTAL &&
@@ -82,5 +82,6 @@ export function isValidShipCoordinate(
         orientation === Orientation.VERTICAL &&
         maxShipRow >= 1 && maxShipRow <= boardSize &&
         col >= 1 && col <= boardSize
-    );
+    )
 }
+

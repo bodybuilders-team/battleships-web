@@ -1,6 +1,6 @@
-import {SirenEntity} from "../../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 
 /**
  * The Fire Shots Output.
  */
-export type FireShotsOutput = SirenEntity<FiredShotsModel>;
+export type FireShotsOutput = SirenEntity<FiredShotsModel>

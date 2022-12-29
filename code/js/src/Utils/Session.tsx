@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {createContext, useContext, useState} from 'react';
+import * as React from 'react'
+import {createContext, useContext, useState} from 'react'
 
 /**
  * Holds the session data.
@@ -10,10 +10,10 @@ import {createContext, useContext, useState} from 'react';
  * @property userHomeLink the user home link
  */
 export interface Session {
-    readonly username: string;
-    readonly accessToken: string;
-    readonly refreshToken: string;
-    readonly userHomeLink: string;
+    readonly username: string
+    readonly accessToken: string
+    readonly refreshToken: string
+    readonly userHomeLink: string
 }
 
 /**
@@ -24,9 +24,9 @@ export interface Session {
  * @property clearSession clears the session data
  */
 export interface SessionManager {
-    readonly session: Session | null;
-    readonly  setSession: (session: Session) => void;
-    readonly  clearSession: () => void;
+    readonly session: Session | null
+    readonly  setSession: (session: Session) => void
+    readonly  clearSession: () => void
 }
 
 const SessionManagerContext = createContext<SessionManager>({
@@ -35,9 +35,9 @@ const SessionManagerContext = createContext<SessionManager>({
     },
     clearSession: () => {
     }
-});
+})
 
-const sessionStorageKey = 'session';
+const sessionStorageKey = 'session'
 
 /**
  * Provides the session data to the children.
@@ -46,31 +46,31 @@ const sessionStorageKey = 'session';
  */
 export function Auth({children}: { children: React.ReactNode }) {
     const [session, setSession] = useState<Session | null>(() => {
-        const sessionJson = localStorage.getItem(sessionStorageKey);
+        const sessionJson = localStorage.getItem(sessionStorageKey)
         if (!sessionJson)
-            return;
+            return
 
-        return JSON.parse(sessionJson);
-    });
+        return JSON.parse(sessionJson)
+    })
 
     return (
         <SessionManagerContext.Provider
             value={{
                 session,
                 setSession: (session: Session) => {
-                    setSession(session);
+                    setSession(session)
 
-                    localStorage.setItem(sessionStorageKey, JSON.stringify(session));
+                    localStorage.setItem(sessionStorageKey, JSON.stringify(session))
                 },
                 clearSession: () => {
-                    localStorage.removeItem('session');
+                    localStorage.removeItem('session')
 
-                    setSession(null);
+                    setSession(null)
                 }
             }}>
             {children}
         </SessionManagerContext.Provider>
-    );
+    )
 }
 
 /**
@@ -79,7 +79,7 @@ export function Auth({children}: { children: React.ReactNode }) {
  * @return the session data
  */
 export function useSession(): Session | null {
-    return useContext(SessionManagerContext).session;
+    return useContext(SessionManagerContext).session
 }
 
 /**
@@ -88,7 +88,7 @@ export function useSession(): Session | null {
  * @return the session manager
  */
 export function useSessionManager(): SessionManager {
-    return useContext(SessionManagerContext);
+    return useContext(SessionManagerContext)
 }
 
 /**
@@ -97,5 +97,5 @@ export function useSessionManager(): SessionManager {
  * @return true if the user is logged in, false otherwise
  */
 export function useLoggedIn(): boolean {
-    return useSessionManager().session != null;
+    return useSessionManager().session != null
 }

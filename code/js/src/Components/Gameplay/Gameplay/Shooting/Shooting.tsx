@@ -1,32 +1,32 @@
-import {handleError} from "../../../../Services/utils/fetchSiren";
-import * as React from "react";
-import {useState} from "react";
-import Box from "@mui/material/Box";
-import BoardView from "../../Shared/Board/BoardView";
-import Button from "@mui/material/Button";
-import {Ship} from "../../../../Domain/games/ship/Ship";
-import {tileSize} from "../../Shared/Board/Tile";
-import ShipView from "../../Shared/Ship/ShipView";
-import {Coordinate} from "../../../../Domain/games/Coordinate";
-import {ShipCell, UnknownShipCell} from "../../../../Domain/games/Cell";
-import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer";
-import Typography from "@mui/material/Typography";
-import {Game} from "../../../../Domain/games/game/Game";
-import TileHitView from "../../Shared/Board/TileHitView";
-import useShooting from "./useShooting";
-import LeaveGameAlert from "../../Shared/LeaveGame/LeaveGameAlert";
-import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton";
-import Container from "@mui/material/Container";
-import {CancelRounded, RefreshRounded} from "@mui/icons-material";
-import RoundView from "./RoundView";
-import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService";
-import {useNavigate} from "react-router-dom";
-import {Uris} from "../../../../Utils/navigation/Uris";
-import ErrorAlert from "../../../Shared/ErrorAlert";
-import {useMountedSignal} from "../../../../Utils/useMounted";
-import to from "../../../../Utils/await-to";
-import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
-import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils";
+import {handleError} from "../../../../Services/utils/fetchSiren"
+import * as React from "react"
+import {useState} from "react"
+import Box from "@mui/material/Box"
+import BoardView from "../../Shared/Board/BoardView"
+import Button from "@mui/material/Button"
+import {Ship} from "../../../../Domain/games/ship/Ship"
+import {tileSize} from "../../Shared/Board/Tile"
+import ShipView from "../../Shared/Ship/ShipView"
+import {Coordinate} from "../../../../Domain/games/Coordinate"
+import {ShipCell, UnknownShipCell} from "../../../../Domain/games/Cell"
+import {CountdownTimer} from "../../Shared/CountdownTimer/CountdownTimer"
+import Typography from "@mui/material/Typography"
+import {Game} from "../../../../Domain/games/game/Game"
+import TileHitView from "../../Shared/Board/TileHitView"
+import useShooting from "./useShooting"
+import LeaveGameAlert from "../../Shared/LeaveGame/LeaveGameAlert"
+import LeaveGameButton from "../../Shared/LeaveGame/LeaveGameButton"
+import Container from "@mui/material/Container"
+import {CancelRounded, RefreshRounded} from "@mui/icons-material"
+import RoundView from "./RoundView"
+import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
+import {useNavigate} from "react-router-dom"
+import {Uris} from "../../../../Utils/navigation/Uris"
+import ErrorAlert from "../../../Shared/ErrorAlert"
+import {useMountedSignal} from "../../../../Utils/useMounted"
+import to from "../../../../Utils/await-to"
+import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU
+import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils"
 
 /**
  * Properties for the Shooting component.
@@ -37,37 +37,37 @@ import {abortableTo, useAbortableEffect} from "../../../../Utils/abortableUtils"
  * @property onTimeUp the callback to call when the time is up
  */
 interface ShootingProps {
-    game: Game;
-    myFleet: Ship[];
-    onFinished: () => void;
-    onTimeUp: () => void;
+    game: Game
+    myFleet: Ship[]
+    onFinished: () => void
+    onTimeUp: () => void
 }
 
 /**
  * Shooting component.
  */
 export default function Shooting({game, myFleet, onFinished, onTimeUp}: ShootingProps) {
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null)
 
-    const [leavingGame, setLeavingGame] = useState<boolean>(false);
-    const battleshipsService = useBattleshipsService();
+    const [leavingGame, setLeavingGame] = useState<boolean>(false)
+    const battleshipsService = useBattleshipsService()
     const navigate = useNavigate()
     const {shootingState, fire} = useShooting(game, myFleet, (err) => {
-        handleError(err, setError);
-    });
+        handleError(err, setError)
+    })
 
-    const [selectedCells, setSelectedCells] = useState<Coordinate[]>([]);
-    const [canFireShots, setCanFireShots] = useState<boolean>(shootingState.myTurn);
+    const [selectedCells, setSelectedCells] = useState<Coordinate[]>([])
+    const [canFireShots, setCanFireShots] = useState<boolean>(shootingState.myTurn)
 
-    useAbortableEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn]);
-    useAbortableEffect(callOnFinishIfGameIsFinished, [shootingState.finished]);
+    useAbortableEffect(disableFireShotsWhenNotMyTurn, [shootingState.myTurn])
+    useAbortableEffect(callOnFinishIfGameIsFinished, [shootingState.finished])
 
     /**
      * Disables the fire shots button when it's not my turn.
      */
     function disableFireShotsWhenNotMyTurn() {
         if (shootingState.myTurn)
-            setCanFireShots(true);
+            setCanFireShots(true)
     }
 
     /**
@@ -75,7 +75,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
      */
     function callOnFinishIfGameIsFinished() {
         if (shootingState.finished)
-            onFinished();
+            onFinished()
     }
 
 
@@ -86,11 +86,11 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
         const [err, res] = await abortableTo(battleshipsService.gamesService.leaveGame())
 
         if (err) {
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
-        navigate(GAMEPLAY_MENU);
+        navigate(GAMEPLAY_MENU)
     }
 
     return (
@@ -109,8 +109,8 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                     <CountdownTimer
                         finalTime={shootingState.gameState.phaseEndTime}
                         onTimeUp={() => {
-                            setCanFireShots(false);
-                            onTimeUp();
+                            setCanFireShots(false)
+                            onTimeUp()
                         }}
                     />
                     <RoundView round={shootingState.gameState.round!}/>
@@ -121,8 +121,8 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                 <LeaveGameAlert
                     open={leavingGame}
                     onLeave={() => {
-                        setLeavingGame(false);
-                        leaveGame();
+                        setLeavingGame(false)
+                        leaveGame()
                     }}
                     onStay={() => setLeavingGame(false)}
                 />
@@ -150,12 +150,12 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                             left: (ship.coordinate.col) * tileSize,
                                         }}>
                                             <ShipView
-                                                type={ship.type}
+                                                shipType={ship.type}
                                                 orientation={ship.orientation}
                                                 key={ship.type.shipName + index}
                                             />
                                         </Box>
-                                    );
+                                    )
                                 })
                             }
                             {
@@ -171,9 +171,9 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                                     cell instanceof ShipCell || cell instanceof UnknownShipCell
                                                 }/>
                                             </Box>
-                                        );
+                                        )
                                     else
-                                        return null;
+                                        return null
                                 })
                             }
                         </BoardView>
@@ -191,14 +191,14 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                             onTileClicked={
                                 (coordinate) => {
                                     if (!canFireShots || shootingState.opponentBoard.getCell(coordinate).wasHit)
-                                        return;
+                                        return
 
                                     if (selectedCells.find(c => c.equals(coordinate)) !== undefined)
-                                        setSelectedCells(selectedCells.filter(c => !c.equals(coordinate)));
+                                        setSelectedCells(selectedCells.filter(c => !c.equals(coordinate)))
                                     else if (selectedCells.length < game.config.shotsPerRound)
-                                        setSelectedCells([...selectedCells, coordinate]);
+                                        setSelectedCells([...selectedCells, coordinate])
                                     else if (game.config.shotsPerRound == 1)
-                                        setSelectedCells([coordinate]);
+                                        setSelectedCells([coordinate])
                                 }
                             }>
                             {
@@ -210,12 +210,12 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                             left: (ship.coordinate.col) * tileSize,
                                         }}>
                                             <ShipView
-                                                type={ship.type}
+                                                shipType={ship.type}
                                                 orientation={ship.orientation}
                                                 key={ship.type.shipName + index}
                                             />
                                         </Box>
-                                    );
+                                    )
                                 })
                             }
                             {
@@ -230,7 +230,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                             border: '4px solid green',
                                             pointerEvents: "none",
                                         }}/>
-                                    );
+                                    )
                                 })
                             }
                             {
@@ -246,9 +246,9 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                                     cell instanceof ShipCell || cell instanceof UnknownShipCell
                                                 }/>
                                             </Box>
-                                        );
+                                        )
                                     else
-                                        return null;
+                                        return null
                                 })
                             }
                         </BoardView>
@@ -266,10 +266,10 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                 startIcon={<CancelRounded/>}
                                 color="primary"
                                 onClick={() => {
-                                    setCanFireShots(false);
-                                    const shots = selectedCells;
-                                    setSelectedCells([]);
-                                    fire(shots);
+                                    setCanFireShots(false)
+                                    const shots = selectedCells
+                                    setSelectedCells([])
+                                    fire(shots)
                                 }}
                             >
                                 Shoot
@@ -282,7 +282,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                 startIcon={<RefreshRounded/>}
                                 color="primary"
                                 onClick={() => {
-                                    setSelectedCells([]);
+                                    setSelectedCells([])
                                 }}
                             >
                                 Reset Shots

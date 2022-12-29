@@ -1,6 +1,6 @@
-import {Board, toIndex} from "./Board";
-import {Cell, ShipCell, WaterCell} from "../Cell";
-import {Ship} from "../ship/Ship";
+import {Board, toIndex} from "./Board"
+import {Cell, ShipCell, WaterCell} from "../Cell"
+import {Ship} from "../ship/Ship"
 
 /**
  * A board in the game.
@@ -12,7 +12,7 @@ import {Ship} from "../ship/Ship";
  */
 export class ConfigurableBoard extends Board {
     constructor(boardSize: number, grid: Cell[]) {
-        super(boardSize, grid);
+        super(boardSize, grid)
     }
 
     /**
@@ -23,9 +23,9 @@ export class ConfigurableBoard extends Board {
      */
     canPlaceShip(ship: Ship): boolean {
         return ship.coordinates.every(coordinate => {
-            const cell = this.getCell(coordinate);
-            return cell instanceof WaterCell;
-        });
+            const cell = this.getCell(coordinate)
+            return cell instanceof WaterCell
+        })
     }
 
     /**
@@ -35,14 +35,14 @@ export class ConfigurableBoard extends Board {
      * @return the new board with the ship placed
      */
     placeShip(ship: Ship): ConfigurableBoard {
-        const newGrid = this.grid.slice();
+        const newGrid = this.grid.slice()
 
         ship.coordinates.forEach(coordinate => {
-            const index = toIndex(coordinate, this.size);
-            newGrid[index] = new ShipCell(coordinate, false, ship);
-        });
+            const index = toIndex(coordinate, this.size)
+            newGrid[index] = new ShipCell(coordinate, false, ship)
+        })
 
-        return new ConfigurableBoard(this.size, newGrid);
+        return new ConfigurableBoard(this.size, newGrid)
     }
 
     /**
@@ -52,13 +52,13 @@ export class ConfigurableBoard extends Board {
      * @return the new board with the ship placed
      */
     removeShip(ship: Ship): ConfigurableBoard {
-        const newGrid = this.grid.slice();
+        const newGrid = this.grid.slice()
 
         ship.coordinates.forEach(coordinate => {
-            const index = toIndex(coordinate, this.size);
-            newGrid[index] = new WaterCell(coordinate, false);
-        });
+            const index = toIndex(coordinate, this.size)
+            newGrid[index] = new WaterCell(coordinate, false)
+        })
 
-        return new ConfigurableBoard(this.size, newGrid);
+        return new ConfigurableBoard(this.size, newGrid)
     }
 }

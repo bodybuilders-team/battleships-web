@@ -7,8 +7,8 @@
  * @property sunkShip the sunk ship, if any
  */
 interface FiredShotModel {
-    coordinate: CoordinateModel;
-    round: number;
-    result: ShotResultModel;
-    sunkShip?: DeployedShipModel;
+    coordinate: CoordinateModel
+    round: number
+    result: ShotResultModel
+    sunkShip?: DeployedShipModel
 }

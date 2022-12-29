@@ -1,43 +1,43 @@
-import * as React from "react";
-import {useState} from "react";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import {User} from "../../Domain/users/User";
-import {EmbeddedSubEntity} from "../../Services/media/siren/SubEntity";
-import to from "../../Utils/await-to";
-import {handleError} from "../../Services/utils/fetchSiren";
-import PageContent from "../Shared/PageContent";
-import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
-import {abortableTo, useAbortableEffect} from "../../Utils/abortableUtils";
+import * as React from "react"
+import {useState} from "react"
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material"
+import {User} from "../../Domain/users/User"
+import {EmbeddedSubEntity} from "../../Services/media/siren/SubEntity"
+import to from "../../Utils/await-to"
+import {handleError} from "../../Services/utils/fetchSiren"
+import PageContent from "../Shared/PageContent"
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService"
+import {abortableTo, useAbortableEffect} from "../../Utils/abortableUtils"
 
 /**
  * Ranking component.
  */
 export default function Ranking() {
-    const battleshipsService = useBattleshipsService();
-    const [error, setError] = useState<string | null>(null);
-    const [ranking, setRanking] = useState<User[]>([]);
+    const battleshipsService = useBattleshipsService()
+    const [error, setError] = useState<string | null>(null)
+    const [ranking, setRanking] = useState<User[]>([])
 
     useAbortableEffect(() => {
-        fetchRanking();
-    }, []);
+        fetchRanking()
+    }, [])
 
     /**
      * Fetches the ranking.
      */
     async function fetchRanking() {
-        const [err, res] = await abortableTo(battleshipsService.usersService.getUsers());
+        const [err, res] = await abortableTo(battleshipsService.usersService.getUsers())
 
         if (err) {
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
         if (res?.entities === undefined)
-            throw new Error("Entities are undefined");
+            throw new Error("Entities are undefined")
 
-        const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User);
+        const users = res.entities.map(entity => (entity as EmbeddedSubEntity<User>).properties as User)
 
-        setRanking(users);
+        setRanking(users)
     }
 
     return (
@@ -65,5 +65,5 @@ export default function Ranking() {
                 </Table>
             </TableContainer>
         </PageContent>
-    );
+    )
 }

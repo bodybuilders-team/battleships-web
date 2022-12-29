@@ -10,14 +10,14 @@
  * @see <a href="https://tools.ietf.org/html/rfc7807">Problem Details for HTTP APIs</a>
  */
 export interface Problem {
-    type: string;
-    title: string;
-    status: number;
-    detail?: string;
-    instance?: string;
+    type: string
+    title: string
+    status: number
+    detail?: string
+    instance?: string
     properties?: {
-        [key: string]: string;
-    };
+        [key: string]: string
+    }
 }
 
 /**
@@ -34,14 +34,14 @@ export interface Problem {
  */
 export class Problem extends Error {
     constructor(problem: Problem) {
-        super(problem.title);
-        this.type = problem.type;
-        this.title = problem.title;
-        this.status = problem.status;
-        this.detail = problem.detail;
-        this.instance = problem.instance;
-        this.properties = problem.properties;
+        super(problem.title)
+        this.type = problem.type
+        this.title = problem.title
+        this.status = problem.status
+        this.detail = problem.detail
+        this.instance = problem.instance
+        this.properties = problem.properties
     }
 }
 
-export const problemMediaType = "application/problem+json";
+export const problemMediaType = "application/problem+json"

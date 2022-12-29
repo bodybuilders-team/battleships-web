@@ -1,25 +1,25 @@
-import * as React from "react";
-import {useState} from "react";
-import Box from "@mui/material/Box";
-import {useNavigate} from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import {useLoggedIn, useSession} from "../../Utils/Session";
-import {LoginRounded, PlayArrowRounded} from "@mui/icons-material";
-import Logo from "../../Assets/logo.png";
-import PageContent from "../Shared/PageContent";
-import MenuButton from "../Shared/MenuButton";
-import Footer from "../../Layouts/Footer";
+import * as React from "react"
+import {useState} from "react"
+import Box from "@mui/material/Box"
+import {useNavigate} from "react-router-dom"
+import Typography from "@mui/material/Typography"
+import {useLoggedIn, useSession} from "../../Utils/Session"
+import {LoginRounded, PlayArrowRounded} from "@mui/icons-material"
+import Logo from "../../Assets/logo.png"
+import PageContent from "../Shared/PageContent"
+import MenuButton from "../Shared/MenuButton"
+import Footer from "../../Layouts/Footer"
 
 /**
  * Home page component.
  */
 export default function Home() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const session = useSession();
-    const loggedIn = useLoggedIn();
+    const session = useSession()
+    const loggedIn = useLoggedIn()
 
-    const [error] = useState<string | null>(null);
+    const [error] = useState<string | null>(null)
 
     return (
         <>
@@ -52,5 +52,5 @@ export default function Home() {
             </PageContent>
             <Footer/>
         </>
-    );
+    )
 }

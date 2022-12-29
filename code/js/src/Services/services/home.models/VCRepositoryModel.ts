@@ -5,6 +5,6 @@
  * @property url the url of the repository
  */
 export interface VCRepositoryModel {
-    type: string;
-    url: string;
+    type: string
+    url: string
 }

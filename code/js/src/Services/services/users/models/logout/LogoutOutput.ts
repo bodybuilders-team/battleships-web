@@ -1,6 +1,6 @@
-import {SirenEntity} from "../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../media/siren/SirenEntity"
 
 /**
  * The Logout Output.
  */
-export type LogoutOutput = SirenEntity<void>;
+export type LogoutOutput = SirenEntity<void>

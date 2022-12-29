@@ -1,12 +1,12 @@
-import {Link} from "./Link";
-import {Action} from "./Action";
-import {throwError} from "../../utils/errorUtils";
+import {Link} from "./Link"
+import {Action} from "./Action"
+import {throwError} from "../../utils/errorUtils"
 
 /**
  * A sub-entity is an entity that is part of another entity.
  * It is represented as a link with an embedded representation.
  */
-export type SubEntity<T> = EmbeddedSubEntity<T> | EmbeddedLink;
+export type SubEntity<T> = EmbeddedSubEntity<T> | EmbeddedLink
 
 /**
  * A sub-entity that is an embedded link.
@@ -18,11 +18,11 @@ export type SubEntity<T> = EmbeddedSubEntity<T> | EmbeddedLink;
  * @property title the title of the link (optional)
  */
 export interface IEmbeddedLink {
-    class?: string[];
-    rel: string[];
-    href: string;
-    type?: string;
-    title?: string;
+    class?: string[]
+    rel: string[]
+    href: string
+    type?: string
+    title?: string
 }
 
 /**
@@ -35,18 +35,18 @@ export interface IEmbeddedLink {
  * @property title the title of the link (optional)
  */
 export class EmbeddedLink implements IEmbeddedLink {
-    class?: string[];
-    rel: string[];
-    href: string;
-    type?: string;
-    title?: string;
+    class?: string[]
+    rel: string[]
+    href: string
+    type?: string
+    title?: string
 
     constructor(link: IEmbeddedLink) {
-        this.class = link.class;
-        this.rel = link.rel;
-        this.href = link.href;
-        this.type = link.type;
-        this.title = link.title;
+        this.class = link.class
+        this.rel = link.rel
+        this.href = link.href
+        this.type = link.type
+        this.title = link.title
     }
 }
 
@@ -63,12 +63,12 @@ export class EmbeddedLink implements IEmbeddedLink {
  * @property links the links to other entities (optional)
  */
 export interface IEmbeddedSubEntity<T> {
-    class?: string[];
-    rel: string[];
-    properties?: T;
-    entities?: SubEntity<any>[];
-    actions?: Action[];
-    links?: Link[];
+    class?: string[]
+    rel: string[]
+    properties?: T
+    entities?: SubEntity<any>[]
+    actions?: Action[]
+    links?: Link[]
 }
 
 /**
@@ -84,20 +84,20 @@ export interface IEmbeddedSubEntity<T> {
  * @property links the links to other entities (optional)
  */
 export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
-    class?: string[];
-    rel: string[];
-    properties?: T;
-    entities?: SubEntity<any>[];
-    actions?: Action[];
-    links?: Link[];
+    class?: string[]
+    rel: string[]
+    properties?: T
+    entities?: SubEntity<any>[]
+    actions?: Action[]
+    links?: Link[]
 
     constructor(entity: IEmbeddedSubEntity<T>) {
-        this.class = entity.class;
-        this.rel = entity.rel;
-        this.properties = entity.properties;
-        this.entities = entity.entities;
-        this.links = entity.links;
-        this.actions = entity.actions;
+        this.class = entity.class
+        this.rel = entity.rel
+        this.properties = entity.properties
+        this.entities = entity.entities
+        this.links = entity.links
+        this.actions = entity.actions
     }
 
     /**
@@ -109,7 +109,7 @@ export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
     getLink(...rels: string[]): string {
         return this.links
             ?.find(link => rels.every((rel) => link.rel.includes(rel)))
-            ?.href ?? throwError("Link not found");
+            ?.href ?? throwError("Link not found")
     }
 
     /**
@@ -121,7 +121,7 @@ export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
     getAction(name: string): string {
         return this.actions
             ?.find(action => action.name === name)
-            ?.href ?? throwError("Action not found");
+            ?.href ?? throwError("Action not found")
     }
 
     /**
@@ -130,13 +130,13 @@ export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
      * @return the links from the actions in a map
      */
     getActionLinks(): Map<string, string> {
-        const map = new Map<string, string>();
+        const map = new Map<string, string>()
 
         this.actions?.forEach(action => {
-            map.set(action.name, action.href);
-        });
+            map.set(action.name, action.href)
+        })
 
-        return map;
+        return map
     }
 
     /**
@@ -148,7 +148,7 @@ export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
     getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
         return this.entities
             ?.filter(entity => !Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedSubEntity<T>(entity as IEmbeddedSubEntity<T>)) ?? [];
+            .map(entity => new EmbeddedSubEntity<T>(entity as IEmbeddedSubEntity<T>)) ?? []
     }
 
     /**
@@ -162,9 +162,9 @@ export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
     getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
         const embeddedLinks = this.entities
             ?.filter(entity => Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? [];
+            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? []
 
         return embeddedLinks
-            .filter(link => rels.every((rel) => link.rel.includes(rel)));
+            .filter(link => rels.every((rel) => link.rel.includes(rel)))
     }
 }

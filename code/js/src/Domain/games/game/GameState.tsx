@@ -9,19 +9,19 @@
  * @property endCause the cause of the game ending
  */
 export class GameState {
-    readonly phase: GamePhase;
-    readonly phaseEndTime: number;
-    readonly round: number | null;
-    readonly turn: string | null;
-    readonly winner: string | null;
-    readonly endCause: string | null;
+    readonly phase: GamePhase
+    readonly phaseEndTime: number
+    readonly round: number | null
+    readonly turn: string | null
+    readonly winner: string | null
+    readonly endCause: string | null
 
     constructor(gameStateModel: GameStateModel) {
-        this.phase = gameStateModel.phase;
-        this.phaseEndTime = gameStateModel.phaseEndTime;
-        this.round = gameStateModel.round;
-        this.turn = gameStateModel.turn;
-        this.winner = gameStateModel.winner;
-        this.endCause = gameStateModel.endCause;
+        this.phase = gameStateModel.phase
+        this.phaseEndTime = gameStateModel.phaseEndTime
+        this.round = gameStateModel.round
+        this.turn = gameStateModel.turn
+        this.winner = gameStateModel.winner
+        this.endCause = gameStateModel.endCause
     }
 }

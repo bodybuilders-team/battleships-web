@@ -1,7 +1,7 @@
-import * as React from "react";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import ErrorAlert from "./ErrorAlert";
+import * as React from "react"
+import Container from "@mui/material/Container"
+import Box from "@mui/material/Box"
+import ErrorAlert from "./ErrorAlert"
 
 /**
  * Properties of the PageContent component.
@@ -11,9 +11,9 @@ import ErrorAlert from "./ErrorAlert";
  * @property children the children to render
  */
 interface PageContentProps {
-    title?: string;
-    error?: string | null;
-    children: React.ReactNode;
+    title?: string
+    error?: string | null
+    children: React.ReactNode
 }
 
 /**
@@ -33,5 +33,5 @@ export default function PageContent({title, error, children}: PageContentProps) 
                 {children}
             </Box>
         </Container>
-    );
+    )
 }

@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 
 /**
  * The Deploy Fleet Output Model.
@@ -6,10 +6,10 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity";
  * @property successfullyDeployed true if the fleet was successfully deployed, false otherwise
  */
 interface DeployFleetOutputModel {
-    successfullyDeployed: boolean;
+    successfullyDeployed: boolean
 }
 
 /**
  * The Deploy Fleet Output.
  */
-export type DeployFleetOutput = SirenEntity<DeployFleetOutputModel>;
+export type DeployFleetOutput = SirenEntity<DeployFleetOutputModel>

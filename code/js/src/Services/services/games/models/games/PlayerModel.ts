@@ -5,6 +5,6 @@
  * @property points the points of the player
  */
 interface PlayerModel {
-    username: string;
-    points: number;
+    username: string
+    points: number
 }

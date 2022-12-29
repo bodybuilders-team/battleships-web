@@ -8,5 +8,5 @@
 export default function to<T, E = Error>(promise: Promise<T>): Promise<[E, null] | [null, T]> {
     return promise
         .then<[null, T]>(data => [null, data])
-        .catch<[E, null]>(err => [err, null]);
+        .catch<[E, null]>(err => [err, null])
 }

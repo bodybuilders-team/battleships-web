@@ -5,15 +5,15 @@
  * @property row int in range [maxRowsRange]
  */
 export class Coordinate {
-    col: number;
-    row: number;
+    col: number
+    row: number
 
     constructor(col: number, row: number) {
-        this.col = col;
-        this.row = row;
+        this.col = col
+        this.row = row
 
         if (col < 1 || row < 1)
-            throw new Error("Coordinates must be > 1");
+            throw new Error("Coordinates must be > 1")
     }
 
     /**
@@ -22,7 +22,7 @@ export class Coordinate {
      * @return the Coordinate
      */
     static fromCoordinateModel(model: CoordinateModel): Coordinate {
-        return new Coordinate(model.col.charCodeAt(0) - "A".charCodeAt(0) + 1, model.row);
+        return new Coordinate(model.col.charCodeAt(0) - "A".charCodeAt(0) + 1, model.row)
     }
 
     /**
@@ -32,10 +32,10 @@ export class Coordinate {
      * @param size the board size
      */
     static fromIndex(index: number, size: number): Coordinate {
-        const row = Math.floor(index / size) + 1;
-        const col = index % size + 1;
+        const row = Math.floor(index / size) + 1
+        const col = index % size + 1
 
-        return new Coordinate(col, row);
+        return new Coordinate(col, row)
     }
 
     /**
@@ -47,10 +47,14 @@ export class Coordinate {
         return {
             col: String.fromCharCode('A'.charCodeAt(0) + this.col - 1),
             row: this.row
-        };
+        }
+    }
+
+    static isValid(col: number, row: number, size: number): boolean {
+        return col >= 1 && col <= size && row >= 1 && row <= size
     }
 
     equals(other: Coordinate): boolean {
-        return this.col === other.col && this.row === other.row;
+        return this.col === other.col && this.row === other.row
     }
 }

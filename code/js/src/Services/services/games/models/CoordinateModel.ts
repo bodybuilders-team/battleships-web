@@ -5,6 +5,6 @@
  * @property row the row of the coordinate
  */
 interface CoordinateModel {
-    col: string;
-    row: number;
+    col: string
+    row: number
 }

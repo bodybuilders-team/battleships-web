@@ -1,22 +1,22 @@
-import * as React from 'react';
-import {useState} from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded';
-import {useNavigate} from 'react-router-dom';
-import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session";
-import {useBattleshipsService} from "../Services/NavigationBattleshipsService";
-import {abortableTo} from "../Utils/abortableUtils";
+import * as React from 'react'
+import {useState} from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
+import Container from '@mui/material/Container'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
+import MenuItem from '@mui/material/MenuItem'
+import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatFilledRounded'
+import {useNavigate} from 'react-router-dom'
+import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session"
+import {useBattleshipsService} from "../Services/NavigationBattleshipsService"
+import {abortableTo} from "../Utils/abortableUtils"
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
@@ -24,17 +24,17 @@ const pages = [
     {name: 'Play', href: '/gameplay-menu', auth: true},
     {name: 'Ranking', href: '/ranking'},
     {name: 'About', href: '/about'},
-];
+]
 
 /**
  * NavBar component.
  */
 export default function NavBar() {
-    const navigate = useNavigate();
-    const loggedIn = useLoggedIn();
-    const sessionManager = useSessionManager();
-    const session = useSession();
-    const battleshipsService = useBattleshipsService();
+    const navigate = useNavigate()
+    const loggedIn = useLoggedIn()
+    const sessionManager = useSessionManager()
+    const session = useSession()
+    const battleshipsService = useBattleshipsService()
 
     const settings = [
         {
@@ -46,8 +46,8 @@ export default function NavBar() {
             name: 'Logout',
             callback: async () => {
                 if (!session) {
-                    navigate('/');
-                    return;
+                    navigate('/')
+                    return
                 }
 
                 await abortableTo(
@@ -56,24 +56,24 @@ export default function NavBar() {
 
                 sessionManager.clearSession()
 
-                navigate('/');
+                navigate('/')
             },
             auth: true
         }
-    ];
+    ]
 
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
+        setAnchorElNav(event.currentTarget)
+    }
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
+        setAnchorElUser(event.currentTarget)
+    }
 
-    const handleCloseNavMenu = () => setAnchorElNav(null);
-    const handleCloseUserMenu = () => setAnchorElUser(null);
+    const handleCloseNavMenu = () => setAnchorElNav(null)
+    const handleCloseUserMenu = () => setAnchorElUser(null)
 
     return (
         <AppBar position="static">
@@ -129,8 +129,8 @@ export default function NavBar() {
                             {pages.map((page) => (
                                 (page.auth && loggedIn || !page.auth && !loggedIn || page.auth === undefined) &&
                                 <MenuItem key={page.name} onClick={() => {
-                                    handleCloseNavMenu();
-                                    navigate(page.href);
+                                    handleCloseNavMenu()
+                                    navigate(page.href)
                                 }}>
                                     <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
@@ -163,8 +163,8 @@ export default function NavBar() {
                             <Button
                                 key={page.name}
                                 onClick={() => {
-                                    handleCloseNavMenu();
-                                    navigate(page.href);
+                                    handleCloseNavMenu()
+                                    navigate(page.href)
                                 }}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
@@ -199,8 +199,8 @@ export default function NavBar() {
                                     {settings.map((setting) => (
                                         (setting.auth && loggedIn || !setting.auth && !loggedIn || setting.auth === undefined) &&
                                         <MenuItem key={setting.name} onClick={() => {
-                                            handleCloseUserMenu();
-                                            setting.callback();
+                                            handleCloseUserMenu()
+                                            setting.callback()
                                         }}>
                                             <Typography textAlign="center">{setting.name}</Typography>
                                         </MenuItem>
@@ -212,5 +212,5 @@ export default function NavBar() {
                 </Toolbar>
             </Container>
         </AppBar>
-    );
+    )
 }

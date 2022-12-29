@@ -1,27 +1,27 @@
-import {get, getWithAuth, postWithAuth} from "../../utils/fetchSiren";
-import {GetGamesOutput} from "./models/games/getGames/GetGamesOutput";
-import {CreateGameOutput} from "./models/games/createGame/CreateGameOutput";
-import {MatchmakeOutput} from "./models/games/matchmake/MatchmakeOutput";
-import {GetGameOutput} from "./models/games/getGame/GetGameOutput";
-import {GetGameStateOutput} from "./models/games/getGameState/GetGameStateOutput";
-import {JoinGameOutput} from "./models/games/joinGame/JoinGameOutput";
-import {SirenEntity} from "../../media/siren/SirenEntity";
-import {CreateGameInput} from "./models/games/createGame/CreateGameInput";
+import {get, getWithAuth, postWithAuth} from "../../utils/fetchSiren"
+import {GetGamesOutput} from "./models/games/getGames/GetGamesOutput"
+import {CreateGameOutput} from "./models/games/createGame/CreateGameOutput"
+import {MatchmakeOutput} from "./models/games/matchmake/MatchmakeOutput"
+import {GetGameOutput} from "./models/games/getGame/GetGameOutput"
+import {GetGameStateOutput} from "./models/games/getGameState/GetGameStateOutput"
+import {JoinGameOutput} from "./models/games/joinGame/JoinGameOutput"
+import {SirenEntity} from "../../media/siren/SirenEntity"
+import {CreateGameInput} from "./models/games/createGame/CreateGameInput"
 
 type GamePhase = "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED"
 
 export namespace GamesService {
 
     export interface PaginatedParams {
-        limit?: number;
-        offset?: number;
+        limit?: number
+        offset?: number
     }
 
     export interface GetGamesParams extends PaginatedParams {
-        username?: string;
-        excludeUsername?: string;
-        phases?: GamePhase[];
-        ids?: readonly number[];
+        username?: string
+        excludeUsername?: string
+        phases?: GamePhase[]
+        ids?: readonly number[]
     }
 
     /**
@@ -37,14 +37,14 @@ export namespace GamesService {
         getGamesParams?: GetGamesParams,
         signal?: AbortSignal): Promise<GetGamesOutput> {
 
-        const searchParams = new URLSearchParams();
+        const searchParams = new URLSearchParams()
 
         if (getGamesParams) {
             for (const [key, value] of Object.entries(getGamesParams))
-                searchParams.append(key, value.toString());
+                searchParams.append(key, value.toString())
         }
 
-        return await get(listGamesLink + "?" + searchParams.toString());
+        return await get(listGamesLink + "?" + searchParams.toString())
     }
 
     /**
@@ -63,7 +63,7 @@ export namespace GamesService {
         createGameInput: CreateGameInput,
         signal?: AbortSignal
     ): Promise<CreateGameOutput> {
-        return await postWithAuth(createGameLink, token, JSON.stringify(createGameInput), signal);
+        return await postWithAuth(createGameLink, token, JSON.stringify(createGameInput), signal)
     }
 
     /**
@@ -82,7 +82,7 @@ export namespace GamesService {
         gameConfig: GameConfigModel,
         signal?: AbortSignal
     ): Promise<MatchmakeOutput> {
-        return await postWithAuth(matchmakeLink, token, JSON.stringify(gameConfig), signal);
+        return await postWithAuth(matchmakeLink, token, JSON.stringify(gameConfig), signal)
     }
 
     /**
@@ -95,7 +95,7 @@ export namespace GamesService {
      * @return the result of the get game request
      */
     export async function getGame(token: string, gameLink: string, signal?: AbortSignal): Promise<GetGameOutput> {
-        return await getWithAuth(gameLink, token, signal);
+        return await getWithAuth(gameLink, token, signal)
     }
 
     /**
@@ -108,7 +108,7 @@ export namespace GamesService {
      * @return the API result of the get game state request
      */
     export async function getGameState(token: string, gameStateLink: string, signal?: AbortSignal): Promise<GetGameStateOutput> {
-        return await getWithAuth(gameStateLink, token, signal);
+        return await getWithAuth(gameStateLink, token, signal)
     }
 
     /**
@@ -121,7 +121,7 @@ export namespace GamesService {
      * @return the API result of the join game request
      */
     export async function joinGame(token: string, joinGameLink: string, signal?: AbortSignal): Promise<JoinGameOutput> {
-        return await postWithAuth(joinGameLink, token, undefined, signal);
+        return await postWithAuth(joinGameLink, token, undefined, signal)
     }
 
     /**
@@ -134,6 +134,6 @@ export namespace GamesService {
      * @return the API result of the leave game request
      */
     export async function leaveGame(token: string, leaveGameLink: string, signal?: AbortSignal): Promise<SirenEntity<void>> {
-        return await postWithAuth(leaveGameLink, token, undefined, signal);
+        return await postWithAuth(leaveGameLink, token, undefined, signal)
     }
 }

@@ -4,5 +4,5 @@
  * @property coordinate the coordinate of the shot
  */
 interface UnfiredShotModel {
-    coordinate: CoordinateModel;
+    coordinate: CoordinateModel
 }

@@ -1,5 +1,5 @@
-import * as React from "react";
-import {useState} from "react";
+import * as React from "react"
+import {useState} from "react"
 import {
     Card,
     CardContent,
@@ -12,59 +12,59 @@ import {
     TableContainer,
     TableHead,
     TableRow
-} from '@mui/material';
-import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
-import {useSession} from "../../Utils/Session";
-import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput";
-import {handleError} from "../../Services/utils/fetchSiren";
-import {Game} from "../../Domain/games/game/Game";
-import ErrorAlert from "../Shared/ErrorAlert";
-import to from "../../Utils/await-to";
-import {useMountedSignal} from "../../Utils/useMounted";
-import {abortableTo, AbortedError, useAbortableEffect} from "../../Utils/abortableUtils";
+} from '@mui/material'
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService"
+import {useSession} from "../../Utils/Session"
+import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput"
+import {handleError} from "../../Services/utils/fetchSiren"
+import {Game} from "../../Domain/games/game/Game"
+import ErrorAlert from "../Shared/ErrorAlert"
+import to from "../../Utils/await-to"
+import {useMountedSignal} from "../../Utils/useMounted"
+import {abortableTo, AbortedError, useAbortableEffect} from "../../Utils/abortableUtils"
 
 /**
  * GameHistory component.
  */
 export default function GameHistory() {
-    const battleshipsService = useBattleshipsService();
-    const session = useSession();
+    const battleshipsService = useBattleshipsService()
+    const session = useSession()
 
-    const [error, setError] = useState<string | null>(null);
-    const [games, setGames] = useState<Game[] | null>(null);
-    const [gamesLoaded, setGamesLoaded] = useState(false);
+    const [error, setError] = useState<string | null>(null)
+    const [games, setGames] = useState<Game[] | null>(null)
+    const [gamesLoaded, setGamesLoaded] = useState(false)
 
     useAbortableEffect(() => {
         fetchGames()
-    }, []);
+    }, [])
 
-    const mountedSignal = useMountedSignal();
+    const mountedSignal = useMountedSignal()
 
     /**
      * Fetches the games.
      */
     async function fetchGames() {
         if (gamesLoaded)
-            return;
+            return
 
         const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             username: session!.username,
             phases: ["FINISHED"]
-        }, mountedSignal));
+        }, mountedSignal))
 
         if (err instanceof AbortedError)
-            throw err;
+            throw err
 
         if (err) {
-            handleError(err, setError);
-            return;
+            handleError(err, setError)
+            return
         }
 
         const games = res
             .getEmbeddedSubEntities<GetGameOutputModel>()
 
-        setGames(games.map(game => new Game(game.properties!)));
-        setGamesLoaded(true);
+        setGames(games.map(game => new Game(game.properties!)))
+        setGamesLoaded(true)
     }
 
     return (
@@ -102,5 +102,5 @@ export default function GameHistory() {
                 </TableContainer>
             </CardContent>
         </Card>
-    );
+    )
 }

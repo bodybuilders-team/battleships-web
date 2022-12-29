@@ -1,6 +1,6 @@
-import {ExitToAppRounded} from "@mui/icons-material";
-import Button from "@mui/material/Button";
-import * as React from "react";
+import {ExitToAppRounded} from "@mui/icons-material"
+import Button from "@mui/material/Button"
+import * as React from "react"
 
 /**
  * Properties for the LeaveGameButton component.
@@ -8,7 +8,7 @@ import * as React from "react";
  * @param onClick the function to be called when the button is clicked
  */
 interface LeaveGameButtonProps {
-    onClick: () => void;
+    onClick: () => void
 }
 
 
@@ -27,5 +27,5 @@ export default function LeaveGameButton({onClick}: LeaveGameButtonProps) {
         >
             Leave Game
         </Button>
-    );
+    )
 }

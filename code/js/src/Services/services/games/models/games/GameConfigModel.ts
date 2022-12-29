@@ -8,9 +8,9 @@
  * @property shipTypes the ship types allowed in the game
  */
 interface GameConfigModel {
-    gridSize: number;
-    maxTimePerRound: number;
-    shotsPerRound: number;
-    maxTimeForLayoutPhase: number;
-    shipTypes: ShipTypeModel[];
+    gridSize: number
+    maxTimePerRound: number
+    shotsPerRound: number
+    maxTimeForLayoutPhase: number
+    shipTypes: ShipTypeModel[]
 }

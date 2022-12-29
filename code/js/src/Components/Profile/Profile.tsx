@@ -1,18 +1,18 @@
-import * as React from "react";
-import {useSession} from "../../Utils/Session";
-import {Card, CardContent} from "@mui/material";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import GameHistory from "./GameHistory";
+import * as React from "react"
+import {useSession} from "../../Utils/Session"
+import {Card, CardContent} from "@mui/material"
+import Box from "@mui/material/Box"
+import Avatar from "@mui/material/Avatar"
+import Typography from "@mui/material/Typography"
+import Container from "@mui/material/Container"
+import Grid from "@mui/material/Grid"
+import GameHistory from "./GameHistory"
 
 /**
  * Profile component.
  */
 export default function Profile() {
-    const session = useSession();
+    const session = useSession()
 
     return (
         <Box component="main">
@@ -41,5 +41,5 @@ export default function Profile() {
                 </Grid>
             </Container>
         </Box>
-    );
+    )
 }

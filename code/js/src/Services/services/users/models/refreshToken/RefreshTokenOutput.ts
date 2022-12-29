@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../media/siren/SirenEntity"
 
 /**
  * The Refresh Token Output Model.
@@ -7,8 +7,8 @@ import {SirenEntity} from "../../../../media/siren/SirenEntity";
  * @property refreshToken the refresh token
  */
 interface RefreshTokenOutputModel {
-    accessToken: string;
-    refreshToken: string;
+    accessToken: string
+    refreshToken: string
 }
 
-export type RefreshTokenOutput = SirenEntity<RefreshTokenOutputModel>;
+export type RefreshTokenOutput = SirenEntity<RefreshTokenOutputModel>

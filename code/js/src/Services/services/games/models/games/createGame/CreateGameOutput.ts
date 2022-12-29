@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 
 /**
  * The CreateGame Output Model.
@@ -6,10 +6,10 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity";
  * @property gameId the id of the game
  */
 interface CreateGameOutputModel {
-    gameId: number;
+    gameId: number
 }
 
 /**
  * The Create Game Output.
  */
-export type CreateGameOutput = SirenEntity<CreateGameOutputModel>;
+export type CreateGameOutput = SirenEntity<CreateGameOutputModel>

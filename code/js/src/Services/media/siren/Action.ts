@@ -10,13 +10,13 @@
  * @property fields the fields of the action (optional)
  */
 export interface IAction {
-    name: string;
+    name: string
     class?: string[]
-    method?: string;
-    href: string;
-    title?: string;
-    type?: string;
-    fields?: Field[];
+    method?: string
+    href: string
+    title?: string
+    type?: string
+    fields?: Field[]
 }
 
 /**
@@ -31,22 +31,22 @@ export interface IAction {
  * @property fields the fields of the action (optional)
  */
 export class Action implements IAction {
-    name: string;
-    class?: string[];
-    method?: string;
-    href: string;
-    title?: string;
-    type?: string;
-    fields?: Field[];
+    name: string
+    class?: string[]
+    method?: string
+    href: string
+    title?: string
+    type?: string
+    fields?: Field[]
 
     constructor(action: IAction) {
-        this.name = action.name;
-        this.class = action.class;
-        this.method = action.method;
-        this.href = action.href;
-        this.title = action.title;
-        this.type = action.type;
-        this.fields = action.fields;
+        this.name = action.name
+        this.class = action.class
+        this.method = action.method
+        this.href = action.href
+        this.title = action.title
+        this.type = action.type
+        this.fields = action.fields
     }
 }
 
@@ -58,9 +58,9 @@ export class Action implements IAction {
  * @property type the type of the field (optional)
  */
 export interface IField {
-    name: string;
-    value?: string;
-    type?: string;
+    name: string
+    value?: string
+    type?: string
 }
 
 /**
@@ -71,13 +71,13 @@ export interface IField {
  * @property type the type of the field (optional)
  */
 export class Field implements IField {
-    name: string;
-    value?: string;
-    type?: string;
+    name: string
+    value?: string
+    type?: string
 
     constructor(field: IField) {
-        this.name = field.name;
-        this.value = field.value;
-        this.type = field.type;
+        this.name = field.name
+        this.value = field.value
+        this.type = field.type
     }
 }

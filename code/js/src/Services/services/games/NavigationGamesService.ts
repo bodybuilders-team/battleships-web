@@ -1,18 +1,18 @@
-import {GetGamesOutput} from "./models/games/getGames/GetGamesOutput";
-import {GamesService} from "./GamesService";
-import {Rels} from "../../../Utils/navigation/Rels";
-import {throwError} from "../../utils/errorUtils";
-import {GetGameOutput, GetGameOutputModel} from "./models/games/getGame/GetGameOutput";
-import {Session, SessionManager} from "../../../Utils/Session";
-import {MatchmakeOutput} from "./models/games/matchmake/MatchmakeOutput";
-import {JoinGameOutput} from "./models/games/joinGame/JoinGameOutput";
-import {SirenEntity} from "../../media/siren/SirenEntity";
-import {GetGameStateOutput} from "./models/games/getGameState/GetGameStateOutput";
-import NavigationBattleshipsService from "../../NavigationBattleshipsService";
-import {CreateGameInput} from "./models/games/createGame/CreateGameInput";
-import {CreateGameOutput} from "./models/games/createGame/CreateGameOutput";
-import {executeRequest, executeRequestAndRefreshTokenIfNecessary} from "../../utils/executeRequestUtils";
-import GetGamesParams = GamesService.GetGamesParams;
+import {GetGamesOutput} from "./models/games/getGames/GetGamesOutput"
+import {GamesService} from "./GamesService"
+import {Rels} from "../../../Utils/navigation/Rels"
+import {throwError} from "../../utils/errorUtils"
+import {GetGameOutput, GetGameOutputModel} from "./models/games/getGame/GetGameOutput"
+import {Session, SessionManager} from "../../../Utils/Session"
+import {MatchmakeOutput} from "./models/games/matchmake/MatchmakeOutput"
+import {JoinGameOutput} from "./models/games/joinGame/JoinGameOutput"
+import {SirenEntity} from "../../media/siren/SirenEntity"
+import {GetGameStateOutput} from "./models/games/getGameState/GetGameStateOutput"
+import NavigationBattleshipsService from "../../NavigationBattleshipsService"
+import {CreateGameInput} from "./models/games/createGame/CreateGameInput"
+import {CreateGameOutput} from "./models/games/createGame/CreateGameOutput"
+import {executeRequest, executeRequestAndRefreshTokenIfNecessary} from "../../utils/executeRequestUtils"
+import GetGamesParams = GamesService.GetGamesParams
 
 
 /**
@@ -23,11 +23,11 @@ export class NavigationGamesService {
     }
 
     private get links(): Map<string, string> {
-        return this.battleshipsService.links;
+        return this.battleshipsService.links
     }
 
     private get session(): Session {
-        return this.sessionManager.session ?? throwError("Session not found");
+        return this.sessionManager.session ?? throwError("Session not found")
     }
 
     /**
@@ -40,22 +40,23 @@ export class NavigationGamesService {
      */
     async getGames(getGamesParams?: GetGamesParams, signal?: AbortSignal): Promise<GetGamesOutput> {
         if (!this.links.has(Rels.LIST_GAMES))
-            await this.battleshipsService.usersService.getUserHome(signal);
+            await this.battleshipsService.usersService.getUserHome(signal)
 
         const res = await executeRequest(() => GamesService.getGames(
             this.links.get(Rels.LIST_GAMES) ?? throwError("List games link not found"),
             getGamesParams,
             signal
-        ), signal);
+        ), signal)
 
         res.getEmbeddedSubEntities<GetGameOutputModel>().forEach(entity => {
-            const id = entity?.properties?.id ?? throwError("Game id not found");
+            const id = entity?.properties?.id ?? throwError("Game id not found")
 
-            this.links.set(`${Rels.GAME}-${id}`, entity.getLink(Rels.SELF));
-            this.links.set(`${Rels.JOIN_GAME}-${id}`, entity.getAction(Rels.JOIN_GAME));
-        });
+            this.links.set(`${Rels.GAME}-${id}`, entity.getLink(Rels.SELF))
+            this.links.set(`${Rels.JOIN_GAME}-${id}`, entity.getAction(Rels.JOIN_GAME))
+            this.links.set(`${Rels.GAME_STATE}-${id}`, entity.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
+        })
 
-        return res;
+        return res
     }
 
     /**
@@ -68,7 +69,7 @@ export class NavigationGamesService {
      */
     async createGame(createGameInput: CreateGameInput, signal?: AbortSignal): Promise<CreateGameOutput> {
         if (!this.links.has(Rels.CREATE_GAME))
-            await this.battleshipsService.usersService.getUserHome(signal);
+            await this.battleshipsService.usersService.getUserHome(signal)
 
         const res = await executeRequestAndRefreshTokenIfNecessary(
             this.battleshipsService.usersService,
@@ -80,12 +81,12 @@ export class NavigationGamesService {
                 createGameInput,
                 signal
             ),
-            signal);
+            signal)
 
-        this.links.set(Rels.GAME, res.getEmbeddedLinks(Rels.GAME)[0].href);
-        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href);
+        this.links.set(Rels.GAME, res.getEmbeddedLinks(Rels.GAME)[0].href)
+        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
 
-        return res;
+        return res
     }
 
     /**
@@ -98,7 +99,7 @@ export class NavigationGamesService {
      */
     async matchmake(gameConfig: GameConfigModel, signal?: AbortSignal): Promise<MatchmakeOutput> {
         if (!this.links.has(Rels.MATCHMAKE))
-            await this.battleshipsService.usersService.getUserHome(signal);
+            await this.battleshipsService.usersService.getUserHome(signal)
 
         const res = await executeRequestAndRefreshTokenIfNecessary(
             this.battleshipsService.usersService,
@@ -110,13 +111,13 @@ export class NavigationGamesService {
                 signal
             ),
             signal
-        );
+        )
 
 
-        this.links.set(Rels.GAME, res.getEmbeddedLinks(Rels.GAME)[0].href);
-        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href);
+        this.links.set(Rels.GAME, res.getEmbeddedLinks(Rels.GAME)[0].href)
+        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
 
-        return res;
+        return res
     }
 
     /**
@@ -136,14 +137,14 @@ export class NavigationGamesService {
                 signal
             ),
             signal
-        );
+        )
 
-        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href);
+        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
         res.getActionLinks().forEach((value, key) => {
-            this.links.set(key, value);
+            this.links.set(key, value)
         })
 
-        return res;
+        return res
     }
 
     /**
@@ -163,7 +164,7 @@ export class NavigationGamesService {
                 signal
             ),
             signal
-        );
+        )
     }
 
     /**
@@ -184,12 +185,12 @@ export class NavigationGamesService {
                 signal
             ),
             signal
-        );
+        )
 
-        this.links.set(Rels.GAME, res.getEmbeddedLinks(Rels.GAME)[0].href);
-        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href);
+        this.links.set(Rels.GAME, res.getEmbeddedLinks(Rels.GAME)[0].href)
+        this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
 
-        return res;
+        return res
     }
 
 
@@ -210,6 +211,6 @@ export class NavigationGamesService {
                 signal
             ),
             signal
-        );
+        )
     }
 }

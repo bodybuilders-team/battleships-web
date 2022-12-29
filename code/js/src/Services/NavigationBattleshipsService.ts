@@ -1,13 +1,13 @@
-import {BattleshipsService} from "./BattleshipsService";
-import {NavigationGamesService} from "./services/games/NavigationGamesService";
-import NavigationUsersService from "./services/users/NavigationUsersService";
-import {NavigationPlayersService} from "./services/games/NavigationPlayersService";
-import {useNavigationState} from "../Utils/navigation/NavigationState";
-import {useMemo} from "react";
-import {Session, SessionManager, useSessionManager} from "../Utils/Session";
-import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput";
-import {throwError} from "./utils/errorUtils";
-import {executeRequest} from "./utils/executeRequestUtils";
+import {BattleshipsService} from "./BattleshipsService"
+import {NavigationGamesService} from "./services/games/NavigationGamesService"
+import NavigationUsersService from "./services/users/NavigationUsersService"
+import {NavigationPlayersService} from "./services/games/NavigationPlayersService"
+import {useNavigationState} from "../Utils/navigation/NavigationState"
+import {useMemo} from "react"
+import {Session, SessionManager, useSessionManager} from "../Utils/Session"
+import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput"
+import {throwError} from "./utils/errorUtils"
+import {executeRequest} from "./utils/executeRequestUtils"
 
 
 /**
@@ -18,22 +18,22 @@ import {executeRequest} from "./utils/executeRequestUtils";
  * @property playersService the service that handles the players
  */
 export default class NavigationBattleshipsService {
-    readonly usersService: NavigationUsersService;
-    readonly gamesService: NavigationGamesService;
-    readonly playersService: NavigationPlayersService;
+    readonly usersService: NavigationUsersService
+    readonly gamesService: NavigationGamesService
+    readonly playersService: NavigationPlayersService
     public readonly links: Map<string, string>
-    protected sessionManager: SessionManager;
+    protected sessionManager: SessionManager
 
     constructor(links: Map<string, string>, sessionManager: SessionManager) {
-        this.links = links;
-        this.sessionManager = sessionManager;
-        this.usersService = new NavigationUsersService(this, sessionManager);
-        this.gamesService = new NavigationGamesService(this, sessionManager);
-        this.playersService = new NavigationPlayersService(this, sessionManager);
+        this.links = links
+        this.sessionManager = sessionManager
+        this.usersService = new NavigationUsersService(this, sessionManager)
+        this.gamesService = new NavigationGamesService(this, sessionManager)
+        this.playersService = new NavigationPlayersService(this, sessionManager)
     }
 
     protected get session(): Session {
-        return this.sessionManager.session ?? throwError("Session not found");
+        return this.sessionManager.session ?? throwError("Session not found")
     }
 
     /**
@@ -48,10 +48,10 @@ export default class NavigationBattleshipsService {
 
         res.getActionLinks()
             .forEach((value, key) => {
-                this.links.set(key, value);
-            });
+                this.links.set(key, value)
+            })
 
-        return res;
+        return res
     }
 
 
@@ -64,10 +64,10 @@ export default class NavigationBattleshipsService {
  * @returns NavigationBattleshipsService
  */
 export function useBattleshipsService() {
-    const navigationState = useNavigationState();
-    const sessionManager = useSessionManager();
+    const navigationState = useNavigationState()
+    const sessionManager = useSessionManager()
 
     return useMemo(() => {
-        return new NavigationBattleshipsService(navigationState.links, sessionManager);
-    }, []);
+        return new NavigationBattleshipsService(navigationState.links, sessionManager)
+    }, [])
 }

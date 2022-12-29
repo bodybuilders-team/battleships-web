@@ -1,8 +1,8 @@
-import * as React from "react";
-import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import DialogContentText from "@mui/material/DialogContentText";
-import Button from "@mui/material/Button";
-import {ExitToAppRounded, PlayArrowRounded} from "@mui/icons-material";
+import * as React from "react"
+import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material"
+import DialogContentText from "@mui/material/DialogContentText"
+import Button from "@mui/material/Button"
+import {ExitToAppRounded, PlayArrowRounded} from "@mui/icons-material"
 
 /**
  * Properties for the LeaveGameAlert component.
@@ -12,9 +12,9 @@ import {ExitToAppRounded, PlayArrowRounded} from "@mui/icons-material";
  * @param onStay the function to call when the user stays in the game
  */
 interface LeaveGameAlertProps {
-    open: boolean;
-    onLeave: () => void;
-    onStay: () => void;
+    open: boolean
+    onLeave: () => void
+    onStay: () => void
 }
 
 /**
@@ -59,5 +59,5 @@ export default function LeaveGameAlert({open, onLeave, onStay}: LeaveGameAlertPr
                 </Button>
             </DialogActions>
         </Dialog>
-    );
+    )
 }

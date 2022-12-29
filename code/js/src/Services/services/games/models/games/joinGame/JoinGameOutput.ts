@@ -1,4 +1,4 @@
-import {SirenEntity} from "../../../../../media/siren/SirenEntity";
+import {SirenEntity} from "../../../../../media/siren/SirenEntity"
 
 /**
  * The Join Game Output Model.
@@ -6,10 +6,10 @@ import {SirenEntity} from "../../../../../media/siren/SirenEntity";
  * @property gameId the id of the joined game
  */
 interface JoinGameOutputModel {
-    gameId: string;
+    gameId: string
 }
 
 /**
  * The Join Game Output.
  */
-export type JoinGameOutput = SirenEntity<JoinGameOutputModel>;
+export type JoinGameOutput = SirenEntity<JoinGameOutputModel>

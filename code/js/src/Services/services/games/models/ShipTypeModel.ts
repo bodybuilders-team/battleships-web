@@ -7,8 +7,8 @@
  * @property points the points that the ship is worth
  */
 interface ShipTypeModel {
-    shipName: string;
-    size: number;
-    quantity: number;
-    points: number;
+    shipName: string
+    size: number
+    quantity: number
+    points: number
 }

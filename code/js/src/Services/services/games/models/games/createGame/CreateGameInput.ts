@@ -5,6 +5,6 @@
  * @property config the game configuration
  */
 export interface CreateGameInput {
-    name: string;
-    config: GameConfigModel;
+    name: string
+    config: GameConfigModel
 }

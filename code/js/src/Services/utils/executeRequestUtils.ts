@@ -1,11 +1,11 @@
-import to from "../../Utils/await-to";
-import {Problem} from "../media/Problem";
-import NavigationUsersService from "../services/users/NavigationUsersService";
-import {SessionManager} from "../../Utils/Session";
-import {NetworkError} from "./fetchSiren";
-import {AbortedError, delay} from "../../Utils/abortableUtils";
+import to from "../../Utils/await-to"
+import {Problem} from "../media/Problem"
+import NavigationUsersService from "../services/users/NavigationUsersService"
+import {SessionManager} from "../../Utils/Session"
+import {NetworkError} from "./fetchSiren"
+import {AbortedError, delay} from "../../Utils/abortableUtils"
 
-const RETRY_DELAY = 1000;
+const RETRY_DELAY = 1000
 
 
 /**
@@ -23,13 +23,13 @@ export async function executeRequestAndRefreshTokenIfNecessary<T>(
     sessionManager: SessionManager,
     request: () => Promise<T>,
     signal?: AbortSignal): Promise<T> {
-    const [err, res] = await to(executeRequest(() => request(), signal));
+    const [err, res] = await to(executeRequest(() => request(), signal))
 
     //Check if the response is 401, and if so, refresh the token
     if (err instanceof Problem && err.status === 401) {
         const res = await executeRequest(() => usersService.refreshToken(
             sessionManager.session!.refreshToken
-        ), signal);
+        ), signal)
 
         sessionManager.setSession({
             ...sessionManager.session!,
@@ -37,25 +37,25 @@ export async function executeRequestAndRefreshTokenIfNecessary<T>(
             refreshToken: res.properties!.refreshToken,
         })
 
-        return await executeRequest(() => request(), signal);
+        return await executeRequest(() => request(), signal)
     } else if (err)
-        throw err;
+        throw err
 
-    return res;
+    return res
 }
 
 export async function executeRequest<T>(request: () => Promise<T>, signal?: AbortSignal): Promise<T> {
 
     while (true) {
-        const data = await to(request());
-        const [err, res] = data;
+        const data = await to(request())
+        const [err, res] = data
 
         if (signal?.aborted) throw new AbortedError()
 
         if (err instanceof NetworkError) {
-            await delay(RETRY_DELAY, signal);
+            await delay(RETRY_DELAY, signal)
 
-            continue;
+            continue
         }
 
         if (err) throw err

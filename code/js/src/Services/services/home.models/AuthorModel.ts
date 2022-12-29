@@ -6,7 +6,7 @@
  * @property github the github of the author
  */
 export interface AuthorModel {
-    name: string;
-    email: string;
-    github: string;
+    name: string
+    email: string
+    github: string
 }

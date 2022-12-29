@@ -1,6 +1,6 @@
-import {AuthenticationOutput} from "../AuthenticationOutput";
+import {AuthenticationOutput} from "../AuthenticationOutput"
 
 /**
  * The Register Output.
  */
-export type RegisterOutput = AuthenticationOutput;
+export type RegisterOutput = AuthenticationOutput

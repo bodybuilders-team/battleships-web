@@ -1,27 +1,27 @@
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import GameConfigSlider from "./GameConfigSlider";
-import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/games/board/Board";
-import ShipSelector from "./ShipSelector";
-import Button from "@mui/material/Button";
-import {Add} from "@mui/icons-material";
-import PageContent from "../../Shared/PageContent";
-import * as React from "react";
-import {ShipType} from "../../../Domain/games/ship/ShipType";
+import Box from "@mui/material/Box"
+import TextField from "@mui/material/TextField"
+import GameConfigSlider from "./GameConfigSlider"
+import {defaultBoardSize, maxBoardSize, minBoardSize} from "../../../Domain/games/board/Board"
+import ShipSelector from "./ShipSelector"
+import Button from "@mui/material/Button"
+import {Add} from "@mui/icons-material"
+import PageContent from "../../Shared/PageContent"
+import * as React from "react"
+import {ShipType} from "../../../Domain/games/ship/ShipType"
 
-const defaultShotsPerTurn = 1;
-const minShotsPerTurn = 1;
-const maxShotsPerTurn = 5;
+const defaultShotsPerTurn = 1
+const minShotsPerTurn = 1
+const maxShotsPerTurn = 5
 
-const defaultMaxTimePerTurn = 1;
-const minMaxTimePerTurn = 1;
-const maxMaxTimePerTurn = 5;
-const stepMaxTimePerTurn = 1;
+const defaultMaxTimePerTurn = 1
+const minMaxTimePerTurn = 1
+const maxMaxTimePerTurn = 5
+const stepMaxTimePerTurn = 1
 
-const defaultMaxTimeForLayoutPhase = 60;
-const minMaxTimeForLayoutPhase = 30;
-const maxMaxTimeForLayoutPhase = 120;
-const stepMaxTimeForLayoutPhase = 10;
+const defaultMaxTimeForLayoutPhase = 60
+const minMaxTimeForLayoutPhase = 30
+const maxMaxTimeForLayoutPhase = 120
+const stepMaxTimeForLayoutPhase = 10
 
 /**
  * Properties for GameConfig component.
@@ -41,19 +41,19 @@ const stepMaxTimeForLayoutPhase = 10;
  * @property error the error
  */
 interface GameConfigProps {
-    setGameName: (gameName: string) => void;
-    gridSize: number;
-    setGridSize: (gridSize: number) => void;
-    maxTimePerRound: number;
-    setMaxTimePerRound: (maxTimePerRound: number) => void;
-    shotsPerRound: number;
-    setShotsPerRound: (shotsPerRound: number) => void;
-    maxTimeForLayoutPhase: number;
-    setMaxTimeForLayoutPhase: (maxTimeForLayoutPhase: number) => void;
-    shipTypes: Map<ShipType, number>;
-    setShipTypes: (shipTypes: Map<ShipType, number>) => void;
-    handleCreateGame: () => void;
-    error: string | null;
+    setGameName: (gameName: string) => void
+    gridSize: number
+    setGridSize: (gridSize: number) => void
+    maxTimePerRound: number
+    setMaxTimePerRound: (maxTimePerRound: number) => void
+    shotsPerRound: number
+    setShotsPerRound: (shotsPerRound: number) => void
+    maxTimeForLayoutPhase: number
+    setMaxTimeForLayoutPhase: (maxTimeForLayoutPhase: number) => void
+    shipTypes: Map<ShipType, number>
+    setShipTypes: (shipTypes: Map<ShipType, number>) => void
+    handleCreateGame: () => void
+    error: string | null
 }
 
 /**
@@ -89,7 +89,7 @@ function GameConfig(
                     label="Game Name"
                     name="gameName"
                     onChange={(event) => {
-                        setGameName(event.target.value);
+                        setGameName(event.target.value)
                     }}
                 />
 
@@ -101,12 +101,12 @@ function GameConfig(
                     min={minBoardSize}
                     max={maxBoardSize}
                     onValueChange={(value) => {
-                        setGridSize(value);
+                        setGridSize(value)
 
                         Array.from(shipTypes.keys()).forEach(shipType => {
-                            shipTypes.set(shipType, 1);
+                            shipTypes.set(shipType, 1)
                         })
-                        setShipTypes(new Map(shipTypes));
+                        setShipTypes(new Map(shipTypes))
                     }}
                 />
 
@@ -154,14 +154,14 @@ function GameConfig(
                     startIcon={<Add/>}
                     color="primary"
                     onClick={() => {
-                        handleCreateGame();
+                        handleCreateGame()
                     }}
                 >
                     Create Game
                 </Button>
             </Box>
         </PageContent>
-    );
+    )
 }
 
-export default GameConfig;
+export default GameConfig
