@@ -6,14 +6,14 @@ import {Offset} from "../utils/Offset"
 import DraggableShipView from "./DraggableShipView"
 
 /**
- * Placed Draggable Ship View Props
+ * Properties of the PlacedDraggableShipView component.
  *
- * @property ship Ship
- * @property hide Whether to hide the ship
- * @property onDragStart Drag Start Callback
- * @property onDragEnd Drag End Callback
- * @property onDrag Drag Callback
- * @property onClick Click Callback
+ * @property ship the ship to display
+ * @property hide whether to hide the ship
+ * @property onDragStart the callback to call when the ship is dragged
+ * @property onDragEnd the callback to call when the ship stops being dragged
+ * @property onDrag the callback to call when the ship is being dragged
+ * @property onClick the callback to call when the ship is clicked
  */
 interface PlacedDraggableShipViewProps {
     ship: Ship
@@ -25,7 +25,7 @@ interface PlacedDraggableShipViewProps {
 }
 
 /**
- * Placed Draggable Ship View Component
+ * Placed Draggable Ship View Component.
  */
 function PlacedDraggableShipView(
     {
@@ -35,23 +35,26 @@ function PlacedDraggableShipView(
         onDragEnd,
         onDrag,
         onClick,
-    }: PlacedDraggableShipViewProps) {
-
-
-    return <Box key={ship.type.shipName} sx={{
-        position: 'absolute',
-        top: (ship.coordinate.row) * tileSize,
-        left: (ship.coordinate.col) * tileSize,
-    }}>
-        <DraggableShipView
-            shipType={ship.type}
-            orientation={ship.orientation}
-            onDragStart={(shipType, offset) => onDragStart(ship, offset)}
-            onDragEnd={() => onDragEnd(ship)}
-            onDrag={onDrag}
-            onClick={onClick}
-            opacity={hide ? 0 : 1}/>
-    </Box>
+    }: PlacedDraggableShipViewProps
+) {
+    return (
+        <Box key={ship.type.shipName}
+             sx={{
+                 position: 'absolute',
+                 top: (ship.coordinate.row) * tileSize,
+                 left: (ship.coordinate.col) * tileSize,
+             }}
+        >
+            <DraggableShipView
+                shipType={ship.type}
+                orientation={ship.orientation}
+                onDragStart={(shipType, offset) => onDragStart(ship, offset)}
+                onDragEnd={() => onDragEnd(ship)}
+                onDrag={onDrag}
+                onClick={onClick}
+                opacity={hide ? 0 : 1}/>
+        </Box>
+    )
 }
 
 export default PlacedDraggableShipView

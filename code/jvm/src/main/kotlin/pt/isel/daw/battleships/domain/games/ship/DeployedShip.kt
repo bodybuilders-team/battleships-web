@@ -58,7 +58,7 @@ class DeployedShip : Ship {
         type: ShipType,
         coordinate: Coordinate,
         orientation: Orientation,
-        lives: Int,
+        lives: Int
     ) {
 
         if (lives !in 0..type.size)

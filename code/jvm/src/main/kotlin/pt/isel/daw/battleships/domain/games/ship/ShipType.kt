@@ -50,7 +50,7 @@ class ShipType {
         shipName: String,
         quantity: Int,
         size: Int,
-        points: Int,
+        points: Int
     ) {
         if (shipName.length !in MIN_SHIP_NAME_LENGTH..MAX_SHIP_NAME_LENGTH)
             throw InvalidShipTypeException(

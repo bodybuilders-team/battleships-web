@@ -8,7 +8,6 @@ object Params {
     const val LIMIT_PARAM = "limit"
     const val ORDER_BY_PARAM = "orderBy"
     const val SORT_DIRECTION_PARAM = "sortDirection"
-    const val PLAYER_PARAM = "player"
 
     const val USERNAME_PARAM = "username"
     const val EXCLUDE_USERNAME_PARAM = "excludeUsername"

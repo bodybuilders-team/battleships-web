@@ -41,7 +41,7 @@ class RefreshToken {
     constructor(
         user: User,
         tokenHash: String,
-        expirationDate: Timestamp,
+        expirationDate: Timestamp
     ) {
         if (tokenHash.length != TOKEN_HASH_LENGTH)
             throw InvalidRefreshTokenException("The token hash must have a length of $TOKEN_HASH_LENGTH")

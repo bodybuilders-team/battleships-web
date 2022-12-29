@@ -5,11 +5,8 @@ Documentation:
 
 Backend:
 - Implement blacklist of tokens
-- Improve getGames
 
 Frontend:
-- Retry on api error
-- Improve getGames and getUsers
 
 Random or Never Ending Tasks:
 - Add more tests

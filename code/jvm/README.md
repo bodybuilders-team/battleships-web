@@ -9,14 +9,14 @@
     * [Conceptual Model](#conceptual-model)
     * [Physical Model](#physical-model)
 * [Application Architecture](#application-architecture)
-    * [Presentation Layer](#presentation-layer)
-    * [Business Logic Layer](#business-logic-layer)
-    * [Data Access Layer](#data-access-layer)
-    * [Data Representation](#data-representation)
-    * [Authentication](#authentication)
-    * [Error Handling](#error-handling)
-    * [Running the Application](#running-the-application)
-* [Conclusions - Critical Evaluatio](#conclusions---critical-evaluation)
+  * [Presentation Layer](#presentation-layer)
+  * [Business Logic Layer](#business-logic-layer)
+  * [Data Access Layer](#data-access-layer)
+  * [Data Representation](#data-representation)
+  * [Authentication](#authentication)
+  * [Error Handling](#error-handling)
+  * [Running the Application](#running-the-application)
+* [Conclusions - Critical Evaluation](#conclusions---critical-evaluation)
 
 ---
 ---

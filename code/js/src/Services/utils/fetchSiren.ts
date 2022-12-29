@@ -4,18 +4,6 @@ import * as React from "react"
 import {API_ENDPOINT} from "../BattleshipsService"
 import to from "../../Utils/await-to"
 
-export class NetworkError extends Error {
-    constructor(message: string) {
-        super(message)
-    }
-}
-
-export class UnexpectedResponseError extends Error {
-    constructor(message: string) {
-        super(message)
-    }
-}
-
 /**
  * Fetches a Siren entity from the given URL.
  *
@@ -139,4 +127,22 @@ export function postWithAuth<T>(
     signal?: AbortSignal
 ): Promise<SirenEntity<T>> {
     return fetchSiren<T>(API_ENDPOINT + link, token, 'POST', body, signal)
+}
+
+/**
+ * An error that occurs if there is a network error.
+ */
+export class NetworkError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
+
+/**
+ * An error that occurs if the response is not a Siren entity.
+ */
+export class UnexpectedResponseError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
 }

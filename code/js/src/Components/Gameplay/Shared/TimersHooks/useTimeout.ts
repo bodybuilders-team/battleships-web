@@ -5,7 +5,6 @@ import {useEffect} from "react";
  *
  * @param callback the function to call
  * @param delay the delay
- * @param signal the signal to abort the timeout
  * @param dependencies the dependencies of the hook
  */
 export function useTimeout(callback: () => void, delay: number, dependencies: any[]) {

@@ -7,7 +7,11 @@ import {useEffect} from "react";
  * @param delay the delay between calls
  * @param dependencies the dependencies of the hook
  */
-export function useInterval(callback: () => Promise<boolean> | boolean | void, delay: number, dependencies?: any[]) {
+export function useInterval(
+    callback: () => Promise<boolean> | boolean | void,
+    delay: number,
+    dependencies?: any[]
+) {
     useEffect(activateInterval, dependencies)
 
     /**

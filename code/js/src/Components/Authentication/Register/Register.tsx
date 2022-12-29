@@ -20,8 +20,8 @@ import {throwError} from "../../../Services/utils/errorUtils"
 import {PasswordTextField} from "../Shared/PasswordTextField"
 import {UsernameTextField} from "../Shared/UsernameTextField"
 import {EmailTextField} from "../Shared/EmailTextField"
-import {useMountedSignal} from '../../../Utils/useMounted'
-import {abortableTo} from "../../../Utils/abortableUtils"
+import {useMountedSignal} from '../../../Utils/componentManagement/useMounted'
+import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
 
 /**
  * Register component.

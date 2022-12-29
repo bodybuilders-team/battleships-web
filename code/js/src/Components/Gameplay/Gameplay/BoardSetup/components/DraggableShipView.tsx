@@ -7,15 +7,15 @@ import {Orientation} from "../../../../../Domain/games/ship/Orientation"
 import * as React from "react"
 
 /**
- * Draggabçe Ship View Props
+ * Properties of the DraggableShipView component.
  *
- * @property shipType Ship Type
- * @property orientation Ship Orientation
- * @property onDragStart Drag Start Callback
- * @property onDragEnd Drag End Callback
- * @property onDrag Drag Callback
- * @property onClick Click Callback
- * @property opacity Opacity of the ship
+ * @property shipType the type of the ship to display
+ * @property orientation the orientation of the ship
+ * @property onDragStart the callback to call when the ship is dragged
+ * @property onDragEnd the callback to call when the ship stops being dragged
+ * @property onDrag the callback to call when the ship is being dragged
+ * @property onClick the callback to call when the ship is clicked
+ * @property opacity the opacity of the ship
  */
 interface DraggableShipViewProps {
     shipType: ShipType
@@ -30,46 +30,50 @@ interface DraggableShipViewProps {
 /**
  * Draggable Ship View Component
  */
-function DraggableShipView({
-                               shipType,
-                               orientation,
-                               onDragStart,
-                               onDragEnd,
-                               onDrag,
-                               onClick,
-                               opacity
-                           }: DraggableShipViewProps) {
+function DraggableShipView(
+    {
+        shipType,
+        orientation,
+        onDragStart,
+        onDragEnd,
+        onDrag,
+        onClick,
+        opacity
+    }: DraggableShipViewProps
+) {
     const [dragging, setDragging] = React.useState(false)
 
-    return <DraggableCore
-        onStart={(event, data) => {
-            const position = getPosition(event.currentTarget as HTMLElement)
-            onDragStart(shipType, new Offset(position.left, position.top))
-        }}
-        onStop={(event, data) => {
-            onDragEnd(shipType)
+    return (
+        <DraggableCore
+            onStart={(event, data) => {
+                const position = getPosition(event.currentTarget as HTMLElement)
+                onDragStart(shipType, new Offset(position.left, position.top))
+            }}
+            onStop={(event, data) => {
+                onDragEnd(shipType)
 
-            if (dragging) {
-                setDragging(false)
-            } else {
-                onClick?.()
-            }
-        }}
-        onDrag={(event, data) => {
-            const offset = new Offset(data.deltaX, data.deltaY)
-            setDragging(true)
+                if (dragging) {
+                    setDragging(false)
+                } else {
+                    onClick?.()
+                }
+            }}
+            onDrag={(event, data) => {
+                const offset = new Offset(data.deltaX, data.deltaY)
+                setDragging(true)
 
-            onDrag(offset)
-        }}
-    >
-        <div style={{opacity: opacity}}>
-            <ShipView
-                shipType={shipType}
-                orientation={orientation}
-                key={shipType.shipName}
-            />
-        </div>
-    </DraggableCore>
+                onDrag(offset)
+            }}
+        >
+            <div style={{opacity: opacity}}>
+                <ShipView
+                    shipType={shipType}
+                    orientation={orientation}
+                    key={shipType.shipName}
+                />
+            </div>
+        </DraggableCore>
+    )
 }
 
 export default DraggableShipView

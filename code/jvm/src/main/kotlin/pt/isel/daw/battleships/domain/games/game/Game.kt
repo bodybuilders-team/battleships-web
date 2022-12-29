@@ -59,7 +59,7 @@ class Game {
         name: String,
         creator: User,
         config: GameConfig,
-        state: GameState,
+        state: GameState
     ) {
         if (name.length !in MIN_NAME_LENGTH..MAX_NAME_LENGTH)
             throw InvalidGameException("Name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long.")

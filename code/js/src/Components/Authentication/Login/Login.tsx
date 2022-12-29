@@ -19,8 +19,8 @@ import {Rels} from "../../../Utils/navigation/Rels"
 import {throwError} from "../../../Services/utils/errorUtils"
 import {UsernameTextField} from "../Shared/UsernameTextField"
 import {PasswordTextField} from "../Shared/PasswordTextField"
-import {useMountedSignal} from "../../../Utils/useMounted"
-import {abortableTo} from "../../../Utils/abortableUtils"
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted"
+import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
 
 /**
  * Login component.

@@ -50,7 +50,7 @@ class GameConfig {
         maxTimePerRound: Int,
         maxTimeForLayoutPhase: Int,
         shotsPerRound: Int,
-        shipTypes: List<ShipType>,
+        shipTypes: List<ShipType>
     ) {
         if (gridSize !in MIN_GRID_SIZE..MAX_GRID_SIZE)
             throw InvalidGameConfigException("Grid size must be between $MIN_GRID_SIZE and $MAX_GRID_SIZE")
@@ -106,10 +106,10 @@ class GameConfig {
         if (maxTimeForLayoutPhase != other.maxTimeForLayoutPhase) return false
         if (shipTypes.size != other.shipTypes.size) return false
         if (shipTypes.any { shipType ->
-                other.shipTypes.none { otherShipType ->
-                    shipType == otherShipType
-                }
+            other.shipTypes.none { otherShipType ->
+                shipType == otherShipType
             }
+        }
         ) return false
 
         return true

@@ -63,7 +63,7 @@ class Player {
     constructor(
         game: Game,
         user: User,
-        points: Int = 0,
+        points: Int = 0
     ) {
         if (points < 0)
             throw InvalidPlayerException("The points must be greater than or equal to 0.")
@@ -124,7 +124,7 @@ class Player {
     private fun isValidShipCoordinate(
         coordinate: Coordinate,
         orientation: Orientation,
-        size: Int,
+        size: Int
     ): Boolean {
         val colsRange = game.config.colsRange
         val rowsRange = game.config.rowsRange
@@ -155,7 +155,7 @@ class Player {
         if (coordinates.distinctBy { it }.size != coordinates.size)
             throw InvalidFiredShotException("Shots must have distinct coordinates.")
 
-        //TODO InvalidFiredShot not being sent over api
+        // TODO InvalidFiredShot not being sent over api
         if (
             coordinates.any { coordinate ->
                 coordinate in shots.map { existingShots -> existingShots.coordinate }

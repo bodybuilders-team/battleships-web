@@ -38,11 +38,11 @@ import javax.persistence.PersistenceContext
 class PlayersServiceImpl(
     private val gamesRepository: GamesRepository,
     usersRepository: UsersRepository,
-    jwtProvider: JwtProvider,
+    jwtProvider: JwtProvider
 ) : PlayersService, AuthenticatedService(usersRepository, jwtProvider) {
 
     @PersistenceContext
-    lateinit var entityManager: EntityManager
+    private lateinit var entityManager: EntityManager
 
     override fun getFleet(token: String, gameId: Int): DeployedFleetDTO {
         val user = authenticateUser(token = token)

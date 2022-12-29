@@ -47,7 +47,7 @@ class User {
         email: String,
         passwordHash: String,
         points: Int = 0,
-        numberOfGamesPlayed: Int = 0,
+        numberOfGamesPlayed: Int = 0
     ) {
         if (username.length !in MIN_USERNAME_LENGTH..MAX_USERNAME_LENGTH)
             throw InvalidUserException(

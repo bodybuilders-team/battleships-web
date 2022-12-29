@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort
 data class OffsetPageRequest(
     private val offset: Long,
     private val limit: Int,
-    private val sort: Sort? = null,
+    private val sort: Sort? = null
 ) : Pageable {
 
     init {

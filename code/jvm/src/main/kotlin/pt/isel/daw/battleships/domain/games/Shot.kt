@@ -58,7 +58,7 @@ class Shot {
         player: Player,
         coordinate: Coordinate,
         result: ShotResult,
-        sunkShip: DeployedShip?,
+        sunkShip: DeployedShip?
     ) {
         if (round < 1)
             throw InvalidShotException("Round must be greater than 0")

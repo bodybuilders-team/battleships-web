@@ -19,8 +19,6 @@ plugins {
     idea
 }
 
-
-
 noArg {
     annotation(NoArg::class.java.`package`.name + "." + NoArg::class.java.simpleName)
     invokeInitializers = true
@@ -60,7 +58,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
-
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

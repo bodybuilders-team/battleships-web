@@ -9,8 +9,8 @@ import {useBattleshipsService} from "../../../Services/NavigationBattleshipsServ
 import {useInterval} from "../Shared/TimersHooks/useInterval"
 import LoadingSpinner from "../../Shared/LoadingSpinner"
 import GameConfig from "./GameConfig"
-import {abortableTo} from "../../../Utils/abortableUtils"
-import {useMountedSignal} from "../../../Utils/useMounted";
+import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
 
 const POLLING_DELAY = 1000
 

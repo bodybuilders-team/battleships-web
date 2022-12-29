@@ -27,15 +27,17 @@ interface GameConfigSliderProps {
 /**
  * GameConfigSlider component.
  */
-export default function GameConfigSlider({
-                                             id,
-                                             label,
-                                             defaultValue,
-                                             step,
-                                             min,
-                                             max,
-                                             onValueChange
-                                         }: GameConfigSliderProps) {
+export default function GameConfigSlider(
+    {
+        id,
+        label,
+        defaultValue,
+        step,
+        min,
+        max,
+        onValueChange
+    }: GameConfigSliderProps
+) {
     return (
         <Box>
             <Typography id={id} gutterBottom>

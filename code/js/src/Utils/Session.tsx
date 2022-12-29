@@ -1,5 +1,5 @@
-import * as React from 'react'
-import {createContext, useContext, useState} from 'react'
+import * as React from 'react';
+import {createContext, useContext, useState} from 'react';
 
 /**
  * Holds the session data.
@@ -25,8 +25,8 @@ export interface Session {
  */
 export interface SessionManager {
     readonly session: Session | null
-    readonly  setSession: (session: Session) => void
-    readonly  clearSession: () => void
+    readonly setSession: (session: Session) => void
+    readonly clearSession: () => void
 }
 
 const SessionManagerContext = createContext<SessionManager>({

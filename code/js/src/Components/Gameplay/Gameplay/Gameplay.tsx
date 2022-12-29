@@ -9,9 +9,9 @@ import ShootingGameplay from "./Shooting/ShootingGameplay"
 import BoardSetupGameplay from "./BoardSetup/BoardSetupGameplay"
 import {Game} from "../../../Domain/games/game/Game"
 import GameFinished from "../Shared/EndGame/GameFinished"
-import {abortableTo} from "../../../Utils/abortableUtils"
+import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
 import {useNavigationState} from "../../../Utils/navigation/NavigationState";
-import {useMountedSignal} from "../../../Utils/useMounted";
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
 
 /**
  * Gameplay component.

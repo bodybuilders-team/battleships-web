@@ -16,4 +16,3 @@ INSERT INTO players(game, user_id, points)
 VALUES (1, 2, 0),
        (2, 3, 0),
        (3, 4, 0);
-

@@ -23,9 +23,9 @@ import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsS
 import {useNavigate} from "react-router-dom"
 import {Uris} from "../../../../Utils/navigation/Uris"
 import ErrorAlert from "../../../Shared/ErrorAlert"
-import {abortableTo} from "../../../../Utils/abortableUtils"
+import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
-import {useMountedSignal} from "../../../../Utils/useMounted";
 
 /**
  * Properties for the Shooting component.

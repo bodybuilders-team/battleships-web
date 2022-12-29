@@ -75,7 +75,6 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
     const {board, setBoard, placeShip, removeShip} = useConfigurableBoard(boardSize, generateEmptyMatrix(boardSize))
     const [unplacedShips, setUnplacedShips] = useState<ReadonlyMap<ShipType, number>>(ships)
     const [dragState, setDragState] = useState<DragState>(new DragState())
-    const [selectedShipType, setSelectedShipType] = useState<ShipType | null>(null)
     const [leavingGame, setLeavingGame] = useState<boolean>(false)
     const boardRef = React.useRef<HTMLDivElement>(null)
 
@@ -95,24 +94,27 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
         }
     }
 
-    function getCoordinateAfterDragEnd(shipType: ShipType) {
+    /**
+     * Gets the coordinate of the ship when the drag ends.
+     *
+     * @param shipType the ship
+     * @return the coordinate of the ship or null if the coordinate is not valid
+     */
+    function getCoordinateAfterDragEnd(shipType: ShipType): Coordinate | null {
         setDragState(dragState.reset())
 
         const boardOffset = getPosition(boardRef.current as HTMLElement)
 
-        //Calculate coordinate based on offset and boardOffset
+        // Calculate coordinate based on offset and boardOffset
         const coordinateX = Math.round((dragState.dragOffset.x - boardOffset.left) / tileSize)
         const coordinateY = Math.round((dragState.dragOffset.y - boardOffset.top) / tileSize)
 
         if (!Coordinate.isValid(coordinateX, coordinateY, boardSize))
-            return
+            return null
 
         const coordinate = new Coordinate(coordinateX, coordinateY)
 
-
-        if (!isValidShipCoordinate(coordinate,
-            Orientation.VERTICAL, shipType.size, board.size)
-        )
+        if (!isValidShipCoordinate(coordinate, Orientation.VERTICAL, shipType.size, board.size))
             return null
 
         return coordinate
@@ -121,13 +123,12 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
     return (<>
             {
                 dragState.ship != null &&
-                <div
-                    style={{
-                        position: "absolute",
-                        zIndex: 1000,
-                        left: dragState.dragOffset.x,
-                        top: dragState.dragOffset.y,
-                    }}
+                <div style={{
+                    position: "absolute",
+                    zIndex: 1000,
+                    left: dragState.dragOffset.x,
+                    top: dragState.dragOffset.y,
+                }}
                 >
                     <ShipView shipType={dragState.ship.type} orientation={dragState.ship.orientation}/>
                 </div>
@@ -187,8 +188,7 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                                 const newUnplacedShips = new Map<ShipType, number>()
                                 ships.forEach((count, ship) => newUnplacedShips.set(ship, 0))
                                 setUnplacedShips(newUnplacedShips)
-                            }
-                            }
+                            }}
                             onConfirmBoardButtonPressed={() => {
                                 if (Array.from(unplacedShips.values()).filter(count => count > 0).length == 0)
                                     onBoardReady(board)
@@ -196,7 +196,6 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                                     alert("You must place all the ships!")
                             }}
                         />
-
 
                         <ErrorAlert error={error}/>
                     </Grid>

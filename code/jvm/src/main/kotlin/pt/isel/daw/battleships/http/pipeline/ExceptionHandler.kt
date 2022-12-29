@@ -76,7 +76,7 @@ class ExceptionHandler {
     )
     fun handleBadRequest(
         request: HttpServletRequest,
-        ex: Exception,
+        ex: Exception
     ): ResponseEntity<Any> =
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
@@ -94,7 +94,7 @@ class ExceptionHandler {
     @ExceptionHandler(value = [MethodArgumentNotValidException::class])
     fun handleValidationExceptions(
         request: HttpServletRequest,
-        ex: MethodArgumentNotValidException,
+        ex: MethodArgumentNotValidException
     ): ResponseEntity<Any> =
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
@@ -112,20 +112,20 @@ class ExceptionHandler {
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun handleHttpMessageNotReadableExceptions(
         request: HttpServletRequest,
-        ex: HttpMessageNotReadableException,
+        ex: HttpMessageNotReadableException
     ): ResponseEntity<Any> =
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + "invalid-request-body"),
             title = "Invalid request body${
-                ex.rootCause?.also { println(it) }.let {
-                    ": " +
-                        when (it) {
-                            is UnrecognizedPropertyException -> "Unknown property '${it.propertyName}'"
-                            is JsonParseException -> it.originalMessage
-                            is MissingKotlinParameterException -> "Missing property '${it.parameter.name}'"
-                            else -> null
-                        }
-                }
+            ex.rootCause?.also { println(it) }.let {
+                ": " +
+                    when (it) {
+                        is UnrecognizedPropertyException -> "Unknown property '${it.propertyName}'"
+                        is JsonParseException -> it.originalMessage
+                        is MissingKotlinParameterException -> "Missing property '${it.parameter.name}'"
+                        else -> null
+                    }
+            }
             }",
             status = HttpStatus.BAD_REQUEST.value()
         ).toResponse()
@@ -140,7 +140,7 @@ class ExceptionHandler {
     @ExceptionHandler(value = [AuthenticationException::class])
     fun handleUnauthorized(
         request: HttpServletRequest,
-        ex: Exception,
+        ex: Exception
     ): ResponseEntity<Any> =
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
@@ -158,7 +158,7 @@ class ExceptionHandler {
     @ExceptionHandler(value = [UserNotInGameException::class])
     fun handleForbidden(
         request: HttpServletRequest,
-        ex: Exception,
+        ex: Exception
     ): ResponseEntity<Any> =
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + ex.toProblemType()),
@@ -176,7 +176,7 @@ class ExceptionHandler {
     @ExceptionHandler(value = [Exception::class])
     fun handleUncaughtExceptions(
         request: HttpServletRequest,
-        ex: Exception,
+        ex: Exception
     ): ResponseEntity<Any> =
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + "internal-server-error"),

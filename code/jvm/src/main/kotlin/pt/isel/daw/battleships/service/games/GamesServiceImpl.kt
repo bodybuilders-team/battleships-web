@@ -40,7 +40,7 @@ class GamesServiceImpl(
 ) : GamesService, AuthenticatedService(usersRepository, jwtProvider) {
 
     @PersistenceContext
-    lateinit var entityManager: EntityManager
+    private lateinit var entityManager: EntityManager
 
     override fun getGames(
         offset: Int,
@@ -69,7 +69,7 @@ class GamesServiceImpl(
         return GamesDTO(
             games = filteredGames
                 .onEach(Game::updateIfPhaseExpired)
-                .let { games ->// Need to filter again because the updateIfPhaseExpired can change the phase
+                .let { games -> // Need to filter again because the updateIfPhaseExpired can change the phase
                     if (phases != null)
                         games.filter {
                             it.state.phase in phases.map { phase ->

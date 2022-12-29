@@ -19,10 +19,14 @@ export class Coordinate {
     /**
      * Converts a CoordinateModel to a Coordinate.
      *
+     * @param coordinateModel the CoordinateModel
      * @return the Coordinate
      */
-    static fromCoordinateModel(model: CoordinateModel): Coordinate {
-        return new Coordinate(model.col.charCodeAt(0) - "A".charCodeAt(0) + 1, model.row)
+    static fromCoordinateModel(coordinateModel: CoordinateModel): Coordinate {
+        return new Coordinate(
+            coordinateModel.col.charCodeAt(0) - "A".charCodeAt(0) + 1,
+            coordinateModel.row
+        )
     }
 
     /**
@@ -30,6 +34,8 @@ export class Coordinate {
      *
      * @param index the index
      * @param size the board size
+     *
+     * @returns the coordinate
      */
     static fromIndex(index: number, size: number): Coordinate {
         const row = Math.floor(index / size) + 1
@@ -38,6 +44,15 @@ export class Coordinate {
         return new Coordinate(col, row)
     }
 
+    /**
+     * Validates a coordinate.
+     *
+     * @param col the column
+     * @param row the row
+     * @param size the board size
+     *
+     * @returns whether the coordinate is valid
+     */
     static isValid(col: number, row: number, size: number): boolean {
         return col >= 1 && col <= size && row >= 1 && row <= size
     }

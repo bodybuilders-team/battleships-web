@@ -81,11 +81,11 @@ class GamesController(private val gamesService: GamesService) {
                     rel = listOf(Rels.ITEM, Rels.GAME, "${Rels.GAME}-${game.id}"),
                     properties = GetGameOutputModel(gameDTO = game),
                     links = listOf(
-                        Links.self(Uris.gameById(gameId = game.id)),
+                        Links.self(Uris.gameById(gameId = game.id))
                     ),
                     actions = listOf(
                         Actions.joinGame(gameId = game.id),
-                        Actions.leaveGame(gameId = game.id),
+                        Actions.leaveGame(gameId = game.id)
                     ),
                     entities = listOf(
                         EmbeddedLink(

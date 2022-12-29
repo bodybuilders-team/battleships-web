@@ -11,8 +11,8 @@ import {GetGameOutputModel} from "../../../Services/services/games/models/games/
 import {Game} from "../../../Domain/games/game/Game"
 import {useNavigationState} from "../../../Utils/navigation/NavigationState"
 import {Rels} from "../../../Utils/navigation/Rels"
-import {abortableTo} from "../../../Utils/abortableUtils"
-import {useMountedSignal} from "../../../Utils/useMounted";
+import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json')
 const POLLING_DELAY = 1000
@@ -49,7 +49,6 @@ export default function Matchmake() {
      *
      */
     async function checkIfThereIsAnAvailableGame() {
-        console.log(new Map(navigationState.links))
         const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             username: session!.username,
             phases: ["WAITING_FOR_PLAYERS"]
@@ -67,7 +66,6 @@ export default function Matchmake() {
 
             navigationState.links.set(Rels.GAME, navigationState.links.get(`${Rels.GAME}-${game.id}`)!)
             navigationState.links.set(Rels.GAME_STATE, navigationState.links.get(`${Rels.GAME_STATE}-${game.id}`)!)
-            console.log(new Map(navigationState.links))
             setGameId(game.id)
             setWaitingForOpponent(true)
             return true
@@ -80,7 +78,7 @@ export default function Matchmake() {
      * Matchmakes the player.
      */
     async function matchmake() {
-        if (await checkIfThereIsAnAvailableGame() == true)
+        if (await checkIfThereIsAnAvailableGame())
             return
 
         const [err, res] = await abortableTo(
@@ -125,7 +123,6 @@ export default function Matchmake() {
             setWaitingForOpponent(false)
 
             matchmadeRef.current = true
-
             navigate(`/game/${gameId}`)
 
             return true
@@ -136,9 +133,7 @@ export default function Matchmake() {
 
     return (
         <PageContent title={"Matchmake"} error={error}>
-            {
-                <LoadingSpinner text={"Matchmaking..."}/>
-            }
+            <LoadingSpinner text={"Matchmaking..."}/>
         </PageContent>
     )
 }

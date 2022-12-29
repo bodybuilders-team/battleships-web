@@ -71,7 +71,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     data class RefreshTokenDetails(
         val token: String,
-        val expirationDate: Timestamp,
+        val expirationDate: Timestamp
     )
 
     /**
@@ -168,7 +168,6 @@ class JwtProvider(serverConfig: ServerConfiguration) {
             null
         else
             token.substringAfter(delimiter = BEARER_TOKEN_PREFIX)
-
 
     companion object {
         private const val BEARER_TOKEN_PREFIX = "Bearer "

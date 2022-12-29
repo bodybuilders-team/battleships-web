@@ -15,8 +15,8 @@ import {Game} from "../../../../Domain/games/game/Game"
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup"
 import {Problem} from "../../../../Services/media/Problem"
 import {ProblemTypes} from "../../../../Utils/types/problemTypes"
-import {abortableTo} from "../../../../Utils/abortableUtils"
-import {useMountedSignal} from "../../../../Utils/useMounted";
+import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
 
 /**
  * Properties for the ShootingGameplay component.

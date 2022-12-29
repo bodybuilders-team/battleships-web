@@ -46,7 +46,7 @@ class UsersServiceImpl(
     private val refreshTokensRepository: RefreshTokensRepository,
     private val hashingUtils: HashingUtils,
     private val jwtProvider: JwtProvider,
-    private val config: ServerConfiguration,
+    private val config: ServerConfiguration
 ) : UsersService {
 
     override fun getUsers(offset: Int, limit: Int, orderBy: UsersOrder, ascending: Boolean): UsersDTO {
@@ -233,7 +233,7 @@ class UsersServiceImpl(
      */
     private data class Tokens(
         val accessToken: String,
-        val refreshToken: String,
+        val refreshToken: String
     )
 
     companion object {

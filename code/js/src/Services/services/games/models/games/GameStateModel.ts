@@ -1,3 +1,5 @@
+import {EndGameCause, GamePhase} from "../../../../../Domain/games/game/GameState";
+
 /**
  * The Game State Model.
  *
@@ -8,13 +10,11 @@
  * @property winner the winner of the game
  * @property endCause the cause of the game ending
  */
-interface GameStateModel {
+export interface GameStateModel {
     phase: GamePhase
     phaseEndTime: number
     round: number | null
     turn: string | null
     winner: string | null
-    endCause: string | null
+    endCause: EndGameCause | null
 }
-
-type GamePhase = "WAITING_FOR_PLAYERS" | "DEPLOYING_FLEETS" | "IN_PROGRESS" | "FINISHED"

@@ -17,7 +17,7 @@ import pt.isel.daw.battleships.http.pipeline.authentication.AuthenticationInterc
  */
 @SpringBootApplication
 class BattleshipsApplication(
-    val authInterceptor: AuthenticationInterceptor,
+    val authInterceptor: AuthenticationInterceptor
 ) : WebMvcConfigurer {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
@@ -26,6 +26,8 @@ class BattleshipsApplication(
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
+            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+            .allowedOrigins("*")
     }
 }
 

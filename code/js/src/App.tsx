@@ -17,7 +17,7 @@ import CreateGame from "./Components/Gameplay/CreateGame/CreateGame"
 import Lobby from "./Components/Gameplay/Lobby/Lobby"
 import About from "./Components/About/About"
 import {Uris} from "./Utils/navigation/Uris"
-import {useMountedSignal} from "./Utils/useMounted"
+import {useMountedSignal} from "./Utils/componentManagement/useMounted"
 import HOME = Uris.HOME;
 import LOGIN = Uris.LOGIN;
 import REGISTER = Uris.REGISTER;
@@ -104,17 +104,6 @@ export default function App() {
                     <Route path={ABOUT} element={<About/>}/>
                 </Routes>
             </div>
-            {/*<BoardSetup boardSize={10} ships={*/}
-            {/*    defaultShipTypes*/}
-            {/*} onBoardReady={(board) => {*/}
-            {/*    console.log(board)*/}
-            {/*}} finalTime={new Date().getTime() + 100000}*/}
-            {/*            error={null}*/}
-            {/*            onLeaveGame={() => {*/}
-            {/*            }}*/}
-            {/*            onTimeUp={() => {*/}
-            {/*            }}/>*/}
-
         </div>
     )
 }

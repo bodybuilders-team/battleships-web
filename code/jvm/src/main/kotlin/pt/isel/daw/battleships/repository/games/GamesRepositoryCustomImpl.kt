@@ -1,6 +1,5 @@
 package pt.isel.daw.battleships.repository.games
 
-
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import pt.isel.daw.battleships.domain.games.Player_
@@ -17,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 
-
 /**
  * Implementation of the [GamesRepositoryCustom].
  *
@@ -27,7 +25,7 @@ import javax.persistence.criteria.Root
 class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : GamesRepositoryCustom {
 
     @PersistenceContext
-    lateinit var entityManager: EntityManager
+    private lateinit var entityManager: EntityManager
 
     data class GamesWithCountResponse(val games: List<Game>, val count: Long)
 
@@ -60,7 +58,6 @@ class GamesRepositoryCustomImpl(@Lazy val gamesRepository: GamesRepository) : Ga
                 if (excludeUsername != null)
                     predicates += cb.notEqual(user.get(User_.username), excludeUsername)
             }
-
 
             if (phases != null) {
                 predicates +=

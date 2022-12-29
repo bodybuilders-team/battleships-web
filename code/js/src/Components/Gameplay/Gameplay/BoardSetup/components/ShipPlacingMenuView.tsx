@@ -7,15 +7,15 @@ import {Offset} from "../utils/Offset"
 import ShipSlotsView from "./ShipSlotsView"
 
 /**
- * Ship Placing Menu View Props
+ * Properties of the ShipPlacingMenuView component.
  *
- * @property shipTypes Ship Types
- * @property draggingUnplaced Dragging Unplaced Callback
- * @property onDragStart Drag Start Callback
- * @property onDragEnd Drag End Callback
- * @property onDrag Drag Callback
- * @property onRandomBoardButtonPressed Random Board Button Pressed Callback
- * @property onConfirmButtonPressed Confirm Button Pressed Callback
+ * @property shipTypes the ship types to display
+ * @property draggingUnplaced the dragging unplaced callback
+ * @property onDragStart the callback for when a ship starts to be dragged
+ * @property onDragEnd the callback for when a ship stops being dragged
+ * @property onDrag the callback for when a ship is being dragged
+ * @property onRandomBoardButtonPressed the callback for when the random board button is pressed
+ * @property onConfirmBoardButtonPressed the callback for when the confirm board button is pressed
  */
 interface ShipPlacingMenuViewProps {
     shipTypes: ReadonlyMap<ShipType, number>
@@ -28,7 +28,7 @@ interface ShipPlacingMenuViewProps {
 }
 
 /**
- * Ship Placing Menu View Component
+ * Ship Placing Menu View Component.
  */
 function ShipPlacingMenuView(
     {
@@ -39,49 +39,51 @@ function ShipPlacingMenuView(
         onDrag,
         onRandomBoardButtonPressed,
         onConfirmBoardButtonPressed
-    }: ShipPlacingMenuViewProps) {
-
-    return <Card>
-        <CardContent>
-            <ShipSlotsView
-                shipTypes={shipTypes}
-                draggingUnplaced={draggingUnplaced}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDrag={onDrag}
-            />
-        </CardContent>
-        <Divider/>
-        <CardActions sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}>
-            <Button
-                fullWidth
-                size="large"
-                variant="contained"
-                sx={{mt: 3, mb: 2}}
-                startIcon={<CycloneRounded/>}
-                color="primary"
-                onClick={onRandomBoardButtonPressed}
-            >
-                Random Board
-            </Button>
-            <Button
-                fullWidth
-                size="large"
-                variant="contained"
-                sx={{mt: 3, mb: 2}}
-                startIcon={<CheckRounded/>}
-                color="primary"
-                onClick={onConfirmBoardButtonPressed}
-            >
-                Confirm Board
-            </Button>
-        </CardActions>
-    </Card>
+    }: ShipPlacingMenuViewProps
+) {
+    return (
+        <Card>
+            <CardContent>
+                <ShipSlotsView
+                    shipTypes={shipTypes}
+                    draggingUnplaced={draggingUnplaced}
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
+                    onDrag={onDrag}
+                />
+            </CardContent>
+            <Divider/>
+            <CardActions sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <Button
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    sx={{mt: 3, mb: 2}}
+                    startIcon={<CycloneRounded/>}
+                    color="primary"
+                    onClick={onRandomBoardButtonPressed}
+                >
+                    Random Board
+                </Button>
+                <Button
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    sx={{mt: 3, mb: 2}}
+                    startIcon={<CheckRounded/>}
+                    color="primary"
+                    onClick={onConfirmBoardButtonPressed}
+                >
+                    Confirm Board
+                </Button>
+            </CardActions>
+        </Card>
+    )
 }
 
 export default ShipPlacingMenuView

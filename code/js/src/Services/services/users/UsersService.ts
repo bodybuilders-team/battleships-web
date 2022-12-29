@@ -91,12 +91,18 @@ export namespace UsersService {
 
     /**
      * Refreshes the access token of the user.
+     *
+     * @param refreshTokenLink the link to the refresh token endpoint
      * @param refreshToken the refresh token of the user
      * @param signal the signal to cancel the request
      *
      * @return the API result of the refresh token request
      */
-    export function refreshToken(refreshTokenLink: string, refreshToken: string, signal?: AbortSignal): Promise<RefreshTokenOutput> {
+    export function refreshToken(
+        refreshTokenLink: string,
+        refreshToken: string,
+        signal?: AbortSignal
+    ): Promise<RefreshTokenOutput> {
         return post(refreshTokenLink, JSON.stringify({refreshToken}), signal)
     }
 

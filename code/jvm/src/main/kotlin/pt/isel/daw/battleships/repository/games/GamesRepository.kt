@@ -47,7 +47,7 @@ interface GamesRepositoryCustom {
      *
      * @param username the username of the player
      * @param excludeUsername the username of the player to exclude
-     * @param phase the phase of the game
+     * @param phases the list of phases where the games are in
      * @param ids the IDs of the games
      * @param limit the maximum number of games to return
      * @param offset the offset of the games to return
@@ -57,7 +57,7 @@ interface GamesRepositoryCustom {
     fun findAllWithCount(
         username: String?,
         excludeUsername: String?,
-        phase: List<String>?,
+        phases: List<String>?,
         ids: List<Int>?,
         limit: Long,
         offset: Long

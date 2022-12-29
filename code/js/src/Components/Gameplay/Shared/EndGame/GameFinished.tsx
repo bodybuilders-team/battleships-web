@@ -27,16 +27,19 @@ export default function GameFinished({game}: GameFinishedProps) {
             game.state.winner == null ? WinningPlayer.NONE :
                 game.state.winner === session?.username!
                     ? WinningPlayer.YOU : WinningPlayer.OPPONENT
-        } cause={(() => {
-        switch (game.state.endCause) {
-            case "DESTRUCTION":
-                return EndGameCause.DESTRUCTION
-            case "TIMEOUT":
-                return EndGameCause.TIMEOUT
-            default:
-                return EndGameCause.RESIGNATION
         }
-    })()}
+        cause={
+            (() => {
+                switch (game.state.endCause) {
+                    case "DESTRUCTION":
+                        return EndGameCause.DESTRUCTION
+                    case "TIMEOUT":
+                        return EndGameCause.TIMEOUT
+                    default:
+                        return EndGameCause.RESIGNATION
+                }
+            })()
+        }
         playerInfo={{
             name: player.username,
             points: player.points

@@ -6,7 +6,7 @@ import {Rels} from "./Rels";
  * NavigationState interface.
  *
  * @property links map of links
- * @property setLinks setter for links
+ * @property clearGameLinks clears the game links
  */
 interface NavigationState {
     links: Map<string, string>
@@ -17,7 +17,6 @@ interface NavigationState {
 const NavigationStateContext = React.createContext<NavigationState>({
     links: new Map<string, string>(),
     clearGameLinks: () => {
-
     }
 })
 
@@ -35,12 +34,10 @@ export function NavigationState({children}: { children: React.ReactNode }) {
         <NavigationStateContext.Provider value={{
             links,
             clearGameLinks: () => {
-                //Clear all game links
+                // Clear all game links
                 const oldLinks = new Map(links)
                 oldLinks.forEach((value, key) => {
-                    if (key.startsWith(Rels.GAME) ||
-                        key.startsWith(Rels.JOIN_GAME)
-                    )
+                    if (key.startsWith(Rels.GAME) || key.startsWith(Rels.JOIN_GAME))
                         links.delete(key)
 
                     switch (key) {

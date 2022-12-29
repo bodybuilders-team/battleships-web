@@ -13,8 +13,8 @@ import {throwError} from "../../../../Services/utils/errorUtils"
 import {FiredShot} from "../../../../Domain/games/shot/FiredShot"
 import {Problem} from "../../../../Services/media/Problem"
 import {ProblemTypes} from "../../../../Utils/types/problemTypes"
-import {useMountedSignal} from "../../../../Utils/useMounted"
-import {abortableTo} from "../../../../Utils/abortableUtils"
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted"
+import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
 
 const TURN_SWITCH_DELAY = 1000
 const POLLING_DELAY = 1000

@@ -19,8 +19,8 @@ import {GetGameOutputModel} from "../../Services/services/games/models/games/get
 import {handleError} from "../../Services/utils/fetchSiren"
 import {Game} from "../../Domain/games/game/Game"
 import ErrorAlert from "../Shared/ErrorAlert"
-import {useMountedSignal} from "../../Utils/useMounted"
-import {abortableTo, AbortedError} from "../../Utils/abortableUtils"
+import {useMountedSignal} from "../../Utils/componentManagement/useMounted"
+import {abortableTo} from "../../Utils/componentManagement/abortableUtils"
 import {useNavigationState} from "../../Utils/navigation/NavigationState";
 
 /**

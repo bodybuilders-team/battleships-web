@@ -8,9 +8,12 @@ import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsS
 import {useNavigate} from "react-router-dom"
 import GameFinished from "./GameFinished"
 import {Uris} from "../../../../Utils/navigation/Uris"
-import {abortableTo} from "../../../../Utils/abortableUtils"
+import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
 import HOME = Uris.HOME;
-import {useMountedSignal} from "../../../../Utils/useMounted";
+
+const POLLING_DELAY = 1000
+
 
 /**
  * Properties for the FetchedEndGamePopup component.
@@ -23,8 +26,6 @@ interface FetchedEndGamePopupProps {
     onError: (err: Error) => void
 }
 
-const POLLING_DELAY = 1000
-
 /**
  * EndGamePopup that fetches the game.
  */
@@ -36,6 +37,7 @@ export default function FetchedEndGamePopup({open, onError}: FetchedEndGamePopup
     useInterval(fetchGame, POLLING_DELAY, [open])
 
     const mountedSignal = useMountedSignal()
+
     /**
      * Fetches the game.
      */

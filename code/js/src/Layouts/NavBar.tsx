@@ -16,7 +16,7 @@ import DirectionsBoatFilledRoundedIcon from '@mui/icons-material/DirectionsBoatF
 import {useNavigate} from 'react-router-dom'
 import {useLoggedIn, useSession, useSessionManager} from "../Utils/Session"
 import {useBattleshipsService} from "../Services/NavigationBattleshipsService"
-import {abortableTo} from "../Utils/abortableUtils"
+import {abortableTo} from "../Utils/componentManagement/abortableUtils"
 
 const pages = [
     {name: 'Login', href: '/login', auth: false},
