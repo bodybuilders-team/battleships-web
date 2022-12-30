@@ -11,8 +11,8 @@ import {GameStateModel} from "../../../Services/services/games/models/games/Game
  * @property endCause the cause of the game ending
  */
 export class GameState {
-    readonly phase: GamePhase;
-    readonly phaseEndTime: number;
+    readonly phase: GamePhase
+    readonly phaseEndTime: number
     readonly round: number | null;
     readonly turn: string | null;
     readonly winner: string | null;

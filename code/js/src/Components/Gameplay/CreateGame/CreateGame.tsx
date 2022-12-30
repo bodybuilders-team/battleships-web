@@ -1,5 +1,5 @@
 import * as React from "react"
-import {useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import {defaultShipTypes, ShipType} from "../../../Domain/games/ship/ShipType"
 import {defaultBoardSize} from "../../../Domain/games/board/Board"
 import {handleError} from "../../../Services/utils/fetchSiren"
@@ -11,6 +11,7 @@ import LoadingSpinner from "../../Shared/LoadingSpinner"
 import GameConfig from "./GameConfig"
 import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
 import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState";
 
 const POLLING_DELAY = 1000
 
@@ -35,6 +36,16 @@ export default function CreateGame() {
 
     useInterval(checkIfOpponentHasConnected, POLLING_DELAY, [isWaitingForOpponent])
     const mountedSignal = useMountedSignal()
+    const navigatingToGameRef = useRef(false)
+    const navigationState = useNavigationState()
+
+    useEffect(() => {
+
+        return () => {
+            if (!navigatingToGameRef.current)
+                navigationState.clearGameLinks()
+        }
+    }, [])
 
     /**
      * Handles the creation of a game.
@@ -92,6 +103,8 @@ export default function CreateGame() {
 
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
             setWaitingForOpponent(false)
+            navigatingToGameRef.current = true
+
             navigate(`/game/${gameId}`)
             return true
         }

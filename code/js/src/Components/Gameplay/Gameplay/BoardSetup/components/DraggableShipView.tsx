@@ -52,11 +52,10 @@ function DraggableShipView(
             onStop={(event, data) => {
                 onDragEnd(shipType)
 
-                if (dragging) {
+                if (dragging)
                     setDragging(false)
-                } else {
+                else
                     onClick?.()
-                }
             }}
             onDrag={(event, data) => {
                 const offset = new Offset(data.deltaX, data.deltaY)

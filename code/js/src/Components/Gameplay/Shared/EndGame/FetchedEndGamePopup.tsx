@@ -45,7 +45,6 @@ export default function FetchedEndGamePopup({open, onError}: FetchedEndGamePopup
         if (!open) return false
 
         if (!battleshipsService.links.get(Rels.GAME)) {
-            console.log("No game link found in fetched end game popup")
             navigate(HOME)
             return true
         }

@@ -14,9 +14,9 @@ const minShotsPerTurn = 1
 const maxShotsPerTurn = 5
 
 const defaultMaxTimePerTurn = 1
-const minMaxTimePerTurn = 1
-const maxMaxTimePerTurn = 5
-const stepMaxTimePerTurn = 1
+const minMaxTimePerTurn = 10
+const maxMaxTimePerTurn = 120
+const stepMaxTimePerTurn = 10
 
 const defaultMaxTimeForLayoutPhase = 60
 const minMaxTimeForLayoutPhase = 30

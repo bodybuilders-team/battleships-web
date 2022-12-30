@@ -135,7 +135,7 @@ export default function EndGamePopup({open, winningPlayer, cause, playerInfo, op
                 </Typography>
                 <Typography variant="h6">
                     {
-                        (winningPlayer === WinningPlayer.YOU)
+                        (playerInfo.points > 0)
                             ? "+" + playerInfo.points + " points"
                             : "No points won"
                     }

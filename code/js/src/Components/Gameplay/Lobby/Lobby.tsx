@@ -27,7 +27,7 @@ export default function Lobby() {
     const [error, setError] = useState<string | null>(null)
     const [games, setGames] = useState<EmbeddedSubEntity<GetGameOutputModel>[] | null>(null)
     const [gamesLoaded, setGamesLoaded] = useState(false)
-    const joinedGameRef = useRef(false)
+    const navigatingToGameRef = useRef(false)
     const navigationState = useNavigationState()
     const mountedSignal = useMountedSignal()
 
@@ -35,7 +35,7 @@ export default function Lobby() {
         fetchGames()
 
         return () => {
-            if (!joinedGameRef.current)
+            if (!navigatingToGameRef.current)
                 navigationState.clearGameLinks()
         }
     }, [])
@@ -77,7 +77,7 @@ export default function Lobby() {
             return
         }
 
-        joinedGameRef.current = true
+        navigatingToGameRef.current = true
         navigate(`/game/${res.properties!.gameId}`)
     }
 

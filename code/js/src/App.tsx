@@ -58,12 +58,6 @@ export default function App() {
         if (!loggedIn)
             return <Navigate to={LOGIN} replace/>
 
-        useEffect(() => {
-            return () => {
-                console.log("unmounting protected route")
-            }
-        }, [])
-
         return children
     }
 

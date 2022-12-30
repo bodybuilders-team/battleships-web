@@ -2,6 +2,8 @@
 
 > Battleship game.
 
+[Application Demo Video](https://youtu.be/fUZV9ND-IlA)
+
 The project development is divided into 2 phases:
 
 * **Phase 1**: Development of the Web API for the Battleships game - **backend**

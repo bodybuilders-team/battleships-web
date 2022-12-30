@@ -25,7 +25,7 @@ export default function Matchmake() {
     const battleshipsService = useBattleshipsService()
 
     const [error, setError] = useState<string | null>(null)
-    const matchmadeRef = useRef(false)
+    const navigatingToGameRef = useRef(false)
     const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false)
     const [gameId, setGameId] = useState<number | null>(null)
     const session = useSession()
@@ -35,7 +35,7 @@ export default function Matchmake() {
         matchmake()
 
         return () => {
-            if (!matchmadeRef.current)
+            if (!navigatingToGameRef.current)
                 navigationState.clearGameLinks()
         }
     }, [])
@@ -94,7 +94,7 @@ export default function Matchmake() {
         setGameId(gameId)
 
         if (!res.properties!.wasCreated) {
-            matchmadeRef.current = true
+            navigatingToGameRef.current = true
             navigate(`/game/${gameId}`)
             return
         }
@@ -122,7 +122,7 @@ export default function Matchmake() {
         if (res.properties!.phase !== "WAITING_FOR_PLAYERS") {
             setWaitingForOpponent(false)
 
-            matchmadeRef.current = true
+            navigatingToGameRef.current = true
             navigate(`/game/${gameId}`)
 
             return true
