@@ -95,12 +95,13 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
     }
 
     /**
-     * Gets the coordinate of the ship when the drag ends.
+     * Gets the ship when the drag ends.
      *
      * @param shipType the ship
+     * @param orientation the orientation of the ship
      * @return the coordinate of the ship or null if the coordinate is not valid
      */
-    function getCoordinateAfterDragEnd(shipType: ShipType): Coordinate | null {
+    function getShipAfterDragEnd(shipType: ShipType, orientation: Orientation): Ship | null {
         setDragState(dragState.reset())
 
         const boardOffset = getPosition(boardRef.current as HTMLElement)
@@ -114,10 +115,10 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
 
         const coordinate = new Coordinate(coordinateX, coordinateY)
 
-        if (!isValidShipCoordinate(coordinate, Orientation.VERTICAL, shipType.size, board.size))
+        if (!isValidShipCoordinate(coordinate, orientation, shipType.size, board.size))
             return null
 
-        return coordinate
+        return new Ship(shipType, coordinate, orientation)
     }
 
     return (<>
@@ -167,13 +168,9 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                                         offset))
                             }}
                             onDragEnd={(shipType) => {
-                                const coordinate = getCoordinateAfterDragEnd(shipType)
-                                if (coordinate == null)
-                                    return
+                                const newShip = getShipAfterDragEnd(shipType, Orientation.VERTICAL)
 
-                                const newShip = new Ship(shipType, coordinate, Orientation.VERTICAL)
-
-                                if (board.canPlaceShip(newShip)) {
+                                if (newShip != null && board.canPlaceShip(newShip)) {
                                     placeShip(newShip)
 
                                     const newUnplacedShips = new Map(unplacedShips)
@@ -215,18 +212,14 @@ function BoardSetup({finalTime, boardSize, error, ships, onBoardReady, onLeaveGa
                                             )
                                         }}
                                         onDragEnd={() => {
-                                            const coordinate = getCoordinateAfterDragEnd(placedShip.type)
-                                            if (coordinate == null)
-                                                return
+                                            const newShip = getShipAfterDragEnd(placedShip.type, placedShip.orientation)
 
-                                            const newShip = new Ship(placedShip.type, coordinate, placedShip.orientation)
-
-                                            if (board
+                                            if (newShip != null && board
                                                 .removeShip(placedShip)
                                                 .canPlaceShip(newShip)) {
+
                                                 setBoard(board.removeShip(placedShip)
                                                     .placeShip(newShip))
-
                                             }
                                         }}
 

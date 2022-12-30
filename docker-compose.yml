@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  db:
+  battleships-db:
     container_name: db
     build:
       context: .
@@ -36,7 +36,7 @@ services:
     expose:
       - "8080"
 
-  nginx:
+  battleships-nginx:
     container_name: nginx
     image: nginx
     ports:

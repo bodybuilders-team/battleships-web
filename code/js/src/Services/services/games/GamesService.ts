@@ -7,6 +7,7 @@ import {GetGameStateOutput} from "./models/games/getGameState/GetGameStateOutput
 import {JoinGameOutput} from "./models/games/joinGame/JoinGameOutput"
 import {SirenEntity} from "../../media/siren/SirenEntity"
 import {CreateGameInput} from "./models/games/createGame/CreateGameInput"
+import { GamePhase } from "../../../Domain/games/game/GameState"
 
 export namespace GamesService {
 
