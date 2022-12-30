@@ -3,6 +3,7 @@ FROM node:16-alpine AS CACHE_IMAGE
 ARG DEPENDENCY=./code/js
 ARG APP_HOME=/usr/app
 
+RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
 ENV PATH $APP_HOME/node_modules/.bin:$PATH
@@ -14,4 +15,11 @@ RUN npm install
 
 COPY $DEPENDENCY $APP_HOME
 
-CMD ["npm", "start"]
+RUN npm run build
+
+FROM nginx:1.21.3-alpine
+
+ARG APP_HOME=/usr/app
+RUN mkdir $APP_HOME
+
+COPY --from=CACHE_IMAGE $APP_HOME/dist $APP_HOME

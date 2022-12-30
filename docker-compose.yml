@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   battleships-db:
-    container_name: db
+    container_name: battleships-db
     build:
       context: .
       dockerfile: dockerfiles/Dockerfile-db
@@ -15,45 +15,36 @@ services:
   battleships-service-1:
     container_name: battleships-service-1
     depends_on:
-      - db
+      - battleships-db
     build:
       context: .
       dockerfile: dockerfiles/Dockerfile-spring
-    image: battleships-service
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/daw_g03
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://battleships-db/daw_g03
     expose:
-      - "8080"
+      - "80"
 
   battleships-service-2:
     container_name: battleships-service-2
     depends_on:
-      - db
       - battleships-service-1
-    image: battleships-service
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile-spring
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/daw_g03
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://battleships-db/daw_g03
     expose:
-      - "8080"
+      - "80"
 
   battleships-nginx:
-    container_name: nginx
-    image: nginx
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./dockerfiles/nginx:/etc/nginx
+    container_name: battleships-nginx
     depends_on:
       - battleships-service-1
       - battleships-service-2
-
-  battleships-client:
-    container_name: battleships-client
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile-client
-    image: battleships-client
+      dockerfile: dockerfiles/Dockerfile-nginx
     ports:
       - "80:80"
-    depends_on:
-      - nginx
+    volumes:
+      - ./dockerfiles/nginx:/etc/nginx

@@ -7,7 +7,7 @@ server:
       token-hash-secret: QfTjWmZq4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y$B&E)H
     max-refresh-tokens: 3
 
-  port: 8080
+  port: 80
 
 spring:
   datasource:

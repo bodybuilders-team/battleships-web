@@ -1,5 +1,7 @@
 FROM postgres
 
+ENV PORT=5432
+
 USER postgres
 WORKDIR /app
 
@@ -8,4 +10,4 @@ COPY code/sql/createSchema.sql /docker-entrypoint-initdb.d/1_create.sql
 COPY --chown=postgres:postgres ./dockerfiles/scripts/wait-for-postgres.sh ./bin/wait-for-postgres.sh
 RUN chmod +x ./bin/wait-for-postgres.sh
 
-EXPOSE 5432
+EXPOSE $PORT
