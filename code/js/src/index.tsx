@@ -6,7 +6,7 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import {createTheme, ThemeProvider} from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
 import {Auth} from "./Utils/Session"
-import {NavigationState} from "./Utils/navigation/NavigationState"
+import {NavigationStateProvider} from "./Utils/navigation/NavigationState"
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 const theme = createTheme({
@@ -293,9 +293,9 @@ root.render(
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <Auth>
-                <NavigationState>
+                <NavigationStateProvider>
                     <App/>
-                </NavigationState>
+                </NavigationStateProvider>
             </Auth>
         </ThemeProvider>
     </Router>

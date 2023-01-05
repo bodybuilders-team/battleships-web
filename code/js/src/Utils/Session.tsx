@@ -63,7 +63,7 @@ export function Auth({children}: { children: React.ReactNode }) {
                     localStorage.setItem(sessionStorageKey, JSON.stringify(session))
                 },
                 clearSession: () => {
-                    localStorage.removeItem('session')
+                    localStorage.removeItem(sessionStorageKey)
 
                     setSession(null)
                 }

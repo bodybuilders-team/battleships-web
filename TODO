@@ -1,13 +1,30 @@
 Documentation:
-- Review and improve backend documentation
-- Review and improve frontend documentation
-- Improve README.md
+- Fix and review documentation
 
 Backend:
-- Implement blacklist of tokens
+- Access token revocation
+- Google Login
+- HTTPS
 
 Frontend:
+- Fix refresh in game and board setup pages
+- Lobby and ranking pagination
+- Add game state polling when its our turn, to check if the other opponent left the game
+- Ranking table cells could be clickable, and redirect to the player profile (Jesus)
+- Add information about the number of played games, the number of wins and the number of losses in the player profile (Jesus)
+- Custom ships
+- Add dark mode
 
-Random or Never Ending Tasks:
+Both:
+- Use cookies instead of local storage for auth
+- Private games mechanism
+- Server-side events for game state polling
+- Add guest mode
+- Implement "play vs AI" mode (maybe a simple idea: the "AI" is just a second player that plays randomly)
+
+Other:
+- Add continuous integration (check professor's repo)
+
+Never Ending Tasks:
 - Add more tests
-- Implement private games
+- Improve documentation

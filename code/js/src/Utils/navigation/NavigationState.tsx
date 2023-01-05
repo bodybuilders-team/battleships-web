@@ -25,7 +25,7 @@ const NavigationStateContext = React.createContext<NavigationState>({
  *
  * @param children the children to render
  */
-export function NavigationState({children}: { children: React.ReactNode }) {
+export function NavigationStateProvider({children}: { children: React.ReactNode }) {
     // Needs to be useRef to avoid re-rendering the children, also can't
     // be useMemo because useMemo may reset the state.
     const links = useRef(new Map<string, string>()).current
