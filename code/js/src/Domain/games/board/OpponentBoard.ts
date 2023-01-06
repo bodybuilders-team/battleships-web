@@ -14,8 +14,20 @@ import {Coordinate} from "../Coordinate"
  * @property fleet the fleet of the board
  */
 export class OpponentBoard extends Board {
-    constructor(boardSize: number, grid: Cell[] = generateEmptyMatrix(boardSize)) {
+    constructor(boardSize: number, grid: ReadonlyArray<Cell> = generateEmptyMatrix(boardSize)) {
         super(boardSize, grid)
+    }
+
+    /**
+     * Creates a new instance of [MyBoard] with the given size and fleet.
+     *
+     * @param boardSize the size of the board
+     * @param fleet the initial fleet of the board
+     *
+     * @return instance of [MyBoard]
+     */
+    static fromFleet(boardSize: number, fleet: ReadonlyArray<Ship>): OpponentBoard {
+        return new OpponentBoard(boardSize, this.gridFromFleet(boardSize, fleet))
     }
 
     /**

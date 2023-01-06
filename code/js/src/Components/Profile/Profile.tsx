@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid"
 import GameHistory from "./GameHistory"
+import OngoingGames from "./OngoingGames";
 
 /**
  * Profile component.
@@ -36,6 +37,7 @@ export default function Profile() {
                         </Card>
                     </Grid>
                     <Grid item lg={8} md={6} xs={12}>
+                        <OngoingGames/>
                         <GameHistory/>
                     </Grid>
                 </Grid>

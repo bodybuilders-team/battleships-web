@@ -54,8 +54,8 @@ export default function Matchmake() {
             phases: ["WAITING_FOR_PLAYERS"]
         }, mountedSignal))
 
-        if (err) {
-            handleError(err, setError)
+        if (err ) {
+            handleError(err, setError, navigate)
             return false
         }
 
@@ -86,7 +86,7 @@ export default function Matchmake() {
         )
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return
         }
 
@@ -115,7 +115,7 @@ export default function Matchmake() {
             battleshipsService.gamesService.getGameState(mountedSignal)
         )
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return true
         }
 

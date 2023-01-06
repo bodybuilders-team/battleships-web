@@ -1,4 +1,4 @@
-import {Board, generateEmptyMatrix, toIndex} from "./Board"
+import {Board} from "./Board"
 import {Cell, ShipCell, WaterCell} from "../Cell"
 import {Ship} from "../ship/Ship"
 import {Coordinate} from "../Coordinate"
@@ -26,15 +26,7 @@ export class MyBoard extends Board {
      * @return instance of [MyBoard]
      */
     static fromFleet(boardSize: number, fleet: ReadonlyArray<Ship>): MyBoard {
-        const grid = generateEmptyMatrix(boardSize)
-
-        fleet.forEach(ship =>
-            ship.coordinates.forEach(coordinate =>
-                grid[toIndex(coordinate, boardSize)] = new ShipCell(coordinate, false, ship)
-            )
-        )
-
-        return new MyBoard(boardSize, grid)
+        return new MyBoard(boardSize, this.gridFromFleet(boardSize, fleet))
     }
 
     /**

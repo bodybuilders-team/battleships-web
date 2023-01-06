@@ -40,7 +40,7 @@ export default function App() {
 
     useEffect(() => {
         getHome()
-    })
+    }, [])
 
     /**
      * Fetches the home page.
@@ -61,19 +61,6 @@ export default function App() {
         return children
     }
 
-    /**
-     * Public route component, redirects to profile page if logged in.
-     * Used for login and register pages.
-     *
-     * @param children the children to render
-     */
-    function PublicRoute({children}: { children: React.ReactElement }) {
-        if (loggedIn)
-            return <Navigate to={PROFILE} replace/>
-
-        return children
-    }
-
     return (
         <div className="App">
             <NavBar/>
@@ -82,8 +69,8 @@ export default function App() {
                 <Routes>
                     <Route path={HOME} element={<Home/>}/>
 
-                    <Route path={LOGIN} element={<PublicRoute><Login/></PublicRoute>}/>
-                    <Route path={REGISTER} element={<PublicRoute><Register/></PublicRoute>}/>
+                    <Route path={LOGIN} element={<Login/>}/>
+                    <Route path={REGISTER} element={<Register/>}/>
                     <Route path={PROFILE} element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
 
                     <Route path={RANKING} element={<Ranking/>}/>

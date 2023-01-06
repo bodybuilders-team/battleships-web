@@ -53,7 +53,7 @@ export default function Lobby() {
         },mountedSignal))
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return
         }
 
@@ -73,7 +73,7 @@ export default function Lobby() {
         const [err, res] = await abortableTo(battleshipsService.gamesService.joinGame(joinGameLink,mountedSignal))
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return
         }
 

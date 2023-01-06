@@ -74,7 +74,7 @@ export default function CreateGame() {
             )
 
             if (err) {
-                handleError(err, setError)
+                handleError(err, setError, navigate)
                 return
             }
 
@@ -97,7 +97,7 @@ export default function CreateGame() {
         )
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return true
         }
 

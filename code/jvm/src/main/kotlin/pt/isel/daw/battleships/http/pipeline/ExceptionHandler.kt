@@ -117,7 +117,7 @@ class ExceptionHandler {
         Problem(
             type = URI.create(PROBLEMS_DOCS_URI + "invalid-request-body"),
             title = "Invalid request body${
-            ex.rootCause?.also { println(it) }.let {
+            ex.rootCause.let {
                 ": " +
                     when (it) {
                         is UnrecognizedPropertyException -> "Unknown property '${it.propertyName}'"

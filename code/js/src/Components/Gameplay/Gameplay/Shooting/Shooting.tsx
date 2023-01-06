@@ -4,7 +4,6 @@ import {useEffect, useState} from "react"
 import Box from "@mui/material/Box"
 import BoardView from "../../Shared/Board/BoardView"
 import Button from "@mui/material/Button"
-import {Ship} from "../../../../Domain/games/ship/Ship"
 import {tileSize} from "../../Shared/Board/Tile"
 import ShipView from "../../Shared/Ship/ShipView"
 import {Coordinate} from "../../../../Domain/games/Coordinate"
@@ -25,19 +24,23 @@ import {Uris} from "../../../../Utils/navigation/Uris"
 import ErrorAlert from "../../../Shared/ErrorAlert"
 import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
 import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
+import {MyBoard} from "../../../../Domain/games/board/MyBoard";
+import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard";
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**
  * Properties for the Shooting component.
  *
  * @property game the game to play
- * @property myFleet the fleet of the player
+ * @property initialMyBoard the initial board of the player
+ * @property initialOpponentBoard the initial board of the opponent
  * @property onFinished the callback to call when the game is finished
  * @property onTimeUp the callback to call when the time is up
  */
 interface ShootingProps {
     game: Game
-    myFleet: Ship[]
+    initialMyBoard: MyBoard,
+    initialOpponentBoard: OpponentBoard,
     onFinished: () => void
     onTimeUp: () => void
 }
@@ -45,14 +48,14 @@ interface ShootingProps {
 /**
  * Shooting component.
  */
-export default function Shooting({game, myFleet, onFinished, onTimeUp}: ShootingProps) {
+export default function Shooting({game, initialMyBoard, initialOpponentBoard, onFinished, onTimeUp}: ShootingProps) {
     const [error, setError] = useState<string | null>(null)
 
     const [leavingGame, setLeavingGame] = useState<boolean>(false)
     const battleshipsService = useBattleshipsService()
     const navigate = useNavigate()
-    const {shootingState, fire} = useShooting(game, myFleet, (err) => {
-        handleError(err, setError)
+    const {shootingState, fire} = useShooting(game, initialMyBoard, initialOpponentBoard, (err) => {
+        handleError(err, setError, navigate)
     })
     const mountedSignal = useMountedSignal()
 
@@ -86,7 +89,7 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
         const [err, res] = await abortableTo(battleshipsService.gamesService.leaveGame(mountedSignal))
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return
         }
 
@@ -147,10 +150,10 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                         <Box
                                             key={ship.type.shipName + index}
                                             sx={{
-                                            position: 'absolute',
-                                            top: (ship.coordinate.row) * tileSize,
-                                            left: (ship.coordinate.col) * tileSize,
-                                        }}>
+                                                position: 'absolute',
+                                                top: (ship.coordinate.row) * tileSize,
+                                                left: (ship.coordinate.col) * tileSize,
+                                            }}>
                                             <ShipView
                                                 shipType={ship.type}
                                                 orientation={ship.orientation}
@@ -208,10 +211,10 @@ export default function Shooting({game, myFleet, onFinished, onTimeUp}: Shooting
                                         <Box
                                             key={ship.type.shipName + index}
                                             sx={{
-                                            position: 'absolute',
-                                            top: (ship.coordinate.row) * tileSize,
-                                            left: (ship.coordinate.col) * tileSize,
-                                        }}>
+                                                position: 'absolute',
+                                                top: (ship.coordinate.row) * tileSize,
+                                                left: (ship.coordinate.col) * tileSize,
+                                            }}>
                                             <ShipView
                                                 shipType={ship.type}
                                                 orientation={ship.orientation}

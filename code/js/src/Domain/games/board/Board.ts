@@ -24,6 +24,19 @@ export class Board {
             .filter((ship, index, self) => self.indexOf(ship) === index) // distinct
     }
 
+    static gridFromFleet(boardSize: number, fleet: ReadonlyArray<Ship>): ReadonlyArray<Cell> {
+        const grid = generateEmptyMatrix(boardSize)
+
+        fleet.forEach(ship =>
+            ship.coordinates.forEach(coordinate =>
+                grid[toIndex(coordinate, boardSize)] = new ShipCell(coordinate, false, ship)
+            )
+        )
+
+        return grid
+    }
+
+
     /**
      * Returns the cell in [coordinate].
      *

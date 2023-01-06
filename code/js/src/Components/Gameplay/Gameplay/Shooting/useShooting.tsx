@@ -1,5 +1,4 @@
 import {Game} from "../../../../Domain/games/game/Game"
-import {Ship} from "../../../../Domain/games/ship/Ship"
 import {useBattleshipsService} from "../../../../Services/NavigationBattleshipsService"
 import {useSession} from "../../../../Utils/Session"
 import {useState} from "react"
@@ -23,16 +22,17 @@ const POLLING_DELAY = 1000
  * Hook for shooting.
  *
  * @param game game where the shooting is happening
- * @param myFleet fleet of the player
+ * @param initialMyBoard initial my board
+ * @param initialOpponentBoard initial opponent board
  * @param onError callback for errors
  */
-export default function useShooting(game: Game, myFleet: Ship[], onError: (error: Error) => void) {
+export default function useShooting(game: Game, initialMyBoard: MyBoard, initialOpponentBoard: OpponentBoard, onError: (error: Error) => void) {
     const battleshipsService = useBattleshipsService()
     const session = useSession()
 
     const [gameState, setGameState] = useState<GameState>(game.state)
-    const [myBoard, setMyBoard] = useState<MyBoard>(MyBoard.fromFleet(game.config.gridSize, myFleet))
-    const [opponentBoard, setOpponentBoard] = useState<OpponentBoard>(new OpponentBoard(game.config.gridSize))
+    const [myBoard, setMyBoard] = useState<MyBoard>(initialMyBoard)
+    const [opponentBoard, setOpponentBoard] = useState<OpponentBoard>(initialOpponentBoard)
     const [finished, setFinished] = useState<boolean>(false)
     const [myTurn, setMyTurn] = useState<boolean>(game.state.turn == session!.username)
     const [switchTurnWithDelay, setSwitchTurnWithDelay] = useState<boolean>(false)

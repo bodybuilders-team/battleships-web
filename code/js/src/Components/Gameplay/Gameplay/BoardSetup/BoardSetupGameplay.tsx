@@ -1,6 +1,6 @@
 import BoardSetup from "./BoardSetup"
 import * as React from "react"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Board} from "../../../../Domain/games/board/Board"
 import {Orientation} from "../../../../Domain/games/ship/Orientation"
 import {handleError} from "../../../../Services/utils/fetchSiren"
@@ -39,11 +39,30 @@ const POLLING_DELAY = 1000
 export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: BoardSetupGameplayProps) {
     const battleshipsService = useBattleshipsService()
     const [isWaitingForOpponent, setWaitingForOpponent] = useState<boolean>(false)
+    const [loadingFleet, setLoadingFleet] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [showEndGamePopup, setShowEndGamePopup] = useState<boolean>(false)
 
     const navigate = useNavigate()
     const mountedSignal = useMountedSignal()
+
+    useEffect(() => {
+        fetchMyFleet()
+    }, [])
+
+    async function fetchMyFleet() {
+        const [err, res] = await abortableTo(battleshipsService.playersService.getMyFleet(mountedSignal))
+
+        if (err) {
+            handleError(err, setError,navigate)
+            return
+        }
+
+        if (res?.properties?.ships && res.properties.ships.length > 0)
+            setWaitingForOpponent(true)
+
+        setLoadingFleet(false)
+    }
 
     useInterval(() => {
         fetchGameState()
@@ -72,7 +91,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
                 return
             }
 
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return
         }
 
@@ -88,7 +107,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
         )
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return false
         }
 
@@ -112,7 +131,7 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
         const [err] = await abortableTo(battleshipsService.gamesService.leaveGame(mountedSignal))
 
         if (err) {
-            handleError(err, setError)
+            handleError(err, setError, navigate)
             return
         }
 
@@ -120,32 +139,38 @@ export default function BoardSetupGameplay({finalTime, gameConfig, onFinished}: 
     }
 
 
-    if (isWaitingForOpponent)
+    if (loadingFleet)
+        return (
+            <PageContent error={error}>
+                <LoadingSpinner text={"Loading my fleet..."}/>
+            </PageContent>
+        )
+    else if (isWaitingForOpponent)
         return (
             <>
                 <PageContent error={error}>
                     <LoadingSpinner text={"Waiting for opponent to deploy his fleet..."}/>
                 </PageContent>
                 <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
-                    handleError(err, setError)
+                    handleError(err, setError, navigate)
                 }}/>
             </>
         )
     else return (
-        <>
-            <BoardSetup
-                finalTime={finalTime}
-                boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
-                onBoardReady={onBoardSetupFinished}
-                onLeaveGame={leaveGame}
-                error={error}
-                onTimeUp={() => {
-                    setShowEndGamePopup(true)
-                }}
-            />
-            <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
-                handleError(err, setError)
-            }}/>
-        </>
-    )
+            <>
+                <BoardSetup
+                    finalTime={finalTime}
+                    boardSize={gameConfig.gridSize} ships={gameConfig.shipTypes}
+                    onBoardReady={onBoardSetupFinished}
+                    onLeaveGame={leaveGame}
+                    error={error}
+                    onTimeUp={() => {
+                        setShowEndGamePopup(true)
+                    }}
+                />
+                <FetchedEndGamePopup open={showEndGamePopup} onError={(err) => {
+                    handleError(err, setError, navigate)
+                }}/>
+            </>
+        )
 }

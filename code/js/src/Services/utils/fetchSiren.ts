@@ -3,6 +3,8 @@ import {Problem, problemMediaType} from "../media/Problem"
 import * as React from "react"
 import {API_ENDPOINT} from "../BattleshipsService"
 import to from "../../Utils/await-to"
+import {NavigateFunction} from "react-router-dom";
+import {InvalidRefreshTokenError} from "./executeRequestUtils";
 
 /**
  * Fetches a Siren entity from the given URL.
@@ -61,12 +63,16 @@ export async function fetchSiren<T>(
  *
  * @param err the error
  * @param setError the error setter
+ * @param navigate the navigate function
  */
 export function handleError(
     err: Error | Problem,
-    setError: React.Dispatch<React.SetStateAction<string | null>>
+    setError: React.Dispatch<React.SetStateAction<string | null>>,
+    navigate?: NavigateFunction
 ) {
-    if (err instanceof Problem)
+    if (navigate != undefined && err instanceof InvalidRefreshTokenError) {
+        navigate("/login")
+    } else if (err instanceof Problem)
         setError(err.title)
     else
         setError(err.message)

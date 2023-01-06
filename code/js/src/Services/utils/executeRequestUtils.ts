@@ -8,6 +8,14 @@ import {AbortedError, delay} from "../../Utils/componentManagement/abortableUtil
 const RETRY_DELAY = 1000
 
 
+export class InvalidRefreshTokenError implements Error {
+    constructor(public err: Error) {
+    }
+
+    message: string = this.err.message;
+    name: string = "InvalidRefreshTokenError";
+}
+
 /**
  * Executes a request and refreshes the token if necessary.
  *
@@ -28,11 +36,16 @@ export async function executeRequestAndRefreshTokenIfNecessary<T>(
 
     //Check if the response is 401, and if so, refresh the token
     if (err instanceof Problem && err.status === 401) {
-        const res = await executeRequest(
+        const [err, res] = await to(executeRequest(
             () => usersService.refreshToken(sessionManager.session!.refreshToken),
             signal
-        )
+        ))
 
+        if (err) {
+            sessionManager.clearSession()
+            throw new InvalidRefreshTokenError(err)
+        }
+        
         sessionManager.setSession({
             ...sessionManager.session!,
             accessToken: res.properties!.accessToken,

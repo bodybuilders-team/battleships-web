@@ -140,6 +140,7 @@ export class NavigationGamesService {
         )
 
         this.links.set(Rels.GAME_STATE, res.getEmbeddedLinks(Rels.GAME_STATE)[0].href)
+
         res.getActionLinks().forEach((value, key) => {
             this.links.set(key, value)
         })

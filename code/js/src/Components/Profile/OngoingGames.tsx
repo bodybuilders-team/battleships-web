@@ -1,6 +1,16 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
+import {useSession} from "../../Utils/Session";
+import * as React from "react";
+import {useEffect, useState} from "react";
+import {Game} from "../../Domain/games/game/Game";
+import {useNavigationState} from "../../Utils/navigation/NavigationState";
+import {useMountedSignal} from "../../Utils/componentManagement/useMounted";
+import {abortableTo} from "../../Utils/componentManagement/abortableUtils";
+import {handleError} from "../../Services/utils/fetchSiren";
+import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
+    Button,
     Card,
     CardContent,
     CardHeader,
@@ -12,28 +22,21 @@ import {
     TableContainer,
     TableHead,
     TableRow
-} from '@mui/material'
-import {useBattleshipsService} from "../../Services/NavigationBattleshipsService"
-import {useSession} from "../../Utils/Session"
-import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput"
-import {handleError} from "../../Services/utils/fetchSiren"
-import {Game} from "../../Domain/games/game/Game"
-import ErrorAlert from "../Shared/ErrorAlert"
-import {useMountedSignal} from "../../Utils/componentManagement/useMounted"
-import {abortableTo} from "../../Utils/componentManagement/abortableUtils"
-import {useNavigationState} from "../../Utils/navigation/NavigationState";
+} from "@mui/material";
+import ErrorAlert from "../Shared/ErrorAlert";
+import {Rels} from "../../Utils/navigation/Rels";
 import {useNavigate} from "react-router-dom";
 
 /**
- * GameHistory component.
+ * Ongoing games component.
+ *
  */
-export default function GameHistory() {
+export default function OngoingGames() {
     const battleshipsService = useBattleshipsService()
     const session = useSession()
 
     const [error, setError] = useState<string | null>(null)
     const [games, setGames] = useState<Game[] | null>(null)
-    const [gamesLoaded, setGamesLoaded] = useState(false)
     const navigationState = useNavigationState()
     const navigate = useNavigate()
 
@@ -51,12 +54,9 @@ export default function GameHistory() {
      * Fetches the games.
      */
     async function fetchGames() {
-        if (gamesLoaded)
-            return
-
         const [err, res] = await abortableTo(battleshipsService.gamesService.getGames({
             username: session!.username,
-            phases: ["FINISHED"]
+            phases: ["DEPLOYING_FLEETS", "IN_PROGRESS"]
         }, mountedSignal))
 
         if (err) {
@@ -68,14 +68,13 @@ export default function GameHistory() {
             .getEmbeddedSubEntities<GetGameOutputModel>()
 
         setGames(games.map(game => new Game(game.properties!)))
-        setGamesLoaded(true)
     }
 
     return (
         <Card>
             <CardHeader
                 subheader="Last 10 games"
-                title="Game History"
+                title="Ongoing games"
             />
             <ErrorAlert error={error}/>
             <Divider/>
@@ -86,8 +85,7 @@ export default function GameHistory() {
                             <TableRow>
                                 <TableCell>Game</TableCell>
                                 <TableCell>Opponent</TableCell>
-                                <TableCell>Winner</TableCell>
-                                <TableCell>End Cause</TableCell>
+                                <TableCell>Play</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -96,8 +94,19 @@ export default function GameHistory() {
                                     <TableRow key={game.id} sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                                         <TableCell component="th" scope="row">{game.name}</TableCell>
                                         <TableCell>{game.getOpponent(session?.username!)?.username}</TableCell>
-                                        <TableCell>{game.state.winner}</TableCell>
-                                        <TableCell>{game.state.endCause}</TableCell>
+                                        <TableCell>
+                                            <Button onClick={
+                                                () => {
+                                                    navigationState.links.set(Rels.GAME,
+                                                        navigationState.links.get(`${Rels.GAME}-${game.id}`)!
+                                                    )
+
+                                                    navigate(`/game/${game.id}`)
+                                                }
+                                            }>
+                                                <PlayArrowIcon/>
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             }

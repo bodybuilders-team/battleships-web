@@ -1,7 +1,7 @@
 import {get} from "./utils/fetchSiren"
 import {GetHomeOutput} from "./services/home.models/getHome/GetHomeOutput"
 
-export const API_ENDPOINT = "http://localhost:80/api"
+export const API_ENDPOINT = "http://casa.pascoa.org/api"
 
 export namespace BattleshipsService {
 
