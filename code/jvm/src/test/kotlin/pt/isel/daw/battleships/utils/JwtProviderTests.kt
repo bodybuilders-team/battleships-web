@@ -62,7 +62,7 @@ class JwtProviderTests {
 
     @Test
     fun `createAccessToken returns a JWT access token with the correct payload`() {
-        val payload = JwtProvider.JwtPayload(username = "bob")
+        val payload = JwtProvider.JwtPayload.fromData(username = "bob")
 
         val token = jwtProvider.createAccessToken(payload)
 
@@ -73,7 +73,7 @@ class JwtProviderTests {
 
     @Test
     fun `createRefreshToken returns a JWT refresh token`() {
-        val payload = JwtProvider.JwtPayload(username = "bob")
+        val payload = JwtProvider.JwtPayload.fromData(username = "bob")
 
         val (token) = jwtProvider.createRefreshToken(payload)
 
@@ -84,14 +84,14 @@ class JwtProviderTests {
 
     @Test
     fun `validateAccessToken returns the payload if the token is valid`() {
-        val payload = JwtProvider.JwtPayload(username = "bob")
+        val payload = JwtProvider.JwtPayload.fromData(username = "bob")
 
         val token = jwtProvider.createAccessToken(payload)
 
         val validatedPayload = jwtProvider.validateAccessToken(token)
 
         assertNotNull(validatedPayload)
-        assertEquals(payload, validatedPayload)
+        assertEquals(payload.username, validatedPayload.username)
     }
 
     @Test
@@ -105,14 +105,14 @@ class JwtProviderTests {
 
     @Test
     fun `validateRefreshToken returns the payload if the token is valid`() {
-        val payload = JwtProvider.JwtPayload(username = "bob")
+        val payload = JwtProvider.JwtPayload.fromData(username = "bob")
 
         val (token) = jwtProvider.createRefreshToken(payload)
 
         val validatedPayload = jwtProvider.validateRefreshToken(token)
 
         assertNotNull(validatedPayload)
-        assertEquals(payload, validatedPayload)
+        assertEquals(payload.username, validatedPayload.username)
     }
 
     @Test
@@ -150,14 +150,14 @@ class JwtProviderTests {
 
     @Test
     fun `JwtPayload creation is successful`() {
-        JwtProvider.JwtPayload(username = "bob")
+        JwtProvider.JwtPayload.fromData(username = "bob")
     }
 
     @Test
     fun `JwtPayload to Claims conversion is successful`() {
-        val jwtPayload = JwtProvider.JwtPayload(username = "bob")
+        val jwtPayload = JwtProvider.JwtPayload.fromData(username = "bob")
 
-        val claims = jwtPayload.toClaims()
+        val claims = jwtPayload.claims
 
         assertEquals(jwtPayload.username, claims["username"])
     }
@@ -166,7 +166,7 @@ class JwtProviderTests {
     fun `JwtPayload from Claims conversion is successful`() {
         val claims = Jwts.claims(mapOf("username" to "bob"))
 
-        val jwtPayload = JwtProvider.JwtPayload.fromClaims(claims)
+        val jwtPayload = JwtProvider.JwtPayload(claims)
 
         assertEquals(claims["username"], jwtPayload.username)
     }

@@ -7,6 +7,7 @@ import pt.isel.daw.battleships.domain.games.game.Game
 import pt.isel.daw.battleships.domain.games.game.GameState
 import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.repository.games.GamesRepository
+import pt.isel.daw.battleships.repository.users.RevokedAccessTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.AlreadyJoinedException
@@ -19,6 +20,7 @@ import pt.isel.daw.battleships.service.games.dtos.game.GameDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GameStateDTO
 import pt.isel.daw.battleships.service.games.dtos.game.GamesDTO
 import pt.isel.daw.battleships.service.games.dtos.game.MatchmakeResponseDTO
+import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.service.utils.findFirstOrNull
 import pt.isel.daw.battleships.utils.JwtProvider
 import javax.persistence.EntityManager
@@ -35,9 +37,17 @@ import javax.persistence.PersistenceContext
 @Transactional(rollbackFor = [Exception::class])
 class GamesServiceImpl(
     private val gamesRepository: GamesRepository,
-    usersRepository: UsersRepository,
-    jwtProvider: JwtProvider
-) : GamesService, AuthenticatedService(usersRepository, jwtProvider) {
+    private val usersRepository: UsersRepository,
+    private val jwtProvider: JwtProvider,
+    revokedAccessTokensRepository: RevokedAccessTokensRepository,
+    hashingUtils: HashingUtils
+) : GamesService,
+    AuthenticatedService(
+        usersRepository,
+        revokedAccessTokensRepository,
+        jwtProvider,
+        hashingUtils
+    ) {
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager

@@ -10,7 +10,6 @@ import {InvalidRefreshTokenError} from "./executeRequestUtils";
  * Fetches a Siren entity from the given URL.
  *
  * @param input the URL to fetch the Siren entity from
- * @param token the token to send with the request
  * @param method the HTTP method to use
  * @param body the body to send with the request
  * @param signal the signal to abort the request
@@ -19,7 +18,6 @@ import {InvalidRefreshTokenError} from "./executeRequestUtils";
  */
 export async function fetchSiren<T>(
     input: RequestInfo | URL,
-    token?: string,
     method?: string,
     body?: BodyInit,
     signal?: AbortSignal
@@ -30,14 +28,12 @@ export async function fetchSiren<T>(
         'Content-Type': 'application/json',
     }
 
-    if (token)
-        headers['Authorization'] = `Bearer ${token}`
-
     const [err, res] = await to(fetch(input, {
         method: method,
         headers,
         body: body,
         signal: signal,
+        credentials: 'include'
     }))
 
     if (err)
@@ -87,52 +83,24 @@ export function handleError(
  * @return the result of the request
  */
 export function get<T>(input: RequestInfo | URL, signal?: AbortSignal): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + input, undefined, undefined, undefined, signal)
-}
-
-/**
- * Sends a GET request to the specified link with a token in the header.
- *
- * @param input the link to send the request to
- * @param token the token to send in the header
- * @param signal the signal to abort the request
- *
- * @return the result of the request
- */
-export function getWithAuth<T>(input: RequestInfo | URL, token: string, signal?: AbortSignal): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + input, token, undefined, undefined, signal)
-}
-
-/**
- * Sends a POST request to the specified link with the specified body.
- *
- * @param input the link to send the request to
- * @param body the body to send in the request
- * @param signal the signal to abort the request
- *
- * @return the result of the request
- */
-export function post<T>(input: RequestInfo | URL, body: BodyInit, signal?: AbortSignal): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + input, undefined, 'POST', body, signal)
+    return fetchSiren<T>(API_ENDPOINT + input, undefined, undefined, signal)
 }
 
 /**
  * Sends a POST request to the specified link with the specified body and a token in the header.
  *
  * @param link the link to send the request to
- * @param token the token to send in the header
  * @param body the body to send in the request, if undefined, an empty request is sent
  * @param signal the signal to abort the request
  *
  * @return the result of the request
  */
-export function postWithAuth<T>(
+export function post<T>(
     link: RequestInfo | URL,
-    token: string,
     body?: BodyInit,
     signal?: AbortSignal
 ): Promise<SirenEntity<T>> {
-    return fetchSiren<T>(API_ENDPOINT + link, token, 'POST', body, signal)
+    return fetchSiren<T>(API_ENDPOINT + link, 'POST', body, signal)
 }
 
 /**

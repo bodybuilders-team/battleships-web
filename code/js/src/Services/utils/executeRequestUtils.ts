@@ -37,7 +37,7 @@ export async function executeRequestAndRefreshTokenIfNecessary<T>(
     //Check if the response is 401, and if so, refresh the token
     if (err instanceof Problem && err.status === 401) {
         const [err, res] = await to(executeRequest(
-            () => usersService.refreshToken(sessionManager.session!.refreshToken),
+            () => usersService.refreshToken(signal),
             signal
         ))
 
@@ -45,12 +45,6 @@ export async function executeRequestAndRefreshTokenIfNecessary<T>(
             sessionManager.clearSession()
             throw new InvalidRefreshTokenError(err)
         }
-        
-        sessionManager.setSession({
-            ...sessionManager.session!,
-            accessToken: res.properties!.accessToken,
-            refreshToken: res.properties!.refreshToken,
-        })
 
         return await executeRequest(() => request(), signal)
     } else if (err)

@@ -60,8 +60,6 @@ export default function Register() {
 
             sessionManager.setSession({
                 username,
-                accessToken: res.properties.accessToken,
-                refreshToken: res.properties.refreshToken,
                 userHomeLink: battleshipsService.links.get(Rels.USER_HOME)
                     ?? throwError("User home link is undefined")
             })

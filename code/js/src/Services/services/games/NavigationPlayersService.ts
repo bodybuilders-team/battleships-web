@@ -40,7 +40,6 @@ export class NavigationPlayersService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => PlayersService.getMyFleet(
-                this.session.accessToken,
                 this.links.get(Rels.GET_MY_FLEET) ?? throwError("Get my fleet link not found"),
                 signal
             ),
@@ -61,7 +60,6 @@ export class NavigationPlayersService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => PlayersService.deployFleet(
-                this.session.accessToken,
                 this.links.get(Rels.DEPLOY_FLEET) ?? throwError("Deploy fleet link not found"),
                 fleet,
                 signal
@@ -82,7 +80,6 @@ export class NavigationPlayersService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => PlayersService.getOpponentFleet(
-                this.session.accessToken,
                 this.links.get(Rels.GET_OPPONENT_FLEET)
                 ?? throwError("Get opponent fleet link not found"),
                 signal
@@ -103,7 +100,6 @@ export class NavigationPlayersService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => PlayersService.getMyShots(
-                this.session.accessToken,
                 this.links.get(Rels.GET_MY_SHOTS) ?? throwError("Get my shots link not found"),
                 signal
             ),
@@ -124,7 +120,6 @@ export class NavigationPlayersService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => PlayersService.fireShots(
-                this.session.accessToken,
                 this.links.get(Rels.FIRE_SHOTS) ?? throwError("Fire shots link not found"),
                 shots,
                 signal
@@ -145,7 +140,6 @@ export class NavigationPlayersService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => PlayersService.getOpponentShots(
-                this.session.accessToken,
                 this.links.get(Rels.GET_OPPONENT_SHOTS)
                 ?? throwError("Get opponent shots link not found"),
                 signal

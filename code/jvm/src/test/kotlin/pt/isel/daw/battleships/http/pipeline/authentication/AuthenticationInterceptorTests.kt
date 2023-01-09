@@ -137,7 +137,7 @@ class AuthenticationInterceptorTests {
             handler = handlerMethod
         )
 
-        assertEquals("bearerToken", httpServletRequest.getAttribute("token"))
+        assertEquals("bearerToken", httpServletRequest.getAttribute("access_token"))
         assertTrue(proceed)
     }
 }

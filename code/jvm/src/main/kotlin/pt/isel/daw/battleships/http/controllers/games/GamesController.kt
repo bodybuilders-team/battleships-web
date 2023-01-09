@@ -28,7 +28,7 @@ import pt.isel.daw.battleships.http.utils.Params
 import pt.isel.daw.battleships.http.utils.Rels
 import pt.isel.daw.battleships.http.utils.Uris
 import pt.isel.daw.battleships.service.games.GamesService
-import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
+import pt.isel.daw.battleships.utils.JwtProvider.Companion.ACCESS_TOKEN_ATTRIBUTE
 import javax.validation.Valid
 
 /**
@@ -109,7 +109,7 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping(Uris.GAMES)
     @Authenticated
     fun createGame(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @Valid @RequestBody
         gameData: CreateGameInputModel
     ): SirenEntity<CreateGameOutputModel> {
@@ -142,7 +142,7 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping(Uris.GAMES_MATCHMAKE)
     @Authenticated
     fun matchmake(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @Valid @RequestBody
         gameConfig: GameConfigModel
     ): SirenEntity<MatchmakeOutputModel> {
@@ -237,7 +237,7 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping(Uris.GAMES_JOIN)
     @Authenticated
     fun joinGame(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<JoinGameOutputModel> {
         val game = gamesService.joinGame(token = token, gameId = gameId)
@@ -258,7 +258,7 @@ class GamesController(private val gamesService: GamesService) {
     @PostMapping(Uris.GAMES_LEAVE)
     @Authenticated
     fun leaveGame(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<Unit> {
         gamesService.leaveGame(token = token, gameId = gameId)

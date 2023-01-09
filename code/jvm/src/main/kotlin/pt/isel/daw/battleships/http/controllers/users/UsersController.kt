@@ -1,8 +1,11 @@
 package pt.isel.daw.battleships.http.controllers.users
 
+import org.springframework.http.HttpHeaders
+import org.springframework.http.ResponseCookie
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -21,13 +24,17 @@ import pt.isel.daw.battleships.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SirenEntity
 import pt.isel.daw.battleships.http.media.siren.SirenEntity.Companion.SIREN_MEDIA_TYPE
 import pt.isel.daw.battleships.http.media.siren.SubEntity
+import pt.isel.daw.battleships.http.pipeline.authentication.Authenticated
 import pt.isel.daw.battleships.http.utils.Actions
 import pt.isel.daw.battleships.http.utils.Links
 import pt.isel.daw.battleships.http.utils.Params
 import pt.isel.daw.battleships.http.utils.Rels
 import pt.isel.daw.battleships.http.utils.Uris
+import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.users.UsersService
 import pt.isel.daw.battleships.service.users.utils.UsersOrder
+import pt.isel.daw.battleships.utils.JwtProvider
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
 /**
@@ -142,9 +149,12 @@ class UsersController(private val usersService: UsersService) {
     @PostMapping(Uris.USERS_LOGIN)
     fun login(
         @Valid @RequestBody
-        userData: LoginInputModel
+        userData: LoginInputModel,
+        response: HttpServletResponse
     ): SirenEntity<LoginOutputModel> {
         val loginDTO = usersService.login(loginInputDTO = userData.toLoginInputDTO())
+
+        setAuthenticationCookies(response, loginDTO.accessToken, loginDTO.refreshToken)
 
         return SirenEntity(
             `class` = listOf(Rels.LOGIN),
@@ -163,11 +173,23 @@ class UsersController(private val usersService: UsersService) {
      * @return the response to the request
      */
     @PostMapping(Uris.USERS_LOGOUT)
+    @Authenticated
     fun logout(
-        @Valid @RequestBody
-        logoutUserInputModel: LogoutUserInputModel
+        @Valid @RequestBody(required = false)
+        logoutUserInputModel: LogoutUserInputModel?,
+        @RequestAttribute(JwtProvider.ACCESS_TOKEN_ATTRIBUTE) accessToken: String,
+        @RequestAttribute(JwtProvider.REFRESH_TOKEN_ATTRIBUTE, required = false) refreshToken: String?,
+        response: HttpServletResponse
     ): SirenEntity<Unit> {
-        usersService.logout(refreshToken = logoutUserInputModel.refreshToken)
+        clearAuthenticationCookies(response)
+
+        usersService.logout(
+            accessToken = accessToken,
+            refreshToken =
+            // The refresh token may be received from cookies or from the request body
+            (refreshToken ?: logoutUserInputModel?.refreshToken)
+                ?: throw AuthenticationException("Refresh token is required")
+        )
 
         return SirenEntity(
             `class` = listOf(Rels.LOGOUT),
@@ -184,11 +206,22 @@ class UsersController(private val usersService: UsersService) {
      * @return the response to the request with the new token of the user
      */
     @PostMapping(Uris.USERS_REFRESH_TOKEN)
+    @Authenticated
     fun refreshToken(
-        @Valid @RequestBody
-        refreshTokenInputModel: RefreshTokenInputModel
+        @Valid @RequestBody(required = false)
+        refreshTokenInputModel: RefreshTokenInputModel?,
+        @RequestAttribute(JwtProvider.ACCESS_TOKEN_ATTRIBUTE) accessToken: String,
+        @RequestAttribute(JwtProvider.REFRESH_TOKEN_ATTRIBUTE, required = false) refreshToken: String?,
+        response: HttpServletResponse
     ): SirenEntity<RefreshTokenOutputModel> {
-        val refreshDTO = usersService.refreshToken(refreshToken = refreshTokenInputModel.refreshToken)
+        val refreshDTO = usersService.refreshToken(
+            accessToken = accessToken,
+            // The refresh token may be received from cookies or from the request body
+            (refreshToken ?: refreshTokenInputModel?.refreshToken)
+                ?: throw AuthenticationException("Refresh token is required")
+        )
+
+        setAuthenticationCookies(response, refreshDTO.accessToken, refreshDTO.refreshToken)
 
         return SirenEntity(
             `class` = listOf(Rels.REFRESH_TOKEN),
@@ -220,5 +253,52 @@ class UsersController(private val usersService: UsersService) {
                 Links.home
             )
         )
+    }
+
+    companion object {
+
+        private fun setAuthenticationCookies(
+            response: HttpServletResponse,
+            accessToken: String,
+            refreshToken: String
+        ) {
+            val accessTokenCookie = ResponseCookie.from("access_token", accessToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(JwtProvider.accessTokenDuration)
+                .sameSite("Strict")
+                .build()
+
+            val refreshTokenCookie = ResponseCookie.from("refresh_token", refreshToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(JwtProvider.refreshTokenDuration)
+                .sameSite("Strict")
+                .build()
+
+            response.addCookie(accessTokenCookie)
+            response.addCookie(refreshTokenCookie)
+        }
+
+        private fun clearAuthenticationCookies(response: HttpServletResponse) {
+            val accessTokenCookie = ResponseCookie.from("access_token", "")
+                .httpOnly(true)
+                .maxAge(0)
+                .sameSite("Strict")
+                .build()
+
+            val refreshTokenCookie = ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .maxAge(0)
+                .sameSite("Strict")
+                .build()
+
+            response.addCookie(accessTokenCookie)
+            response.addCookie(refreshTokenCookie)
+        }
+
+        private fun HttpServletResponse.addCookie(cookie: ResponseCookie) {
+            this.addHeader(HttpHeaders.SET_COOKIE, cookie.toString())
+        }
     }
 }

@@ -36,18 +36,28 @@ class AuthenticationInterceptor(
                 )
         ) return true
 
-        val authHeader = request.getHeader(AUTHORIZATION_HEADER)
-            ?: throw AuthenticationException("Missing Token")
+        val accessTokenAuthCookie = request.cookies?.firstOrNull { it.name == ACCESS_TOKEN_COOKIE_NAME }?.value
+        val refreshToken = request.cookies?.firstOrNull { it.name == REFRESH_TOKEN_COOKIE_NAME }?.value
 
-        val token = jwtProvider.parseBearerToken(authHeader)
-            ?: throw AuthenticationException("Token is not a Bearer Token")
+        val accessToken = accessTokenAuthCookie
+            ?: (
+                jwtProvider.parseBearerToken(
+                    request.getHeader(AUTHORIZATION_HEADER)
+                        ?: throw AuthenticationException("Missing authorization token")
+                ) ?: throw AuthenticationException("Token is not a Bearer Token")
+                )
 
-        request.setAttribute(TOKEN_ATTRIBUTE_NAME, token)
+        request.setAttribute(JwtProvider.ACCESS_TOKEN_ATTRIBUTE, accessToken)
+
+        if (refreshToken != null)
+            request.setAttribute(JwtProvider.REFRESH_TOKEN_ATTRIBUTE, refreshToken)
+
         return true
     }
 
     companion object {
         private const val AUTHORIZATION_HEADER = "Authorization"
-        private const val TOKEN_ATTRIBUTE_NAME = "token"
+        private const val ACCESS_TOKEN_COOKIE_NAME = "access_token"
+        private const val REFRESH_TOKEN_COOKIE_NAME = "refresh_token"
     }
 }

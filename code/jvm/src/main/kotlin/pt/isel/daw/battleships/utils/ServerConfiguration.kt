@@ -2,6 +2,7 @@ package pt.isel.daw.battleships.utils
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableScheduling
 
 /**
  * Configuration of the server.
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration
  * @property maxRefreshTokens the maximum number of refresh tokens that can be issued for a user
  */
 @Configuration
+@EnableScheduling
 class ServerConfiguration(
     @Value("\${server.config.secrets.access-token-secret}")
     val accessTokenSecret: String,

@@ -2,9 +2,11 @@ package pt.isel.daw.battleships.service
 
 import org.springframework.stereotype.Service
 import pt.isel.daw.battleships.domain.users.User
+import pt.isel.daw.battleships.repository.users.RevokedAccessTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
 import pt.isel.daw.battleships.service.exceptions.NotFoundException
+import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.utils.JwtProvider
 
 /**
@@ -15,8 +17,10 @@ import pt.isel.daw.battleships.utils.JwtProvider
  */
 @Service
 abstract class AuthenticatedService(
-    protected val usersRepository: UsersRepository,
-    protected val jwtProvider: JwtProvider
+    private val usersRepository: UsersRepository,
+    private val revokedAccessTokensRepository: RevokedAccessTokensRepository,
+    private val jwtProvider: JwtProvider,
+    private val hashingUtils: HashingUtils
 ) {
 
     /**
@@ -32,7 +36,12 @@ abstract class AuthenticatedService(
         val tokenPayload = jwtProvider.validateAccessToken(token)
             ?: throw AuthenticationException("Invalid token")
 
-        return usersRepository.findByUsername(tokenPayload.username)
+        val user = usersRepository.findByUsername(tokenPayload.username)
             ?: throw NotFoundException("User not found")
+
+        if (revokedAccessTokensRepository.existsByUserAndTokenHash(user, hashingUtils.hashToken(token)))
+            throw AuthenticationException("Token is revoked")
+
+        return user
     }
 }

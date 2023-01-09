@@ -51,7 +51,7 @@ export default function NavBar() {
                 }
 
                 await abortableTo(
-                    battleshipsService.usersService.logout(session.refreshToken)
+                    battleshipsService.usersService.logout()
                 )
 
                 sessionManager.clearSession()

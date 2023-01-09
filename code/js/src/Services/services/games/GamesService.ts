@@ -1,4 +1,4 @@
-import {get, getWithAuth, postWithAuth} from "../../utils/fetchSiren"
+import {get, post} from "../../utils/fetchSiren"
 import {GetGamesOutput} from "./models/games/getGames/GetGamesOutput"
 import {CreateGameOutput} from "./models/games/createGame/CreateGameOutput"
 import {MatchmakeOutput} from "./models/games/matchmake/MatchmakeOutput"
@@ -65,7 +65,6 @@ export namespace GamesService {
     /**
      * Creates a new game.
      *
-     * @param token the token of the user
      * @param createGameLink the link to the create game endpoint
      * @param createGameInput the game configuration
      * @param signal the signal to cancel the request
@@ -73,18 +72,16 @@ export namespace GamesService {
      * @return the API result of the create game request
      */
     export async function createGame(
-        token: string,
         createGameLink: string,
         createGameInput: CreateGameInput,
         signal?: AbortSignal
     ): Promise<CreateGameOutput> {
-        return await postWithAuth(createGameLink, token, JSON.stringify(createGameInput), signal)
+        return await post(createGameLink, JSON.stringify(createGameInput), signal)
     }
 
     /**
      * Matchmakes a game with a specific configuration.
      *
-     * @param token the token of the user that is matchmaking
      * @param matchmakeLink the link to the matchmake endpoint
      * @param gameConfig the game configuration
      * @param signal the signal to cancel the request
@@ -92,79 +89,70 @@ export namespace GamesService {
      * @return the API result of the matchmake request
      */
     export async function matchmake(
-        token: string,
         matchmakeLink: string,
         gameConfig: GameConfigModel,
         signal?: AbortSignal
     ): Promise<MatchmakeOutput> {
-        return await postWithAuth(matchmakeLink, token, JSON.stringify(gameConfig), signal)
+        return await post(matchmakeLink, JSON.stringify(gameConfig), signal)
     }
 
     /**
      * Gets a game by id.
      *
-     * @param token the user token for the authentication
      * @param gameLink the game link
      * @param signal the signal to cancel the request
      *
      * @return the result of the get game request
      */
     export async function getGame(
-        token: string,
         gameLink: string,
         signal?: AbortSignal
     ): Promise<GetGameOutput> {
-        return await getWithAuth(gameLink, token, signal)
+        return await get(gameLink, signal)
     }
 
     /**
      * Gets the state of a game.
      *
-     * @param token the token of the user that is matchmaking
      * @param gameStateLink the game state link
      * @param signal the signal to cancel the request
      *
      * @return the API result of the get game state request
      */
     export async function getGameState(
-        token: string,
         gameStateLink: string,
         signal?: AbortSignal
     ): Promise<GetGameStateOutput> {
-        return await getWithAuth(gameStateLink, token, signal)
+        return await get(gameStateLink, signal)
     }
 
     /**
      * Joins a game.
      *
-     * @param token the token of the user that is joining the game
      * @param joinGameLink the link to the join game endpoint
      * @param signal the signal to cancel the request
      *
      * @return the API result of the join game request
      */
     export async function joinGame(
-        token: string,
         joinGameLink: string,
         signal?: AbortSignal
     ): Promise<JoinGameOutput> {
-        return await postWithAuth(joinGameLink, token, undefined, signal)
+        return await post(joinGameLink, undefined, signal)
     }
 
     /**
      * Leaves a game.
      *
-     * @param token the token of the user that is leaving the game
      * @param leaveGameLink the link to the leave game endpoint
      * @param signal the signal to cancel the request
      *
      * @return the API result of the leave game request
      */
     export async function leaveGame(
-        token: string,
         leaveGameLink: string,
         signal?: AbortSignal
     ): Promise<SirenEntity<void>> {
-        return await postWithAuth(leaveGameLink, token, undefined, signal)
+        return await post(leaveGameLink, undefined, signal)
     }
 }

@@ -9,6 +9,7 @@ server:
 
   port: 80
 
+
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}

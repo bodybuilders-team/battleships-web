@@ -4,8 +4,10 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.isel.daw.battleships.domain.users.RefreshToken
+import pt.isel.daw.battleships.domain.users.RevokedAccessToken
 import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
+import pt.isel.daw.battleships.repository.users.RevokedAccessTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
@@ -43,6 +45,7 @@ import java.time.Instant
 @Transactional(rollbackFor = [Exception::class])
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
+    private val revokedAccessTokensRepository: RevokedAccessTokensRepository,
     private val refreshTokensRepository: RefreshTokensRepository,
     private val hashingUtils: HashingUtils,
     private val jwtProvider: JwtProvider,
@@ -124,22 +127,22 @@ class UsersServiceImpl(
         )
     }
 
-    override fun logout(refreshToken: String) {
-        val user = getUserFromRefreshToken(refreshToken = refreshToken)
-        val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
+    override fun logout(accessToken: String, refreshToken: String) {
+        val user = getUserAndRevokeAccessToken(accessToken = accessToken)
 
         val refreshTokenEntity = refreshTokensRepository
             .findByUserAndTokenHash(
                 user = user,
-                tokenHash = refreshTokenHash
+                tokenHash = hashingUtils.hashToken(token = refreshToken)
             )
             ?: throw NotFoundException("Refresh token not found")
 
         refreshTokensRepository.delete(refreshTokenEntity)
     }
 
-    override fun refreshToken(refreshToken: String): RefreshTokenOutputDTO {
-        val user = getUserFromRefreshToken(refreshToken = refreshToken)
+    override fun refreshToken(accessToken: String, refreshToken: String): RefreshTokenOutputDTO {
+        val user = getUserAndRevokeAccessToken(accessToken = accessToken)
+
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
         val refreshTokenEntity = refreshTokensRepository
@@ -160,6 +163,26 @@ class UsersServiceImpl(
             accessToken = accessToken,
             refreshToken = newRefreshToken
         )
+    }
+
+    /**
+     * Gets the user from the access token and revokes it.
+     */
+    private fun getUserAndRevokeAccessToken(accessToken: String): User {
+        val accessTokenPayload = jwtProvider.getAccessTokenPayloadOrNull(token = accessToken)
+            ?: throw AuthenticationException("Invalid access token")
+
+        val user = usersRepository.findByUsername(username = accessTokenPayload.username)
+            ?: throw NotFoundException("User not found")
+
+        val revokedAccessTokenEntity = RevokedAccessToken(
+            tokenHash = hashingUtils.hashToken(token = accessToken),
+            user = user,
+            expirationDate = Timestamp.from(accessTokenPayload.claims.expiration.toInstant())
+        )
+
+        revokedAccessTokensRepository.save(revokedAccessTokenEntity)
+        return user
     }
 
     override fun getUser(username: String): UserDTO {
@@ -188,7 +211,7 @@ class UsersServiceImpl(
                 .ifPresent { refreshTokensRepository.delete(it) }
         }
 
-        val jwtPayload = JwtPayload(username = user.username)
+        val jwtPayload = JwtPayload.fromData(username = user.username)
         val accessToken = jwtProvider.createAccessToken(jwtPayload = jwtPayload)
         val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload = jwtPayload)
 
@@ -206,23 +229,6 @@ class UsersServiceImpl(
             accessToken = accessToken,
             refreshToken = refreshToken
         )
-    }
-
-    /**
-     * Gets the user from the refresh token.
-     *
-     * @param refreshToken the refresh token
-     *
-     * @return the user
-     * @throws AuthenticationException if the refresh token is invalid
-     * @throws NotFoundException if a user with the refresh token was not found
-     */
-    private fun getUserFromRefreshToken(refreshToken: String): User {
-        val tokenPayload = jwtProvider.validateRefreshToken(token = refreshToken)
-            ?: throw AuthenticationException("Invalid token")
-
-        return usersRepository.findByUsername(username = tokenPayload.username)
-            ?: throw NotFoundException("User not found")
     }
 
     /**

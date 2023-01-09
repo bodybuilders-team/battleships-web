@@ -11,6 +11,7 @@ import pt.isel.daw.battleships.domain.games.ship.DeployedShip
 import pt.isel.daw.battleships.domain.games.ship.Ship
 import pt.isel.daw.battleships.domain.games.ship.UndeployedShip
 import pt.isel.daw.battleships.repository.games.GamesRepository
+import pt.isel.daw.battleships.repository.users.RevokedAccessTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.AuthenticatedService
 import pt.isel.daw.battleships.service.exceptions.InvalidPhaseException
@@ -21,6 +22,7 @@ import pt.isel.daw.battleships.service.games.dtos.ship.DeployedShipDTO
 import pt.isel.daw.battleships.service.games.dtos.ship.UndeployedFleetDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.FiredShotsDTO
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
+import pt.isel.daw.battleships.service.utils.HashingUtils
 import pt.isel.daw.battleships.utils.JwtProvider
 import javax.persistence.EntityManager
 import javax.persistence.LockModeType
@@ -37,9 +39,17 @@ import javax.persistence.PersistenceContext
 @Transactional(rollbackFor = [Exception::class])
 class PlayersServiceImpl(
     private val gamesRepository: GamesRepository,
-    usersRepository: UsersRepository,
-    jwtProvider: JwtProvider
-) : PlayersService, AuthenticatedService(usersRepository, jwtProvider) {
+    private val usersRepository: UsersRepository,
+    private val jwtProvider: JwtProvider,
+    revokedAccessTokensRepository: RevokedAccessTokensRepository,
+    hashingUtils: HashingUtils
+) : PlayersService,
+    AuthenticatedService(
+        usersRepository,
+        revokedAccessTokensRepository,
+        jwtProvider,
+        hashingUtils
+    ) {
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager

@@ -11,9 +11,11 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.junit4.SpringRunner
 import pt.isel.daw.battleships.domain.users.RefreshToken
+import pt.isel.daw.battleships.domain.users.RevokedAccessToken
 import pt.isel.daw.battleships.domain.users.User
 import pt.isel.daw.battleships.domain.users.UserTests.Companion.defaultUser
 import pt.isel.daw.battleships.repository.users.RefreshTokensRepository
+import pt.isel.daw.battleships.repository.users.RevokedAccessTokensRepository
 import pt.isel.daw.battleships.repository.users.UsersRepository
 import pt.isel.daw.battleships.service.exceptions.AlreadyExistsException
 import pt.isel.daw.battleships.service.exceptions.AuthenticationException
@@ -47,6 +49,9 @@ class UserServiceTests {
 
     @MockBean
     lateinit var refreshTokensRepository: RefreshTokensRepository
+
+    @MockBean
+    lateinit var revokedAccessTokensRepository: RevokedAccessTokensRepository
 
     @Autowired
     lateinit var hashingUtils: HashingUtils
@@ -327,7 +332,7 @@ class UserServiceTests {
         )
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
         ).token
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
         assertEquals(refreshTokenHash, savedRefreshToken.tokenHash)
@@ -412,11 +417,11 @@ class UserServiceTests {
             )
         )
 
-        val jwtPayload = JwtProvider.JwtPayload(username = username)
+        val jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
 
         assertEquals(username, registerUserOutputDTO.username)
-        assertEquals(jwtPayload, jwtProvider.validateAccessToken(token = registerUserOutputDTO.accessToken))
-        assertEquals(jwtPayload, jwtProvider.validateRefreshToken(token = registerUserOutputDTO.refreshToken))
+        assertEquals(jwtPayload.username, jwtProvider.validateAccessToken(token = registerUserOutputDTO.accessToken)?.username)
+        assertEquals(jwtPayload.username, jwtProvider.validateRefreshToken(token = registerUserOutputDTO.refreshToken)?.username)
     }
 
     @Test
@@ -487,10 +492,16 @@ class UserServiceTests {
             )
         )
 
-        val jwtPayload = JwtProvider.JwtPayload(username = username)
+        val jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
 
-        assertEquals(jwtPayload, jwtProvider.validateAccessToken(token = loginUserOutputDTO.accessToken))
-        assertEquals(jwtPayload, jwtProvider.validateRefreshToken(token = loginUserOutputDTO.refreshToken))
+        assertEquals(
+            jwtPayload.username,
+            jwtProvider.validateAccessToken(token = loginUserOutputDTO.accessToken)?.username
+        )
+        assertEquals(
+            jwtPayload.username,
+            jwtProvider.validateRefreshToken(token = loginUserOutputDTO.refreshToken)?.username
+        )
     }
 
     @Test
@@ -580,8 +591,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -610,7 +625,12 @@ class UserServiceTests {
                 null
             }
 
-        userService.logout(refreshToken)
+        Mockito.`when`(revokedAccessTokensRepository.save(Mockito.any(RevokedAccessToken::class.java)))
+            .thenAnswer {
+                it.arguments[0] as RevokedAccessToken
+            }
+
+        userService.logout(accessToken, refreshToken)
 
         assertTrue(deleted)
     }
@@ -618,25 +638,29 @@ class UserServiceTests {
     @Test
     fun `logout throws AuthenticationException if the refresh token is invalid`() {
         val refreshToken = "invalidRefreshToken"
+        val accessToken = "invalidAccessToken"
 
         assertFailsWith<AuthenticationException> {
-            userService.logout(refreshToken)
+            userService.logout(accessToken, refreshToken)
         }
     }
 
     @Test
     fun `logout throws NotFoundException if the user with the username in the refresh token doesn't exist`() {
         val username = defaultUser(0).username
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
+        )
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
         ).token
 
         Mockito.`when`(usersRepository.findByUsername(username))
             .thenReturn(null)
 
         assertFailsWith<NotFoundException> {
-            userService.logout(refreshToken)
+            userService.logout(accessToken, refreshToken)
         }
     }
 
@@ -645,8 +669,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -662,7 +690,7 @@ class UserServiceTests {
         ).thenReturn(null)
 
         assertFailsWith<NotFoundException> {
-            userService.logout(refreshToken)
+            userService.logout(accessToken, refreshToken)
         }
     }
 
@@ -673,8 +701,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -706,7 +738,7 @@ class UserServiceTests {
 
         val expirationDateInstantIfBefore = Instant.now().plus(refreshTokenDuration)
 
-        userService.refreshToken(refreshToken)
+        userService.refreshToken(accessToken, refreshToken)
 
         val expirationDateInstantIfAfter = Instant.now().plus(refreshTokenDuration)
 
@@ -727,7 +759,7 @@ class UserServiceTests {
         )
 
         val newRefreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
         val newRefreshTokenHash = hashingUtils.hashToken(token = newRefreshToken)
         assertEquals(newRefreshTokenHash, savedRefreshToken.tokenHash)
@@ -738,8 +770,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -760,12 +796,18 @@ class UserServiceTests {
                 )
         ).thenReturn(refreshTokenEntity)
 
-        val refreshTokenOutputDTO = userService.refreshToken(refreshToken)
+        val refreshTokenOutputDTO = userService.refreshToken(accessToken, refreshToken)
 
-        val jwtPayload = JwtProvider.JwtPayload(username = user.username)
+        val jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
 
-        assertEquals(jwtPayload, jwtProvider.validateAccessToken(token = refreshTokenOutputDTO.accessToken))
-        assertEquals(jwtPayload, jwtProvider.validateRefreshToken(token = refreshTokenOutputDTO.refreshToken))
+        assertEquals(
+            jwtPayload.username,
+            jwtProvider.validateAccessToken(token = refreshTokenOutputDTO.accessToken)?.username
+        )
+        assertEquals(
+            jwtPayload.username,
+            jwtProvider.validateRefreshToken(token = refreshTokenOutputDTO.refreshToken)?.username
+        )
     }
 
     @Test
@@ -773,8 +815,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -803,7 +849,7 @@ class UserServiceTests {
                 null
             }
 
-        userService.refreshToken(refreshToken)
+        userService.refreshToken(accessToken, refreshToken)
 
         assertTrue(deleted)
     }
@@ -813,8 +859,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -864,7 +914,7 @@ class UserServiceTests {
                 null
             }
 
-        userService.refreshToken(refreshToken)
+        userService.refreshToken(accessToken, refreshToken)
 
         assertTrue(deletedOld)
     }
@@ -872,9 +922,10 @@ class UserServiceTests {
     @Test
     fun `refreshToken throws AuthenticationException if the refresh token is invalid`() {
         val refreshToken = "invalidRefreshToken"
+        val accessToken = "invalidAccessToken"
 
         assertFailsWith<AuthenticationException> {
-            userService.refreshToken(refreshToken)
+            userService.refreshToken(accessToken, refreshToken)
         }
     }
 
@@ -883,14 +934,18 @@ class UserServiceTests {
         val username = defaultUser(0).username
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = username)
+        )
 
         Mockito.`when`(usersRepository.findByUsername(username))
             .thenReturn(null)
 
         assertFailsWith<NotFoundException> {
-            userService.refreshToken(refreshToken)
+            userService.refreshToken(accessToken, refreshToken)
         }
     }
 
@@ -899,8 +954,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -916,7 +975,7 @@ class UserServiceTests {
         ).thenReturn(null)
 
         assertFailsWith<NotFoundException> {
-            userService.refreshToken(refreshToken)
+            userService.refreshToken(accessToken, refreshToken)
         }
     }
 
@@ -925,8 +984,12 @@ class UserServiceTests {
         val user = defaultUser(0)
 
         val refreshToken = jwtProvider.createRefreshToken(
-            jwtPayload = JwtProvider.JwtPayload(username = user.username)
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         ).token
+
+        val accessToken = jwtProvider.createAccessToken(
+            jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        )
 
         val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
 
@@ -948,7 +1011,7 @@ class UserServiceTests {
         ).thenReturn(refreshTokenEntity)
 
         assertFailsWith<RefreshTokenExpiredException> {
-            userService.refreshToken(refreshToken)
+            userService.refreshToken(accessToken, refreshToken)
         }
     }
 

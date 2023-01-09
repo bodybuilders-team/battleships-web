@@ -2,6 +2,7 @@
 
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS refresh_tokens CASCADE;
+DROP TABLE IF EXISTS revoked_access_tokens CASCADE;
 DROP TABLE IF EXISTS players CASCADE;
 DROP TABLE IF EXISTS games CASCADE;
 DROP TABLE IF EXISTS shots CASCADE;
@@ -29,6 +30,16 @@ CREATE TABLE refresh_tokens
     user_id         INT          NOT NULL REFERENCES users (id),
     token_hash      VARCHAR(512) NOT NULL,
     expiration_date TIMESTAMP    NOT NULL,
+
+    UNIQUE (user_id, token_hash)
+);
+
+CREATE TABLE revoked_access_tokens
+(
+    id      SERIAL PRIMARY KEY,
+    user_id INT           NOT NULL REFERENCES users (id),
+    token_hash   VARCHAR(1024) NOT NULL,
+    expiration_date TIMESTAMP NOT NULL,
 
     UNIQUE (user_id, token_hash)
 );

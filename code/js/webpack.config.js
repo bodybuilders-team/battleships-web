@@ -27,11 +27,5 @@ module.exports = {
                 use: ['file-loader?name=[name].[ext]']
             }
         ]
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            favicon: "./public/favicon.ico",
-            template: "./public/index.html"
-        })
-    ]
+    }
 };

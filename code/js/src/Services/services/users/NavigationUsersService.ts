@@ -124,18 +124,16 @@ export default class NavigationUsersService {
 
     /**
      * Logs out a user.
-     * @param refreshToken the refresh token of the user
      * @param signal the signal to cancel the request
      *
      * @return a promise with the result of the logout request
      */
-    async logout(refreshToken: string, signal?: AbortSignal) {
+    async logout(signal?: AbortSignal) {
         if (!this.links.get(Rels.LOGOUT))
             await this.battleshipsService.usersService.getUserHome(signal)
 
         await executeRequest(() => UsersService.logout(
             this.links.get(Rels.LOGOUT) ?? throwError("Logout link not found"),
-            refreshToken,
             signal
         ), signal)
     }
@@ -143,18 +141,16 @@ export default class NavigationUsersService {
     /**
      * Refreshes the token of a user.
      *
-     * @param refreshToken the refresh token of the user
      * @param signal the signal to cancel the request
      *
      * @return a promise with the result of the refresh token request
      */
-    async refreshToken(refreshToken: string, signal?: AbortSignal) {
+    async refreshToken(signal?: AbortSignal) {
         if (!this.links.get(Rels.REFRESH_TOKEN))
             await this.getUserHome(signal)
 
         const res = await executeRequest(() => UsersService.refreshToken(
             this.links.get(Rels.REFRESH_TOKEN) ?? throwError("Refresh token link not found"),
-            refreshToken,
             signal
         ), signal)
 

@@ -1,14 +1,16 @@
 package pt.isel.daw.battleships.utils
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
 import org.springframework.stereotype.Component
+import java.security.Key
 import java.security.SignatureException
 import java.sql.Timestamp
 import java.time.Duration
 import java.time.Instant
-import java.time.temporal.TemporalAmount
 import java.util.Date
 import javax.crypto.spec.SecretKeySpec
 
@@ -37,29 +39,19 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      *
      * @property username the username of the user
      */
-    data class JwtPayload(val username: String) {
+    data class JwtPayload(val claims: Claims) {
 
-        /**
-         * Converts the JWT payload to a [Claims] object.
-         *
-         * @return the [Claims] object
-         */
-        fun toClaims(): Claims = Jwts.claims(
-            /* claims = */ mapOf(USERNAME_KEY to username)
-        )
+        val username: String = claims[USERNAME_KEY] as String
 
         companion object {
-            private const val USERNAME_KEY = "username"
 
-            /**
-             * Creates a [JwtPayload] from the given [claims].
-             *
-             * @param claims the claims to create the payload from
-             * @return the created payload
-             */
-            fun fromClaims(claims: Claims) = JwtPayload(
-                username = claims[USERNAME_KEY] as String
-            )
+            fun fromData(username: String): JwtPayload {
+                val claims = Jwts.claims()
+                claims[USERNAME_KEY] = username
+                return JwtPayload(claims)
+            }
+
+            private const val USERNAME_KEY = "username"
         }
     }
 
@@ -85,7 +77,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
         val expirationDate = issuedAt.plus(accessTokenDuration)
 
         return Jwts.builder()
-            .setClaims(jwtPayload.toClaims())
+            .setClaims(jwtPayload.claims)
             .setIssuedAt(Date.from(issuedAt))
             .setExpiration(Date.from(expirationDate))
             .signWith(accessTokenKey)
@@ -104,7 +96,7 @@ class JwtProvider(serverConfig: ServerConfiguration) {
 
         return RefreshTokenDetails(
             token = Jwts.builder()
-                .setClaims(jwtPayload.toClaims())
+                .setClaims(jwtPayload.claims)
                 .setIssuedAt(Date.from(issuedAt))
                 .setExpiration(Date.from(expirationDate))
                 .signWith(refreshTokenKey)
@@ -121,17 +113,14 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     fun validateAccessToken(token: String): JwtPayload? =
         try {
-            JwtPayload.fromClaims(
-                claims = Jwts.parserBuilder()
-                    .setSigningKey(accessTokenKey)
-                    .build()
-                    .parseClaimsJws(token).body
-            )
-        } catch (e: JwtException) {
+            getAccessTokenPayload(token)
+        } catch (e: ExpiredJwtException) {
             null
         } catch (e: IllegalArgumentException) {
             null
         } catch (e: SignatureException) {
+            null
+        } catch (e: MalformedJwtException) {
             null
         }
 
@@ -143,19 +132,91 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     fun validateRefreshToken(token: String): JwtPayload? =
         try {
-            JwtPayload.fromClaims(
-                claims = Jwts.parserBuilder()
-                    .setSigningKey(refreshTokenKey)
-                    .build()
-                    .parseClaimsJws(token).body
-            )
+            getRefreshTokenPayload(token)
         } catch (e: JwtException) {
             null
         } catch (e: IllegalArgumentException) {
             null
         } catch (e: SignatureException) {
             null
+        } catch (e: MalformedJwtException) {
+            null
         }
+
+    /**
+     * Gets the payload of a JWT access token.
+     *
+     * @param token the token to get the payload from
+     *
+     * @return the payload of the token or null if an exception is thrown
+     */
+    fun getAccessTokenPayloadOrNull(token: String): JwtPayload? =
+        try {
+            getAccessTokenPayload(token)
+        } catch (e: ExpiredJwtException) {
+            e.claims?.let { JwtPayload(it) }
+        } catch (e: IllegalArgumentException) {
+            null
+        } catch (e: SignatureException) {
+            null
+        } catch (e: MalformedJwtException) {
+            null
+        }
+
+    /**
+     * Gets the payload of a JWT refresh token.
+     *
+     * @param token the token to get the payload from
+     *
+     * @return the payload of the token or null if an exception is thrown
+     */
+    fun getRefreshTokenPayloadOrNull(token: String): JwtPayload? =
+        try {
+            getRefreshTokenPayload(token)
+        } catch (e: ExpiredJwtException) {
+            e.claims?.let { JwtPayload(it) }
+        } catch (e: IllegalArgumentException) {
+            null
+        } catch (e: SignatureException) {
+            null
+        } catch (e: MalformedJwtException) {
+            null
+        }
+
+    /**
+     * Gets the payload of a JWT access token.
+     *
+     * @param token the token to get the payload from
+     *
+     * @return the payload of the token
+     */
+    fun getAccessTokenPayload(token: String) =
+        getTokenClaims(token, accessTokenKey)
+
+    /**
+     * Gets the payload of a JWT refresh token.
+     *
+     * @param token the token to get the payload from
+     *
+     * @return the payload of the token
+     */
+    fun getRefreshTokenPayload(token: String) =
+        getTokenClaims(token, refreshTokenKey)
+
+    /**
+     * Gets the payload of a JWT token.
+     *
+     * @param token the token to get the payload from
+     *
+     * @return the claims of the token
+     */
+    private fun getTokenClaims(token: String, tokenKey: Key) =
+        JwtPayload(
+            claims = Jwts.parserBuilder()
+                .setSigningKey(tokenKey)
+                .build()
+                .parseClaimsJws(token).body
+        )
 
     /**
      * Parses the bearer token.
@@ -172,9 +233,10 @@ class JwtProvider(serverConfig: ServerConfiguration) {
     companion object {
         private const val BEARER_TOKEN_PREFIX = "Bearer "
         private const val SECRET_KEY_ALGORITHM = "HmacSHA512"
-        const val TOKEN_ATTRIBUTE = "token"
+        const val ACCESS_TOKEN_ATTRIBUTE = "access_token"
+        const val REFRESH_TOKEN_ATTRIBUTE = "refresh_token"
 
-        val accessTokenDuration: TemporalAmount = Duration.ofHours(1)
-        val refreshTokenDuration: TemporalAmount = Duration.ofDays(1)
+        val accessTokenDuration: Duration = Duration.ofHours(1)
+        val refreshTokenDuration: Duration = Duration.ofDays(1)
     }
 }

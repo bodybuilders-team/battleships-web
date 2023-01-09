@@ -22,18 +22,12 @@ export default class NavigationBattleshipsService {
     readonly gamesService: NavigationGamesService
     readonly playersService: NavigationPlayersService
     public readonly links: Map<string, string>
-    protected sessionManager: SessionManager
 
     constructor(links: Map<string, string>, sessionManager: SessionManager) {
         this.links = links
-        this.sessionManager = sessionManager
         this.usersService = new NavigationUsersService(this, sessionManager)
         this.gamesService = new NavigationGamesService(this, sessionManager)
         this.playersService = new NavigationPlayersService(this, sessionManager)
-    }
-
-    protected get session(): Session {
-        return this.sessionManager.session ?? throwError("Session not found")
     }
 
     /**

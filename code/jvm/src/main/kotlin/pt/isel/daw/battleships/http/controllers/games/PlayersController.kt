@@ -31,7 +31,7 @@ import pt.isel.daw.battleships.http.utils.Uris
 import pt.isel.daw.battleships.service.games.GamesService
 import pt.isel.daw.battleships.service.games.PlayersService
 import pt.isel.daw.battleships.service.games.dtos.shot.UnfiredShotsDTO
-import pt.isel.daw.battleships.utils.JwtProvider.Companion.TOKEN_ATTRIBUTE
+import pt.isel.daw.battleships.utils.JwtProvider.Companion.ACCESS_TOKEN_ATTRIBUTE
 import javax.validation.Valid
 
 /**
@@ -58,7 +58,7 @@ class PlayersController(
      */
     @GetMapping(Uris.PLAYERS_MY_FLEET)
     fun getFleet(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetFleetOutputModel> {
         val ships = playersService
@@ -87,7 +87,7 @@ class PlayersController(
      */
     @PostMapping(Uris.PLAYERS_MY_FLEET)
     fun deployFleet(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int,
         @Valid @RequestBody
         fleet: DeployFleetInputModel
@@ -121,7 +121,7 @@ class PlayersController(
      */
     @GetMapping(Uris.PLAYERS_MY_BOARD)
     fun getBoard(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetBoardOutputModel> {
         val config = gamesService.getGame(gameId = gameId).config
@@ -182,7 +182,7 @@ class PlayersController(
      */
     @GetMapping(Uris.PLAYERS_OPPONENT_FLEET)
     fun getOpponentFleet(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetOpponentFleetOutputModel> {
         val ships = playersService
@@ -212,7 +212,7 @@ class PlayersController(
      */
     @GetMapping(Uris.PLAYERS_MY_SHOTS)
     fun getShots(
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String,
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable gameId: Int
     ): SirenEntity<GetShotsOutputModel> {
         val shots = playersService
@@ -246,7 +246,7 @@ class PlayersController(
         @PathVariable gameId: Int,
         @Valid @RequestBody
         shots: FireShotsInputModel,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String
     ): SirenEntity<FireShotsOutputModel> {
         val shotsModels = playersService
             .fireShots(
@@ -280,7 +280,7 @@ class PlayersController(
     @GetMapping(Uris.PLAYERS_OPPONENT_SHOTS)
     fun getOpponentShots(
         @PathVariable gameId: Int,
-        @RequestAttribute(TOKEN_ATTRIBUTE) token: String
+        @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String
     ): SirenEntity<GetOpponentShotsOutputModel> {
         val shots = playersService
             .getOpponentShots(token = token, gameId = gameId)

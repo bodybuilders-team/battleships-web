@@ -76,34 +76,30 @@ export namespace UsersService {
      * Logs the user out.
      *
      * @param logoutLink the link to the logout endpoint
-     * @param refreshToken the refresh token of the user
      * @param signal the signal to cancel the request
      *
      * @return the API result of the logout request
      */
     export async function logout(
         logoutLink: string,
-        refreshToken: string,
         signal?: AbortSignal
     ): Promise<LogoutOutput> {
-        return await post(logoutLink, JSON.stringify({refreshToken}), signal)
+        return await post(logoutLink, undefined, signal)
     }
 
     /**
      * Refreshes the access token of the user.
      *
      * @param refreshTokenLink the link to the refresh token endpoint
-     * @param refreshToken the refresh token of the user
      * @param signal the signal to cancel the request
      *
      * @return the API result of the refresh token request
      */
     export function refreshToken(
         refreshTokenLink: string,
-        refreshToken: string,
         signal?: AbortSignal
     ): Promise<RefreshTokenOutput> {
-        return post(refreshTokenLink, JSON.stringify({refreshToken}), signal)
+        return post(refreshTokenLink, undefined, signal)
     }
 
 

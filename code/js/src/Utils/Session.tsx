@@ -5,14 +5,10 @@ import {createContext, useContext, useState} from 'react';
  * Holds the session data.
  *
  * @property username the username of the user
- * @property accessToken the access token of the user
- * @property refreshToken the refresh token of the user
  * @property userHomeLink the user home link
  */
 export interface Session {
-    readonly username: string
-    readonly accessToken: string
-    readonly refreshToken: string
+    readonly username: string,
     readonly userHomeLink: string
 }
 

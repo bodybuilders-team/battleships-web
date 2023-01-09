@@ -75,7 +75,6 @@ export class NavigationGamesService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => GamesService.createGame(
-                this.session.accessToken,
                 this.links.get(Rels.CREATE_GAME)
                 ?? throwError("Create game link not found"),
                 createGameInput,
@@ -105,7 +104,6 @@ export class NavigationGamesService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => GamesService.matchmake(
-                this.session.accessToken,
                 this.links.get(Rels.MATCHMAKE) ?? throwError("Matchmake link not found"),
                 gameConfig,
                 signal
@@ -132,7 +130,6 @@ export class NavigationGamesService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => GamesService.getGame(
-                this.session.accessToken,
                 this.links.get(Rels.GAME) ?? throwError("Game link not found"),
                 signal
             ),
@@ -160,7 +157,6 @@ export class NavigationGamesService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => GamesService.getGameState(
-                this.session.accessToken,
                 this.links.get(Rels.GAME_STATE) ?? throwError("Game state link not found"),
                 signal
             ),
@@ -181,7 +177,6 @@ export class NavigationGamesService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => GamesService.joinGame(
-                this.session.accessToken,
                 joinGameLink,
                 signal
             ),
@@ -207,7 +202,6 @@ export class NavigationGamesService {
             this.battleshipsService.usersService,
             this.sessionManager,
             () => GamesService.leaveGame(
-                this.session.accessToken,
                 this.links.get(Rels.LEAVE_GAME) ?? throwError("Leave game link not found"),
                 signal
             ),
