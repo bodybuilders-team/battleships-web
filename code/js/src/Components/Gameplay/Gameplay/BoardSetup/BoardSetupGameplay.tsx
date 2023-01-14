@@ -15,7 +15,7 @@ import {ProblemTypes} from "../../../../Utils/types/problemTypes"
 import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup"
 import {Uris} from "../../../../Utils/navigation/Uris"
 import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted"
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**

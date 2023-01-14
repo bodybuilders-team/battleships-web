@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {createContext, useContext, useState} from 'react';
+import * as React from 'react'
+import {createContext, useContext, useState} from 'react'
 
 /**
  * Holds the session data.

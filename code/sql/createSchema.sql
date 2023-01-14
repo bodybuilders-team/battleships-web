@@ -36,10 +36,10 @@ CREATE TABLE refresh_tokens
 
 CREATE TABLE revoked_access_tokens
 (
-    id      SERIAL PRIMARY KEY,
-    user_id INT           NOT NULL REFERENCES users (id),
-    token_hash   VARCHAR(1024) NOT NULL,
-    expiration_date TIMESTAMP NOT NULL,
+    id              SERIAL PRIMARY KEY,
+    user_id         INT           NOT NULL REFERENCES users (id),
+    token_hash      VARCHAR(1024) NOT NULL,
+    expiration_date TIMESTAMP     NOT NULL,
 
     UNIQUE (user_id, token_hash)
 );

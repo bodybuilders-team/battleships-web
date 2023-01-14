@@ -10,8 +10,8 @@ import {useInterval} from "../Shared/TimersHooks/useInterval"
 import LoadingSpinner from "../../Shared/LoadingSpinner"
 import GameConfig from "./GameConfig"
 import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted"
+import {useNavigationState} from "../../../Utils/navigation/NavigationState"
 
 const POLLING_DELAY = 1000
 

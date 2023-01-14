@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid"
 import GameHistory from "./GameHistory"
-import OngoingGames from "./OngoingGames";
+import OngoingGames from "./OngoingGames"
 
 /**
  * Profile component.

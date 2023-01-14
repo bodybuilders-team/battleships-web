@@ -34,7 +34,6 @@ class RevokedAccessToken {
     @Column(name = "token_hash", nullable = false)
     val tokenHash: String
 
-    // TODO: Add routine to periodically remove expired tokens
     @Column(name = "expiration_date", nullable = false)
     val expirationDate: Timestamp
 

@@ -16,11 +16,11 @@ import FetchedEndGamePopup from "../../Shared/EndGame/FetchedEndGamePopup"
 import {Problem} from "../../../../Services/media/Problem"
 import {ProblemTypes} from "../../../../Utils/types/problemTypes"
 import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
-import {MyBoard} from "../../../../Domain/games/board/MyBoard";
-import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard";
-import {FiredShot} from "../../../../Domain/games/shot/FiredShot";
-import {useNavigate} from "react-router-dom";
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted"
+import {MyBoard} from "../../../../Domain/games/board/MyBoard"
+import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard"
+import {FiredShot} from "../../../../Domain/games/shot/FiredShot"
+import {useNavigate} from "react-router-dom"
 
 /**
  * Properties for the ShootingGameplay component.

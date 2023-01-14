@@ -12,8 +12,8 @@ export class InvalidRefreshTokenError implements Error {
     constructor(public err: Error) {
     }
 
-    message: string = this.err.message;
-    name: string = "InvalidRefreshTokenError";
+    message: string = this.err.message
+    name: string = "InvalidRefreshTokenError"
 }
 
 /**

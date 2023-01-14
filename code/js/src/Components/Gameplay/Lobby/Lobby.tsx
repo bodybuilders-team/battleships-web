@@ -12,8 +12,8 @@ import {Rels} from "../../../Utils/navigation/Rels"
 import {useSession} from "../../../Utils/Session"
 import Typography from "@mui/material/Typography"
 import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
-import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState"
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted"
 
 /**
  * Lobby component.

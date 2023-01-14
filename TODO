@@ -2,7 +2,6 @@ Documentation:
 - Fix and review documentation
 
 Backend:
-- Access token revocation
 - Google Login
 - HTTPS
 
@@ -14,9 +13,9 @@ Frontend:
 - Add information about the number of played games, the number of wins and the number of losses in the player profile (Jesus)
 - Custom ships
 - Add dark mode
+- Make board view responsive (change the tileSize variable according to the screen size)
 
 Both:
-- Use cookies instead of local storage for auth
 - Private games mechanism
 - Server-side events for game state polling
 - Add guest mode

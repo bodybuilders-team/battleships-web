@@ -172,6 +172,15 @@ export default function NavBar() {
                             </Button>
                         ))}
                     </Box>
+
+                    {/* TODO: <IconButton
+                        sx={{ml: 1}}
+                        onClick={colorMode.toggleColorMode}
+                        color="inherit"
+                    >
+                        {theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
+                    </IconButton>*/}
+
                     {
                         loggedIn
                             ? <Box sx={{flexGrow: 0}}>

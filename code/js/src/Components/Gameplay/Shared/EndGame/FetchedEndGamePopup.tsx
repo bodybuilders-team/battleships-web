@@ -9,7 +9,7 @@ import {useNavigate} from "react-router-dom"
 import GameFinished from "./GameFinished"
 import {Uris} from "../../../../Utils/navigation/Uris"
 import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted"
 import HOME = Uris.HOME;
 
 const POLLING_DELAY = 1000

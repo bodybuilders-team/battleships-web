@@ -23,9 +23,9 @@ import {useNavigate} from "react-router-dom"
 import {Uris} from "../../../../Utils/navigation/Uris"
 import ErrorAlert from "../../../Shared/ErrorAlert"
 import {abortableTo} from "../../../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted";
-import {MyBoard} from "../../../../Domain/games/board/MyBoard";
-import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard";
+import {useMountedSignal} from "../../../../Utils/componentManagement/useMounted"
+import {MyBoard} from "../../../../Domain/games/board/MyBoard"
+import {OpponentBoard} from "../../../../Domain/games/board/OpponentBoard"
 import GAMEPLAY_MENU = Uris.GAMEPLAY_MENU;
 
 /**

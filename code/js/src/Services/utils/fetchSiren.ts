@@ -3,8 +3,8 @@ import {Problem, problemMediaType} from "../media/Problem"
 import * as React from "react"
 import {API_ENDPOINT} from "../BattleshipsService"
 import to from "../../Utils/await-to"
-import {NavigateFunction} from "react-router-dom";
-import {InvalidRefreshTokenError} from "./executeRequestUtils";
+import {NavigateFunction} from "react-router-dom"
+import {InvalidRefreshTokenError} from "./executeRequestUtils"
 
 /**
  * Fetches a Siren entity from the given URL.

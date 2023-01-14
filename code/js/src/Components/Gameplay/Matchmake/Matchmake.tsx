@@ -12,7 +12,7 @@ import {Game} from "../../../Domain/games/game/Game"
 import {useNavigationState} from "../../../Utils/navigation/NavigationState"
 import {Rels} from "../../../Utils/navigation/Rels"
 import {abortableTo} from "../../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted"
 
 const defaultGameConfig = require('../../../Assets/defaultGameConfig.json')
 const POLLING_DELAY = 1000

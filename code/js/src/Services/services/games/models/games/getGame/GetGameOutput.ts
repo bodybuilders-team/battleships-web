@@ -1,5 +1,5 @@
 import {SirenEntity} from "../../../../../media/siren/SirenEntity"
-import {GameStateModel} from "../GameStateModel";
+import {GameStateModel} from "../GameStateModel"
 
 /**
  * The Get Game Output Model.

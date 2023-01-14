@@ -7,7 +7,7 @@ import {handleError} from "../../Services/utils/fetchSiren"
 import PageContent from "../Shared/PageContent"
 import {useBattleshipsService} from "../../Services/NavigationBattleshipsService"
 import {abortableTo} from "../../Utils/componentManagement/abortableUtils"
-import {useMountedSignal} from "../../Utils/componentManagement/useMounted";
+import {useMountedSignal} from "../../Utils/componentManagement/useMounted"
 
 /**
  * Ranking component.

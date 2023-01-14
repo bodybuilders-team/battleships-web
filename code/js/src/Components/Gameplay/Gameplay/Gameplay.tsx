@@ -10,12 +10,12 @@ import BoardSetupGameplay from "./BoardSetup/BoardSetupGameplay"
 import {Game} from "../../../Domain/games/game/Game"
 import GameFinished from "../Shared/EndGame/GameFinished"
 import {abortableTo, setAbortableTimeout} from "../../../Utils/componentManagement/abortableUtils"
-import {useNavigationState} from "../../../Utils/navigation/NavigationState";
-import {useMountedSignal} from "../../../Utils/componentManagement/useMounted";
-import {useNavigate, useParams} from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import {Rels} from "../../../Utils/navigation/Rels";
+import {useNavigationState} from "../../../Utils/navigation/NavigationState"
+import {useMountedSignal} from "../../../Utils/componentManagement/useMounted"
+import {useNavigate, useParams} from "react-router-dom"
+import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
+import {Rels} from "../../../Utils/navigation/Rels"
 
 /**
  * Gameplay component.

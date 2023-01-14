@@ -1,14 +1,14 @@
-import {useBattleshipsService} from "../../Services/NavigationBattleshipsService";
-import {useSession} from "../../Utils/Session";
-import * as React from "react";
-import {useEffect, useState} from "react";
-import {Game} from "../../Domain/games/game/Game";
-import {useNavigationState} from "../../Utils/navigation/NavigationState";
-import {useMountedSignal} from "../../Utils/componentManagement/useMounted";
-import {abortableTo} from "../../Utils/componentManagement/abortableUtils";
-import {handleError} from "../../Services/utils/fetchSiren";
-import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import {useBattleshipsService} from "../../Services/NavigationBattleshipsService"
+import {useSession} from "../../Utils/Session"
+import * as React from "react"
+import {useEffect, useState} from "react"
+import {Game} from "../../Domain/games/game/Game"
+import {useNavigationState} from "../../Utils/navigation/NavigationState"
+import {useMountedSignal} from "../../Utils/componentManagement/useMounted"
+import {abortableTo} from "../../Utils/componentManagement/abortableUtils"
+import {handleError} from "../../Services/utils/fetchSiren"
+import {GetGameOutputModel} from "../../Services/services/games/models/games/getGame/GetGameOutput"
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import {
     Button,
     Card,
@@ -22,10 +22,10 @@ import {
     TableContainer,
     TableHead,
     TableRow
-} from "@mui/material";
-import ErrorAlert from "../Shared/ErrorAlert";
-import {Rels} from "../../Utils/navigation/Rels";
-import {useNavigate} from "react-router-dom";
+} from "@mui/material"
+import ErrorAlert from "../Shared/ErrorAlert"
+import {Rels} from "../../Utils/navigation/Rels"
+import {useNavigate} from "react-router-dom"
 
 /**
  * Ongoing games component.

@@ -1,6 +1,6 @@
 import * as React from "react"
 import {useContext, useRef} from "react"
-import {Rels} from "./Rels";
+import {Rels} from "./Rels"
 
 /**
  * NavigationState interface.
@@ -11,7 +11,7 @@ import {Rels} from "./Rels";
 interface NavigationState {
     links: Map<string, string>
 
-    clearGameLinks(): void;
+    clearGameLinks(): void
 }
 
 const NavigationStateContext = React.createContext<NavigationState>({

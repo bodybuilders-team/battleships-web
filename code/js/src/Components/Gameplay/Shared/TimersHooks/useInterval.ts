@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect} from "react"
 
 /**
  * Hook that calls a function every interval.

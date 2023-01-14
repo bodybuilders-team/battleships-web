@@ -1,4 +1,4 @@
-import {EndGameCause, GamePhase} from "../../../../../Domain/games/game/GameState";
+import {EndGameCause, GamePhase} from "../../../../../Domain/games/game/GameState"
 
 /**
  * The Game State Model.

@@ -1,4 +1,4 @@
-import {GameStateModel} from "../../../Services/services/games/models/games/GameStateModel";
+import {GameStateModel} from "../../../Services/services/games/models/games/GameStateModel"
 
 /**
  * The Game State.
@@ -13,18 +13,18 @@ import {GameStateModel} from "../../../Services/services/games/models/games/Game
 export class GameState {
     readonly phase: GamePhase
     readonly phaseEndTime: number
-    readonly round: number | null;
-    readonly turn: string | null;
-    readonly winner: string | null;
-    readonly endCause: EndGameCause | null;
+    readonly round: number | null
+    readonly turn: string | null
+    readonly winner: string | null
+    readonly endCause: EndGameCause | null
 
     constructor(gameStateModel: GameStateModel) {
-        this.phase = gameStateModel.phase;
-        this.phaseEndTime = gameStateModel.phaseEndTime;
-        this.round = gameStateModel.round;
-        this.turn = gameStateModel.turn;
-        this.winner = gameStateModel.winner;
-        this.endCause = gameStateModel.endCause;
+        this.phase = gameStateModel.phase
+        this.phaseEndTime = gameStateModel.phaseEndTime
+        this.round = gameStateModel.round
+        this.turn = gameStateModel.turn
+        this.winner = gameStateModel.winner
+        this.endCause = gameStateModel.endCause
     }
 }
 

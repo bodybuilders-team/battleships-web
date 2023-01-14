@@ -21,8 +21,8 @@ import {Game} from "../../Domain/games/game/Game"
 import ErrorAlert from "../Shared/ErrorAlert"
 import {useMountedSignal} from "../../Utils/componentManagement/useMounted"
 import {abortableTo} from "../../Utils/componentManagement/abortableUtils"
-import {useNavigationState} from "../../Utils/navigation/NavigationState";
-import {useNavigate} from "react-router-dom";
+import {useNavigationState} from "../../Utils/navigation/NavigationState"
+import {useNavigate} from "react-router-dom"
 
 /**
  * GameHistory component.

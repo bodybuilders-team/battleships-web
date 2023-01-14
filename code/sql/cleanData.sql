@@ -6,6 +6,9 @@ ALTER SEQUENCE users_id_seq RESTART WITH 1;
 TRUNCATE refresh_tokens CASCADE;
 ALTER SEQUENCE refresh_tokens_id_seq RESTART WITH 1;
 
+TRUNCATE revoked_access_tokens CASCADE;
+ALTER SEQUENCE revoked_access_tokens_id_seq RESTART WITH 1;
+
 TRUNCATE players CASCADE;
 ALTER SEQUENCE players_id_seq RESTART WITH 1;
 
@@ -23,6 +26,3 @@ ALTER SEQUENCE ships_id_seq RESTART WITH 1;
 
 TRUNCATE refresh_tokens CASCADE;
 ALTER SEQUENCE refresh_tokens_id_seq RESTART WITH 1;
-
-TRUNCATE revoked_access_tokens CASCADE;
-ALTER SEQUENCE revoked_access_tokens_id_seq RESTART WITH 1;
