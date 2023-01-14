@@ -6,11 +6,10 @@ jobs:
   build:
     name: Continuous Integration
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Java 17
-        uses: actions/setup-java@v1
+      - uses: isbang/compose-action@v1.4.1
         with:
-          java-version: 17
-      - name: Build with Gradle
-        run: code/jvm/gradlew -p code/jvm build
+          compose-file: "./docker-compose.yml"
+          
