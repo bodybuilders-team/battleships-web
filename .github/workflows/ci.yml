@@ -13,4 +13,4 @@ jobs:
         with:
           java-version: 17
       - name: Build with Gradle
-        run: code/code/jvm/gradlew -p code/jvm build
+        run: code/jvm/gradlew -p code/jvm build
