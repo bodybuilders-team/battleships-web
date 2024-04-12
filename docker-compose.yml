@@ -48,3 +48,25 @@ services:
       - "80:80"
     volumes:
       - ./dockerfiles/nginx:/etc/nginx
+
+  battleships-db-test:
+    container_name: battleships-db-test
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=daw_g03_test
+    ports:
+      - "5432:5432"
+
+  battleships-test:
+    container_name: battleships-test
+    depends_on:
+      - battleships-db-test
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile-test
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://battleships-db-test/daw_g03_test
